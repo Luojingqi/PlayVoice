@@ -18,7 +18,7 @@
 现在开始收集你最爱的音频并分享给他们听吧！
 
 
-![Uploading QQ20260711-203951.png…]()
+<img width="2205" height="1317" alt="QQ20260711-203951" src="https://github.com/user-attachments/assets/f935ceac-ec79-4e6f-b7f3-6fb188019a5a" />
 <img width="2205" height="1317" alt="QQ20260711-203908" src="https://github.com/user-attachments/assets/92814adc-a4b2-435d-92f1-d4c12da6e45d" />
 <img width="2205" height="1317" alt="QQ20260711-203856" src="https://github.com/user-attachments/assets/b57fe5dc-e4d9-436e-abc4-f8560b57aa10" />
 <img width="2205" height="1317" alt="QQ20260711-203745" src="https://github.com/user-attachments/assets/07253b9d-f833-4b7c-8899-2e5161d8d276" />
