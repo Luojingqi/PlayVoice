@@ -449,19 +449,19 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="教程3_内容" xml:space="preserve">
     <value>· 运行后，在您需要在麦克风播放音频的程序内，设置麦克风输入为上面绑定的虚拟麦克风</value>
   </data>
-  <data name="教程5_标题" xml:space="preserve">
+  <data name="教程6_标题" xml:space="preserve">
     <value>遇到了未知的问题</value>
   </data>
-  <data name="教程5_内容" xml:space="preserve">
+  <data name="教程6_内容" xml:space="preserve">
     <value>· 欢迎前往我们的steam商店界面，我们的最佳联系方式均在此处</value>
   </data>
   <data name="文件资源浏览器" xml:space="preserve">
     <value>文件资源浏览器</value>
   </data>
-  <data name="教程4_标题" xml:space="preserve">
-    <value>特别注意</value>
+  <data name="教程5_标题" xml:space="preserve">
+    <value>为什么有回声</value>
   </data>
-  <data name="教程4_内容" xml:space="preserve">
+  <data name="教程5_内容" xml:space="preserve">
     <value>· 耳返开启时务必要将物理麦克风与物理扬声器保持一定距离，否则有不可避免的回声</value>
   </data>
   <data name="Steam 未连接" xml:space="preserve">
@@ -508,5 +508,11 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   </data>
   <data name="耳返_In" xml:space="preserve">
     <value>输入耳返</value>
+  </data>
+  <data name="教程4_标题" xml:space="preserve">
+    <value>为什么播放时电脑没卡但是其他按键全失灵了</value>
+  </data>
+  <data name="教程4_内容" xml:space="preserve">
+    <value>· 如果设置了播放前按下某个按键A，那么系统会认为这个按键一直没有抬起，其他应用程序可能会阻止输入导致看起来没反应了，此时重新按下这个按键A即可</value>
   </data>
 </root>
