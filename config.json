@@ -1,0 +1,24 @@
+﻿{
+  "Theme": 1,
+  "Language": "zh-CN",
+  "AutoMute": false,
+  "AudioDecibel": 0,
+  "MicrophoneInputDecibel": 1.2,
+  "GlobalDecibel": 0,
+  "BeforePlayingKey": {
+    "Action": 0,
+    "HotkeyData": {
+      "Modifiers": 0,
+      "VkCode": 0,
+      "IsMouse": false
+    }
+  },
+  "AfterPlayingKey": {
+    "Action": 1,
+    "HotkeyData": {
+      "Modifiers": 0,
+      "VkCode": 0,
+      "IsMouse": false
+    }
+  }
+}

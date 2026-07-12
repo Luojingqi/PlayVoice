@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="软件名称" xml:space="preserve">
+    <value>PlayVoice</value>
+  </data>
+  <data name="设置" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="物理麦克风" xml:space="preserve">
+    <value>Physical Microphone</value>
+  </data>
+  <data name="物理扬声器" xml:space="preserve">
+    <value>Physical Loudspeaker</value>
+  </data>
+  <data name="虚拟扬声器" xml:space="preserve">
+    <value>Virtual Loudspeaker</value>
+  </data>
+  <data name="虚拟麦克风" xml:space="preserve">
+    <value>Virtual Microphone</value>
+  </data>
+  <data name="请选择" xml:space="preserve">
+    <value>Please choose ...</value>
+  </data>
+  <data name="声卡绑定" xml:space="preserve">
+    <value>Sound Card Binding</value>
+  </data>
+  <data name="系统设置" xml:space="preserve">
+    <value>System Settings</value>
+  </data>
+  <data name="运行" xml:space="preserve">
+    <value>Run</value>
+  </data>
+  <data name="语言" xml:space="preserve">
+    <value>Language</value>
+  </data>
+  <data name="样式" xml:space="preserve">
+    <value>Style</value>
+  </data>
+  <data name="去Steam" xml:space="preserve">
+    <value>Go to Steam and support us</value>
+  </data>
+  <data name="去Github" xml:space="preserve">
+    <value>Go to Github and support us</value>
+  </data>
+  <data name="虚拟声卡" xml:space="preserve">
+    <value>Virtual Sound Card</value>
+  </data>
+  <data name="安装" xml:space="preserve">
+    <value>Installation</value>
+  </data>
+  <data name="卸载" xml:space="preserve">
+    <value>Uninstallation</value>
+  </data>
+  <data name="检测" xml:space="preserve">
+    <value>Detection</value>
+  </data>
+  <data name="去VB-AUDIO_Software" xml:space="preserve">
+    <value>Go support VB-AUDIO Software</value>
+  </data>
+  <data name="VB-AUDIO_分销规则与感谢" xml:space="preserve">
+    <value>Thank you VB-AUDIO for providing technical support for this project.
+VB-CABLE is a donationware, all participations are welcome.</value>
+  </data>
+  <data name="关于" xml:space="preserve">
+    <value>Audio</value>
+  </data>
+  <data name="创意工坊" xml:space="preserve">
+    <value>Workshop</value>
+  </data>
+  <data name="预设" xml:space="preserve">
+    <value>Preset</value>
+  </data>
+  <data name="教程" xml:space="preserve">
+    <value>Tutorial</value>
+  </data>
+  <data name="输入按键" xml:space="preserve">
+    <value>Input Button</value>
+  </data>
+  <data name="创建新预设" xml:space="preserve">
+    <value>Create New Preset</value>
+  </data>
+  <data name="输入预设名称" xml:space="preserve">
+    <value>Enter preset name ...</value>
+  </data>
+  <data name="确认" xml:space="preserve">
+    <value>Confirm</value>
+  </data>
+  <data name="添加音频" xml:space="preserve">
+    <value>Add audio</value>
+  </data>
+  <data name="音频文件" xml:space="preserve">
+    <value>Audio File</value>
+  </data>
+  <data name="文件名称" xml:space="preserve">
+    <value>File Name</value>
+  </data>
+  <data name="无" xml:space="preserve">
+    <value>Null</value>
+  </data>
+  <data name="时长" xml:space="preserve">
+    <value>Duration</value>
+  </data>
+  <data name="名称" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="快捷键" xml:space="preserve">
+    <value>Shortcut Key</value>
+  </data>
+  <data name="通知" xml:space="preserve">
+    <value>Notification</value>
+  </data>
+  <data name="未安装" xml:space="preserve">
+    <value>Not installed</value>
+  </data>
+  <data name="已安装" xml:space="preserve">
+    <value>Installed</value>
+  </data>
+  <data name="正在卸载" xml:space="preserve">
+    <value>Uninstalling</value>
+  </data>
+  <data name="卸载结束" xml:space="preserve">
+    <value>End of uninstallation</value>
+  </data>
+  <data name="卸载未完成" xml:space="preserve">
+    <value>Uninstalling not completed</value>
+  </data>
+  <data name="正在安装" xml:space="preserve">
+    <value>Installing</value>
+  </data>
+  <data name="安装结束" xml:space="preserve">
+    <value>Installation complete</value>
+  </data>
+  <data name="安装未完成" xml:space="preserve">
+    <value>Installation not completed</value>
+  </data>
+  <data name="启动" xml:space="preserve">
+    <value>start</value>
+  </data>
+  <data name="失败" xml:space="preserve">
+    <value>failure</value>
+  </data>
+  <data name="请查看教程说明重新配置" xml:space="preserve">
+    <value>Please refer to the tutorial instructions for reconfiguring</value>
+  </data>
+  <data name="请勿重复点击" xml:space="preserve">
+    <value>Please do not click again</value>
+  </data>
+  <data name="未绑定声卡" xml:space="preserve">
+    <value>Unbound sound card</value>
+  </data>
+  <data name="耳返" xml:space="preserve">
+    <value>In-ear Monitor</value>
+  </data>
+  <data name="请先启动程序" xml:space="preserve">
+    <value>Please start the program first</value>
+  </data>
+  <data name="我的订阅" xml:space="preserve">
+    <value>My Subscriptions</value>
+  </data>
+  <data name="我的创作" xml:space="preserve">
+    <value>My Creation</value>
+  </data>
+  <data name="好友创作" xml:space="preserve">
+    <value>Friend Creation</value>
+  </data>
+  <data name="大小" xml:space="preserve">
+    <value>Size</value>
+  </data>
+  <data name="所有" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="音乐" xml:space="preserve">
+    <value>Music</value>
+  </data>
+  <data name="音效" xml:space="preserve">
+    <value>Sound Effect</value>
+  </data>
+  <data name="语音" xml:space="preserve">
+    <value>Voice</value>
+  </data>
+  <data name="搜索" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="关键词" xml:space="preserve">
+    <value>keyword</value>
+  </data>
+  <data name="上传到创意工坊" xml:space="preserve">
+    <value>Upload to Creative Workshop</value>
+  </data>
+  <data name="为你的资源命名" xml:space="preserve">
+    <value>Name your resources</value>
+  </data>
+  <data name="放入预览图" xml:space="preserve">
+    <value>Insert preview image</value>
+  </data>
+  <data name="标签" xml:space="preserve">
+    <value>Tag</value>
+  </data>
+  <data name="为你的资源添加描述" xml:space="preserve">
+    <value>Add a description to your resource</value>
+  </data>
+  <data name="选择预览图" xml:space="preserve">
+    <value>Select preview image</value>
+  </data>
+  <data name="图片文件" xml:space="preserve">
+    <value>Image File</value>
+  </data>
+  <data name="预览图要求" xml:space="preserve">
+    <value>The preview image file cannot be larger than 1MB, scale requirement is 1:1</value>
+  </data>
+  <data name="没有输入资源名称" xml:space="preserve">
+    <value>No resource name entered</value>
+  </data>
+  <data name="没有选择上传的预设" xml:space="preserve">
+    <value>No preset selected for upload</value>
+  </data>
+  <data name="至少选择一个标签" xml:space="preserve">
+    <value>Select at least one label</value>
+  </data>
+  <data name="正在复制文件" xml:space="preserve">
+    <value>Copying Files...</value>
+  </data>
+  <data name="开始上传" xml:space="preserve">
+    <value>Start uploading ..
+Please wait for the final pop-up of the upload result ..
+Never leave this interface</value>
+  </data>
+  <data name="已上传到Steam" xml:space="preserve">
+    <value>Already uploaded to Steam</value>
+  </data>
+  <data name="上传Steam失败" xml:space="preserve">
+    <value>Upload to Steam failed</value>
+  </data>
+  <data name="可见" xml:space="preserve">
+    <value>Visible</value>
+  </data>
+  <data name="仅自己" xml:space="preserve">
+    <value>Only Me</value>
+  </data>
+  <data name="仅好友" xml:space="preserve">
+    <value>Only Friends</value>
+  </data>
+  <data name="所有人" xml:space="preserve">
+    <value>Everyone</value>
+  </data>
+  <data name="热度" xml:space="preserve">
+    <value>  Heat</value>
+  </data>
+  <data name="评分" xml:space="preserve">
+    <value>  Rating</value>
+  </data>
+  <data name="最新" xml:space="preserve">
+    <value>  Latest</value>
+  </data>
+  <data name="订阅" xml:space="preserve">
+    <value>  Subscribe</value>
+  </data>
+  <data name="排序" xml:space="preserve">
+    <value>Sort</value>
+  </data>
+  <data name="订阅按钮" xml:space="preserve">
+    <value> Subscribe</value>
+  </data>
+  <data name="正在订阅" xml:space="preserve">
+    <value>Subscription in progress</value>
+  </data>
+  <data name="取消订阅按钮" xml:space="preserve">
+    <value>Unsubscribe</value>
+  </data>
+  <data name="订阅失败" xml:space="preserve">
+    <value>Subscription Failed</value>
+  </data>
+  <data name="正在退订" xml:space="preserve">
+    <value>Unsubscribing</value>
+  </data>
+  <data name="已退订" xml:space="preserve">
+    <value>Unsubscribed</value>
+  </data>
+  <data name="退订失败" xml:space="preserve">
+    <value>Unsubscribe Failed</value>
+  </data>
+  <data name="开始下载" xml:space="preserve">
+    <value>Start Downloading</value>
+  </data>
+  <data name="图片加载失败" xml:space="preserve">
+    <value>Image loading failed</value>
+  </data>
+  <data name="物品加载失败" xml:space="preserve">
+    <value>Item loading failed</value>
+  </data>
+  <data name="全选" xml:space="preserve">
+    <value>Select All</value>
+  </data>
+  <data name="复制" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="粘贴" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="导入" xml:space="preserve">
+    <value>Import</value>
+  </data>
+  <data name="上传" xml:space="preserve">
+    <value>Upload</value>
+  </data>
+  <data name="删除" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="已复制" xml:space="preserve">
+    <value>Copied: </value>
+  </data>
+  <data name="删除预设" xml:space="preserve">
+    <value>Delete Preset</value>
+  </data>
+  <data name="教程1_内容" xml:space="preserve">
+    <value>· The virtual sound card must be installed in the settings interface
+· After installation, please proceed to the system audio settings to check whether the virtual device has been successfully installed</value>
+  </data>
+  <data name="教程1_标题" xml:space="preserve">
+    <value>First use</value>
+  </data>
+  <data name="教程2_内容" xml:space="preserve">
+    <value>· After successfully binding all four devices          Press the "Run" button
+· The sound you monitor through the microphone and the audio played by this program will be outputted through the virtual microphone</value>
+  </data>
+  <data name="教程2_标题" xml:space="preserve">
+    <value>How to start</value>
+  </data>
+  <data name="教程3_标题" xml:space="preserve">
+    <value>How to use it in gaming/live streaming</value>
+  </data>
+  <data name="教程3_内容" xml:space="preserve">
+    <value>· After running, in the program where you need to play audio through the microphone, set the microphone input to the virtual microphone bound above</value>
+  </data>
+  <data name="教程5_标题" xml:space="preserve">
+    <value>Encountered an unknown problem</value>
+  </data>
+  <data name="教程5_内容" xml:space="preserve">
+    <value>· Welcome to our Steam store page, where all our best contact information is available</value>
+  </data>
+  <data name="文件资源浏览器" xml:space="preserve">
+    <value>File resource browser</value>
+  </data>
+  <data name="教程4_标题" xml:space="preserve">
+    <value>Special attention</value>
+  </data>
+  <data name="教程4_内容" xml:space="preserve">
+    <value>· When turning on the earphones, it is essential to maintain a certain distance between the physical microphone and the physical speaker, otherwise there will be unavoidable echoes</value>
+  </data>
+  <data name="Steam 未连接" xml:space="preserve">
+    <value>Steam not connected</value>
+  </data>
+  <data name="Steam 初始化失败" xml:space="preserve">
+    <value>Steam initialization failed</value>
+  </data>
+  <data name="麦克风输入音量" xml:space="preserve">
+    <value>Microphone input volume</value>
+  </data>
+  <data name="自动闭麦" xml:space="preserve">
+    <value>Auto-mute</value>
+  </data>
+  <data name="播放前" xml:space="preserve">
+    <value>Before playing</value>
+  </data>
+  <data name="按下" xml:space="preserve">
+    <value>DownKey</value>
+  </data>
+  <data name="抬起" xml:space="preserve">
+    <value>UpKey</value>
+  </data>
+  <data name="单击" xml:space="preserve">
+    <value>Click</value>
+  </data>
+  <data name="音频" xml:space="preserve">
+    <value>
+A</value>
+  </data>
+  <data name="输入" xml:space="preserve">
+    <value>
+I</value>
+  </data>
+  <data name="输出" xml:space="preserve">
+    <value>
+O</value>
+  </data>
+  <data name="全局音量" xml:space="preserve">
+    <value>Global Volume</value>
+  </data>
+  <data name="音频音量" xml:space="preserve">
+    <value>Audio Volume</value>
+  </data>
+  <data name="运行中禁止更改设备" xml:space="preserve">
+    <value>Prohibit changing devices during operation</value>
+  </data>
+</root>

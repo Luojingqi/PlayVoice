@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- 暗色主题颜色 -->
+    <SolidColorBrush x:Key="Title" Color="#1A212A"/>
+    <SolidColorBrush x:Key="Border" Color="#5A5A5A"/>
+    <SolidColorBrush x:Key="BgDark" Color="#1E1E2E"/>
+    <SolidColorBrush x:Key="BgMedium" Color="#2B2B3C"/>
+    <SolidColorBrush x:Key="BgLight" Color="#363649"/>
+    <SolidColorBrush x:Key="BgMediumInvert" Color="#EFEFEF"/>
+    <SolidColorBrush x:Key="AccentColor" Color="#A78BFA"/>
+    <SolidColorBrush x:Key="AccentColorSecondary" Color="#007070"/>
+    <SolidColorBrush x:Key="TextPrimary" Color="#E0E0F0"/>
+    <SolidColorBrush x:Key="Error" Color="#CC0000"/>
+    <SolidColorBrush x:Key="Warning" Color="#CC6600"/>
+    <SolidColorBrush x:Key="Success" Color="#009900"/>
+</ResourceDictionary> 

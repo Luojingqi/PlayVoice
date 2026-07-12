@@ -1,0 +1,79 @@
+﻿<Page x:Class="PlayVoice.Pages.Workshop.PageNumberSelection"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PlayVoice.Pages.Workshop"
+      mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Style/ListBox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <ListBox Grid.Column="0" Margin="5,0"
+                 BorderBrush="{DynamicResource AccentColor}"
+                 Style="{StaticResource HorizontalButtonGroupStyle}"
+                 Background="{DynamicResource BgMedium}"
+                 x:Name="LeftListBox">
+            <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="5,0">
+                <TextBlock Text="&lt;&lt;"
+                        Style="{StaticResource TextBlockLight}"/>
+            </ListBoxItem>
+            <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="5,0">
+                <TextBlock Text="&lt;"
+                        Style="{StaticResource TextBlockLight}"/>
+            </ListBoxItem>
+        </ListBox>
+        <ListBox Grid.Column="1" Margin="5,3"
+                 BorderBrush="Transparent"
+                Style="{StaticResource HorizontalButtonGroupStyle}"
+                Background="{DynamicResource BgMedium}"
+                x:Name="InputListBox">
+            <ListBoxItem Style="{StaticResource GroupInputItemStyle}" Padding="5,0">
+                <TextBox x:Name="PageNumberTextBox" 
+                         FontSize="17"
+                         TextAlignment="Center"
+                         Text="1"
+                        Style="{StaticResource GroupTextBoxStyle}"/>
+            </ListBoxItem>
+        </ListBox>
+        <TextBlock Text="/ " Grid.Column="2" TextAlignment="Center" HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="15"
+                    Style="{StaticResource TextBlockLight}"/>
+        <TextBlock  Grid.Column="3" TextAlignment="Center" HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="20"
+                    Text="1"
+                    Style="{StaticResource TextBlockLight}"
+                    x:Name="MaxPageText"/>
+
+        <ListBox Grid.Column="4" Margin="5,0"
+                 BorderBrush="{DynamicResource AccentColor}"
+                Style="{StaticResource HorizontalButtonGroupStyle}"
+                Background="{DynamicResource BgMedium}"
+                x:Name="RightListBox">
+            <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="5,0">
+                <TextBlock Text="&gt;"
+                        Style="{StaticResource TextBlockLight}"/>
+            </ListBoxItem>
+            <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="5,0">
+                <TextBlock Text="&gt;&gt;"
+                        Style="{StaticResource TextBlockLight}"/>
+            </ListBoxItem>
+        </ListBox>
+    </Grid>
+</Page>

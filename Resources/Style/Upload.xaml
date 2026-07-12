@@ -1,0 +1,22 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DrawingImage x:Key="UploadIcon">
+        <DrawingImage.Drawing>
+            <GeometryDrawing Brush="Transparent">
+                <GeometryDrawing.Pen>
+                    <Pen Brush="{DynamicResource BgMediumInvert}"
+                         Thickness="2"/>
+                </GeometryDrawing.Pen>
+                <GeometryDrawing.Geometry>
+                    <Geometry>
+                        M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4
+                        M17,8 L12,3 L7,8
+                        M12,3 L12,15
+                    </Geometry>
+                </GeometryDrawing.Geometry>
+            </GeometryDrawing>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+</ResourceDictionary>

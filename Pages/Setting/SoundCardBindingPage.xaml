@@ -1,0 +1,61 @@
+﻿<Page x:Class="PlayVoice.Pages.Setting.SoundCardBindingPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PlayVoice.Pages.Setting"
+      xmlns:L="clr-namespace:PlayVoice.Resources.Language"
+      xmlns:DropDownList="clr-namespace:PlayVoice.Pages.DropDownList"
+      mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Style/PageBox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <HeaderedContentControl Style="{StaticResource PageBoxStyle}"
+        Header="{L:Lan 声卡绑定}">
+        <Grid Margin="2.5,2.5,2.5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <DropDownList:DropDownList
+                Grid.Row="0"
+                x:Name="PhysicalMicrophoneComboBox"
+                Header="{L:Lan 物理麦克风}"
+                DropDownWidth="130"
+                Margin="0,1.5,0,1.5"
+                Height="37.5"/>
+            <DropDownList:DropDownList
+                Grid.Row="1"
+                x:Name="PhysicalLoudspeakerComboBox"
+                Header="{L:Lan 物理扬声器}"
+                DropDownWidth="130"
+                Margin="0,1.5,0,1.5"
+                Height="37.5"/>
+            <DropDownList:DropDownList
+                Grid.Row="2"
+                x:Name="VirtualMicrophoneComboBox"
+                Header="{L:Lan 虚拟麦克风}"
+                DropDownWidth="130"
+                Margin="0,1.5,0,1.5"
+                Height="37.5"/>
+            <DropDownList:DropDownList
+                Grid.Row="3"
+                x:Name="VirtualLoudspeakerComboBox"
+                Header="{L:Lan 虚拟扬声器}"
+                DropDownWidth="130"
+                Margin="0,1.5,0,1.5"
+                Height="37.5"/>
+            <Border Grid.Row="4" Margin="0,1.5,0,0"/>
+        </Grid>
+    </HeaderedContentControl>
+</Page>

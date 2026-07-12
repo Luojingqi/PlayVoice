@@ -1,0 +1,121 @@
+﻿<UserControl x:Class="PlayVoice.Pages.AudioVolumeSlider.AudioVolumeSlider"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PlayVoice.Pages.AudioVolumeSlider"
+      x:Name="RootControl" 
+      mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="ModernThumbStyle" TargetType="Thumb">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Thumb">
+                        <Grid Background="Transparent" Margin="-10">
+
+                            <Border x:Name="ThumbValueIndicator" 
+                                    Background="{DynamicResource BgMedium}" CornerRadius="3" Padding="6,2"
+                                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                                    IsHitTestVisible="False" Opacity="0">
+
+                                <Border.RenderTransform>
+                                    <TranslateTransform X="-35" Y="0"/>
+                                </Border.RenderTransform>
+
+                                <TextBlock Text="{Binding Value, RelativeSource={RelativeSource AncestorType=Slider}, StringFormat={}{0:F0}}" 
+                                           Foreground="{DynamicResource TextPrimary}" FontSize="12" HorizontalAlignment="Center"/>
+                            </Border>
+
+                            <Ellipse x:Name="ThumbEllipse" Width="14" Height="14" 
+                                     Fill="{DynamicResource BgMediumInvert}" Stroke="{DynamicResource AccentColor}" StrokeThickness="2"
+                                     RenderTransformOrigin="0.5,0.5">
+                                <Ellipse.RenderTransform>
+                                    <ScaleTransform x:Name="ThumbScale" ScaleX="1" ScaleY="1"/>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                        </Grid>
+
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsDragging" Value="True">
+                                <Setter TargetName="ThumbValueIndicator" Property="Opacity" Value="1"/>
+                            </Trigger>
+
+                            <DataTrigger Binding="{Binding IsMouseOver, RelativeSource={RelativeSource AncestorType=Slider}}" Value="True">
+                                <Setter TargetName="ThumbValueIndicator" Property="Opacity" Value="1"/>
+
+                                <DataTrigger.EnterActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ThumbScale" Storyboard.TargetProperty="ScaleX" To="1.4" Duration="0:0:0.15"/>
+                                            <DoubleAnimation Storyboard.TargetName="ThumbScale" Storyboard.TargetProperty="ScaleY" To="1.4" Duration="0:0:0.15"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.EnterActions>
+
+                                <DataTrigger.ExitActions>
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetName="ThumbScale" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.15"/>
+                                            <DoubleAnimation Storyboard.TargetName="ThumbScale" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.15"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </DataTrigger.ExitActions>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernSliderStyle" TargetType="Slider">
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Border x:Name="MainBorder" Background="Transparent" BorderThickness="1" BorderBrush="Transparent" CornerRadius="4" Padding="5,0">
+                            <Grid VerticalAlignment="Center">
+
+                                <Border Height="4" Background="{DynamicResource Border}" CornerRadius="2"/>
+
+                                <Track x:Name="PART_Track">
+                                    <Track.DecreaseRepeatButton>
+                                        <RepeatButton Command="{x:Static Slider.DecreaseLarge}">
+                                            <RepeatButton.Template>
+                                                <ControlTemplate TargetType="RepeatButton">
+                                                    <Border Height="4" Background="{DynamicResource AccentColor}" CornerRadius="2" Margin="0,0,-7,0"/>
+                                                </ControlTemplate>
+                                            </RepeatButton.Template>
+                                        </RepeatButton>
+                                    </Track.DecreaseRepeatButton>
+                                    <Track.IncreaseRepeatButton>
+                                        <RepeatButton Command="{x:Static Slider.IncreaseLarge}">
+                                            <RepeatButton.Template>
+                                                <ControlTemplate TargetType="RepeatButton">
+                                                    <Border Height="4" Background="Transparent"/>
+                                                </ControlTemplate>
+                                            </RepeatButton.Template>
+                                        </RepeatButton>
+                                    </Track.IncreaseRepeatButton>
+                                    <Track.Thumb>
+                                        <Thumb Style="{StaticResource ModernThumbStyle}"/>
+                                    </Track.Thumb>
+                                </Track>
+                            </Grid>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Slider x:Name="InnerSlider"
+            Style="{StaticResource ModernSliderStyle}"
+            Orientation="Horizontal"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Center"
+            Minimum="0" Maximum="200"
+            IsSnapToTickEnabled="True" TickFrequency="1"
+            Value="{Binding Value, ElementName=RootControl, Mode=TwoWay}"/>
+</UserControl>

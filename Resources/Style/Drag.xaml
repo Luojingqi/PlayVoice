@@ -1,0 +1,14 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <DrawingImage x:Key="DragIcon">
+        <DrawingImage.Drawing>
+            <GeometryDrawing Brush="{DynamicResource TextPrimary}">
+                <GeometryDrawing.Geometry>
+                    <Geometry>M 0,0 A 1.5,1.5 0 1,1 0.1,0 M 0,6 A 1.5,1.5 0 1,1 0.1,6 M 6,0 A 1.5,1.5 0 1,1 6.1,0 M 6,6 A 1.5,1.5 0 1,1 6.1,6</Geometry>
+                </GeometryDrawing.Geometry>
+            </GeometryDrawing>
+        </DrawingImage.Drawing>
+    </DrawingImage>
+
+</ResourceDictionary>

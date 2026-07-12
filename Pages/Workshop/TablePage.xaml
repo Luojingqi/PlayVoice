@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="PlayVoice.Pages.Workshop.TablePage"
+              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+              xmlns:local="clr-namespace:PlayVoice.Pages.Workshop"
+              mc:Ignorable="d">
+
+
+    <Border BorderBrush="{DynamicResource AccentColor}" 
+             BorderThickness="1" 
+             CornerRadius="6" 
+             Background="{DynamicResource BgMedium}" 
+             Padding="5">
+        <Grid Background="Transparent">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <ItemsControl Name="ItemsControl" Margin="0">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid x:Name="DynamicGrid" Loaded="DynamicGrid_Loaded" Columns="3" VerticalAlignment="Top"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </ScrollViewer>
+        </Grid>
+    </Border>
+</UserControl>

@@ -1,0 +1,172 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:tsb="clr-namespace:PlayVoice.Pages.ToggleSwitchButton">
+
+    <ResourceDictionary.MergedDictionaries>
+
+    </ResourceDictionary.MergedDictionaries>
+
+    <Style TargetType="Button" x:Key="NavButtonStyle">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                                   TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource BgLight}"/>
+                            <!--<Setter Property="Foreground" Value="{DynamicResource AccentColor}"/>-->
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- 定义基于 NavButtonStyle 的新样式，专门用于关闭按钮 -->
+    <Style TargetType="Button" x:Key="CloseButtonStyle" 
+       BasedOn="{StaticResource NavButtonStyle}">
+        <!--重写 Template 属性-->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <!--修改 CornerRadius 为仅右上角圆角-->
+                    <Border Background="{TemplateBinding Background}"
+                        CornerRadius="0, 12, 0, 0">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                      VerticalAlignment="Center"
+                                      TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#C42B1C"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--图片按钮-->
+    <Style x:Key="ImageButtonStyle" TargetType="Button">
+        <Setter Property="Width" Value="48"/>
+        <Setter Property="Height" Value="48"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="Transparent"
+                            BorderThickness="0"
+                            Name="border">
+                        <!-- 图片呈现：Source 绑定到 Button 的 Content 属性 -->
+                        <Image Source="{TemplateBinding Content}"
+                               Stretch="Uniform"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <!-- 鼠标悬停：放大 1.1 倍 -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="border" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="1.1" ScaleY="1.1"/>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter TargetName="border" Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                        </Trigger>
+                        <!-- 按下时：恢复原始大小 -->
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="border" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="1" ScaleY="1"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <tsb:HeightToThumbSizeConverter x:Key="HeightToThumbSizeConverter"/>
+    <tsb:HeightToCornerRadiusConverter x:Key="HeightToCornerRadiusConverter"/>
+    <!-- 状态开关按钮 (ToggleButton) -->
+    <Style x:Key="ToggleSwitchStyle" TargetType="ToggleButton">
+        <Setter Property="Background" Value="{DynamicResource BgDark}"/>
+        <Setter Property="BorderBrush" Value="{DynamicResource Border}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid>
+                        <!-- 轨道背景 -->
+                        <Border x:Name="Track"
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            SnapsToDevicePixels="True">
+                            <Border.CornerRadius>
+                                <Binding Path="ActualHeight"
+                                     RelativeSource="{RelativeSource Self}"
+                                     Converter="{StaticResource HeightToCornerRadiusConverter}"
+                                     ConverterParameter="0.5"/>
+                            </Border.CornerRadius>
+                        </Border>
+
+                        <!-- 圆形滑块（始终正圆） -->
+                        <Ellipse x:Name="Thumb"
+                             Fill="White"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Center"
+                             Margin="3,0,0,0">
+                            <Ellipse.Width>
+                                <Binding Path="ActualHeight"
+                                     RelativeSource="{RelativeSource TemplatedParent}"
+                                     Converter="{StaticResource HeightToThumbSizeConverter}"/>
+                            </Ellipse.Width>
+                            <Ellipse.Height>
+                                <Binding Path="ActualHeight"
+                                     RelativeSource="{RelativeSource TemplatedParent}"
+                                     Converter="{StaticResource HeightToThumbSizeConverter}"/>
+                            </Ellipse.Height>
+                        </Ellipse>
+                    </Grid>
+
+                    <ControlTemplate.Triggers>
+                        <!-- 选中状态 -->
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="Track" 
+                                Property="Background" 
+                                Value="{DynamicResource AccentColorSecondary}"/>
+                            <Setter TargetName="Thumb" 
+                                Property="HorizontalAlignment" 
+                                Value="Right"/>
+                            <Setter TargetName="Thumb" 
+                                Property="Margin" 
+                                Value="0,0,3,0"/>
+                        </Trigger>
+
+                        <!-- 鼠标悬停 -->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Track" Property="Opacity" Value="0.9"/>
+                        </Trigger>
+
+                        <!-- 禁用 -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Opacity" Value="0.4"/>
+                        </Trigger>
+                        
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

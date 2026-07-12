@@ -1,0 +1,88 @@
+﻿<Page x:Class="PlayVoice.Pages.Setting.VirtualSoundCardInstallationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PlayVoice.Pages.Setting"
+      xmlns:L="clr-namespace:PlayVoice.Resources.Language"
+      xmlns:Hyperlink="clr-namespace:PlayVoice.Pages.Hyperlink"
+      xmlns:pages="clr-namespace:PlayVoice.Pages"
+      mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Style/Button.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/PageBox.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/ListBox.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/VB-AUDIO_Software.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <HeaderedContentControl Style="{StaticResource PageBoxStyle}"
+                            Header="{L:Lan 虚拟声卡}">
+        <Grid Margin="2.5,2.5,2.5,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Button Style="{StaticResource ImageButtonStyle}"
+                        Content="{StaticResource VB-AUDIO_SoftwareIcon}"
+                        Hyperlink:HyperlinkBehavior.Url="https://vb-audio.com"
+                        ToolTip="{L:Lan 去VB-AUDIO_Software}" 
+                        Width="35" Height="35"
+                        Grid.Column="0"
+                        Margin="10,0,0,0"/>
+                <TextBlock  Grid.Column="1"
+                            Style="{StaticResource TextBlockHeavy}"
+                            Margin="10,0,7.5,0"
+                            FontSize="15"
+                            Text="VB-AUDIO"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Center"/>
+                <TextBlock  Grid.Column="2"
+                            Style="{StaticResource TextBlockLight}"
+                            FontSize="15"
+                            Text="Software"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Left"/>
+            </Grid>
+
+            <ListBox Style="{StaticResource HorizontalButtonGroupStyle}"
+                     x:Name="ButtonGroupListBox"
+                     Grid.Row="1"
+                     Margin="2.5,12.5,2.5,1.5"
+                     Tag="Uniform">
+                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
+                    <TextBlock Text="{L:Lan 安装}" Style="{StaticResource TextBlockLight}"/>
+                </ListBoxItem>
+                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
+                    <TextBlock Text="{L:Lan 卸载}" Style="{StaticResource TextBlockLight}"/>
+                </ListBoxItem>
+                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
+                    <TextBlock Text="{L:Lan 检测}" Style="{StaticResource TextBlockLight}"/>
+                </ListBoxItem>
+            </ListBox>
+
+            <TextBlock  Style="{StaticResource TextBlockLight}"
+            Grid.Row="2"
+            Margin="15,10.5,2.5,0"
+            FontSize="11"
+            HorizontalAlignment="Left"
+            Text="{L:Lan VB-AUDIO_分销规则与感谢}"/>
+
+            <Border Grid.Row="4" Margin="0,1.5,0,0"/>
+        </Grid>
+    </HeaderedContentControl>
+</Page>

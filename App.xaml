@@ -1,0 +1,31 @@
+﻿<Application x:Class="PlayVoice.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Style/ScrollBar.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/ToolTipBorder.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <FontFamily x:Key="FontHeavy">/PlayVoice;component/Resources/Fonts/#思源黑体 Heavy</FontFamily>
+            <FontFamily x:Key="FontMedium">/PlayVoice;component/Resources/Fonts/#思源黑体 Medium</FontFamily>
+            <FontFamily x:Key="FontLight">/PlayVoice;component/Resources/Fonts/#思源黑体 Light</FontFamily>
+
+            <Style TargetType="TextBlock" x:Key="TextBlockHeavy">
+                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                <Setter Property="FontFamily" Value="{StaticResource FontHeavy}"/>
+            </Style>
+            <Style TargetType="TextBlock" x:Key="TextBlockMedium">
+                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                <Setter Property="FontFamily" Value="{StaticResource FontMedium}"/>
+            </Style>
+            <Style TargetType="TextBlock" x:Key="TextBlockLight">
+                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                <Setter Property="FontFamily" Value="{StaticResource FontLight}"/>
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
+
+<!--PlayVoice;Component/Resources/Fonts/#思源黑体 Heavy-->

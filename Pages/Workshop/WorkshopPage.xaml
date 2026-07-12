@@ -1,0 +1,139 @@
+﻿<Page x:Class="PlayVoice.Pages.Workshop.WorkshopPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:L="clr-namespace:PlayVoice.Resources.Language"
+      xmlns:TransparentAndBottomLineListBox="clr-namespace:PlayVoice.Pages.TransparentAndBottomLineListBox"
+      xmlns:local="clr-namespace:PlayVoice.Pages.Workshop"
+      xmlns:DropDownList="clr-namespace:PlayVoice.Pages.DropDownList"
+      mc:Ignorable="d" >
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Style/Button.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/PageBox.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/ListBox.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/ComboBox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+
+        <Border Grid.Row="0" Margin="0,0,0,13">
+            <ListBox Style="{StaticResource TransparentAndBottomLineListBoxStyle}"
+                     TransparentAndBottomLineListBox:ListBoxHelper.LinePosition="Top"
+                     x:Name="TopButtonListBox"/>
+        </Border>
+
+        <Grid Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center"
+              Margin="0,5,11,0"
+              x:Name="UpperRightInputField">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <ListBox Grid.Column="0" BorderBrush="{DynamicResource AccentColor}"
+                    Style="{StaticResource HorizontalButtonGroupStyle}"
+                    Background="{DynamicResource BgMedium}"
+                    x:Name="ItemGroupListBox">
+                <ListBoxItem Style="{StaticResource GroupInputItemStyle}"
+                             Width="125">
+                    <TextBox Tag="{L:Lan 关键词}"
+                        Text="{Binding SearchText}"
+                        Style="{StaticResource GroupTextBoxStyle}"
+                        InputMethod.IsInputMethodEnabled="False"/>
+                </ListBoxItem>
+                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}"
+                             Width="50">
+                    <TextBlock Text="{L:Lan 搜索}"
+                        Style="{StaticResource TextBlockLight}"/>
+                </ListBoxItem>
+            </ListBox>
+
+            <TextBlock Grid.Column="1" 
+                       Text="{L:Lan 排序}"
+                       Style="{StaticResource TextBlockLight}"
+                       FontSize="16"
+                       Margin="15,0,0,0"
+                       TextAlignment="Center" 
+                       VerticalAlignment="Center"/>
+            <ComboBox Grid.Column="2"
+                x:Name="RankedComboBox"
+                Style="{StaticResource TransparentComboBoxStyle}"
+                Background="{DynamicResource BgMedium}"
+                Width="65"
+                Height="35"
+                FontSize="15"
+                Margin="10,0,0,0"
+                BorderBrush="{DynamicResource AccentColor}" />
+        </Grid>
+
+        <Border Grid.Row="1" Margin="10,0">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <local:TablePage x:Name="TablePage" Grid.Column="0"/>
+                <Border Grid.Column="1"
+                        x:Name="DetailPageBorder"
+                        Width="0" 
+                        ClipToBounds="True"
+                        BorderBrush="{DynamicResource AccentColor}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Margin="0"
+                        Padding="5"
+                        Background="{DynamicResource BgMedium}">
+                    <Grid>
+                        <Frame x:Name="DetailPageFrame"/>
+                    </Grid>
+                </Border>
+                <Border Grid.Column="1"
+                        x:Name="LocalDetailPageBorder"
+                        Width="0" 
+                        ClipToBounds="True"
+                        BorderBrush="{DynamicResource AccentColor}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Margin="0"
+                        Padding="5"
+                        Background="{DynamicResource BgMedium}">
+                    <Grid>
+                        <Frame x:Name="LocalDetailPageFrame"/>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Border>
+        <Frame Grid.Row="1" x:Name="LoadingPageFrame"/>
+
+        <Border Grid.Row="2" Margin="0,12.5,0,0">
+            <ListBox Style="{StaticResource TransparentAndBottomLineListBoxStyle}"
+                     TransparentAndBottomLineListBox:ListBoxHelper.LinePosition="Bottom"
+                     x:Name="BottomButtonListBox"
+                     SelectionMode="Multiple">
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem" BasedOn="{StaticResource TransparentAndBottomLineItemStyle}">
+                        <Setter Property="Margin" Value="8,0"/>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+        </Border>
+
+        <Frame Grid.Row="2" Margin="0,6.5,11,5"
+                x:Name="PageNumberSelectionFrame" 
+                HorizontalAlignment="Right"
+                VerticalAlignment="Center"/>
+    </Grid>
+</Page>

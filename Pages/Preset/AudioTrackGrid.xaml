@@ -1,0 +1,155 @@
+﻿<Page x:Class="PlayVoice.Pages.Preset.AudioTrackGrid"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:PlayVoice.Pages.Preset"
+      xmlns:L="clr-namespace:PlayVoice.Resources.Language"
+      mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Style/ListBox.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/ComboBox.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/TrashCan.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/Import.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/Upload.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/Copy.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/Paste.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/Folder.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Border BorderBrush="{DynamicResource AccentColor}" 
+            BorderThickness="1" 
+            CornerRadius="6" 
+            Background="{DynamicResource BgMedium}" 
+            Padding="10">
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Border Padding="10,5" Background="Transparent">
+                <Grid Margin="0,0,0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <ListBox Style="{StaticResource HorizontalButtonGroupStyle}"
+                             x:Name="TopButtonGroupListBox"
+                             Grid.Column="0"
+                             Margin="0,0,5,0"
+                             Height="32.5">
+                        <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="5,0" ToolTip="{L:Lan 全选}">
+                            <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Ellipse Width="19" Height="19"
+                                        Stroke="{DynamicResource AccentColor}"
+                                        Fill="Transparent"
+                                        StrokeThickness="1.5"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center"/>
+                                <Ellipse Width="8" Height="8"
+                                        Fill="{DynamicResource AccentColor}"
+                                        x:Name="SelectCenterPoint"
+                                        Visibility="Collapsed"/>
+                            </Grid>
+                        </ListBoxItem>
+                        <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="3.5" ToolTip="{L:Lan 复制}">
+                            <Image Source="{StaticResource CopyIcon}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </ListBoxItem>
+                        <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="3.5" ToolTip="{L:Lan 粘贴}">
+                            <Image Source="{StaticResource PasteIcon}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </ListBoxItem>
+                        <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="6.5" ToolTip="{L:Lan 导入}">
+                            <Image Source="{StaticResource ImportIcon}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </ListBoxItem>
+                        <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="6.5" ToolTip="{L:Lan 上传}">
+                            <Image Source="{StaticResource UploadIcon}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </ListBoxItem>
+                        <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="6.5,4.5" ToolTip="{L:Lan 删除}">
+                            <Image Source="{StaticResource TrashCanIcon}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </ListBoxItem>
+                        <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="6.5" ToolTip="{L:Lan 文件资源浏览器}">
+                            <Image Source="{StaticResource FolderIcon}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </ListBoxItem>
+                    </ListBox>
+                    <TextBlock Grid.Column="1" 
+                               Text="{L:Lan 名称}"  
+                               Style="{StaticResource TextBlockMedium}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Background="Transparent"
+                               Margin="0,0,50,0"/>
+                    <TextBlock Grid.Column="2" 
+                               Text="{L:Lan 时长}"
+                               Style="{StaticResource TextBlockMedium}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="3" 
+                               Text="{L:Lan 大小}"
+                               Style="{StaticResource TextBlockMedium}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="4" 
+                               Text="{L:Lan 快捷键}" 
+                               Style="{StaticResource TextBlockMedium}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+
+            <ListBox Grid.Row="1" 
+                     x:Name="AudioListBox"
+                     ItemsSource="{Binding ShortcutList}"
+                     Background="Transparent"
+                     BorderThickness="0"
+                     ClipToBounds="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     VirtualizingStackPanel.IsVirtualizing="False"
+                     AllowDrop="True"
+                     DragOver="ListBox_DragOver"
+                     DragLeave="ListBox_DragLeave"
+                     Drop="ListBox_Drop">
+
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:AudioTrackItem />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="ClipToBounds" Value="False"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <ContentPresenter ClipToBounds="False"/>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+
+            <Canvas Grid.Row="1" x:Name="DragOverlayCanvas" IsHitTestVisible="False">
+                <Rectangle x:Name="DragGhost" Opacity="0.45" Visibility="Collapsed">
+                    <Rectangle.Effect>
+                        <BlurEffect Radius="3"/>
+                    </Rectangle.Effect>
+                </Rectangle>
+
+                <Border x:Name="InsertionLine" Height="3" Background="{DynamicResource AccentColor}" CornerRadius="1.5" Visibility="Collapsed"/>
+            </Canvas>
+        </Grid>
+    </Border>
+</Page>
