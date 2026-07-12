@@ -3,7 +3,7 @@
   "Language": "zh-CN",
   "AutoMute": false,
   "AudioDecibel": 0,
-  "MicrophoneInputDecibel": 1.2,
+  "MicrophoneInputDecibel": 0,
   "GlobalDecibel": 0,
   "BeforePlayingKey": {
     "Action": 0,

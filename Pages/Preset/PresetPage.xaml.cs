@@ -75,7 +75,6 @@ public partial class PresetPage : Page
 
     private void DisableNavigation_CanExecute(object sender, CanExecuteRoutedEventArgs e)
     {
-        Console.Write("1");
         // 禁止执行该命令
         e.CanExecute = false;
         // 标记为已处理，防止路由事件继续传递

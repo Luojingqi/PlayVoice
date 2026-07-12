@@ -94,7 +94,7 @@ internal class AudioProxy
             if (device0 != null) StopPLEquipment();
             if (device1 != null) StartPLEquipment();
         };
-        GlobalData.Inst.GoEarStateChanged += (value) =>
+        GlobalData.Inst.GoEar_InStateChanged += (value) =>
         {
             if (value)
             {
@@ -106,6 +106,10 @@ internal class AudioProxy
                 physicalLoudspeakerMixer.RemoveMixerInput(physicalMicrophoneVolumeArray[1]);
                 StopPLEquipmentClear();
             }
+        };
+        GlobalData.Inst.GoEar_AudioStateChanged += (value) =>
+        {
+            StopPLEquipmentClear();
         };
         audioDecibel = GlobalData.Inst.Config.AudioDecibel;
         microphoneInputDecibel = GlobalData.Inst.Config.MicrophoneInputDecibel;
@@ -183,7 +187,7 @@ internal class AudioProxy
                 return;
             physicalMicrophoneBufferArray[0].AddSamples(e.Buffer, 0, e.BytesRecorded);
 
-            if (GlobalData.Inst.GetGoEar())
+            if (GlobalData.Inst.GetGoEar_In())
                 physicalMicrophoneBufferArray[1].AddSamples(e.Buffer, 0, e.BytesRecorded);
         };
         physicalMicrophoneCapture.StartRecording();

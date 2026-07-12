@@ -54,7 +54,8 @@ internal class GlobalData
         if (value == false)
         {
             run = false;
-            TryGoEar(false);
+            TryGoEar_In(false);
+            TryGoEar_Audio(false);
             RunStateChanged?.Invoke(false);
             audioProxy.Stop();
             return true;
@@ -79,11 +80,11 @@ internal class GlobalData
     private bool run = false;
     public event Action<bool> RunStateChanged;
 
-    private bool goEar = false;
-    public bool GetGoEar() => goEar;
-    public bool TryGoEar(bool value)
+    private bool goEar_Audio = false;
+    public bool GetGoEar_Audio() => goEar_Audio;
+    public bool TryGoEar_Audio(bool value)
     {
-        if (value == goEar) return true;
+        if (value == goEar_Audio) return true;
         if (value == true && run == false)
         {
             MainWindow.Inst.AddNotification(
@@ -92,10 +93,32 @@ internal class GlobalData
                 Pages.LabelStatus.Warning, 4);
             return false;
         }
-        goEar = value;
-        GoEarStateChanged?.Invoke(goEar);
+        goEar_Audio = value;
+        GoEar_AudioStateChanged?.Invoke(goEar_Audio);
         return true;
     }
+    public event Action<bool> GoEar_AudioStateChanged;
+
+    private bool goEar_In = false;
+    public bool GetGoEar_In() => goEar_In;
+    public bool TryGoEar_In(bool value)
+    {
+        if (value == goEar_In) return true;
+        if (value == true && run == false)
+        {
+            MainWindow.Inst.AddNotification(
+                () => $"{LanguageManager.Inst.GetString("通知")}",
+                () => $"{LanguageManager.Inst.GetString("请先启动程序")}",
+                Pages.LabelStatus.Warning, 4);
+            return false;
+        }
+        goEar_In = value;
+        GoEar_InStateChanged?.Invoke(goEar_In);
+        return true;
+    }
+    public event Action<bool> GoEar_InStateChanged;
+
+
 
     private bool autoMute = false;
     public bool AutoMute
@@ -109,8 +132,6 @@ internal class GlobalData
             config.Save();
         }
     }
-
-    public event Action<bool> GoEarStateChanged;
     public GlobalData()
     {
         Inst = this;

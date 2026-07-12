@@ -85,7 +85,7 @@ public class AudioData
                 PlayMode |= PlayModeEnum.VL播放;
                 VolumeProvider_ToVM = new VolumeSampleProvider(
                   new MediaFoundationResampler(AudioTrackArray[0], audioProxy.PhysicalMicrophoneWaveFormat) { ResamplerQuality = 60 }.ToSampleProvider());
-                if (GlobalData.Inst.GetGoEar())
+                if (GlobalData.Inst.GetGoEar_Audio())
                 {
                     VolumeProvider_ToPL = new VolumeSampleProvider(
                       new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }.ToSampleProvider());

@@ -38,6 +38,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <ToggleSwitchButton:ToggleSwitchButton
@@ -50,14 +52,22 @@
                      Height="42.5"/>
             <ToggleSwitchButton:ToggleSwitchButton
                      Grid.Row="1"
-                     x:Name="EarToggle"
-                     Header="{L:Lan 耳返}"
+                     x:Name="EarAudioToggle"
+                     Header="{L:Lan 耳返_Audio}"
                      ButtonWidth="80"
                      Margin="0,1.5"
                      Padding="0,2.2"
                      Height="42.5"/>
             <ToggleSwitchButton:ToggleSwitchButton
                      Grid.Row="2"
+                     x:Name="EarInToggle"
+                     Header="{L:Lan 耳返_In}"
+                     ButtonWidth="80"
+                     Margin="0,1.5"
+                     Padding="0,2.2"
+                     Height="42.5"/>
+            <ToggleSwitchButton:ToggleSwitchButton
+                     Grid.Row="3"
                      x:Name="AutoMuteToggle"
                      Header="{L:Lan 自动闭麦}"
                      ButtonWidth="80"
@@ -65,28 +75,28 @@
                      Padding="0,2.2"
                      Height="42.5"/>
             <DropDownList:DropDownList
-                    Grid.Row="3"
+                    Grid.Row="4"
                     x:Name="PresetComboBox"
                     Header="{L:Lan 预设}"
                     DropDownWidth="130"
                     Margin="0,1.5"
                     Height="37.5"/>
             <DropDownList:DropDownList
-                    Grid.Row="4"
+                    Grid.Row="5"
                     x:Name="LanguageComboBox"
                     Header="{L:Lan 语言}"
                     DropDownWidth="130"
                     Margin="0,1.5"
                     Height="37.5"/>
             <HorizontalList:HorizontalList
-                    Grid.Row="5"
+                    Grid.Row="6"
                     x:Name="StyleListBox"
                     Header="{L:Lan 样式}"
                     DropDownWidth="130"
                     Margin="0,1.5"
                     Height="37.5"/>
             
-            <Grid Grid.Row="6" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="7" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -107,7 +117,7 @@
                             HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Row="7" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="8" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -128,7 +138,7 @@
                             HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Row="8" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="9" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -149,7 +159,7 @@
                             HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Row="9" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="10" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -174,7 +184,7 @@
                     </ListBoxItem>
                 </ListBox>
             </Grid>
-            <Grid Grid.Row="10" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="11" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -202,7 +212,7 @@
 
 
 
-            <Border Grid.Row="11" Margin="0,1.5,0,0"/>
+            <Border Grid.Row="12" Margin="0,1.5,0,0"/>
         </Grid>
     </HeaderedContentControl>
 </Page>

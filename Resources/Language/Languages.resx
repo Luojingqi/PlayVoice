@@ -265,8 +265,8 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="未绑定声卡" xml:space="preserve">
     <value>未绑定声卡</value>
   </data>
-  <data name="耳返" xml:space="preserve">
-    <value>耳返</value>
+  <data name="耳返_Audio" xml:space="preserve">
+    <value>音频耳返</value>
   </data>
   <data name="请先启动程序" xml:space="preserve">
     <value>请先启动程序</value>
@@ -505,5 +505,8 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   </data>
   <data name="运行中禁止更改设备" xml:space="preserve">
     <value>运行中禁止更改设备</value>
+  </data>
+  <data name="耳返_In" xml:space="preserve">
+    <value>输入耳返</value>
   </data>
 </root>

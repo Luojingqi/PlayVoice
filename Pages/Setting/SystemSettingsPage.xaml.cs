@@ -106,22 +106,40 @@ namespace PlayVoice.Pages.Setting
                 };
             }
             {
-                UpdateGoEarAction(GlobalData.Inst.GetGoEar());
-                EarToggle.OnToggleChanged += (b) =>
+                UpdateGoEarAudioAction(GlobalData.Inst.GetGoEar_Audio());
+                EarAudioToggle.OnToggleChanged += (b) =>
                 {
                     if (b.Value == true)
                     {
-                        if (GlobalData.Inst.TryGoEar(b.Value) == false)
+                        if (GlobalData.Inst.TryGoEar_Audio(b.Value) == false)
                         {
-                            EarToggle.IsSyncing = true;
-                            EarToggle.IsChecked = false;
-                            EarToggle.IsSyncing = false;
+                            EarAudioToggle.IsSyncing = true;
+                            EarAudioToggle.IsChecked = false;
+                            EarAudioToggle.IsSyncing = false;
                         }
                     }
-                    else GlobalData.Inst.TryGoEar(false);
+                    else GlobalData.Inst.TryGoEar_Audio(false);
 
                 };
-                GlobalData.Inst.GoEarStateChanged += UpdateGoEarAction;
+                GlobalData.Inst.GoEar_AudioStateChanged += UpdateGoEarAudioAction;
+            }
+            {
+                UpdateGoEarInAction(GlobalData.Inst.GetGoEar_In());
+                EarInToggle.OnToggleChanged += (b) =>
+                {
+                    if (b.Value == true)
+                    {
+                        if (GlobalData.Inst.TryGoEar_In(b.Value) == false)
+                        {
+                            EarInToggle.IsSyncing = true;
+                            EarInToggle.IsChecked = false;
+                            EarInToggle.IsSyncing = false;
+                        }
+                    }
+                    else GlobalData.Inst.TryGoEar_In(false);
+
+                };
+                GlobalData.Inst.GoEar_InStateChanged += UpdateGoEarInAction;
             }
 
             {
@@ -212,7 +230,7 @@ namespace PlayVoice.Pages.Setting
             LanguageManager.Inst.CultureChanged -= UpdateLanguageAction;
             ThemeManager.ThemeChanged -= UpdateThemeAction;
             GlobalData.Inst.RunStateChanged -= UpdateRunAction;
-            GlobalData.Inst.GoEarStateChanged -= UpdateGoEarAction;
+            GlobalData.Inst.GoEar_AudioStateChanged -= UpdateGoEarAudioAction;
         }
 
         private ObservableCollection<string> presetNameArray = new ObservableCollection<string>();
@@ -269,11 +287,18 @@ namespace PlayVoice.Pages.Setting
                 RunToggle.LabelStatus = LabelStatus.None;
         }
 
-        private void UpdateGoEarAction(bool b)
+        private void UpdateGoEarAudioAction(bool b)
         {
-            EarToggle.IsSyncing = true;
-            EarToggle.IsChecked = b;
-            EarToggle.IsSyncing = false;
+            EarAudioToggle.IsSyncing = true;
+            EarAudioToggle.IsChecked = b;
+            EarAudioToggle.IsSyncing = false;
+        }
+
+        private void UpdateGoEarInAction(bool b)
+        {
+            EarInToggle.IsSyncing = true;
+            EarInToggle.IsChecked = b;
+            EarInToggle.IsSyncing = false;
         }
 
         private void UpdateAutoMuteAction(bool b)
