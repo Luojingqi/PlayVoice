@@ -16,3 +16,10 @@
 免费使用：  如果你喜欢此产品，我们理解您暂时囊中羞涩，可以前往我们的 GitHub 网站免费获取，免费获取的产品不支持创意工坊与云存档功能。
 
 现在开始收集你最爱的音频并分享给他们听吧！
+
+
+![Uploading QQ20260711-203951.png…]()
+<img width="2205" height="1317" alt="QQ20260711-203908" src="https://github.com/user-attachments/assets/92814adc-a4b2-435d-92f1-d4c12da6e45d" />
+<img width="2205" height="1317" alt="QQ20260711-203856" src="https://github.com/user-attachments/assets/b57fe5dc-e4d9-436e-abc4-f8560b57aa10" />
+<img width="2205" height="1317" alt="QQ20260711-203745" src="https://github.com/user-attachments/assets/07253b9d-f833-4b7c-8899-2e5161d8d276" />
+<img width="2205" height="1317" alt="QQ20260711-203723" src="https://github.com/user-attachments/assets/7b5b0cd2-cdad-4d69-85fe-bc47e86b4423" />
