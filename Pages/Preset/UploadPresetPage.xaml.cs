@@ -28,19 +28,6 @@ namespace PlayVoice.Pages.Preset
             loadingPage = new();
             loadingPage.Visibility = Visibility.Hidden;
             LoadingPageFrame.Content = loadingPage;
-            var tempArray = PresetDataTool.GetAllPresetName();
-            presetNameArray.Add(LanguageManager.Inst.GetString("无"));
-            int presetIndex = 0;
-            for (int i = 0; i < tempArray.Length; i++)
-            {
-                presetNameArray.Add(tempArray[i]);
-                if (GlobalData.Inst.PresetData != null && tempArray[i] == GlobalData.Inst.PresetData.Config.Name)
-                    presetIndex = i + 1;
-            }
-            PresetComboBox.ItemsSource = presetNameArray;
-            PresetComboBox.IsSyncing = true;
-            PresetComboBox.SelectedIndex = presetIndex;
-            PresetComboBox.IsSyncing = false;
 
             TabListBox.ItemsSource = new TabItem<TabType>[]
                 {
@@ -71,9 +58,25 @@ namespace PlayVoice.Pages.Preset
             VisibleComboBox.SelectedIndex = 2;
         }
 
-        public void Open(string presetName)
+        public void Open(int index)
         {
-            
+            presetNameArray.Clear();
+            var tempArray = PresetDataTool.GetAllPresetName();
+            presetNameArray.Add(LanguageManager.Inst.GetString("无"));
+            int presetIndex = 0;
+            for (int i = 0; i < tempArray.Length; i++)
+            {
+                presetNameArray.Add(tempArray[i]);
+                if (GlobalData.Inst.PresetData != null && tempArray[i] == GlobalData.Inst.PresetData.Config.Name)
+                    presetIndex = i + 1;
+            }
+            PresetComboBox.ItemsSource = presetNameArray;
+            PresetComboBox.IsSyncing = true;
+            if (index == -1)
+                PresetComboBox.SelectedIndex = presetIndex;
+            else
+                PresetComboBox.SelectedIndex = index;
+            PresetComboBox.IsSyncing = false;
         }
 
         private HashSet<TabItem<TabType>> tabSelectionSet = new();

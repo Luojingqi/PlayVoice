@@ -436,32 +436,32 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="教程1_标题" xml:space="preserve">
     <value>第一次使用</value>
   </data>
-  <data name="教程2_内容" xml:space="preserve">
+  <data name="教程3_内容" xml:space="preserve">
     <value>· 绑定4个设备全部成功后          开启“运行”按钮
 · 之后您通过麦克风监听的声音以及此程序播放的音频都将在虚拟麦克风输出</value>
   </data>
-  <data name="教程2_标题" xml:space="preserve">
+  <data name="教程3_标题" xml:space="preserve">
     <value>如何启动</value>
   </data>
-  <data name="教程3_标题" xml:space="preserve">
+  <data name="教程4_标题" xml:space="preserve">
     <value>如何在游戏/直播中使用</value>
   </data>
-  <data name="教程3_内容" xml:space="preserve">
+  <data name="教程4_内容" xml:space="preserve">
     <value>· 运行后，在您需要在麦克风播放音频的程序内，设置麦克风输入为上面绑定的虚拟麦克风</value>
   </data>
-  <data name="教程6_标题" xml:space="preserve">
+  <data name="教程7_标题" xml:space="preserve">
     <value>遇到了未知的问题</value>
   </data>
-  <data name="教程6_内容" xml:space="preserve">
+  <data name="教程7_内容" xml:space="preserve">
     <value>· 欢迎前往我们的steam商店界面，我们的最佳联系方式均在此处</value>
   </data>
   <data name="文件资源浏览器" xml:space="preserve">
     <value>文件资源浏览器</value>
   </data>
-  <data name="教程5_标题" xml:space="preserve">
+  <data name="教程6_标题" xml:space="preserve">
     <value>为什么有回声</value>
   </data>
-  <data name="教程5_内容" xml:space="preserve">
+  <data name="教程6_内容" xml:space="preserve">
     <value>· 耳返开启时务必要将物理麦克风与物理扬声器保持一定距离，否则有不可避免的回声</value>
   </data>
   <data name="Steam 未连接" xml:space="preserve">
@@ -509,10 +509,34 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="耳返_In" xml:space="preserve">
     <value>输入耳返</value>
   </data>
-  <data name="教程4_标题" xml:space="preserve">
+  <data name="教程5_标题" xml:space="preserve">
     <value>为什么播放时电脑没卡但是其他按键全失灵了</value>
   </data>
-  <data name="教程4_内容" xml:space="preserve">
+  <data name="教程5_内容" xml:space="preserve">
     <value>· 如果设置了播放前按下某个按键A，那么系统会认为这个按键一直没有抬起，其他应用程序可能会阻止输入导致看起来没反应了，此时重新按下这个按键A即可</value>
+  </data>
+  <data name="教程2_标题" xml:space="preserve">
+    <value>预设界面图标说明</value>
+  </data>
+  <data name="教程2_内容_选择" xml:space="preserve">
+    <value>选择</value>
+  </data>
+  <data name="教程2_内容_复制" xml:space="preserve">
+    <value>复制选项</value>
+  </data>
+  <data name="教程2_内容_粘贴" xml:space="preserve">
+    <value>粘贴选项</value>
+  </data>
+  <data name="教程2_内容_导入" xml:space="preserve">
+    <value>导入音频</value>
+  </data>
+  <data name="教程2_内容_上传" xml:space="preserve">
+    <value>前往上传页</value>
+  </data>
+  <data name="教程2_内容_删除" xml:space="preserve">
+    <value>删除选项</value>
+  </data>
+  <data name="教程2_内容_文件" xml:space="preserve">
+    <value>打开文件夹</value>
   </data>
 </root>

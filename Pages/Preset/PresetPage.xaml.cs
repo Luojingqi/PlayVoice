@@ -16,6 +16,7 @@ public partial class PresetPage : Page
 
     private CreatePresetPage CreatePresetPage;
     private DeletePresetPage DeletePresetPage;
+    private UploadPresetPage UploadPresetPage;
     public PresetPage()
     {
         Inst = this;
@@ -26,8 +27,10 @@ public partial class PresetPage : Page
         Frame1.Visibility = Visibility.Hidden;
         CreatePresetPage = new();
         DeletePresetPage = new();
+        UploadPresetPage = new();
         CreatePresetPageFrame.Content = CreatePresetPage;
         DeletePresetPageFrame.Content = DeletePresetPage;
+        UploadPresetPageFrame.Content = UploadPresetPage;
         int index = -1;
         var presetNames = PresetDataTool.GetAllPresetName();
         for (int i = 0; i < presetNames.Length; i++)
@@ -64,6 +67,7 @@ public partial class PresetPage : Page
             Frame0.Visibility = Visibility.Hidden;
             Frame1.Visibility = Visibility.Visible;
             DeletePresetPage.Open();
+            UploadPresetPage.Open(-1);
         }
         else
         {

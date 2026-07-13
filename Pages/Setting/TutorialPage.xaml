@@ -11,6 +11,12 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Style/PageBox.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/TrashCan.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/Import.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/Upload.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/Copy.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/Paste.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/Folder.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
@@ -63,16 +69,141 @@
                     Style="{StaticResource TextBlockMedium}"
                     Margin="0,5,0,0"
                     FontSize="15"/>
-            <TextBlock Grid.Row="4" 
-                    Text="{L:Lan 教程2_内容}"
-                    TextWrapping="Wrap"
-                    Style="{StaticResource TextBlockLight}"
-                    Margin="10,5"
-                    FontSize="13.5"/>
+            
+            <Grid Grid.Row="4" Margin="0,5,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="0"
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Ellipse Grid.Row="0"
+                            Margin="5,0"
+                            Width="19" Height="19"
+                            Stroke="{DynamicResource AccentColor}"
+                            Fill="Transparent"
+                            StrokeThickness="1.5"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" 
+                            Text="{L:Lan 教程2_内容_选择}"
+                            TextWrapping="Wrap"
+                            Style="{StaticResource TextBlockLight}"
+                            Margin="10,5"
+                            FontSize="13.5"/>
+                </Grid>
+                <Grid Grid.Column="1" 
+                      VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Grid.Row="0" Margin="3.5"
+                        Source="{StaticResource CopyIcon}"  
+                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" 
+                        Text="{L:Lan 教程2_内容_复制}"
+                        TextWrapping="Wrap"
+                        Style="{StaticResource TextBlockLight}"
+                        Margin="10,5"
+                        FontSize="13.5"/>
+                </Grid>
+                <Grid Grid.Column="2" 
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Grid.Row="0" Margin="3.5"
+                        Source="{StaticResource PasteIcon}"  
+                        HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" 
+                                Text="{L:Lan 教程2_内容_粘贴}"
+                                TextWrapping="Wrap"
+                                Style="{StaticResource TextBlockLight}"
+                                Margin="10,5"
+                                FontSize="13.5"/>
+                </Grid>
+                <Grid Grid.Column="3" 
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Grid.Row="0" Margin="3.5"
+                            Source="{StaticResource ImportIcon}"  
+                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" 
+                            Text="{L:Lan 教程2_内容_导入}"
+                            TextWrapping="Wrap"
+                            Style="{StaticResource TextBlockLight}"
+                            Margin="10,5"
+                            FontSize="13.5"/>
+                </Grid>
+                <Grid Grid.Column="4" 
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Grid.Row="0" Margin="3.5"
+                            Source="{StaticResource UploadIcon}"  
+                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" 
+                            Text="{L:Lan 教程2_内容_上传}"
+                            TextWrapping="Wrap"
+                            Style="{StaticResource TextBlockLight}"
+                            Margin="10,5"
+                            FontSize="13.5"/>
+                </Grid>
+                <Grid Grid.Column="5" 
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Grid.Row="0" Margin="3.5"
+                            Source="{StaticResource TrashCanIcon}"  
+                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" 
+                            Text="{L:Lan 教程2_内容_删除}"
+                            TextWrapping="Wrap"
+                            Style="{StaticResource TextBlockLight}"
+                            Margin="10,5"
+                            FontSize="13.5"/>
+                </Grid>
+                <Grid Grid.Column="6" 
+                        VerticalAlignment="Center" HorizontalAlignment="Center">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Image Grid.Row="0" Margin="3.5"
+                            Source="{StaticResource FolderIcon}"  
+                            HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" 
+                            Text="{L:Lan 教程2_内容_文件}"
+                            TextWrapping="Wrap"
+                            Style="{StaticResource TextBlockLight}"
+                            Margin="10,5"
+                            FontSize="13.5"/>
+                </Grid>
+            </Grid>
+
             <Border Grid.Row="5" 
                     Height="1" 
                     Background="{DynamicResource Border}" 
                     Margin="20,3"/>
+
             <TextBlock Grid.Row="6" 
                     Text="{L:Lan 教程3_标题}"
                     Style="{StaticResource TextBlockMedium}"
@@ -124,13 +255,28 @@
                     Margin="0,5,0,0"
                     FontSize="15"/>
             <TextBlock Grid.Row="16" 
-                   Text="{L:Lan 教程6_内容}"
+                    Text="{L:Lan 教程6_内容}"
+                    TextWrapping="Wrap"
+                    Style="{StaticResource TextBlockLight}"
+                    Margin="10,5"
+                    FontSize="13.5"/>
+            <Border Grid.Row="17" 
+                    Height="1" 
+                    Background="{DynamicResource Border}" 
+                    Margin="20,3"/>
+            <TextBlock Grid.Row="18" 
+                    Text="{L:Lan 教程7_标题}"
+                    Style="{StaticResource TextBlockMedium}"
+                    Margin="0,5,0,0"
+                    FontSize="15"/>
+            <TextBlock Grid.Row="19" 
+                   Text="{L:Lan 教程7_内容}"
                    TextWrapping="Wrap"
                    Style="{StaticResource TextBlockLight}"
                    Margin="10,5"
                    FontSize="13.5"/>
 
-            <Border Grid.Row="17" Margin="0,1.5,0,0"/>
+            <Border Grid.Row="20" Margin="0,1.5,0,0"/>
         </Grid>
     </HeaderedContentControl>
 </Page>
