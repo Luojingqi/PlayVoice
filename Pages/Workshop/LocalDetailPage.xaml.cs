@@ -179,10 +179,10 @@ namespace PlayVoice.Pages.Workshop
                 for (int i = 0; i < resourceDataConfig.Data.ItemList.Count; i++)
                 {
                     var item = resourceDataConfig.Data.ItemList[i];
-                    if (File.Exists(Path.Combine(path, $"{item.FileName}{item.FileFormat}")))
+                    if (File.Exists(Path.Combine(path, item.Name)))
                     {
                         var audioData = new AudioData();
-                        var audioPath = Path.Combine(path, $"{item.FileName}{item.FileFormat}");
+                        var audioPath = Path.Combine(path, item.Name);
                         audioData.AudioTrackArray[0] = new AudioFileReader(audioPath);
                         audioData.AudioTrackArray[1] = new AudioFileReader(audioPath);
                         audioData.Index = i;

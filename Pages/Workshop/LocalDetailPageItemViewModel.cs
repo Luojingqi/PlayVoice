@@ -61,7 +61,7 @@ public class LocalDetailPageItemViewModel : INotifyPropertyChanged
     public LocalDetailPageItemViewModel(AudioData audioData, ResourceDataConfig.ResourceItem item)
     {
         this.Data = audioData;
-        _header = item.FileName + item.FileFormat;
+        _header = item.Name;
         Duration = audioData.AudioTrackArray[0].TotalTime;
         SubHeader1 = AudioData.SizeToString(item.Size);
     }

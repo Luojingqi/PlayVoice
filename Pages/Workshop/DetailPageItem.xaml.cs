@@ -11,7 +11,7 @@ namespace PlayVoice.Pages.Workshop
     {
         public DetailPageItem(ResourceDataConfig.ResourceItem item) : this()
         {
-            ItemTitle = item.FileName;
+            ItemTitle = item.Name;
             ItemDuration = AudioData.DurationToString(item.Duration);
             ItemSize = AudioData.SizeToString(item.Size);
 

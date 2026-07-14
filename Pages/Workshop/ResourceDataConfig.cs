@@ -1,4 +1,5 @@
 ﻿using PlayVoice.Pages.Preset;
+using System.Text.Json.Serialization;
 using static PlayVoice.Pages.Workshop.ResourceDataConfig;
 
 namespace PlayVoice.Pages.Workshop;
@@ -18,6 +19,8 @@ public class ResourceDataConfig
     {
         public string FileName { get; set; }
         public string FileFormat { get; set; }
+        [JsonIgnore]
+        public string Name => $"{FileName}{FileFormat}";
         public TimeSpan Duration { get; set; }
         public long Size { get; set; }
     }
