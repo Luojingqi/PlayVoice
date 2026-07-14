@@ -40,7 +40,8 @@ internal class GlobalData
                     HotkeyManager.Inst.AddHotkey(item.Config.HotkeyData);
                     item.Config.HotkeyData.Callback = () =>
                     {
-                        item.Start();
+                        if (run == true)
+                            item.Start();
                     };
                 }
             }
