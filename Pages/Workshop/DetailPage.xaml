@@ -37,11 +37,16 @@
                 RadiusY="5"
                 Width="160"
                 Height="160" 
-                HorizontalAlignment="Center" 
+                HorizontalAlignment="Left" 
                 VerticalAlignment="Center"/>
 
-            <Border Grid.Column="0" CornerRadius="5" ClipToBounds="True" Height="146" Width="146" Background="{DynamicResource BgLight}">
-                <Image x:Name="BgImage"  
+            <Border Grid.Column="0" CornerRadius="5" ClipToBounds="True" Background="{DynamicResource BgLight}"
+                    HorizontalAlignment="Left" 
+                    VerticalAlignment="Center"
+                    Margin="7">
+                <Image x:Name="BgImage"
+                    Width="146"
+                    Height="146"   
                     HorizontalAlignment="Right" 
                     VerticalAlignment="Top"/>
             </Border>

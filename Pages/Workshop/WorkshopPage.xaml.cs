@@ -246,7 +246,7 @@ namespace PlayVoice.Pages.Workshop
 
             DoubleAnimation widthAnimation = new DoubleAnimation
             {
-                To = _isDetailPageOpen ? 225 : 0,
+                To = _isDetailPageOpen ? 275 : 0,
                 Duration = TimeSpan.FromSeconds(0.3),
                 EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut }
             };
