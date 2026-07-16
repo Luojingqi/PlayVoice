@@ -63,6 +63,15 @@ internal class GlobalData
         }
         else
         {
+            if(config.IsPassVolumeTest == false)
+            {
+                MainWindow.Inst.AddNotification(
+                    () => $"{LanguageManager.Inst.GetString("通知")}",
+                    () => $"{LanguageManager.Inst.GetString("请先通过")} {LanguageManager.Inst.GetString("响度归一化测试")}",
+                    Pages.LabelStatus.Warning, 4);
+                return false;
+            }
+
             bool b = true;
             b &= equipment.PhysicalLoudspeakerState
                 && equipment.PhysicalMicrophoneState

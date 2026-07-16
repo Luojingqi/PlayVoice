@@ -1,7 +1,9 @@
 ﻿using NAudio.Wave;
 using PlayVoice.Audio;
 using PlayVoice.Hotkey;
+using System.Diagnostics;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace PlayVoice.Pages.Preset;
 
@@ -48,13 +50,12 @@ public class PresetData
         Config.Name = newName;
     }
 
-    public bool AddAudio(string completePath, out AudioData audioData)
+    public async Task<AudioData> AddAudio(string completePath)
     {
-        audioData = null;
         if (string.IsNullOrEmpty(completePath) || !File.Exists(completePath))
         {
             Console.WriteLine("文件不存在。");
-            return false;
+            return null;
         }
 
         try
@@ -64,7 +65,7 @@ public class PresetData
             {
                 Console.WriteLine("音频文件长度或时长异常。");
                 reader.Dispose();
-                return false;
+                return null;
             }
 
             string destPath = Path.Combine(PresetDataTool.basePath, Config.Name, Path.GetFileName(completePath));
@@ -72,7 +73,7 @@ public class PresetData
             if (!File.Exists(destPath))
             {
                 File.Copy(completePath, destPath, false);
-                audioData = new AudioData
+                var audioData = new AudioData
                 {
                     Index = AudioList.Count,
                     Preset = this
@@ -91,20 +92,24 @@ public class PresetData
                 {
                     audioDataConfig.Size = fs.Length;
                 }
+                double actualLufs = await AudioData.MeasureLufs(destPath);
+                double lufsDifference = AudioData.TargetLufs - actualLufs;
+                audioDataConfig.Decibel = lufsDifference;
+                Console.WriteLine($"{audioDataConfig.Name} 实际LUFS: {actualLufs}");
                 Config.AudioDataConfigList.Add(audioDataConfig);
-                return true;
+                return audioData;
             }
             else
             {
                 Console.WriteLine("音频文件已存在。");
                 reader.Dispose();
-                return false;
+                return null;
             }
         }
         catch
         {
             Console.WriteLine("无法读取音频文件。");
-            return false;
+            return null;
         }
     }
 

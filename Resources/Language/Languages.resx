@@ -500,9 +500,6 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="全局音量" xml:space="preserve">
     <value>全局音量</value>
   </data>
-  <data name="音频音量" xml:space="preserve">
-    <value>音频音量</value>
-  </data>
   <data name="运行中禁止更改设备" xml:space="preserve">
     <value>运行中禁止更改设备</value>
   </data>
@@ -538,5 +535,20 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   </data>
   <data name="教程2_内容_文件" xml:space="preserve">
     <value>打开文件夹</value>
+  </data>
+  <data name="测试" xml:space="preserve">
+    <value>测试</value>
+  </data>
+  <data name="音频输出音量" xml:space="preserve">
+    <value>音频输出音量</value>
+  </data>
+  <data name="音频耳返音量" xml:space="preserve">
+    <value>音频耳返音量</value>
+  </data>
+  <data name="响度归一化测试" xml:space="preserve">
+    <value>响度归一化测试</value>
+  </data>
+  <data name="请先通过" xml:space="preserve">
+    <value>请先通过</value>
   </data>
 </root>

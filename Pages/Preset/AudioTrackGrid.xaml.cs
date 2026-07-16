@@ -92,20 +92,18 @@ namespace PlayVoice.Pages.Preset
                 Pages.LabelStatus.Success, 3.5f);
         }
 
-        private void PasteButton_Click()
+        private async Task PasteButton_Click()
         {
             foreach (var path in GlobalData.Inst.CopyAudioPathList)
             {
-                if (GlobalData.Inst.PresetData.AddAudio(path, out var audioData))
-                {
-
-                }
+                var audioData = await GlobalData.Inst.PresetData.AddAudio(path);
+                await Task.Delay(25);
             }
             GlobalData.Inst.PresetData.Save();
             InitLoadPreset(GlobalData.Inst.PresetData.Config.Name);
         }
 
-        private void ImportButton_Click()
+        private async void ImportButton_Click()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = LanguageManager.Inst.GetString("添加音频");
@@ -121,10 +119,8 @@ namespace PlayVoice.Pages.Preset
                 string[] selectedFiles = openFileDialog.FileNames;
                 foreach (string file in selectedFiles)
                 {
-                    if (GlobalData.Inst.PresetData.AddAudio(file, out var audioData))
-                    {
-
-                    }
+                    var audioData = await GlobalData.Inst.PresetData.AddAudio(file);
+                    await Task.Delay(25);
                 }
                 GlobalData.Inst.PresetData.Save();
                 InitLoadPreset(GlobalData.Inst.PresetData.Config.Name);

@@ -1,13 +1,19 @@
-﻿using PlayVoice.Audio;
+﻿using NAudio.CoreAudioApi;
+using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
+using PlayVoice.Audio;
 using PlayVoice.Hotkey;
 using PlayVoice.Pages.Preset;
 using PlayVoice.Pages.Workshop;
 using PlayVoice.Resources.Language;
 using PlayVoice.Resources.Themes;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using static CommunityToolkit.Mvvm.ComponentModel.__Internals.__TaskExtensions.TaskAwaitableWithoutEndValidation;
+using static PlayVoice.Audio.AudioProxy;
 
 namespace PlayVoice.Pages.Setting
 {
@@ -143,6 +149,93 @@ namespace PlayVoice.Pages.Setting
             }
 
             {
+                VolumeTestGroupListBox.SelectionChanged += (obj0, obj1) =>
+                {
+                    if (VolumeTestGroupListBox.SelectedIndex == -1) return;
+                    if (VolumeTestGroupListBox.SelectedIndex != 0) return;
+
+                    if (physicalMicrophoneCapture != null)
+                    {
+                        physicalMicrophoneCapture.StopRecording();
+                        physicalMicrophoneCapture.Dispose();
+                        physicalMicrophoneCapture = null;
+                        Vol(MainWindow.Inst.IL, MainWindow.Inst.IR, 0, 0);
+                    }
+
+                    var equipment = GlobalData.Inst.Equipment;
+                    if (equipment.PhysicalMicrophoneState == false)
+                    {
+                        MainWindow.Inst.AddNotification(
+                            () => $"{LanguageManager.Inst.GetString("通知")}",
+                            () => $"{LanguageManager.Inst.GetString("物理麦克风")} {LanguageManager.Inst.GetString("未绑定")}",
+                            Pages.LabelStatus.Warning, 4);
+                        goto end;
+                    }
+                    WaveFormat targetFormat = equipment.PhysicalMicrophone.AudioClient.MixFormat;
+                    physicalMicrophoneCapture = new WasapiCapture(equipment.PhysicalMicrophone);
+                    var physicalMicrophoneWaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(targetFormat.SampleRate, targetFormat.Channels);
+                    physicalMicrophoneCapture.WaveFormat = physicalMicrophoneWaveFormat;
+                    var buffer = new BufferedWaveProvider(physicalMicrophoneWaveFormat);
+                    float[] sampleBuffer = new float[8192];
+                    MeteringSampleProvider meteringSample = null;
+                    string testPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/temp/VolumeTest.wav");
+                    var writer = new WaveFileWriter(testPath, physicalMicrophoneWaveFormat);
+                    physicalMicrophoneCapture.DataAvailable += (sender, e) =>
+                    {
+                        buffer.AddSamples(e.Buffer, 0, e.BytesRecorded);
+                        int samplesToRead = e.BytesRecorded / 4;
+                        if (sampleBuffer.Length < samplesToRead)
+                            sampleBuffer = new float[sampleBuffer.Length * 2];
+
+                        int samplesRead = meteringSample.Read(sampleBuffer, 0, samplesToRead);
+                        if (samplesRead > 0)
+                        {
+                            writer.WriteSamples(sampleBuffer, 0, samplesRead);
+                        }
+                    };
+                    physicalMicrophoneCapture.RecordingStopped += (sender, e) =>
+                    {
+                        writer.Dispose();
+                    };
+                    var volumeSample = new VolumeSampleProvider(buffer.ToSampleProvider());
+                    volumeSample.Volume = (float)AudioData.DecibelToVolume(GlobalData.Inst.AudioProxy.MicrophoneInputDecibel);
+                    meteringSample = new MeteringSampleProvider(volumeSample);
+                    SetStreamVolume(meteringSample, SampleEnum.In);
+                    physicalMicrophoneCapture.StartRecording();
+
+
+                    MainWindow.Inst.AddNotification(
+                            () => $"{LanguageManager.Inst.GetString("通知")}",
+                            () => $"{LanguageManager.Inst.GetString("正在录音")}",
+                            Pages.LabelStatus.Warning, 7);
+                    Task.Run(async () =>
+                    {
+                        await Task.Delay(7000);
+                        Application.Current?.Dispatcher?.Invoke(async () =>
+                        {
+                            if (physicalMicrophoneCapture != null)
+                            {
+                                physicalMicrophoneCapture.StopRecording();
+                                physicalMicrophoneCapture.Dispose();
+                                physicalMicrophoneCapture = null;
+                                Vol(MainWindow.Inst.IL, MainWindow.Inst.IR, 0, 0);
+
+                                MainWindow.Inst.AddNotification(
+                                    () => $"{LanguageManager.Inst.GetString("通知")}",
+                                    () => $"{LanguageManager.Inst.GetString("录音结束")}",
+                                    Pages.LabelStatus.Warning, 3.5f);
+                                AudioOutVolumeSlider.Value = AudioData.DecibelToProportion(await AudioData.MeasureLufs(testPath)) * 100;
+                                GlobalData.Inst.Config.IsPassVolumeTest = true;
+                                GlobalData.Inst.Config.Save();
+                            }
+                        });
+                    });
+                end:
+                    VolumeTestGroupListBox.SelectedIndex = -1;
+                };
+            }
+
+            {
                 UpdateAutoMuteAction(GlobalData.Inst.AutoMute);
                 AutoMuteToggle.OnToggleChanged += (b) =>
                 {
@@ -151,10 +244,18 @@ namespace PlayVoice.Pages.Setting
             }
 
             {
-                this.AudioVolumeSlider.Value = AudioData.DecibelToProportion(GlobalData.Inst.AudioProxy.AudioDecibel) * 100;
-                AudioVolumeSlider.ValueChanged += (sender, value) =>
+                this.AudioOutVolumeSlider.Value = AudioData.DecibelToProportion(GlobalData.Inst.AudioProxy.AudioOutDecibel) * 100;
+                AudioOutVolumeSlider.ValueChanged += (sender, value) =>
                 {
-                    GlobalData.Inst.AudioProxy.AudioDecibel = AudioData.ProportionToDecibel(value.NewValue / 100);
+                    GlobalData.Inst.AudioProxy.AudioOutDecibel = AudioData.ProportionToDecibel(value.NewValue / 100);
+                };
+            }
+
+            {
+                this.AudioEarVolumeSlider.Value = AudioData.DecibelToProportion(GlobalData.Inst.AudioProxy.AudioEarDecibel) * 100;
+                AudioEarVolumeSlider.ValueChanged += (sender, value) =>
+                {
+                    GlobalData.Inst.AudioProxy.AudioEarDecibel = AudioData.ProportionToDecibel(value.NewValue / 100);
                 };
             }
 
@@ -211,6 +312,8 @@ namespace PlayVoice.Pages.Setting
                 };
             }
         }
+
+        private WasapiCapture physicalMicrophoneCapture;
 
         public class PlayAudioKeyDataKeyAction
         {

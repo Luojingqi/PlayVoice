@@ -11,9 +11,12 @@ internal class Config
 
     public bool AutoMute { get; set; } = false;
 
-    public double AudioDecibel { get; set; } = 0;
+    public double AudioOutDecibel { get; set; } = 0;
+    public double AudioEarDecibel { get; set; } = 0;
     public double MicrophoneInputDecibel { get; set; } = 1.2;
     public double GlobalDecibel { get; set; } = 0;
+
+    public bool IsPassVolumeTest { get; set; } = false;
 
     public string PhysicalMicrophoneID { get; set; }
     public string PhysicalLoudspeakerID { get; set; }

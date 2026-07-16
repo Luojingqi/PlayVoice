@@ -503,9 +503,6 @@ O</value>
   <data name="全局音量" xml:space="preserve">
     <value>Global Volume</value>
   </data>
-  <data name="音频音量" xml:space="preserve">
-    <value>Audio Volume</value>
-  </data>
   <data name="运行中禁止更改设备" xml:space="preserve">
     <value>Prohibit changing devices during operation</value>
   </data>
@@ -541,5 +538,29 @@ O</value>
   </data>
   <data name="教程2_内容_文件" xml:space="preserve">
     <value>Open Folder</value>
+  </data>
+  <data name="测试" xml:space="preserve">
+    <value>Test</value>
+  </data>
+  <data name="音频输出音量" xml:space="preserve">
+    <value>Audio Output Volume</value>
+  </data>
+  <data name="音频耳返音量" xml:space="preserve">
+    <value>Audio Ear Return Volume</value>
+  </data>
+  <data name="未绑定" xml:space="preserve">
+    <value>Unbound</value>
+  </data>
+  <data name="正在录音" xml:space="preserve">
+    <value>Recording test in progress, please speak normally for a few seconds</value>
+  </data>
+  <data name="录音结束" xml:space="preserve">
+    <value>The recording has ended and is currently being analyzed</value>
+  </data>
+  <data name="响度归一化测试" xml:space="preserve">
+    <value>Loudness Normalization Test</value>
+  </data>
+  <data name="请先通过" xml:space="preserve">
+    <value>Please proceed first</value>
   </data>
 </root>

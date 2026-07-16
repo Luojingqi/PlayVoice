@@ -40,6 +40,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <ToggleSwitchButton:ToggleSwitchButton
@@ -95,8 +97,41 @@
                     DropDownWidth="130"
                     Margin="0,1.5"
                     Height="37.5"/>
-            
-            <Grid Grid.Row="7" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="7"
+                  Margin="0,1.5"
+                  Height="37.5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock  Grid.Column="0"
+                            FontSize="16"
+                            Text="{L:Lan 响度归一化测试}" 
+                            Style="{StaticResource TextBlockLight}"
+                            VerticalAlignment="Center" 
+                            Margin="13.5,0,0,0" 
+                            HorizontalAlignment="Left"
+                            TextAlignment="Left"/>
+                <ListBox  Grid.Column="1"
+                        Width="130"
+                        Style="{StaticResource HorizontalButtonGroupStyle}"
+                        x:Name="VolumeTestGroupListBox"
+                        Tag="Uniform"
+                        HorizontalAlignment="Right"
+                          VerticalAlignment="Center" >
+                    <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
+                        <TextBlock x:Name="VolumeTestIcon" 
+                            Text="{L:Lan 测试}" Style="{StaticResource TextBlockLight}"/>
+                    </ListBoxItem>
+                    <!--<ListBoxItem Style="{StaticResource GroupInputItemStyle}">
+                        <TextBox x:Name="VolumeTestTextBox" Text="70" Style="{StaticResource GroupTextBoxStyle}"/>
+                    </ListBoxItem>-->
+                </ListBox>
+
+            </Grid>
+
+
+            <Grid Grid.Row="8" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -106,18 +141,38 @@
                             Margin="13.5,0,0,0"
                             FontSize="16"
                             Style="{StaticResource TextBlockLight}"
-                            Text="{L:Lan 音频音量}"
+                            Text="{L:Lan 音频输出音量}"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left"/>
                 <AudioVolumeSlider:AudioVolumeSlider
-                            x:Name="AudioVolumeSlider"
+                            x:Name="AudioOutVolumeSlider"
+                            Grid.Column="1"
+                            Width="168"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"/>
+            </Grid>
+            <Grid Grid.Row="9" Margin="0,1.5" Height="37.5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                            Margin="13.5,0,0,0"
+                            FontSize="16"
+                            Style="{StaticResource TextBlockLight}"
+                            Text="{L:Lan 音频耳返音量}"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"/>
+                <AudioVolumeSlider:AudioVolumeSlider
+                            x:Name="AudioEarVolumeSlider"
                             Grid.Column="1"
                             Width="168"
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Row="8" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="10" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -138,7 +193,7 @@
                             HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Row="9" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="11" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -159,7 +214,7 @@
                             HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Row="10" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="12" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -184,7 +239,7 @@
                     </ListBoxItem>
                 </ListBox>
             </Grid>
-            <Grid Grid.Row="11" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="13" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -212,7 +267,7 @@
 
 
 
-            <Border Grid.Row="12" Margin="0,1.5,0,0"/>
+            <Border Grid.Row="14" Margin="0,1.5,0,0"/>
         </Grid>
     </HeaderedContentControl>
 </Page>

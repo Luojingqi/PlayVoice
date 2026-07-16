@@ -36,19 +36,30 @@ internal class AudioProxy
     public WaveFormat PhysicalLoudspeakerWaveFormat => physicalLoudspeakerWaveFormat;
 
 
-    private double audioDecibel;
-    public double AudioDecibel
+    private double audioOutDecibel;
+    public double AudioOutDecibel
     {
-        get => audioDecibel;
+        get => audioOutDecibel;
         set
         {
-            audioDecibel = value;
-            GlobalData.Inst.Config.AudioDecibel = audioDecibel;
+            audioOutDecibel = value;
+            GlobalData.Inst.Config.AudioOutDecibel = audioOutDecibel;
             GlobalData.Inst.Config.Save();
             if (audioVolumeToVL != null)
-                audioVolumeToVL.Volume = (float)AudioData.DecibelToVolume(audioDecibel);
+                audioVolumeToVL.Volume = (float)AudioData.DecibelToVolume(audioOutDecibel);
+        }
+    }
+    private double audioEarDecibel;
+    public double AudioEarDecibel
+    {
+        get => audioEarDecibel;
+        set
+        {
+            audioEarDecibel = value;
+            GlobalData.Inst.Config.AudioEarDecibel = audioEarDecibel;
+            GlobalData.Inst.Config.Save();
             if (audioVolumeToPL != null)
-                audioVolumeToPL.Volume = (float)AudioData.DecibelToVolume(audioDecibel);
+                audioVolumeToPL.Volume = (float)AudioData.DecibelToVolume(audioEarDecibel);
         }
     }
     private double microphoneInputDecibel;
@@ -111,7 +122,8 @@ internal class AudioProxy
         {
             StopPLEquipmentClear();
         };
-        audioDecibel = GlobalData.Inst.Config.AudioDecibel;
+        audioOutDecibel = GlobalData.Inst.Config.AudioOutDecibel;
+        audioEarDecibel = GlobalData.Inst.Config.AudioEarDecibel;
         microphoneInputDecibel = GlobalData.Inst.Config.MicrophoneInputDecibel;
         globalDecibel = GlobalData.Inst.Config.GlobalDecibel;
     }
@@ -128,10 +140,10 @@ internal class AudioProxy
         physicalLoudspeakerVolume.Volume = (float)AudioData.DecibelToVolume(globalDecibel);
         audioMixToPL = new MixingSampleProvider(physicalLoudspeakerWaveFormat) { ReadFully = true };
         audioVolumeToPL = new VolumeSampleProvider(audioMixToPL);
-        audioVolumeToPL.Volume = (float)AudioData.DecibelToVolume(audioDecibel);
-        audioToPLSamnle = new MeteringSampleProvider(audioVolumeToPL);
-        SetStreamVolume(audioToPLSamnle, SampleEnum.AutioToPL);
-        physicalLoudspeakerMixer.AddMixerInput(audioToPLSamnle);
+        audioVolumeToPL.Volume = (float)AudioData.DecibelToVolume(audioOutDecibel);
+        audioToPLMetering = new MeteringSampleProvider(audioVolumeToPL);
+        SetStreamVolume(audioToPLMetering, SampleEnum.AutioToPL);
+        physicalLoudspeakerMixer.AddMixerInput(audioToPLMetering);
 
         physicalLoudspeakerOutput.Init(physicalLoudspeakerVolume);
         physicalLoudspeakerOutput.Play();
@@ -165,10 +177,10 @@ internal class AudioProxy
     private VolumeSampleProvider physicalLoudspeakerVolume;
     private VolumeSampleProvider virtualLoudspeakerVolume;
 
-    private MeteringSampleProvider audioToVLSamnle;
-    private MeteringSampleProvider audioToPLSamnle;
-    private MeteringSampleProvider physicalMicrophoneSample;
-    private MeteringSampleProvider virtualLoudspeakerSample;
+    private MeteringSampleProvider audioToVLMetering;
+    private MeteringSampleProvider audioToPLMetering;
+    private MeteringSampleProvider physicalMicrophoneMetering;
+    private MeteringSampleProvider virtualLoudspeakerMetering;
     private const int MeteringSampleProviderCollectionRate = 5;
     public void Start()
     {
@@ -194,9 +206,9 @@ internal class AudioProxy
 
         audioMixToVL = new MixingSampleProvider(physicalMicrophoneWaveFormat) { ReadFully = true };
         audioVolumeToVL = new VolumeSampleProvider(audioMixToVL);
-        audioVolumeToVL.Volume = (float)AudioData.DecibelToVolume(audioDecibel);
-        audioToVLSamnle = new MeteringSampleProvider(audioVolumeToVL);
-        SetStreamVolume(audioToVLSamnle, SampleEnum.AutioToVL);
+        audioVolumeToVL.Volume = (float)AudioData.DecibelToVolume(audioOutDecibel);
+        audioToVLMetering = new MeteringSampleProvider(audioVolumeToVL);
+        SetStreamVolume(audioToVLMetering, SampleEnum.AutioToVL);
 
         virtualLoudspeakerMixer = new MixingSampleProvider(physicalMicrophoneWaveFormat) { ReadFully = true };
         for (int i = 0; i < physicalMicrophoneBufferArray.Length; i++)
@@ -208,23 +220,23 @@ internal class AudioProxy
             physicalMicrophoneVolumeArray[i].Volume = (float)AudioData.DecibelToVolume(microphoneInputDecibel);
         }
 
-        physicalMicrophoneSample = new MeteringSampleProvider(physicalMicrophoneVolumeArray[0]);
-        SetStreamVolume(physicalMicrophoneSample, SampleEnum.In);
+        physicalMicrophoneMetering = new MeteringSampleProvider(physicalMicrophoneVolumeArray[0]);
+        SetStreamVolume(physicalMicrophoneMetering, SampleEnum.In);
 
-        virtualLoudspeakerMixer.AddMixerInput(physicalMicrophoneSample);
-        virtualLoudspeakerMixer.AddMixerInput(audioToVLSamnle);
+        virtualLoudspeakerMixer.AddMixerInput(physicalMicrophoneMetering);
+        virtualLoudspeakerMixer.AddMixerInput(audioToVLMetering);
 
         virtualLoudspeakerVolume = new VolumeSampleProvider(virtualLoudspeakerMixer);
         virtualLoudspeakerVolume.Volume = (float)AudioData.DecibelToVolume(globalDecibel);
 
-        virtualLoudspeakerSample = new MeteringSampleProvider(virtualLoudspeakerVolume);
-        SetStreamVolume(virtualLoudspeakerSample, SampleEnum.Out);
+        virtualLoudspeakerMetering = new MeteringSampleProvider(virtualLoudspeakerVolume);
+        SetStreamVolume(virtualLoudspeakerMetering, SampleEnum.Out);
 
 
 
         virtualLoudspeakerOutput = new WasapiOut(equipment.VirtualLoudspeaker, AudioClientShareMode.Shared, false, 100);
 
-        virtualLoudspeakerOutput.Init(virtualLoudspeakerSample);
+        virtualLoudspeakerOutput.Init(virtualLoudspeakerMetering);
         virtualLoudspeakerOutput.Play();
     }
 
@@ -320,7 +332,7 @@ internal class AudioProxy
     }
 
 
-    private void SetStreamVolume(MeteringSampleProvider meteringSample, SampleEnum index)
+    public static void SetStreamVolume(MeteringSampleProvider meteringSample, SampleEnum index)
     {
         meteringSample.SamplesPerNotification = meteringSample.WaveFormat.SampleRate / MeteringSampleProviderCollectionRate;
         LevelBar L = null;
@@ -356,13 +368,13 @@ internal class AudioProxy
         }
     }
 
-    private void Vol(StreamVolumeEventArgs e, LevelBar L, LevelBar R)
+    private static void Vol(StreamVolumeEventArgs e, LevelBar L, LevelBar R)
     {
         float leftChannelVol = e.MaxSampleValues[0];
         float rightChannelVol = e.MaxSampleValues.Length > 1 ? e.MaxSampleValues[1] : leftChannelVol;
         Vol(L, R, leftChannelVol, rightChannelVol);
     }
-    private void Vol(LevelBar L, LevelBar R, float leftChannelVol, float rightChannelVol)
+    public static void Vol(LevelBar L, LevelBar R, float leftChannelVol, float rightChannelVol)
     {
         Application.Current?.Dispatcher?.Invoke(() =>
         {
@@ -371,7 +383,7 @@ internal class AudioProxy
         });
     }
 
-    private enum SampleEnum
+    public enum SampleEnum
     {
         AutioToVL,
         AutioToPL,

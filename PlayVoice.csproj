@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
     <Nullable>warnings</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -21,11 +21,6 @@
     <None Remove="Resources\Fonts\SOURCEHANSANSSC-HEAVY-2.OTF" />
     <None Remove="Resources\Fonts\SourceHanSansSC-Light-2.otf" />
     <None Remove="Resources\Fonts\SourceHanSansSC-Medium-2.otf" />
-    <None Remove="Resources\Style\PlayVoice.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Resources\Style\PlayVoice.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,9 +31,6 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Fonts\SourceHanSansSC-Medium-2.otf">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Resources\Style\PlayVoice.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
