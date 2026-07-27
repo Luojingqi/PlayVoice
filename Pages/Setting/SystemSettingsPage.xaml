@@ -97,7 +97,14 @@
                     DropDownWidth="130"
                     Margin="0,1.5"
                     Height="37.5"/>
-            <Grid Grid.Row="7"
+            <DropDownList:DropDownList
+                    Grid.Row="7"
+                    x:Name="CloseBehaviorComboBox"
+                    Header="{L:Lan 关闭行为}"
+                    DropDownWidth="130"
+                    Margin="0,1.5"
+                    Height="37.5"/>
+            <Grid Grid.Row="8"
                   Margin="0,1.5"
                   Height="37.5">
                 <Grid.ColumnDefinitions>
@@ -131,7 +138,7 @@
             </Grid>
 
 
-            <Grid Grid.Row="8" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="9" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -151,7 +158,7 @@
                             VerticalAlignment="Center"
                             HorizontalAlignment="Right"/>
             </Grid>
-            <Grid Grid.Row="9" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="10" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -172,7 +179,7 @@
                             HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Row="10" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="11" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -193,7 +200,7 @@
                             HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Row="11" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="12" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -214,7 +221,7 @@
                             HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Row="12" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="13" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -239,7 +246,7 @@
                     </ListBoxItem>
                 </ListBox>
             </Grid>
-            <Grid Grid.Row="13" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="14" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -267,7 +274,7 @@
 
 
 
-            <Border Grid.Row="14" Margin="0,1.5,0,0"/>
+            <Border Grid.Row="15" Margin="0,1.5,0,0"/>
         </Grid>
     </HeaderedContentControl>
 </Page>

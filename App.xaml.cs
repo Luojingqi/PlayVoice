@@ -48,10 +48,21 @@ namespace PlayVoice
 
         protected override void OnExit(ExitEventArgs e)
         {
-            base.OnExit(e);
+            if (GlobalData.Inst != null)
+            {
+                GlobalData.Inst.TryRun(false);
+                GlobalData.Inst.DisposePresetForExit();
+            }
             HotkeyManager.Inst.Stop();
             //SteamClient.Init(480);
             SteamClient.Shutdown();
+            base.OnExit(e);
+        }
+
+        protected override void OnSessionEnding(SessionEndingCancelEventArgs e)
+        {
+            PlayVoice.MainWindow.Inst?.PrepareForExit();
+            base.OnSessionEnding(e);
         }
 
 

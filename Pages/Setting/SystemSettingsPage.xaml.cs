@@ -26,6 +26,7 @@ namespace PlayVoice.Pages.Setting
         {
             InitializeComponent();
             LanguageManager.Inst.CultureChanged += UpdateLanguageAction;
+            Loaded += SystemSettingsPage_Loaded;
             Unloaded += SystemSettingsPage_Unloaded;
             {
                 LanguageComboBox.ItemsSource = LanguageManager.Inst.LanguageList;
@@ -52,6 +53,19 @@ namespace PlayVoice.Pages.Setting
                     ThemeManager.SwitchTheme(themeInfo.Theme);
                 };
                 ThemeManager.ThemeChanged += UpdateThemeAction;
+            }
+
+            {
+                RefreshCloseBehaviorOptions();
+                CloseBehaviorComboBox.ItemsSource = closeBehaviorOptions;
+                CloseBehaviorComboBox.IsSyncing = true;
+                CloseBehaviorComboBox.SelectedIndex = GlobalData.Inst.Config.MinimizeToTrayOnClose ? 0 : 1;
+                CloseBehaviorComboBox.IsSyncing = false;
+                CloseBehaviorComboBox.OnSelectionChanged += (obj0, obj1) =>
+                {
+                    GlobalData.Inst.Config.MinimizeToTrayOnClose = CloseBehaviorComboBox.SelectedIndex == 0;
+                    GlobalData.Inst.Config.Save();
+                };
             }
 
             {
@@ -332,11 +346,48 @@ namespace PlayVoice.Pages.Setting
         {
             LanguageManager.Inst.CultureChanged -= UpdateLanguageAction;
             ThemeManager.ThemeChanged -= UpdateThemeAction;
+            GlobalData.Inst.PresetDataChanged -= UpdatePresetSelection;
             GlobalData.Inst.RunStateChanged -= UpdateRunAction;
             GlobalData.Inst.GoEar_AudioStateChanged -= UpdateGoEarAudioAction;
         }
 
+        private void SystemSettingsPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            GlobalData.Inst.PresetDataChanged -= UpdatePresetSelection;
+            GlobalData.Inst.PresetDataChanged += UpdatePresetSelection;
+            UpdatePresetSelection(GlobalData.Inst.PresetData);
+        }
+
         private ObservableCollection<string> presetNameArray = new ObservableCollection<string>();
+        private ObservableCollection<string> closeBehaviorOptions = new ObservableCollection<string>();
+
+        private void UpdatePresetSelection(PresetData presetData)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(() => UpdatePresetSelection(presetData));
+                return;
+            }
+
+            int presetIndex = 0;
+            if (presetData != null)
+            {
+                int nameIndex = presetNameArray.IndexOf(presetData.Config.Name);
+                if (nameIndex >= 0)
+                    presetIndex = nameIndex;
+            }
+
+            PresetComboBox.IsSyncing = true;
+            PresetComboBox.SelectedIndex = presetIndex;
+            PresetComboBox.IsSyncing = false;
+        }
+
+        private void RefreshCloseBehaviorOptions()
+        {
+            closeBehaviorOptions.Clear();
+            closeBehaviorOptions.Add(LanguageManager.Inst.GetString("最小化到托盘"));
+            closeBehaviorOptions.Add(LanguageManager.Inst.GetString("直接关闭"));
+        }
 
 
         private void UpdateLanguageAction(System.Globalization.CultureInfo arg1, LanguageManager.LanguageInfo arg2)
@@ -346,6 +397,12 @@ namespace PlayVoice.Pages.Setting
             presetNameArray[0] = LanguageManager.Inst.GetString("无");
             PresetComboBox.SelectedIndex = index;
             PresetComboBox.IsSyncing = false;
+
+            int closeBehaviorIndex = CloseBehaviorComboBox.SelectedIndex;
+            CloseBehaviorComboBox.IsSyncing = true;
+            RefreshCloseBehaviorOptions();
+            CloseBehaviorComboBox.SelectedIndex = closeBehaviorIndex;
+            CloseBehaviorComboBox.IsSyncing = false;
 
             LanguageComboBox.IsSyncing = true;
             LanguageComboBox.SelectedIndex = arg2.Index;

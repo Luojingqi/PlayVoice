@@ -11,6 +11,10 @@ internal class Config
 
     public bool AutoMute { get; set; } = false;
 
+    public bool MinimizeToTrayOnClose { get; set; } = false;
+
+    public string LastPresetName { get; set; } = string.Empty;
+
     public double AudioOutDecibel { get; set; } = 0;
     public double AudioEarDecibel { get; set; } = 0;
     public double MicrophoneInputDecibel { get; set; } = 1.2;

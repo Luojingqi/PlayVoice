@@ -17,6 +17,9 @@ public partial class PresetPage : Page
     private CreatePresetPage CreatePresetPage;
     private DeletePresetPage DeletePresetPage;
     private UploadPresetPage UploadPresetPage;
+    private bool isSynchronizingPresetSelection;
+    private bool isLoadingPresetFromPage;
+
     public PresetPage()
     {
         Inst = this;
@@ -31,30 +34,24 @@ public partial class PresetPage : Page
         CreatePresetPageFrame.Content = CreatePresetPage;
         DeletePresetPageFrame.Content = DeletePresetPage;
         UploadPresetPageFrame.Content = UploadPresetPage;
-        int index = -1;
+        Loaded += PresetPage_Loaded;
+        Unloaded += PresetPage_Unloaded;
         var presetNames = PresetDataTool.GetAllPresetName();
         for (int i = 0; i < presetNames.Length; i++)
         {
             var name = presetNames[i];
             PageList.Add(new PageData() { Name = name });
-            if (GlobalData.Inst.PresetData != null && name == GlobalData.Inst.PresetData.Config.Name)
-                index = i;
         }
         PageList.Add(new PageData() { Name = " + " });
-        if (index == -1) index = PageList.Count - 1;
         TopButtonListBox.ItemsSource = PageList;
         TopButtonListBox.DisplayMemberPath = "Name";
         TopButtonListBox.SelectionChanged += TopButtonListBox_SelectionChanged;
-        Application.Current.Dispatcher.InvokeAsync(() =>
-        {
-            TopButtonListBox.SelectedIndex = index;
-            
-        }, System.Windows.Threading.DispatcherPriority.Loaded);
 
     }
 
-    private void TopButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private async void TopButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        if (isSynchronizingPresetSelection) return;
 
         var selectedPage = (PageData)TopButtonListBox.SelectedItem;
         if (string.IsNullOrEmpty(selectedPage?.Name))
@@ -73,7 +70,75 @@ public partial class PresetPage : Page
         {
             Frame0.Visibility = Visibility.Visible;
             Frame1.Visibility = Visibility.Hidden;
-            AudioTrackGridPage.InitLoadPreset(selectedPage.Name);
+            isLoadingPresetFromPage = true;
+            try
+            {
+                await AudioTrackGridPage.InitLoadPreset(selectedPage.Name);
+            }
+            finally
+            {
+                isLoadingPresetFromPage = false;
+            }
+        }
+    }
+
+    private void PresetPage_Loaded(object sender, RoutedEventArgs e)
+    {
+        GlobalData.Inst.PresetDataChanged -= UpdatePresetPage;
+        GlobalData.Inst.PresetDataChanged += UpdatePresetPage;
+        UpdatePresetPage(GlobalData.Inst.PresetData);
+    }
+
+    private void PresetPage_Unloaded(object sender, RoutedEventArgs e)
+    {
+        GlobalData.Inst.PresetDataChanged -= UpdatePresetPage;
+    }
+
+    private async void UpdatePresetPage(PresetData presetData)
+    {
+        if (isLoadingPresetFromPage) return;
+        if (!Dispatcher.CheckAccess())
+        {
+            Dispatcher.Invoke(() => UpdatePresetPage(presetData));
+            return;
+        }
+
+        int selectedIndex = PageList.Count - 1;
+        if (presetData != null)
+        {
+            int presetIndex = PageList.FindIndex(page => page.Name == presetData.Config.Name);
+            if (presetIndex >= 0)
+                selectedIndex = presetIndex;
+        }
+
+        isSynchronizingPresetSelection = true;
+        try
+        {
+            TopButtonListBox.SelectedIndex = -1;
+            await Dispatcher.InvokeAsync(() =>
+            {
+                TopButtonListBox.UpdateLayout();
+                TopButtonListBox.SelectedIndex = selectedIndex;
+                TopButtonListBox.ScrollIntoView(TopButtonListBox.SelectedItem);
+            }, System.Windows.Threading.DispatcherPriority.Loaded);
+        }
+        finally
+        {
+            isSynchronizingPresetSelection = false;
+        }
+
+        if (presetData == null)
+        {
+            Frame0.Visibility = Visibility.Hidden;
+            Frame1.Visibility = Visibility.Visible;
+            DeletePresetPage.Open();
+            UploadPresetPage.Open(-1);
+        }
+        else
+        {
+            Frame0.Visibility = Visibility.Visible;
+            Frame1.Visibility = Visibility.Hidden;
+            await AudioTrackGridPage.RefreshCurrentPreset();
         }
     }
 

@@ -359,15 +359,19 @@ namespace PlayVoice.Pages.Preset
 
         public async Task InitLoadPreset(string name)
         {
-            if (GlobalData.Inst.PresetData != null)
-            {
-                ShortcutList.Clear();
-                GlobalData.Inst.PresetData = null;
-            }
+            var presetData = await PresetDataTool.LoadPresetData(name);
+            GlobalData.Inst.PresetData = presetData;
+            await RefreshCurrentPreset();
+        }
+
+        public async Task RefreshCurrentPreset()
+        {
+            ShortcutList.Clear();
             TopButtonGroupListBox.SelectedIndex = -1;
             SelectAll = false;
-            GlobalData.Inst.PresetData = await PresetDataTool.LoadPresetData(name);
             var presetData = GlobalData.Inst.PresetData;
+            if (presetData == null) return;
+
             foreach (var item in presetData.AudioList)
             {
                 ShortcutList.Add(new AudioTrackItemViewModel(item));

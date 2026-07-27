@@ -581,4 +581,19 @@ O</value>
   <data name="举报" xml:space="preserve">
     <value>Report in Steam</value>
   </data>
+  <data name="关闭行为" xml:space="preserve">
+    <value>Close behavior</value>
+  </data>
+  <data name="最小化到托盘" xml:space="preserve">
+    <value>Minimize to tray</value>
+  </data>
+  <data name="直接关闭" xml:space="preserve">
+    <value>Exit application</value>
+  </data>
+  <data name="显示主窗口" xml:space="preserve">
+    <value>Show main window</value>
+  </data>
+  <data name="退出" xml:space="preserve">
+    <value>Exit</value>
+  </data>
 </root>
