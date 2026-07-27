@@ -551,4 +551,22 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="请先通过" xml:space="preserve">
     <value>请先通过</value>
   </data>
+  <data name="好评" xml:space="preserve">
+    <value>好评</value>
+  </data>
+  <data name="差评" xml:space="preserve">
+    <value>差评</value>
+  </data>
+  <data name="喜欢" xml:space="preserve">
+    <value>喜欢</value>
+  </data>
+  <data name="Steam详情" xml:space="preserve">
+    <value>在 Steam 中查看详情</value>
+  </data>
+  <data name="复制链接" xml:space="preserve">
+    <value>复制链接</value>
+  </data>
+  <data name="举报" xml:space="preserve">
+    <value>前往 Steam 举报</value>
+  </data>
 </root>

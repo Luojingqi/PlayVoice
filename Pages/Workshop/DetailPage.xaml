@@ -12,6 +12,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Style/ListBox.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/WorkshopFeedback.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </UserControl.Resources>
@@ -25,6 +26,7 @@
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
@@ -51,14 +53,45 @@
                     VerticalAlignment="Top"/>
             </Border>
 
-            <Grid Grid.Column="1">
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" >
+                <TextBlock x:Name="SteamScoreText"
+                           Text="★ --"
+                           Style="{StaticResource TextBlockMedium}"
+                           Foreground="{DynamicResource Warning}"
+                           HorizontalAlignment="Center"
+                           Margin="0,11,0,5"/>
+                <Button Style="{StaticResource WorkshopStandaloneButtonStyle}"
+                        ToolTip="{L:Lan Steam详情}"
+                        Click="OpenWorkshopPage_Click">
+                    <Viewbox Width="16" Height="16">
+                        <Path Data="{StaticResource WorkshopOpenIcon}" Stroke="{DynamicResource AccentColor}" StrokeThickness="1.7"/>
+                    </Viewbox>
+                </Button>
+                <Button Style="{StaticResource WorkshopStandaloneButtonStyle}"
+                        ToolTip="{L:Lan 复制链接}"
+                        Click="CopyWorkshopUrl_Click">
+                    <Viewbox Width="16" Height="16">
+                        <Path Data="{StaticResource WorkshopCopyLinkIcon}" Stroke="{DynamicResource AccentColor}" StrokeThickness="1.7"/>
+                    </Viewbox>
+                </Button>
+                <Button Style="{StaticResource WorkshopStandaloneButtonStyle}"
+                        ToolTip="{L:Lan 举报}"
+                        Click="ReportWorkshopItem_Click">
+                    <Viewbox Width="16" Height="16">
+                        <Path Data="{StaticResource WorkshopReportIcon}" Stroke="{DynamicResource Error}" StrokeThickness="1.7"/>
+                    </Viewbox>
+                </Button>
+            </StackPanel>
+
+            <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <ListBox Margin="0.25,1.5,0.25,1" Grid.Row="0" 
                         Style="{StaticResource HorizontalButtonGroupStyle}"
-                        x:Name="FoldUpButton" HorizontalAlignment="Center">
+                        x:Name="FoldUpButton" HorizontalAlignment="Center" Width="46" Tag="Uniform">
                     <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
                         <TextBlock Style="{StaticResource TextBlockHeavy}"
                                     Text=">>>" Foreground="{DynamicResource AccentColor}"/>
@@ -67,7 +100,7 @@
 
                 <ListBox Margin="0.25,2.5" Grid.Row="1" 
                         Style="{StaticResource HorizontalButtonGroupStyle}"
-                        x:Name="SubscribeButton" HorizontalAlignment="Center">
+                        x:Name="SubscribeButton" HorizontalAlignment="Center" Width="46" Tag="Uniform">
                     <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
                         <TextBlock Style="{StaticResource TextBlockHeavy}"
                                 Text="{L:Lan 订阅按钮}" Foreground="{DynamicResource AccentColor}"/>
@@ -75,24 +108,70 @@
                 </ListBox>
                 <ListBox Margin="0.25,2.5" Grid.Row="1" 
                         Style="{StaticResource HorizontalButtonGroupStyle}"
-                        x:Name="UnSubscribeButton" HorizontalAlignment="Center">
+                        x:Name="UnSubscribeButton" HorizontalAlignment="Center" Width="46" Tag="Uniform">
                     <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
                         <TextBlock Style="{StaticResource TextBlockHeavy}"
                                 Text="{L:Lan 取消订阅按钮}" Foreground="{DynamicResource AccentColor}"/>
+                    </ListBoxItem>
+                </ListBox>
+
+                <ListBox Margin="0.25,2.5" Grid.Row="2"
+                        Style="{StaticResource VerticalButtonGroupStyle}"
+                        x:Name="FeedbackButton" HorizontalAlignment="Center" Width="46">
+                    <ListBoxItem x:Name="UpvoteButton" Style="{StaticResource VerticalGroupButtonItemStyle}" Padding="7,5"
+                                 ToolTip="{L:Lan 好评}">
+                        <Viewbox Width="16" Height="16">
+                            <Path x:Name="UpvoteIcon" Fill="{DynamicResource AccentColor}"
+                                  Data="{StaticResource WorkshopUpvoteIcon}"/>
+                        </Viewbox>
+                    </ListBoxItem>
+                    <ListBoxItem x:Name="DownvoteButton" Style="{StaticResource VerticalGroupButtonItemStyle}" Padding="7,5"
+                                 ToolTip="{L:Lan 差评}">
+                        <Viewbox Width="16" Height="16">
+                            <Path x:Name="DownvoteIcon" Fill="{DynamicResource AccentColor}"
+                                  Data="{StaticResource WorkshopDownvoteIcon}"/>
+                        </Viewbox>
+                    </ListBoxItem>
+                    <ListBoxItem x:Name="FavoriteButton" Style="{StaticResource VerticalGroupButtonItemStyle}" Padding="7,5"
+                                 ToolTip="{L:Lan 喜欢}">
+                        <Viewbox Width="16" Height="16">
+                            <Path x:Name="FavoriteIcon" Fill="{DynamicResource AccentColor}"
+                                  Data="{StaticResource WorkshopFavoriteIcon}"/>
+                        </Viewbox>
                     </ListBoxItem>
                 </ListBox>
             </Grid>
         </Grid>
 
         <Border Margin="0,3" Grid.Row="1">
-            <TextBlock Style="{StaticResource TextBlockMedium}"
-                       x:Name="ItemTitle"
-                       HorizontalAlignment="Center" 
-                       VerticalAlignment="Top"
-                       FontSize="14"/>
+            <StackPanel>
+                <TextBlock Style="{StaticResource TextBlockMedium}"
+                           x:Name="ItemTitle"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Top"
+                           FontSize="14"/>
+                <StackPanel x:Name="AuthorPanel"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            Height="29"
+                            Margin="0,3,0,0"
+                            Visibility="Hidden">
+                    <Border Width="24" Height="24" CornerRadius="12" ClipToBounds="True"
+                            Background="{DynamicResource BgLight}" Margin="0,0,7,0">
+                        <Image x:Name="AuthorAvatar" Stretch="UniformToFill"/>
+                    </Border>
+                    <TextBlock x:Name="AuthorName"
+                               Style="{StaticResource TextBlockMedium}"
+                               Foreground="{DynamicResource AccentColor}"
+                               VerticalAlignment="Center"
+                               Cursor="Hand"
+                               TextDecorations="Underline"
+                               MouseLeftButtonUp="AuthorName_MouseLeftButtonUp"/>
+                </StackPanel>
+            </StackPanel>
         </Border>
 
-        <ListBox Grid.Row="2" 
+        <ListBox Grid.Row="2"
                 x:Name="AudioListBox"
                 Background="Transparent"
                 BorderThickness="0"
@@ -117,7 +196,7 @@
             </ListBox.ItemContainerStyle>
         </ListBox>
 
-        <Border Grid.Row="2" 
+        <Border Grid.Row="2"
           BorderBrush="Transparent">
             <Grid>
                 <Grid.RowDefinitions>

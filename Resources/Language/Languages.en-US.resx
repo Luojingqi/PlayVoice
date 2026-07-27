@@ -563,4 +563,22 @@ O</value>
   <data name="请先通过" xml:space="preserve">
     <value>Please proceed first</value>
   </data>
+  <data name="好评" xml:space="preserve">
+    <value>Upvote</value>
+  </data>
+  <data name="差评" xml:space="preserve">
+    <value>Downvote</value>
+  </data>
+  <data name="喜欢" xml:space="preserve">
+    <value>Add to favorites</value>
+  </data>
+  <data name="Steam详情" xml:space="preserve">
+    <value>View details in Steam</value>
+  </data>
+  <data name="复制链接" xml:space="preserve">
+    <value>Copy link</value>
+  </data>
+  <data name="举报" xml:space="preserve">
+    <value>Report in Steam</value>
+  </data>
 </root>

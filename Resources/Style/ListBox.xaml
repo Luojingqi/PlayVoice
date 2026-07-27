@@ -342,6 +342,18 @@
         </Style.Triggers>
     </Style>
 
+    <Style x:Key="VerticalButtonGroupStyle"
+           TargetType="ListBox"
+           BasedOn="{StaticResource HorizontalButtonGroupStyle}">
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Vertical" IsItemsHost="True"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="GroupButtonItemStyle" TargetType="ListBoxItem">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
@@ -446,10 +458,25 @@
                         <Trigger Property="ItemsControl.AlternationIndex" Value="0">
                             <Setter TargetName="SeparatorLine" Property="Visibility" Value="Collapsed"/>
                         </Trigger>
+                        <Trigger Property="Tag" Value="Vertical">
+                            <Setter TargetName="SeparatorLine" Property="Width" Value="Auto"/>
+                            <Setter TargetName="SeparatorLine" Property="Height" Value="1"/>
+                            <Setter TargetName="SeparatorLine" Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter TargetName="SeparatorLine" Property="VerticalAlignment" Value="Top"/>
+                            <Setter TargetName="SeparatorLine" Property="Margin" Value="6,0"/>
+                            <Setter TargetName="SeparatorLine" Property="Stroke" Value="{x:Null}"/>
+                            <Setter TargetName="SeparatorLine" Property="Fill" Value="{DynamicResource Border}"/>
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+
+    <Style x:Key="VerticalGroupButtonItemStyle"
+           TargetType="ListBoxItem"
+           BasedOn="{StaticResource GroupButtonItemStyle}">
+        <Setter Property="Tag" Value="Vertical"/>
     </Style>
 
     <Style x:Key="GroupInputItemStyle" TargetType="ListBoxItem">

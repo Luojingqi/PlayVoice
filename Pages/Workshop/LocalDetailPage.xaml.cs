@@ -16,6 +16,9 @@ namespace PlayVoice.Pages.Workshop
     /// </summary>
     public partial class LocalDetailPage : UserControl
     {
+        private bool? userVote;
+        private bool isFavorite;
+
         public LocalDetailPage()
         {
             InitializeComponent();
@@ -85,6 +88,44 @@ namespace PlayVoice.Pages.Workshop
                 }
                 CheckSubscribe();
                 UnSubscribeButton.SelectedIndex = -1;
+            };
+
+            FeedbackButton.SelectionChanged += async (s, e) =>
+            {
+                int selectedIndex = FeedbackButton.SelectedIndex;
+                if (selectedIndex == -1 || tableItem?.Item.HasValue != true) return;
+
+                var item = tableItem.Item.Value;
+                string action = selectedIndex switch
+                {
+                    0 => LanguageManager.Inst.GetString("好评"),
+                    1 => LanguageManager.Inst.GetString("差评"),
+                    _ => LanguageManager.Inst.GetString("喜欢")
+                };
+
+                bool success = selectedIndex switch
+                {
+                    0 => await item.Vote(true) == Result.OK,
+                    1 => await item.Vote(false) == Result.OK,
+                    _ => isFavorite ? await item.RemoveFavorite() : await item.AddFavorite()
+                };
+
+                if (success)
+                {
+                    if (selectedIndex == 0) userVote = true;
+                    else if (selectedIndex == 1) userVote = false;
+                    else isFavorite = !isFavorite;
+                    UpdateFeedbackState();
+                }
+
+                MainWindow.Inst.AddNotification(
+                    () => LanguageManager.Inst.GetString("通知"),
+                    () => success
+                        ? $"{action} : {item.Title}"
+                        : $"{action} {LanguageManager.Inst.GetString("失败")} : {item.Title}",
+                    success ? LabelStatus.Success : LabelStatus.Error, 3.5f);
+
+                FeedbackButton.SelectedIndex = -1;
             };
 
             CheckBoxListBox.SelectionChanged += CheckBoxListBox_SelectionChanged;
@@ -169,6 +210,23 @@ namespace PlayVoice.Pages.Workshop
         public async Task SetTableItem(TablePageItem tableItem)
         {
             this.tableItem = tableItem;
+            FeedbackButton.SelectedIndex = -1;
+            userVote = null;
+            isFavorite = false;
+            UpdateFeedbackState();
+            AuthorPanel.Visibility = Visibility.Hidden;
+            AuthorAvatar.Source = null;
+            AuthorName.Text = string.Empty;
+            if (tableItem.Item.HasValue)
+            {
+                SteamScoreText.Text = $"★ {tableItem.Item.Value.Score * 5:0.0}";
+                await LoadAuthor(tableItem.Item.Value.Owner.Id);
+                var vote = await tableItem.Item.Value.GetUserVote();
+                userVote = vote?.VotedUp == true ? true : vote?.VotedDown == true ? false : null;
+                UpdateFeedbackState();
+            }
+            else
+                SteamScoreText.Text = "★ --";
             var path = tableItem.LocalItemPath;
             if (JsonTool.LoadJson<ResourceDataConfig>(Path.Combine(path, "ResourceConfig.json"), out var resourceDataConfig))
             {
@@ -206,6 +264,64 @@ namespace PlayVoice.Pages.Workshop
             LocalDetailItemList.Clear();
             AudioDataList.Clear();
             BgImage.Source = null;
+            AuthorPanel.Visibility = Visibility.Hidden;
+            AuthorAvatar.Source = null;
+            AuthorName.Text = string.Empty;
+            SteamScoreText.Text = "★ --";
+            FeedbackButton.SelectedIndex = -1;
+            userVote = null;
+            isFavorite = false;
+            UpdateFeedbackState();
+        }
+
+        private async Task LoadAuthor(SteamId owner)
+        {
+            var author = await WorkshopAuthorInfo.LoadAsync(owner);
+            if (tableItem?.Item.HasValue != true || tableItem.Item.Value.Owner.Id != owner) return;
+
+            AuthorName.Text = author.Name;
+            AuthorAvatar.Source = author.Avatar;
+            AuthorPanel.Visibility = Visibility.Visible;
+        }
+
+        private void AuthorName_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (tableItem?.Item.HasValue == true)
+                SteamFriends.OpenUserOverlay(tableItem.Item.Value.Owner.Id, "steamid");
+        }
+
+        private void OpenWorkshopPage_Click(object sender, RoutedEventArgs e)
+        {
+            if (tableItem?.Item.HasValue == true)
+                SteamFriends.OpenWebOverlay(tableItem.Item.Value.Url);
+        }
+
+        private void CopyWorkshopUrl_Click(object sender, RoutedEventArgs e)
+        {
+            if (tableItem?.Item.HasValue != true) return;
+            Clipboard.SetText(tableItem.Item.Value.Url);
+            MainWindow.Inst.AddNotification(
+                () => LanguageManager.Inst.GetString("通知"),
+                () => LanguageManager.Inst.GetString("已复制") + "URL",
+                LabelStatus.Success, 3.5f);
+        }
+
+        private void ReportWorkshopItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (tableItem?.Item.HasValue == true)
+                SteamFriends.OpenWebOverlay(tableItem.Item.Value.Url);
+        }
+
+        private void UpdateFeedbackState()
+        {
+            SetFeedbackState(UpvoteIcon, userVote == true, "Success");
+            SetFeedbackState(DownvoteIcon, userVote == false, "Error");
+            SetFeedbackState(FavoriteIcon, isFavorite, "Warning");
+        }
+
+        private void SetFeedbackState(System.Windows.Shapes.Path icon, bool active, string brushKey)
+        {
+            icon.SetResourceReference(System.Windows.Shapes.Shape.FillProperty, active ? brushKey : "AccentColor");
         }
 
         private async Task<bool> CheckSubscribe()
