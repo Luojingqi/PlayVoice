@@ -17,6 +17,9 @@
 
 现在开始收集你最爱的音频并分享给他们听吧！
 
+https://store.steampowered.com/app/4907460/PlayVoice/
+创意工坊与云存档功能需要前往steam使用。
+
 
 <img width="2205" height="1317" alt="QQ20260711-203951" src="https://github.com/user-attachments/assets/f935ceac-ec79-4e6f-b7f3-6fb188019a5a" />
 <img width="2205" height="1317" alt="QQ20260711-203908" src="https://github.com/user-attachments/assets/92814adc-a4b2-435d-92f1-d4c12da6e45d" />
