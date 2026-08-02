@@ -77,7 +77,7 @@ namespace PlayVoice
         private void ContentFrame_Navigating(object sender, NavigatingCancelEventArgs e)
         {
             if (e.NavigationMode == System.Windows.Navigation.NavigationMode.Back ||
-        e.NavigationMode == System.Windows.Navigation.NavigationMode.Forward)
+                e.NavigationMode == System.Windows.Navigation.NavigationMode.Forward)
             {
                 e.Cancel = true;
             }

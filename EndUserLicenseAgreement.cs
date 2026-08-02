@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿namespace PlayVoice;
 
-namespace PlayVoice;
-
+/// <summary>
+/// 最终用户许可协议（End User License Agreement，EULA）
+/// </summary>
 public static class EndUserLicenseAgreement
 {
     public static string zh_CN =

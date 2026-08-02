@@ -37,36 +37,36 @@ public class AudioData
         }
     }
 
-    private static double minDecibel = -90.0;
-    private static double maxDecibel = 6.0;
+    public static readonly double MinDecibel = -90.0;
+    public static readonly double MaxDecibel = 6.0;
 
     public static double DecibelToVolume(double decibel)
     {
-        if (decibel <= minDecibel) return 0;
+        if (decibel <= MinDecibel) return 0;
         return Math.Pow(10.0, decibel / 20.0);
     }
 
     public static double VolumeToDecibel(double volume)
     {
-        if (volume <= 0) return minDecibel;
-        return Math.Clamp(20.0 * Math.Log10(volume), minDecibel, maxDecibel);
+        if (volume <= 0) return MinDecibel;
+        return Math.Clamp(20.0 * Math.Log10(volume), MinDecibel, MaxDecibel);
     }
 
     public static double ProportionToDecibel(double proportion)
     {
         if (proportion <= 1)
-            return proportion * Math.Abs(minDecibel) + minDecibel;
+            return proportion * Math.Abs(MinDecibel) + MinDecibel;
         else
-            return (proportion - 1) * maxDecibel;
+            return (proportion - 1) * MaxDecibel;
     }
 
     public static double DecibelToProportion(double decibel)
     {
-        var absMinDecibel = Math.Abs(minDecibel);
+        var absMinDecibel = Math.Abs(MinDecibel);
         if (decibel <= 0)
             return (decibel + absMinDecibel) / absMinDecibel;
         else
-            return decibel / maxDecibel + 1;
+            return decibel / MaxDecibel + 1;
     }
 
     public AudioData()

@@ -1,7 +1,6 @@
 ﻿using PlayVoice.Audio;
 using PlayVoice.Hotkey;
 using PlayVoice.Pages.Preset;
-using PlayVoice.Pages.Workshop;
 using PlayVoice.Resources.Language;
 using PlayVoice.Resources.Themes;
 using System.IO;
@@ -22,9 +21,8 @@ internal class GlobalData
     public AudioProxy AudioProxy => audioProxy;
 
     private PresetData presetData;
-    private int presetChangeVersion;
+
     public event Action<PresetData> PresetDataChanged;
-    public Task LoadLastPresetTask { get; private set; }
 
     public PresetData PresetData
     {
@@ -32,7 +30,6 @@ internal class GlobalData
         set
         {
             if (ReferenceEquals(presetData, value)) return;
-            presetChangeVersion++;
             if (presetData != null)
             {
                 HotkeyManager.Inst.ClearHotkeys();
@@ -51,7 +48,6 @@ internal class GlobalData
                     };
                 }
             }
-            config.LastPresetName = presetData?.Config?.Name ?? string.Empty;
             config.Save();
             PresetDataChanged?.Invoke(presetData);
         }
@@ -63,39 +59,6 @@ internal class GlobalData
         HotkeyManager.Inst.ClearHotkeys();
         presetData.Dispose();
         presetData = null;
-    }
-
-    private async Task LoadLastPresetAsync()
-    {
-        string presetName = config.LastPresetName;
-        if (string.IsNullOrWhiteSpace(presetName)) return;
-
-        int changeVersion = presetChangeVersion;
-        PresetData loadedPreset = null;
-        try
-        {
-            loadedPreset = await PresetDataTool.LoadPresetData(presetName);
-        }
-        catch
-        {
-            // 配置中的预设已损坏或无法读取时，回退到无预设状态。
-        }
-
-        if (changeVersion != presetChangeVersion)
-        {
-            loadedPreset?.Dispose();
-            return;
-        }
-
-        if (loadedPreset != null)
-        {
-            PresetData = loadedPreset;
-        }
-        else
-        {
-            config.LastPresetName = string.Empty;
-            config.Save();
-        }
     }
 
     public bool GetRun() => run;
@@ -113,7 +76,7 @@ internal class GlobalData
         }
         else
         {
-            if(config.IsPassVolumeTest == false)
+            if (config.IsPassVolumeTest == false)
             {
                 MainWindow.Inst.AddNotification(
                     () => $"{LanguageManager.Inst.GetString("通知")}",
@@ -214,7 +177,6 @@ internal class GlobalData
         audioProxy = new();
         audioProxy.Init();
         equipment.Init();
-        LoadLastPresetTask = LoadLastPresetAsync();
     }
 
     public List<string> CopyAudioPathList = new();

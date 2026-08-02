@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using PlayVoice.Pages.Sidebar;
-using PlayVoice.Resources.Language;
 using System.Collections.ObjectModel;
 
 namespace PlayVoice;
@@ -20,7 +19,7 @@ internal class MainViewModel : ObservableObject
     {
         InitializeMenuItems();
         SelectedMenu = MenuItems[0];
-        
+
     }
 
     private void InitializeMenuItems()
@@ -39,6 +38,4 @@ internal class MainViewModel : ObservableObject
             PageUri = "Pages/Setting/SettingPage.xaml"
         });
     }
-
-    
 }
