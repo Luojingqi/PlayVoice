@@ -20,6 +20,8 @@ internal class Config
 
     public bool IsPassVolumeTest { get; set; } = false;
 
+    public bool AcceptedEndUserLicenseAgreement { get; set; } = false;
+
     public string PhysicalMicrophoneID { get; set; }
     public string PhysicalLoudspeakerID { get; set; }
     public string VirtualMicrophoneID { get; set; }

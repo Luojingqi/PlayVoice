@@ -596,4 +596,13 @@ O</value>
   <data name="退出" xml:space="preserve">
     <value>Exit</value>
   </data>
+  <data name="最终用户许可协议" xml:space="preserve">
+    <value>End User License Agreement</value>
+  </data>
+  <data name="拒绝" xml:space="preserve">
+    <value>Decline</value>
+  </data>
+  <data name="同意" xml:space="preserve">
+    <value>Agree</value>
+  </data>
 </root>

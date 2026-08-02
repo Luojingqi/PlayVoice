@@ -584,4 +584,13 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="退出" xml:space="preserve">
     <value>退出</value>
   </data>
+  <data name="最终用户许可协议" xml:space="preserve">
+    <value>最终用户许可协议</value>
+  </data>
+  <data name="拒绝" xml:space="preserve">
+    <value>拒绝</value>
+  </data>
+  <data name="同意" xml:space="preserve">
+    <value>同意</value>
+  </data>
 </root>

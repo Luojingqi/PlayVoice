@@ -5,6 +5,7 @@
   "AudioDecibel": 0,
   "MicrophoneInputDecibel": 0,
   "GlobalDecibel": 0,
+  "AcceptedEndUserLicenseAgreement": false,
   "BeforePlayingKey": {
     "Action": 0,
     "HotkeyData": {

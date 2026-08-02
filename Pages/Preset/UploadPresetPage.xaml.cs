@@ -127,6 +127,16 @@ namespace PlayVoice.Pages.Preset
                 goto end;
             }
 
+            if (!GlobalData.Inst.Config.AcceptedEndUserLicenseAgreement)
+            {
+                var agreementWindow = new EndUserLicenseAgreementWindow { Owner = MainWindow.Inst };
+                if (agreementWindow.ShowDialog() != true)
+                    goto end;
+
+                GlobalData.Inst.Config.AcceptedEndUserLicenseAgreement = true;
+                GlobalData.Inst.Config.Save();
+            }
+
             ContentGrid.IsEnabled = false;
             loadingPage.Visibility = Visibility.Visible;
             loadingPage.SetProgress(0, 0);
