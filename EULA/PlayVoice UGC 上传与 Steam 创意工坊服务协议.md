@@ -4,7 +4,7 @@ PlayVoice UGC 上传与 Steam 创意工坊服务协议
 
 生效日期：2026年8月3日
 
-永久链接：【PLAYVOICE\_UGC\_TERMS\_URL】
+永久链接：https://github.com/Luojingqi/PlayVoice/blob/main/EULA/PlayVoice%20UGC%20%E4%B8%8A%E4%BC%A0%E4%B8%8E%20Steam%20%E5%88%9B%E6%84%8F%E5%B7%A5%E5%9D%8A%E6%9C%8D%E5%8A%A1%E5%8D%8F%E8%AE%AE.md
 
 
 
