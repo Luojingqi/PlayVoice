@@ -7,9 +7,9 @@
 
 ## 许可与协议
 
-- GitHub 源代码以 Source-Available 方式提供，并非经 Open Source Initiative 认可的开源软件。查看 [中文许可协议](LICENSE/PlayVoice%20Source-Available%20源代码许可协议.md) / [English License](LICENSE/PlayVoice%20Source-Available%20License.md)。
-- 通过 Steam 获取和使用 PlayVoice 官方版本前，请阅读 [最终用户许可协议](EULA/PlayVoice%20最终用户许可协议.md) / [End User License Agreement](EULA/PlayVoice%20End%20User%20License%20Agreement.md)。
-- 使用 PlayVoice 上传用户生成内容（UGC）前，请阅读 [UGC 上传与 Steam 创意工坊服务协议](EULA/PlayVoice%20UGC%20上传与%20Steam%20创意工坊服务协议.md) / [UGC Upload and Steam Workshop Service Agreement](EULA/PlayVoice%20UGC%20Upload%20and%20Steam%20Workshop%20Service%20Agreement.md)。
+- GitHub 源代码以 Source-Available 方式提供，并非经 Open Source Initiative 认可的开源软件。查看 [中文许可协议](https://github.com/Luojingqi/PlayVoice/blob/main/LICENSE/PlayVoice%20Source-Available%20%E6%BA%90%E4%BB%A3%E7%A0%81%E8%AE%B8%E5%8F%AF%E5%8D%8F%E8%AE%AE.md) / [English License](https://github.com/Luojingqi/PlayVoice/blob/main/LICENSE/PlayVoice%20Source-Available%20License.md)。
+- 通过 Steam 获取和使用 PlayVoice 官方版本前，请阅读 [最终用户许可协议](https://store.steampowered.com/eula/4907460_eula_0) / [End User License Agreement](https://store.steampowered.com/eula/4907460_eula_0)。
+- 使用 PlayVoice 上传用户生成内容（UGC）前，请阅读 [UGC 上传与 Steam 创意工坊服务协议](https://store.steampowered.com/eula/4907460_eula_1) / [UGC Upload and Steam Workshop Service Agreement](https://store.steampowered.com/eula/4907460_eula_1)。
 
 ## 优势
 

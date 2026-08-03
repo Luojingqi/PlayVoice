@@ -49,11 +49,13 @@
     <Resource Include="Resources\Style\PlayVoice.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="EULA\PlayVoice UGC Upload and Steam Workshop Service Agreement.md">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Resource Include="EULA\PlayVoice UGC Upload and Steam Workshop Service Agreement.md"
+              Condition="Exists('EULA\PlayVoice UGC Upload and Steam Workshop Service Agreement.md')">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="EULA\PlayVoice UGC 上传与 Steam 创意工坊服务协议.md">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    <Resource Include="EULA\PlayVoice UGC 上传与 Steam 创意工坊服务协议.md"
+              Condition="Exists('EULA\PlayVoice UGC 上传与 Steam 创意工坊服务协议.md')">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 
