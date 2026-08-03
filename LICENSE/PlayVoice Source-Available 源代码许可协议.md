@@ -6,7 +6,7 @@ PlayVoice Source-Available 源代码许可协议
 
 生效日期：2026年8月3日
 
-永久链接：【PLAYVOICE\_SOURCE\_AVAILABLE\_LICENSE\_URL】
+永久链接：https://github.com/Luojingqi/PlayVoice/blob/main/LICENSE/PlayVoice%20Source-Available%20%E6%BA%90%E4%BB%A3%E7%A0%81%E8%AE%B8%E5%8F%AF%E5%8D%8F%E8%AE%AE.md
 
 
 
