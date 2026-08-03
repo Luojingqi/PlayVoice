@@ -129,7 +129,7 @@ namespace PlayVoice.Pages.Preset
 
             if (!GlobalData.Inst.Config.AcceptedEndUserLicenseAgreement)
             {
-                var agreementWindow = new EndUserLicenseAgreementWindow { Owner = MainWindow.Inst };
+                var agreementWindow = new UserGeneratedContentAgreementWindow { Owner = MainWindow.Inst };
                 if (agreementWindow.ShowDialog() != true)
                     goto end;
 
@@ -157,10 +157,6 @@ namespace PlayVoice.Pages.Preset
             Directory.CreateDirectory(tempExtendedExplanationPath);
             await JsonTool.CopyDirectoryReplaceTrueAsync(extendedExplanationPath, tempExtendedExplanationPath);
             Report(0.82f);
-            await File.WriteAllTextAsync(Path.Combine(tempExtendedExplanationPath, "Readme.txt"),
-@$"{EndUserLicenseAgreement.en_US}
-
-{EndUserLicenseAgreement.zh_CN}");
 
             var metaData = ResourceDataConfig.Metadata.Create(
                  await PresetDataTool.LoadPresetDataFromPath(

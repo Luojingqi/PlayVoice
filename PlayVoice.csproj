@@ -29,6 +29,8 @@
     <None Remove="Resources\Fonts\SourceHanSansSC-Medium-2.otf" />
     <None Remove="Resources\Style\PlayVoice.ico" />
     <None Remove="Resources\Style\PlayVoice.png" />
+    <None Remove="EULA\PlayVoice UGC Upload and Steam Workshop Service Agreement.md" />
+    <None Remove="EULA\PlayVoice UGC 上传与 Steam 创意工坊服务协议.md" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +48,12 @@
     </Resource>
     <Resource Include="Resources\Style\PlayVoice.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="EULA\PlayVoice UGC Upload and Steam Workshop Service Agreement.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="EULA\PlayVoice UGC 上传与 Steam 创意工坊服务协议.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
 
@@ -66,6 +74,12 @@
 
   <ItemGroup>
     <None Update="config.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="EULA\PlayVoice End User License Agreement.md">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="EULA\PlayVoice 最终用户许可协议.md">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="steam_api64.dll">

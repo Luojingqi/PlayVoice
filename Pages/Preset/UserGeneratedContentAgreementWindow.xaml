@@ -1,4 +1,4 @@
-<Window x:Class="PlayVoice.Pages.Preset.EndUserLicenseAgreementWindow"
+<Window x:Class="PlayVoice.Pages.Preset.UserGeneratedContentAgreementWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:L="clr-namespace:PlayVoice.Resources.Language"
@@ -36,7 +36,7 @@
                     CornerRadius="12,12,0,0"
                     MouseLeftButtonDown="TitleBar_OnMouseLeftButtonDown">
                 <Grid>
-                    <TextBlock Text="{L:Lan 最终用户许可协议}"
+                    <TextBlock Text="{L:Lan PlayVoice UGC 上传与 Steam 创意工坊服务协议}"
                                Margin="12,0,45,0"
                                VerticalAlignment="Center"
                                Foreground="{DynamicResource AccentColor}"
