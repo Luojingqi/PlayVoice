@@ -2,7 +2,17 @@
 
 一款  更现代 更便携 操作更简单  的 游戏内麦克风音频播放工具，将欢乐的语音播放到你的队麦。
 
-优势
+> [!IMPORTANT]
+> 在获取、编译或使用 PlayVoice，以及向 Steam 创意工坊上传内容前，请先阅读下方与对应使用场景相关的许可和协议。
+
+## 许可与协议
+
+- GitHub 源代码以 Source-Available 方式提供，并非经 Open Source Initiative 认可的开源软件。查看 [中文许可协议](LICENSE/PlayVoice%20Source-Available%20源代码许可协议.md) / [English License](LICENSE/PlayVoice%20Source-Available%20License.md)。
+- 通过 Steam 获取和使用 PlayVoice 官方版本前，请阅读 [最终用户许可协议](EULA/PlayVoice%20最终用户许可协议.md) / [End User License Agreement](EULA/PlayVoice%20End%20User%20License%20Agreement.md)。
+- 使用 PlayVoice 上传用户生成内容（UGC）前，请阅读 [UGC 上传与 Steam 创意工坊服务协议](EULA/PlayVoice%20UGC%20上传与%20Steam%20创意工坊服务协议.md) / [UGC Upload and Steam Workshop Service Agreement](EULA/PlayVoice%20UGC%20Upload%20and%20Steam%20Workshop%20Service%20Agreement.md)。
+
+## 优势
+
 创意工坊：  内置创意工坊查看与上传，发现更多好玩的音频，或将你收集好的音频共享出去，独乐乐不如众乐乐。
 
 云存档 + 小而精：  程序占用空间小，出门外在可以随时在steam下载此程序，并配合云存档让你随时随地使用你的预设。
