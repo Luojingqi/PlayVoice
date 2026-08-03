@@ -140,7 +140,7 @@ internal class AudioProxy
         physicalLoudspeakerVolume.Volume = (float)AudioData.DecibelToVolume(globalDecibel);
         audioMixToPL = new MixingSampleProvider(physicalLoudspeakerWaveFormat) { ReadFully = true };
         audioVolumeToPL = new VolumeSampleProvider(audioMixToPL);
-        audioVolumeToPL.Volume = (float)AudioData.DecibelToVolume(audioOutDecibel);
+        audioVolumeToPL.Volume = (float)AudioData.DecibelToVolume(audioEarDecibel);
         audioToPLMetering = new MeteringSampleProvider(audioVolumeToPL);
         SetStreamVolume(audioToPLMetering, SampleEnum.AutioToPL);
         physicalLoudspeakerMixer.AddMixerInput(audioToPLMetering);

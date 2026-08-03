@@ -238,9 +238,12 @@ namespace PlayVoice.Pages.Setting
                                     () => $"{LanguageManager.Inst.GetString("通知")}",
                                     () => $"{LanguageManager.Inst.GetString("录音结束")}",
                                     Pages.LabelStatus.Warning, 3.5f);
-                                AudioOutVolumeSlider.Value = AudioData.DecibelToProportion(await AudioData.MeasureLufs(testPath)) * 100;
-                                GlobalData.Inst.Config.IsPassVolumeTest = true;
-                                GlobalData.Inst.Config.Save();
+                                double? microphoneLufs = await AudioData.MeasureLufs(testPath);
+                                if (microphoneLufs.HasValue)
+                                {
+                                    GlobalData.Inst.Config.MicrophoneLufs = microphoneLufs.Value;
+                                    GlobalData.Inst.Config.Save();
+                                }
                             }
                         });
                     });

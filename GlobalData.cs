@@ -76,7 +76,7 @@ internal class GlobalData
         }
         else
         {
-            if (config.IsPassVolumeTest == false)
+            if (config.MicrophoneLufs == null)
             {
                 MainWindow.Inst.AddNotification(
                     () => $"{LanguageManager.Inst.GetString("通知")}",

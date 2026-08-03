@@ -68,6 +68,13 @@ public class PresetData
                 return null;
             }
 
+            double? actualLufs = await AudioData.MeasureLufs(completePath);
+            if (!actualLufs.HasValue)
+            {
+                reader.Dispose();
+                return null;
+            }
+
             string destPath = Path.Combine(PresetDataTool.basePath, Config.Name, Path.GetFileName(completePath));
 
             if (!File.Exists(destPath))
@@ -86,15 +93,13 @@ public class PresetData
                 {
                     FileName = Path.GetFileNameWithoutExtension(completePath),
                     FileFormat = Path.GetExtension(completePath),
+                    Lufs = actualLufs.Value,
                     HotkeyData = new HotkeyData()
                 };
                 using (var fs = System.IO.File.OpenRead(destPath))
                 {
                     audioDataConfig.Size = fs.Length;
                 }
-                double actualLufs = await AudioData.MeasureLufs(destPath);
-                double lufsDifference = AudioData.TargetLufs - actualLufs;
-                audioDataConfig.Decibel = lufsDifference;
                 Console.WriteLine($"{audioDataConfig.Name} 实际LUFS: {actualLufs}");
                 Config.AudioDataConfigList.Add(audioDataConfig);
                 return audioData;

@@ -16,9 +16,8 @@ internal class Config
     public double AudioOutDecibel { get; set; } = 0;
     public double AudioEarDecibel { get; set; } = 0;
     public double MicrophoneInputDecibel { get; set; } = 1.2;
+    public double? MicrophoneLufs { get; set; }
     public double GlobalDecibel { get; set; } = 0;
-
-    public bool IsPassVolumeTest { get; set; } = false;
 
     public bool AcceptedEndUserLicenseAgreement { get; set; } = false;
 

@@ -3,6 +3,7 @@ using NAudio.Wave.SampleProviders;
 using PlayVoice.Pages.Preset;
 using PlayVoice.Resources.Language;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Windows;
 
@@ -27,13 +28,18 @@ public class AudioData
 
     public void SetVolume(double decibel)
     {
+        double normalizationDecibel = 0;
+        if (Config.Lufs.HasValue && GlobalData.Inst.Config.MicrophoneLufs.HasValue)
+            normalizationDecibel = GlobalData.Inst.Config.MicrophoneLufs.Value - Config.Lufs.Value;
+
+        var volume = (float)DecibelToVolume(normalizationDecibel + decibel);
         if (VolumeProvider_ToVM != null)
         {
-            VolumeProvider_ToVM.Volume = (float)DecibelToVolume(decibel);
+            VolumeProvider_ToVM.Volume = volume;
         }
         if (VolumeProvider_ToPL != null)
         {
-            VolumeProvider_ToPL.Volume = (float)DecibelToVolume(decibel);
+            VolumeProvider_ToPL.Volume = volume;
         }
     }
 
@@ -142,6 +148,7 @@ public class AudioData
                 VolumeProvider_ToPL = new VolumeSampleProvider(
                   new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }.ToSampleProvider());
                 PlayTimer.Interval = AudioTrackArray[0].TotalTime.TotalMilliseconds;
+                SetVolume(Config.Decibel);
                 audioProxy.AddAudio(this);
                 PlayTimer.Start();
                 AnimationPlayAction?.Invoke();
@@ -245,8 +252,7 @@ public class AudioData
         }
     }
 
-    public static double TargetLufs = -25;
-    public static async Task<double> MeasureLufs(string filePath)
+    public static async Task<double?> MeasureLufs(string filePath)
     {
         var process = new Process
         {
@@ -266,12 +272,12 @@ public class AudioData
 
         var match = Regex.Match(output, @"I:\s+([-0-9.]+)\s+LUFS", RegexOptions.RightToLeft);
 
-        if (match.Success && double.TryParse(match.Groups[1].Value, out double lufs))
+        if (match.Success && double.TryParse(match.Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out double lufs))
         {
             return lufs;
         }
         Console.WriteLine($"[警告] 未能解析 {filePath} 的 LUFS。FFmpeg 输出:\n{output}");
-        return TargetLufs;
+        return null;
     }
 }
 

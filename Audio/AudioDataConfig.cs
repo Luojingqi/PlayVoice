@@ -8,7 +8,8 @@ public class AudioDataConfig
     public string FileName { get; set; }
     public string FileFormat { get; set; }
     public long Size { get; set; }
-    public double Decibel { get; set; } = -25.2;
+    public double? Lufs { get; set; }
+    public double Decibel { get; set; } = 0;
     public HotkeyData HotkeyData {  get; set; }
 
     [JsonIgnore]
