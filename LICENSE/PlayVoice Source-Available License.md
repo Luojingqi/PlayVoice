@@ -6,7 +6,7 @@ Version: 1.0
 
 Effective Date: August 3, 2026
 
-Permanent URL: [PLAYVOICE_SOURCE_AVAILABLE_LICENSE_URL]
+Permanent URL: https://github.com/Luojingqi/PlayVoice/blob/main/LICENSE/PlayVoice%20Source-Available%20License.md
 
 
 
