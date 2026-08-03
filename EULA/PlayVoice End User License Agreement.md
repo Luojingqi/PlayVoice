@@ -4,7 +4,7 @@ Version: 1.0
 
 Effective Date: August 3, 2026
 
-Permanent URL: [PLAYVOICE_STEAM_EULA_URL]
+Permanent URL: https://github.com/Luojingqi/PlayVoice/blob/main/EULA/PlayVoice%20End%20User%20License%20Agreement.md
 
 
 
