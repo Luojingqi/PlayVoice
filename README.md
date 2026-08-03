@@ -8,8 +8,8 @@
 ## 许可与协议
 
 - GitHub 源代码以 Source-Available 方式提供，并非经 Open Source Initiative 认可的开源软件。查看 [中文许可协议](https://github.com/Luojingqi/PlayVoice/blob/main/LICENSE/PlayVoice%20Source-Available%20%E6%BA%90%E4%BB%A3%E7%A0%81%E8%AE%B8%E5%8F%AF%E5%8D%8F%E8%AE%AE.md) / [English License](https://github.com/Luojingqi/PlayVoice/blob/main/LICENSE/PlayVoice%20Source-Available%20License.md)。
-- 通过 Steam 获取和使用 PlayVoice 官方版本前，请阅读 [最终用户许可协议](https://store.steampowered.com/eula/4907460_eula_0) / [End User License Agreement](https://store.steampowered.com/eula/4907460_eula_0)。
-- 使用 PlayVoice 上传用户生成内容（UGC）前，请阅读 [UGC 上传与 Steam 创意工坊服务协议](https://store.steampowered.com/eula/4907460_eula_1) / [UGC Upload and Steam Workshop Service Agreement](https://store.steampowered.com/eula/4907460_eula_1)。
+- 通过 Steam 获取和使用 PlayVoice 官方版本前，请阅读 [最终用户许可协议](https://store.steampowered.com/eula/4907460_eula_0) 
+- 使用 PlayVoice 上传用户生成内容（UGC）前，请阅读 [UGC 上传与 Steam 创意工坊服务协议](https://store.steampowered.com/eula/4907460_eula_1)
 
 ## 优势
 
