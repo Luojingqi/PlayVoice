@@ -4,7 +4,7 @@ Version: 1.0
 
 Effective Date: August 3, 2026
 
-Permanent URL: [PLAYVOICE_UGC_TERMS_URL]
+Permanent URL: https://github.com/Luojingqi/PlayVoice/blob/main/EULA/PlayVoice%20UGC%20Upload%20and%20Steam%20Workshop%20Service%20Agreement.md
 
 
 
