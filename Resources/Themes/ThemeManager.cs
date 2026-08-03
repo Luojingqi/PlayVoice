@@ -1,12 +1,10 @@
 ﻿using Microsoft.Win32;
 using PlayVoice.Resources.Language;
-using System.Collections.ObjectModel;
 using System.Windows;
 namespace PlayVoice.Resources.Themes;
 
 public static class ThemeManager
 {
-    public static readonly ThemeEnum Default = ThemeEnum.Dark;
     public static ThemeInfo NowTheme => nowNowTheme;
     private static ThemeInfo nowNowTheme;
     public enum ThemeEnum

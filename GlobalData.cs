@@ -161,17 +161,13 @@ internal class GlobalData
         JsonTool.LoadJson(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json"), out config);
 
         if (config == null)
+        {
             config = new Config();
+            config.Save();
+        }
 
-        if (config.Theme == null)
-            ThemeManager.SwitchTheme(ThemeManager.Default);
-        else
-            ThemeManager.SwitchTheme(config.Theme.Value);
-
-        if (string.IsNullOrEmpty(config.Language))
-            LanguageManager.Inst.SetCulture("zh-CN");
-        else
-            LanguageManager.Inst.SetCulture(config.Language);
+        ThemeManager.SwitchTheme(config.Theme);
+        LanguageManager.Inst.SetCulture(config.Language);
 
         equipment = new();
         audioProxy = new();

@@ -6,8 +6,8 @@ namespace PlayVoice;
 
 internal class Config
 {
-    public ThemeManager.ThemeEnum? Theme { get; set; }
-    public string Language { get; set; }
+    public ThemeManager.ThemeEnum Theme { get; set; } = ThemeManager.ThemeEnum.Dark;
+    public string Language { get; set; } = "zh-CN";
 
     public bool AutoMute { get; set; } = false;
 
@@ -15,11 +15,11 @@ internal class Config
 
     public double AudioOutDecibel { get; set; } = 0;
     public double AudioEarDecibel { get; set; } = 0;
-    public double MicrophoneInputDecibel { get; set; } = 1.2;
+    public double MicrophoneInputDecibel { get; set; } = 0;
     public double? MicrophoneLufs { get; set; }
     public double GlobalDecibel { get; set; } = 0;
 
-    public bool AcceptedEndUserLicenseAgreement { get; set; } = false;
+    public bool AcceptedUserGeneratedContentAgreement { get; set; } = false;
 
     public string PhysicalMicrophoneID { get; set; }
     public string PhysicalLoudspeakerID { get; set; }

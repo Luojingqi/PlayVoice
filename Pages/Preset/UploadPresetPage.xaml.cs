@@ -127,13 +127,13 @@ namespace PlayVoice.Pages.Preset
                 goto end;
             }
 
-            if (!GlobalData.Inst.Config.AcceptedEndUserLicenseAgreement)
+            if (!GlobalData.Inst.Config.AcceptedUserGeneratedContentAgreement)
             {
                 var agreementWindow = new UserGeneratedContentAgreementWindow { Owner = MainWindow.Inst };
                 if (agreementWindow.ShowDialog() != true)
                     goto end;
 
-                GlobalData.Inst.Config.AcceptedEndUserLicenseAgreement = true;
+                GlobalData.Inst.Config.AcceptedUserGeneratedContentAgreement = true;
                 GlobalData.Inst.Config.Save();
             }
 
