@@ -124,25 +124,25 @@
     <value>Settings</value>
   </data>
   <data name="物理麦克风" xml:space="preserve">
-    <value>Physical Microphone</value>
+    <value>Microphone</value>
   </data>
   <data name="物理扬声器" xml:space="preserve">
-    <value>Physical Loudspeaker</value>
+    <value>Speakers</value>
   </data>
   <data name="虚拟扬声器" xml:space="preserve">
-    <value>Virtual Loudspeaker</value>
+    <value>Virtual Speakers</value>
   </data>
   <data name="虚拟麦克风" xml:space="preserve">
-    <value>Virtual Microphone</value>
+    <value>Virtual Mic</value>
   </data>
   <data name="请选择" xml:space="preserve">
     <value>Select...</value>
   </data>
   <data name="声卡绑定" xml:space="preserve">
-    <value>Audio Device Setup</value>
+    <value>Audio Devices</value>
   </data>
   <data name="系统设置" xml:space="preserve">
-    <value>System Settings</value>
+    <value>General</value>
   </data>
   <data name="运行" xml:space="preserve">
     <value>Run</value>
@@ -175,29 +175,29 @@
     <value>Support VB-AUDIO Software</value>
   </data>
   <data name="VB-AUDIO_分销规则与感谢" xml:space="preserve">
-    <value>Thanks to VB-AUDIO for providing technical support for this project.
-VB-CABLE is donationware, and everyone is welcome to contribute.</value>
+    <value>Thanks to VB-AUDIO for supporting this project.
+VB-CABLE is donationware; contributions are welcome.</value>
   </data>
   <data name="关于" xml:space="preserve">
     <value>About</value>
   </data>
   <data name="创意工坊" xml:space="preserve">
-    <value>Steam Workshop</value>
+    <value>Workshop</value>
   </data>
   <data name="预设" xml:space="preserve">
     <value>Presets</value>
   </data>
   <data name="教程" xml:space="preserve">
-    <value>Tutorial</value>
+    <value>Guide</value>
   </data>
   <data name="输入按键" xml:space="preserve">
-    <value>Enter hotkey</value>
+    <value>Hotkey</value>
   </data>
   <data name="创建新预设" xml:space="preserve">
-    <value>Create New Preset</value>
+    <value>New Preset</value>
   </data>
   <data name="输入预设名称" xml:space="preserve">
-    <value>Enter a preset name...</value>
+    <value>Preset name...</value>
   </data>
   <data name="确认" xml:space="preserve">
     <value>Confirm</value>
@@ -236,19 +236,19 @@ VB-CABLE is donationware, and everyone is welcome to contribute.</value>
     <value>Uninstalling</value>
   </data>
   <data name="卸载结束" xml:space="preserve">
-    <value>Uninstallation complete</value>
+    <value>Uninstall complete</value>
   </data>
   <data name="卸载未完成" xml:space="preserve">
-    <value>Uninstallation could not be completed</value>
+    <value>Uninstall failed</value>
   </data>
   <data name="正在安装" xml:space="preserve">
     <value>Installing</value>
   </data>
   <data name="安装结束" xml:space="preserve">
-    <value>Installation complete</value>
+    <value>Installed</value>
   </data>
   <data name="安装未完成" xml:space="preserve">
-    <value>Installation could not be completed</value>
+    <value>Installation failed</value>
   </data>
   <data name="启动" xml:space="preserve">
     <value>started</value>
@@ -257,28 +257,28 @@ VB-CABLE is donationware, and everyone is welcome to contribute.</value>
     <value>failed</value>
   </data>
   <data name="请查看教程说明重新配置" xml:space="preserve">
-    <value>See the tutorial and check your configuration</value>
+    <value>Check the guide and settings</value>
   </data>
   <data name="请勿重复点击" xml:space="preserve">
-    <value>Please do not click again</value>
+    <value>Please wait</value>
   </data>
   <data name="未绑定声卡" xml:space="preserve">
-    <value>Audio devices are not configured</value>
+    <value>Audio devices are not set</value>
   </data>
   <data name="耳返_Audio" xml:space="preserve">
-    <value>Audio Monitoring</value>
+    <value>Audio Monitor</value>
   </data>
   <data name="请先启动程序" xml:space="preserve">
-    <value>Start PlayVoice first</value>
+    <value>Start PlayVoice</value>
   </data>
   <data name="我的订阅" xml:space="preserve">
-    <value>My Subscriptions</value>
+    <value>Subscriptions</value>
   </data>
   <data name="我的创作" xml:space="preserve">
-    <value>My Creations</value>
+    <value>My Items</value>
   </data>
   <data name="好友创作" xml:space="preserve">
-    <value>Friends' Creations</value>
+    <value>Friends' Items</value>
   </data>
   <data name="大小" xml:space="preserve">
     <value>Size</value>
@@ -290,7 +290,7 @@ VB-CABLE is donationware, and everyone is welcome to contribute.</value>
     <value>Music</value>
   </data>
   <data name="音效" xml:space="preserve">
-    <value>Sound Effects</value>
+    <value>SFX</value>
   </data>
   <data name="语音" xml:space="preserve">
     <value>Voice</value>
@@ -302,28 +302,28 @@ VB-CABLE is donationware, and everyone is welcome to contribute.</value>
     <value>Keyword</value>
   </data>
   <data name="上传到创意工坊" xml:space="preserve">
-    <value>Upload to Steam Workshop</value>
+    <value>Upload to Workshop</value>
   </data>
   <data name="为你的资源命名" xml:space="preserve">
-    <value>Name your item</value>
+    <value>Item name</value>
   </data>
   <data name="放入预览图" xml:space="preserve">
-    <value>Drop a preview image here</value>
+    <value>Drop image here</value>
   </data>
   <data name="标签" xml:space="preserve">
     <value>Tags</value>
   </data>
   <data name="为你的资源添加描述" xml:space="preserve">
-    <value>Add a description for your item</value>
+    <value>Item description</value>
   </data>
   <data name="选择预览图" xml:space="preserve">
-    <value>Select preview image</value>
+    <value>Choose Image</value>
   </data>
   <data name="图片文件" xml:space="preserve">
-    <value>Image File</value>
+    <value>Image</value>
   </data>
   <data name="预览图要求" xml:space="preserve">
-    <value>The preview image must be no larger than 1 MB and have a 1:1 aspect ratio</value>
+    <value>Max 1 MB · 1:1</value>
   </data>
   <data name="没有输入资源名称" xml:space="preserve">
     <value>Enter a name for the item</value>
@@ -358,7 +358,7 @@ Do not leave this page.</value>
     <value>Friends Only</value>
   </data>
   <data name="所有人" xml:space="preserve">
-    <value>Everyone</value>
+    <value>Public</value>
   </data>
   <data name="热度" xml:space="preserve">
     <value>  Popularity</value>
@@ -367,7 +367,7 @@ Do not leave this page.</value>
     <value>  Rating</value>
   </data>
   <data name="最新" xml:space="preserve">
-    <value>  Most Recent</value>
+    <value>  Recent</value>
   </data>
   <data name="订阅" xml:space="preserve">
     <value>  Subscriptions</value>
@@ -430,39 +430,39 @@ Do not leave this page.</value>
     <value>Delete Preset</value>
   </data>
   <data name="教程1_内容" xml:space="preserve">
-    <value>· Install the virtual sound card from Settings.
-· After installation, open Windows sound settings and confirm that the virtual devices are available.</value>
+    <value>· Install the virtual sound card in Settings.
+· Then confirm the virtual devices in Windows sound settings.</value>
   </data>
   <data name="教程1_标题" xml:space="preserve">
-    <value>Getting Started</value>
+    <value>First Run</value>
   </data>
   <data name="教程3_内容" xml:space="preserve">
-    <value>· After all four devices are configured, turn on “Run.”
-· Your microphone input and audio played by this app will then be sent to the virtual microphone.</value>
+    <value>· Configure all four devices, then enable “Run.”
+· Microphone input and app audio will go to the virtual mic.</value>
   </data>
   <data name="教程3_标题" xml:space="preserve">
-    <value>How to Start</value>
+    <value>Start PlayVoice</value>
   </data>
   <data name="教程4_标题" xml:space="preserve">
-    <value>Using PlayVoice in Games and Live Streams</value>
+    <value>Games &amp; Streaming</value>
   </data>
   <data name="教程4_内容" xml:space="preserve">
-    <value>· After starting PlayVoice, select the configured virtual microphone as the microphone input in your game or streaming app.</value>
+    <value>· In your game or streaming app, select the configured virtual mic as the input.</value>
   </data>
   <data name="教程7_标题" xml:space="preserve">
     <value>Need More Help?</value>
   </data>
   <data name="教程7_内容" xml:space="preserve">
-    <value>· Visit our Steam store page to find the best ways to contact us.</value>
+    <value>· Find our contact details on the PlayVoice Steam page.</value>
   </data>
   <data name="文件资源浏览器" xml:space="preserve">
-    <value>Open in File Explorer</value>
+    <value>Open Folder</value>
   </data>
   <data name="教程6_标题" xml:space="preserve">
-    <value>Why Is There an Echo?</value>
+    <value>Echo?</value>
   </data>
   <data name="教程6_内容" xml:space="preserve">
-    <value>· When microphone monitoring is enabled, keep enough distance between the physical microphone and speakers to prevent feedback and echo.</value>
+    <value>· When mic monitoring is on, keep the mic away from speakers to prevent echo.</value>
   </data>
   <data name="Steam 未连接" xml:space="preserve">
     <value>Steam not connected</value>
@@ -471,16 +471,16 @@ Do not leave this page.</value>
     <value>Steam initialization failed</value>
   </data>
   <data name="麦克风输入音量" xml:space="preserve">
-    <value>Microphone input volume</value>
+    <value>Mic Volume</value>
   </data>
   <data name="自动闭麦" xml:space="preserve">
     <value>Auto-mute</value>
   </data>
   <data name="播放前" xml:space="preserve">
-    <value>Before playback</value>
+    <value>Before</value>
   </data>
   <data name="播放后" xml:space="preserve">
-    <value>After playback</value>
+    <value>After</value>
   </data>
   <data name="按下" xml:space="preserve">
     <value>Press</value>
@@ -504,22 +504,22 @@ I</value>
 O</value>
   </data>
   <data name="全局音量" xml:space="preserve">
-    <value>Global Volume</value>
+    <value>Master Volume</value>
   </data>
   <data name="运行中禁止更改设备" xml:space="preserve">
-    <value>Devices cannot be changed while PlayVoice is running</value>
+    <value>Stop PlayVoice to change devices</value>
   </data>
   <data name="耳返_In" xml:space="preserve">
-    <value>Microphone Monitoring</value>
+    <value>Mic Monitor</value>
   </data>
   <data name="教程5_标题" xml:space="preserve">
-    <value>Why Does Keyboard Input Stop Working During Playback?</value>
+    <value>Keys Stop Working?</value>
   </data>
   <data name="教程5_内容" xml:space="preserve">
-    <value>· If key A is configured to be pressed before playback, Windows treats it as held down until it is released. Some apps may then ignore other input. Press key A again to release it.</value>
+    <value>· If key A is pressed before playback, Windows holds it down. Some apps may ignore input. Press A again to release it.</value>
   </data>
   <data name="教程2_标题" xml:space="preserve">
-    <value>Preset Page Icons</value>
+    <value>Preset Icons</value>
   </data>
   <data name="教程2_内容_选择" xml:space="preserve">
     <value>Select</value>
@@ -534,7 +534,7 @@ O</value>
     <value>Import Audio</value>
   </data>
   <data name="教程2_内容_上传" xml:space="preserve">
-    <value>Open Upload Page</value>
+    <value>Upload Page</value>
   </data>
   <data name="教程2_内容_删除" xml:space="preserve">
     <value>Delete Selection</value>
@@ -546,25 +546,25 @@ O</value>
     <value>Test</value>
   </data>
   <data name="音频输出音量" xml:space="preserve">
-    <value>Audio Output Volume</value>
+    <value>Output Volume</value>
   </data>
   <data name="音频耳返音量" xml:space="preserve">
-    <value>Audio Monitoring Volume</value>
+    <value>Monitor Volume</value>
   </data>
   <data name="未绑定" xml:space="preserve">
-    <value>is not configured</value>
+    <value>not set</value>
   </data>
   <data name="正在录音" xml:space="preserve">
-    <value>Recording test in progress, please speak normally for a few seconds</value>
+    <value>Recording... Speak normally.</value>
   </data>
   <data name="录音结束" xml:space="preserve">
-    <value>The recording has ended and is currently being analyzed</value>
+    <value>Recording complete; analyzing...</value>
   </data>
   <data name="响度归一化测试" xml:space="preserve">
-    <value>Loudness Normalization Test</value>
+    <value>Loudness Test</value>
   </data>
   <data name="未完成响度测试，音频响度可能过高" xml:space="preserve">
-    <value>The loudness test was not completed. The audio may be too loud.</value>
+    <value>Loudness not tested; audio may be too loud.</value>
   </data>
   <data name="请先通过" xml:space="preserve">
     <value>Please complete the</value>
@@ -588,22 +588,22 @@ O</value>
     <value>Report on Steam</value>
   </data>
   <data name="关闭行为" xml:space="preserve">
-    <value>Close behavior</value>
+    <value>On Close</value>
   </data>
   <data name="最小化到托盘" xml:space="preserve">
     <value>Minimize to tray</value>
   </data>
   <data name="直接关闭" xml:space="preserve">
-    <value>Exit application</value>
+    <value>Exit</value>
   </data>
   <data name="显示主窗口" xml:space="preserve">
-    <value>Show main window</value>
+    <value>Show Window</value>
   </data>
   <data name="退出" xml:space="preserve">
     <value>Exit</value>
   </data>
   <data name="PlayVoice UGC 上传与 Steam 创意工坊服务协议" xml:space="preserve">
-    <value>PlayVoice UGC Upload and Steam Workshop Service Agreement</value>
+    <value>PlayVoice Workshop Agreement</value>
   </data>
   <data name="拒绝" xml:space="preserve">
     <value>Decline</value>
