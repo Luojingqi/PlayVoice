@@ -115,5 +115,6 @@ public sealed class LanguageManager : INotifyPropertyChanged
     {
         new LanguageInfo { Key = "zh-CN", Value = "简体中文", Index = 0 },
         new LanguageInfo { Key = "en-US", Value = "English", Index = 1 },
+        new LanguageInfo { Key = "ru-RU", Value = "Русский", Index = 2 },
     };
 }

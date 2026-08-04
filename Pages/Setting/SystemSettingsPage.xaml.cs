@@ -395,6 +395,13 @@ namespace PlayVoice.Pages.Setting
 
         private void UpdateLanguageAction(System.Globalization.CultureInfo arg1, LanguageManager.LanguageInfo arg2)
         {
+            int themeIndex = StyleListBox.SelectedIndex;
+            StyleListBox.IsSyncing = true;
+            StyleListBox.ItemsSource = null;
+            StyleListBox.ItemsSource = ThemeManager.ThemeList;
+            StyleListBox.SelectedIndex = themeIndex;
+            StyleListBox.IsSyncing = false;
+
             int index = PresetComboBox.SelectedIndex;
             PresetComboBox.IsSyncing = true;
             presetNameArray[0] = LanguageManager.Inst.GetString("无");

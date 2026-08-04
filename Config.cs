@@ -26,9 +26,9 @@ internal class Config
     public string VirtualMicrophoneID { get; set; }
     public string VirtualLoudspeakerID { get; set; }
 
-    public PlayAudioKeyData BeforePlayingKey { get; set; } = new();
+    public PlayAudioKeyData BeforePlayingKey { get; set; } = new() { Action = PlayAudioKeyData.KeyAction.按下 };
 
-    public PlayAudioKeyData AfterPlayingKey { get; set; } = new();
+    public PlayAudioKeyData AfterPlayingKey { get; set; } = new() { Action = PlayAudioKeyData.KeyAction.抬起 };
 
     public bool Save()
     {

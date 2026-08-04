@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="软件名称" xml:space="preserve"><value>PlayVoice</value></data>
+  <data name="设置" xml:space="preserve"><value>Настройки</value></data>
+  <data name="物理麦克风" xml:space="preserve"><value>Физический микрофон</value></data>
+  <data name="物理扬声器" xml:space="preserve"><value>Физические динамики</value></data>
+  <data name="虚拟扬声器" xml:space="preserve"><value>Виртуальные динамики</value></data>
+  <data name="虚拟麦克风" xml:space="preserve"><value>Виртуальный микрофон</value></data>
+  <data name="请选择" xml:space="preserve"><value>Выберите...</value></data>
+  <data name="声卡绑定" xml:space="preserve"><value>Настройка аудиоустройств</value></data>
+  <data name="系统设置" xml:space="preserve"><value>Системные настройки</value></data>
+  <data name="运行" xml:space="preserve"><value>Запуск</value></data>
+  <data name="语言" xml:space="preserve"><value>Язык</value></data>
+  <data name="样式" xml:space="preserve"><value>Тема</value></data>
+  <data name="去Steam" xml:space="preserve"><value>Поддержать нас в Steam</value></data>
+  <data name="去Github" xml:space="preserve"><value>Поддержать нас на GitHub</value></data>
+  <data name="虚拟声卡" xml:space="preserve"><value>Виртуальная звуковая карта</value></data>
+  <data name="安装" xml:space="preserve"><value>Установить</value></data>
+  <data name="卸载" xml:space="preserve"><value>Удалить</value></data>
+  <data name="检测" xml:space="preserve"><value>Проверить</value></data>
+  <data name="去VB-AUDIO_Software" xml:space="preserve"><value>Поддержать VB-AUDIO Software</value></data>
+  <data name="VB-AUDIO_分销规则与感谢" xml:space="preserve"><value>Благодарим VB-AUDIO за техническую поддержку проекта.&#xA;VB-CABLE распространяется по принципу donationware, и каждый может поддержать разработчиков.</value></data>
+  <data name="关于" xml:space="preserve"><value>О программе</value></data>
+  <data name="创意工坊" xml:space="preserve"><value>Мастерская Steam</value></data>
+  <data name="预设" xml:space="preserve"><value>Пресеты</value></data>
+  <data name="教程" xml:space="preserve"><value>Руководство</value></data>
+  <data name="输入按键" xml:space="preserve"><value>Введите горячую клавишу</value></data>
+  <data name="创建新预设" xml:space="preserve"><value>Создать пресет</value></data>
+  <data name="输入预设名称" xml:space="preserve"><value>Введите название пресета...</value></data>
+  <data name="确认" xml:space="preserve"><value>Подтвердить</value></data>
+  <data name="添加音频" xml:space="preserve"><value>Добавить аудио</value></data>
+  <data name="音频文件" xml:space="preserve"><value>Аудиофайл</value></data>
+  <data name="文件名称" xml:space="preserve"><value>Имя файла</value></data>
+  <data name="无" xml:space="preserve"><value>Нет</value></data>
+  <data name="时长" xml:space="preserve"><value>Длительность</value></data>
+  <data name="名称" xml:space="preserve"><value>Название</value></data>
+  <data name="快捷键" xml:space="preserve"><value>Горячая клавиша</value></data>
+  <data name="通知" xml:space="preserve"><value>Уведомление</value></data>
+  <data name="未安装" xml:space="preserve"><value>Не установлено</value></data>
+  <data name="已安装" xml:space="preserve"><value>Установлено</value></data>
+  <data name="正在卸载" xml:space="preserve"><value>Удаление...</value></data>
+  <data name="卸载结束" xml:space="preserve"><value>Удаление завершено</value></data>
+  <data name="卸载未完成" xml:space="preserve"><value>Не удалось завершить удаление</value></data>
+  <data name="正在安装" xml:space="preserve"><value>Установка...</value></data>
+  <data name="安装结束" xml:space="preserve"><value>Установка завершена</value></data>
+  <data name="安装未完成" xml:space="preserve"><value>Не удалось завершить установку</value></data>
+  <data name="启动" xml:space="preserve"><value>запущен</value></data>
+  <data name="失败" xml:space="preserve"><value>— ошибка</value></data>
+  <data name="请查看教程说明重新配置" xml:space="preserve"><value>Сверьтесь с руководством и проверьте настройки</value></data>
+  <data name="请勿重复点击" xml:space="preserve"><value>Не нажимайте повторно</value></data>
+  <data name="未绑定声卡" xml:space="preserve"><value>Аудиоустройства не настроены</value></data>
+  <data name="耳返_Audio" xml:space="preserve"><value>Мониторинг аудио</value></data>
+  <data name="请先启动程序" xml:space="preserve"><value>Сначала запустите приложение</value></data>
+  <data name="我的订阅" xml:space="preserve"><value>Мои подписки</value></data>
+  <data name="我的创作" xml:space="preserve"><value>Мои работы</value></data>
+  <data name="好友创作" xml:space="preserve"><value>Работы друзей</value></data>
+  <data name="大小" xml:space="preserve"><value>Размер</value></data>
+  <data name="所有" xml:space="preserve"><value>Все</value></data>
+  <data name="音乐" xml:space="preserve"><value>Музыка</value></data>
+  <data name="音效" xml:space="preserve"><value>Звуковые эффекты</value></data>
+  <data name="语音" xml:space="preserve"><value>Голос</value></data>
+  <data name="搜索" xml:space="preserve"><value>Поиск</value></data>
+  <data name="关键词" xml:space="preserve"><value>Ключевое слово</value></data>
+  <data name="上传到创意工坊" xml:space="preserve"><value>Опубликовать в Мастерской Steam</value></data>
+  <data name="为你的资源命名" xml:space="preserve"><value>Название ресурса</value></data>
+  <data name="放入预览图" xml:space="preserve"><value>Перетащите сюда изображение предпросмотра</value></data>
+  <data name="标签" xml:space="preserve"><value>Теги</value></data>
+  <data name="为你的资源添加描述" xml:space="preserve"><value>Добавьте описание ресурса</value></data>
+  <data name="选择预览图" xml:space="preserve"><value>Выбрать изображение предпросмотра</value></data>
+  <data name="图片文件" xml:space="preserve"><value>Файл изображения</value></data>
+  <data name="预览图要求" xml:space="preserve"><value>Изображение должно быть не больше 1 МБ и иметь соотношение сторон 1:1</value></data>
+  <data name="没有输入资源名称" xml:space="preserve"><value>Введите название ресурса</value></data>
+  <data name="没有选择上传的预设" xml:space="preserve"><value>Выберите пресет для публикации</value></data>
+  <data name="至少选择一个标签" xml:space="preserve"><value>Выберите хотя бы один тег</value></data>
+  <data name="正在复制文件" xml:space="preserve"><value>Копирование файлов...</value></data>
+  <data name="开始上传" xml:space="preserve"><value>Публикация...&#xA;Дождитесь сообщения с результатом.&#xA;Не покидайте эту страницу.</value></data>
+  <data name="已上传到Steam" xml:space="preserve"><value>Опубликовано в Steam</value></data>
+  <data name="上传Steam失败" xml:space="preserve"><value>Не удалось опубликовать в Steam</value></data>
+  <data name="可见" xml:space="preserve"><value>Видимость</value></data>
+  <data name="仅自己" xml:space="preserve"><value>Только я</value></data>
+  <data name="仅好友" xml:space="preserve"><value>Только друзья</value></data>
+  <data name="所有人" xml:space="preserve"><value>Для всех</value></data>
+  <data name="热度" xml:space="preserve"><value>  Популярность</value></data>
+  <data name="评分" xml:space="preserve"><value>  Рейтинг</value></data>
+  <data name="最新" xml:space="preserve"><value>  Новые</value></data>
+  <data name="订阅" xml:space="preserve"><value>  Подписки</value></data>
+  <data name="排序" xml:space="preserve"><value>Сортировка</value></data>
+  <data name="订阅按钮" xml:space="preserve"><value>Подписаться</value></data>
+  <data name="正在订阅" xml:space="preserve"><value>Оформление подписки...</value></data>
+  <data name="取消订阅按钮" xml:space="preserve"><value>Отписаться</value></data>
+  <data name="订阅失败" xml:space="preserve"><value>Не удалось подписаться</value></data>
+  <data name="正在退订" xml:space="preserve"><value>Отмена подписки...</value></data>
+  <data name="已退订" xml:space="preserve"><value>Подписка отменена</value></data>
+  <data name="退订失败" xml:space="preserve"><value>Не удалось отменить подписку</value></data>
+  <data name="开始下载" xml:space="preserve"><value>Загрузка началась</value></data>
+  <data name="图片加载失败" xml:space="preserve"><value>Не удалось загрузить изображение</value></data>
+  <data name="物品加载失败" xml:space="preserve"><value>Не удалось загрузить ресурс</value></data>
+  <data name="全选" xml:space="preserve"><value>Выбрать все</value></data>
+  <data name="复制" xml:space="preserve"><value>Копировать</value></data>
+  <data name="粘贴" xml:space="preserve"><value>Вставить</value></data>
+  <data name="导入" xml:space="preserve"><value>Импортировать</value></data>
+  <data name="上传" xml:space="preserve"><value>Опубликовать</value></data>
+  <data name="删除" xml:space="preserve"><value>Удалить</value></data>
+  <data name="已复制" xml:space="preserve"><value>Скопировано: </value></data>
+  <data name="删除预设" xml:space="preserve"><value>Удалить пресет</value></data>
+  <data name="教程1_内容" xml:space="preserve"><value>· Установите виртуальную звуковую карту в настройках.&#xA;· После установки откройте параметры звука Windows и убедитесь, что виртуальные устройства доступны.</value></data>
+  <data name="教程1_标题" xml:space="preserve"><value>Начало работы</value></data>
+  <data name="教程3_内容" xml:space="preserve"><value>· После настройки всех четырёх устройств включите «Запуск».&#xA;· Вход микрофона и воспроизводимое приложением аудио будут передаваться на виртуальный микрофон.</value></data>
+  <data name="教程3_标题" xml:space="preserve"><value>Как запустить</value></data>
+  <data name="教程4_标题" xml:space="preserve"><value>Использование в играх и трансляциях</value></data>
+  <data name="教程4_内容" xml:space="preserve"><value>· После запуска PlayVoice выберите настроенный виртуальный микрофон в качестве входа в игре или приложении для трансляций.</value></data>
+  <data name="教程7_标题" xml:space="preserve"><value>Нужна помощь?</value></data>
+  <data name="教程7_内容" xml:space="preserve"><value>· Контактные данные можно найти на странице PlayVoice в Steam.</value></data>
+  <data name="文件资源浏览器" xml:space="preserve"><value>Открыть в проводнике</value></data>
+  <data name="教程6_标题" xml:space="preserve"><value>Почему слышно эхо?</value></data>
+  <data name="教程6_内容" xml:space="preserve"><value>· При включённом мониторинге микрофона держите микрофон подальше от динамиков, чтобы избежать обратной связи и эха.</value></data>
+  <data name="Steam 未连接" xml:space="preserve"><value>Нет подключения к Steam</value></data>
+  <data name="Steam 初始化失败" xml:space="preserve"><value>Не удалось инициализировать Steam</value></data>
+  <data name="麦克风输入音量" xml:space="preserve"><value>Громкость микрофона</value></data>
+  <data name="自动闭麦" xml:space="preserve"><value>Автовыключение микрофона</value></data>
+  <data name="播放前" xml:space="preserve"><value>Перед воспроизведением</value></data>
+  <data name="播放后" xml:space="preserve"><value>После воспроизведения</value></data>
+  <data name="按下" xml:space="preserve"><value>Нажать</value></data>
+  <data name="抬起" xml:space="preserve"><value>Отпустить</value></data>
+  <data name="单击" xml:space="preserve"><value>Нажать и отпустить</value></data>
+  <data name="音频" xml:space="preserve"><value>&#xA;A</value></data>
+  <data name="输入" xml:space="preserve"><value>&#xA;I</value></data>
+  <data name="输出" xml:space="preserve"><value>&#xA;O</value></data>
+  <data name="全局音量" xml:space="preserve"><value>Общая громкость</value></data>
+  <data name="运行中禁止更改设备" xml:space="preserve"><value>Нельзя менять устройства во время работы PlayVoice</value></data>
+  <data name="耳返_In" xml:space="preserve"><value>Мониторинг микрофона</value></data>
+  <data name="教程5_标题" xml:space="preserve"><value>Почему во время воспроизведения перестают работать клавиши?</value></data>
+  <data name="教程5_内容" xml:space="preserve"><value>· Если клавиша A настроена на нажатие перед воспроизведением, Windows считает её зажатой до отпускания. Некоторые приложения из-за этого могут игнорировать ввод. Нажмите A ещё раз, чтобы отпустить клавишу.</value></data>
+  <data name="教程2_标题" xml:space="preserve"><value>Значки на странице пресетов</value></data>
+  <data name="教程2_内容_选择" xml:space="preserve"><value>Выбор</value></data>
+  <data name="教程2_内容_复制" xml:space="preserve"><value>Копировать выбранное</value></data>
+  <data name="教程2_内容_粘贴" xml:space="preserve"><value>Вставить выбранное</value></data>
+  <data name="教程2_内容_导入" xml:space="preserve"><value>Импорт аудио</value></data>
+  <data name="教程2_内容_上传" xml:space="preserve"><value>Открыть страницу публикации</value></data>
+  <data name="教程2_内容_删除" xml:space="preserve"><value>Удалить выбранное</value></data>
+  <data name="教程2_内容_文件" xml:space="preserve"><value>Открыть папку</value></data>
+  <data name="测试" xml:space="preserve"><value>Тест</value></data>
+  <data name="音频输出音量" xml:space="preserve"><value>Громкость аудиовыхода</value></data>
+  <data name="音频耳返音量" xml:space="preserve"><value>Громкость мониторинга аудио</value></data>
+  <data name="响度归一化测试" xml:space="preserve"><value>Тест нормализации громкости</value></data>
+  <data name="未完成响度测试，音频响度可能过高" xml:space="preserve"><value>Тест громкости не завершён. Аудио может быть слишком громким.</value></data>
+  <data name="请先通过" xml:space="preserve"><value>Сначала пройдите</value></data>
+  <data name="好评" xml:space="preserve"><value>Положительная оценка</value></data>
+  <data name="差评" xml:space="preserve"><value>Отрицательная оценка</value></data>
+  <data name="喜欢" xml:space="preserve"><value>В избранное</value></data>
+  <data name="Steam详情" xml:space="preserve"><value>Подробнее в Steam</value></data>
+  <data name="复制链接" xml:space="preserve"><value>Копировать ссылку</value></data>
+  <data name="举报" xml:space="preserve"><value>Пожаловаться в Steam</value></data>
+  <data name="关闭行为" xml:space="preserve"><value>При закрытии</value></data>
+  <data name="最小化到托盘" xml:space="preserve"><value>Свернуть в область уведомлений</value></data>
+  <data name="直接关闭" xml:space="preserve"><value>Закрыть приложение</value></data>
+  <data name="显示主窗口" xml:space="preserve"><value>Показать главное окно</value></data>
+  <data name="退出" xml:space="preserve"><value>Выход</value></data>
+  <data name="PlayVoice UGC 上传与 Steam 创意工坊服务协议" xml:space="preserve"><value>Соглашение PlayVoice UGC о публикации в Мастерской Steam</value></data>
+  <data name="拒绝" xml:space="preserve"><value>Отклонить</value></data>
+  <data name="同意" xml:space="preserve"><value>Принять</value></data>
+  <data name="未绑定" xml:space="preserve"><value>— устройство не настроено</value></data>
+  <data name="正在录音" xml:space="preserve"><value>Идёт запись...</value></data>
+  <data name="录音结束" xml:space="preserve"><value>Запись завершена</value></data>
+  <data name="已订阅" xml:space="preserve"><value>Подписка оформлена</value></data>
+  <data name="浅色" xml:space="preserve"><value>Светлая</value></data>
+  <data name="深色" xml:space="preserve"><value>Тёмная</value></data>
+  <data name="系统" xml:space="preserve"><value>Системная</value></data>
+  <data name="预设已存在" xml:space="preserve"><value>Пресет уже существует</value></data>
+  <data name="文件夹已存在" xml:space="preserve"><value>Папка $ уже существует</value></data>
+  <data name="未命名" xml:space="preserve"><value>Без названия</value></data>
+</root>

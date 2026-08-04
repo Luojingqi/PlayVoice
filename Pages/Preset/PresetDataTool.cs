@@ -65,7 +65,11 @@ public static class PresetDataTool
         }
         else
         {
-            MainWindow.Inst.AddNotification("预设已存在", $"文件夹 {name} 已存在", Pages.LabelStatus.Warning);
+            MainWindow.Inst.AddNotification(
+                () => Resources.Language.LanguageManager.Inst.GetString("预设已存在"),
+                () => Resources.Language.LanguageManager.Inst.SpliceString(
+                    Resources.Language.LanguageManager.Inst.GetString("文件夹已存在"), name),
+                Pages.LabelStatus.Warning);
             presetData = null;
             return false;
         }

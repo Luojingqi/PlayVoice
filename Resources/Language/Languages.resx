@@ -479,6 +479,9 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="播放前" xml:space="preserve">
     <value>播放前</value>
   </data>
+  <data name="播放后" xml:space="preserve">
+    <value>播放后</value>
+  </data>
   <data name="按下" xml:space="preserve">
     <value>按下</value>
   </data>
@@ -548,6 +551,9 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="响度归一化测试" xml:space="preserve">
     <value>响度归一化测试</value>
   </data>
+  <data name="未完成响度测试，音频响度可能过高" xml:space="preserve">
+    <value>未完成响度测试，音频响度可能过高</value>
+  </data>
   <data name="请先通过" xml:space="preserve">
     <value>请先通过</value>
   </data>
@@ -592,5 +598,35 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   </data>
   <data name="同意" xml:space="preserve">
     <value>同意</value>
+  </data>
+  <data name="已订阅" xml:space="preserve">
+    <value>已订阅</value>
+  </data>
+  <data name="未绑定" xml:space="preserve">
+    <value>未绑定</value>
+  </data>
+  <data name="正在录音" xml:space="preserve">
+    <value>正在录音</value>
+  </data>
+  <data name="录音结束" xml:space="preserve">
+    <value>录音结束</value>
+  </data>
+  <data name="浅色" xml:space="preserve">
+    <value>浅色</value>
+  </data>
+  <data name="深色" xml:space="preserve">
+    <value>深色</value>
+  </data>
+  <data name="系统" xml:space="preserve">
+    <value>系统</value>
+  </data>
+  <data name="预设已存在" xml:space="preserve">
+    <value>预设已存在</value>
+  </data>
+  <data name="文件夹已存在" xml:space="preserve">
+    <value>文件夹 $ 已存在</value>
+  </data>
+  <data name="未命名" xml:space="preserve">
+    <value>未命名</value>
   </data>
 </root>

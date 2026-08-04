@@ -17,6 +17,7 @@ namespace PlayVoice.Pages.Workshop
         public TablePageItem(Item? item, string localItemPath)
         {
             InitializeComponent();
+            ItemTitle = LanguageManager.Inst.GetString("未命名");
             this.Item = item;
             this.LocalItemPath = localItemPath;
             this.IsEnabled = false;
@@ -140,7 +141,7 @@ namespace PlayVoice.Pages.Workshop
             }
         }
         public static readonly DependencyProperty ItemTitleProperty =
-            DependencyProperty.Register("ItemTitle", typeof(string), typeof(TablePageItem), new PropertyMetadata("未命名"));
+            DependencyProperty.Register("ItemTitle", typeof(string), typeof(TablePageItem), new PropertyMetadata(string.Empty));
         public string ItemTitle
         {
             get { return (string)GetValue(ItemTitleProperty); }

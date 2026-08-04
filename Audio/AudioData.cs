@@ -113,6 +113,13 @@ public class AudioData
                 VolumeProvider_ToPL = new VolumeSampleProvider(
                   new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }.ToSampleProvider());
                 canPlay = true;
+                if (GlobalData.Inst.Config.MicrophoneLufs == null)
+                {
+                    MainWindow.Inst.AddNotification(
+                        () => $"{LanguageManager.Inst.GetString("通知")}",
+                        () => $"{LanguageManager.Inst.GetString("未完成响度测试，音频响度可能过高")}",
+                        Pages.LabelStatus.Warning, 4);
+                }
             }
             else
             {
