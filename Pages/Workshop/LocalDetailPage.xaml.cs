@@ -326,6 +326,12 @@ namespace PlayVoice.Pages.Workshop
 
         private async Task<bool> CheckSubscribe()
         {
+            if (tableItem == null)
+            {
+                SubscribeButton.Visibility = Visibility.Collapsed;
+                UnSubscribeButton.Visibility = Visibility.Collapsed;
+                return false;
+            }
             if (tableItem.Item.HasValue == false) return false;
             var item = await SteamUGC.QueryFileAsync(tableItem.Item.Value.Id);
             if (item.HasValue)
