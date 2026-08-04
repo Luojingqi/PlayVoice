@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="软件名称" xml:space="preserve"><value>PlayVoice</value></data>
+  <data name="设置" xml:space="preserve"><value>Ajustes</value></data>
+  <data name="物理麦克风" xml:space="preserve"><value>Micrófono</value></data>
+  <data name="物理扬声器" xml:space="preserve"><value>Altavoces</value></data>
+  <data name="虚拟扬声器" xml:space="preserve"><value>Altavoces virtuales</value></data>
+  <data name="虚拟麦克风" xml:space="preserve"><value>Micrófono virtual</value></data>
+  <data name="请选择" xml:space="preserve"><value>Seleccionar...</value></data>
+  <data name="声卡绑定" xml:space="preserve"><value>Dispositivos de audio</value></data>
+  <data name="系统设置" xml:space="preserve"><value>General</value></data>
+  <data name="运行" xml:space="preserve"><value>Iniciar</value></data>
+  <data name="语言" xml:space="preserve"><value>Idioma</value></data>
+  <data name="样式" xml:space="preserve"><value>Tema</value></data>
+  <data name="去Steam" xml:space="preserve"><value>Apóyanos en Steam</value></data>
+  <data name="去Github" xml:space="preserve"><value>Apóyanos en GitHub</value></data>
+  <data name="虚拟声卡" xml:space="preserve"><value>Audio virtual</value></data>
+  <data name="安装" xml:space="preserve"><value>Instalar</value></data>
+  <data name="卸载" xml:space="preserve"><value>Desinstalar</value></data>
+  <data name="检测" xml:space="preserve"><value>Comprobar</value></data>
+  <data name="去VB-AUDIO_Software" xml:space="preserve"><value>Apoyar a VB-AUDIO Software</value></data>
+  <data name="VB-AUDIO_分销规则与感谢" xml:space="preserve"><value>Gracias a VB-AUDIO por apoyar este proyecto.&#xA;VB-CABLE es donationware; cualquier aportación es bienvenida.</value></data>
+  <data name="关于" xml:space="preserve"><value>Acerca de</value></data>
+  <data name="创意工坊" xml:space="preserve"><value>Taller</value></data>
+  <data name="预设" xml:space="preserve"><value>Preajustes</value></data>
+  <data name="教程" xml:space="preserve"><value>Guía</value></data>
+  <data name="输入按键" xml:space="preserve"><value>Atajo</value></data>
+  <data name="创建新预设" xml:space="preserve"><value>Nuevo preajuste</value></data>
+  <data name="输入预设名称" xml:space="preserve"><value>Nombre del preajuste...</value></data>
+  <data name="确认" xml:space="preserve"><value>Confirmar</value></data>
+  <data name="添加音频" xml:space="preserve"><value>Añadir audio</value></data>
+  <data name="音频文件" xml:space="preserve"><value>Archivo de audio</value></data>
+  <data name="文件名称" xml:space="preserve"><value>Nombre del archivo</value></data>
+  <data name="无" xml:space="preserve"><value>Ninguno</value></data>
+  <data name="时长" xml:space="preserve"><value>Duración</value></data>
+  <data name="名称" xml:space="preserve"><value>Nombre</value></data>
+  <data name="快捷键" xml:space="preserve"><value>Atajo</value></data>
+  <data name="通知" xml:space="preserve"><value>Aviso</value></data>
+  <data name="未安装" xml:space="preserve"><value>No instalado</value></data>
+  <data name="已安装" xml:space="preserve"><value>Instalado</value></data>
+  <data name="正在卸载" xml:space="preserve"><value>Desinstalando...</value></data>
+  <data name="卸载结束" xml:space="preserve"><value>Desinstalado</value></data>
+  <data name="卸载未完成" xml:space="preserve"><value>Error al desinstalar</value></data>
+  <data name="正在安装" xml:space="preserve"><value>Instalando...</value></data>
+  <data name="安装结束" xml:space="preserve"><value>Instalado</value></data>
+  <data name="安装未完成" xml:space="preserve"><value>Error al instalar</value></data>
+  <data name="启动" xml:space="preserve"><value>iniciado</value></data>
+  <data name="失败" xml:space="preserve"><value>— error</value></data>
+  <data name="请查看教程说明重新配置" xml:space="preserve"><value>Revisa la guía y los ajustes</value></data>
+  <data name="请勿重复点击" xml:space="preserve"><value>Espera</value></data>
+  <data name="未绑定声卡" xml:space="preserve"><value>Dispositivos de audio sin configurar</value></data>
+  <data name="耳返_Audio" xml:space="preserve"><value>Monitor de audio</value></data>
+  <data name="请先启动程序" xml:space="preserve"><value>Inicia PlayVoice</value></data>
+  <data name="我的订阅" xml:space="preserve"><value>Suscripciones</value></data>
+  <data name="我的创作" xml:space="preserve"><value>Mis elementos</value></data>
+  <data name="好友创作" xml:space="preserve"><value>Elementos de amigos</value></data>
+  <data name="大小" xml:space="preserve"><value>Tamaño</value></data>
+  <data name="所有" xml:space="preserve"><value>Todo</value></data>
+  <data name="音乐" xml:space="preserve"><value>Música</value></data>
+  <data name="音效" xml:space="preserve"><value>Efectos</value></data>
+  <data name="语音" xml:space="preserve"><value>Voz</value></data>
+  <data name="搜索" xml:space="preserve"><value>Buscar</value></data>
+  <data name="关键词" xml:space="preserve"><value>Palabra clave</value></data>
+  <data name="上传到创意工坊" xml:space="preserve"><value>Subir al Taller</value></data>
+  <data name="为你的资源命名" xml:space="preserve"><value>Nombre del elemento</value></data>
+  <data name="放入预览图" xml:space="preserve"><value>Suelta la imagen aquí</value></data>
+  <data name="标签" xml:space="preserve"><value>Etiquetas</value></data>
+  <data name="为你的资源添加描述" xml:space="preserve"><value>Descripción</value></data>
+  <data name="选择预览图" xml:space="preserve"><value>Elegir imagen</value></data>
+  <data name="图片文件" xml:space="preserve"><value>Imagen</value></data>
+  <data name="预览图要求" xml:space="preserve"><value>Máx. 1 MB · 1:1</value></data>
+  <data name="没有输入资源名称" xml:space="preserve"><value>Introduce un nombre</value></data>
+  <data name="没有选择上传的预设" xml:space="preserve"><value>Elige un preajuste</value></data>
+  <data name="至少选择一个标签" xml:space="preserve"><value>Elige al menos una etiqueta</value></data>
+  <data name="正在复制文件" xml:space="preserve"><value>Copiando archivos...</value></data>
+  <data name="开始上传" xml:space="preserve"><value>Subiendo...&#xA;Espera al resultado.&#xA;No salgas de esta página.</value></data>
+  <data name="已上传到Steam" xml:space="preserve"><value>Subido a Steam</value></data>
+  <data name="上传Steam失败" xml:space="preserve"><value>Error al subir a Steam</value></data>
+  <data name="可见" xml:space="preserve"><value>Visibilidad</value></data>
+  <data name="仅自己" xml:space="preserve"><value>Privado</value></data>
+  <data name="仅好友" xml:space="preserve"><value>Solo amigos</value></data>
+  <data name="所有人" xml:space="preserve"><value>Público</value></data>
+  <data name="热度" xml:space="preserve"><value>  Populares</value></data>
+  <data name="评分" xml:space="preserve"><value>  Valoración</value></data>
+  <data name="最新" xml:space="preserve"><value>  Recientes</value></data>
+  <data name="订阅" xml:space="preserve"><value>  Suscripciones</value></data>
+  <data name="排序" xml:space="preserve"><value>Ordenar</value></data>
+  <data name="订阅按钮" xml:space="preserve"><value>Suscribirse</value></data>
+  <data name="正在订阅" xml:space="preserve"><value>Suscribiendo...</value></data>
+  <data name="取消订阅按钮" xml:space="preserve"><value>Cancelar suscripción</value></data>
+  <data name="订阅失败" xml:space="preserve"><value>Error al suscribirse</value></data>
+  <data name="正在退订" xml:space="preserve"><value>Cancelando...</value></data>
+  <data name="已退订" xml:space="preserve"><value>Suscripción cancelada</value></data>
+  <data name="退订失败" xml:space="preserve"><value>Error al cancelar</value></data>
+  <data name="开始下载" xml:space="preserve"><value>Descarga iniciada</value></data>
+  <data name="图片加载失败" xml:space="preserve"><value>Error al cargar la imagen</value></data>
+  <data name="物品加载失败" xml:space="preserve"><value>Error al cargar el elemento</value></data>
+  <data name="全选" xml:space="preserve"><value>Seleccionar todo</value></data>
+  <data name="复制" xml:space="preserve"><value>Copiar</value></data>
+  <data name="粘贴" xml:space="preserve"><value>Pegar</value></data>
+  <data name="导入" xml:space="preserve"><value>Importar</value></data>
+  <data name="上传" xml:space="preserve"><value>Subir</value></data>
+  <data name="删除" xml:space="preserve"><value>Eliminar</value></data>
+  <data name="已复制" xml:space="preserve"><value>Copiado: </value></data>
+  <data name="删除预设" xml:space="preserve"><value>Eliminar preajuste</value></data>
+  <data name="教程1_内容" xml:space="preserve"><value>· Instala el dispositivo de audio virtual en Ajustes.&#xA;· Después, compruébalo en los ajustes de sonido de Windows.</value></data>
+  <data name="教程1_标题" xml:space="preserve"><value>Primer inicio</value></data>
+  <data name="教程3_内容" xml:space="preserve"><value>· Configura los cuatro dispositivos y activa «Iniciar».&#xA;· El micrófono y el audio de la aplicación irán al micrófono virtual.</value></data>
+  <data name="教程3_标题" xml:space="preserve"><value>Iniciar PlayVoice</value></data>
+  <data name="教程4_标题" xml:space="preserve"><value>Juegos y streaming</value></data>
+  <data name="教程4_内容" xml:space="preserve"><value>· Elige el micrófono virtual configurado en el juego o la aplicación de streaming.</value></data>
+  <data name="教程7_标题" xml:space="preserve"><value>¿Necesitas ayuda?</value></data>
+  <data name="教程7_内容" xml:space="preserve"><value>· Encontrarás nuestros datos de contacto en la página de PlayVoice en Steam.</value></data>
+  <data name="文件资源浏览器" xml:space="preserve"><value>Abrir carpeta</value></data>
+  <data name="教程6_标题" xml:space="preserve"><value>¿Hay eco?</value></data>
+  <data name="教程6_内容" xml:space="preserve"><value>· Con el monitor activo, aleja el micrófono de los altavoces para evitar eco.</value></data>
+  <data name="Steam 未连接" xml:space="preserve"><value>Steam no está conectado</value></data>
+  <data name="Steam 初始化失败" xml:space="preserve"><value>Error al iniciar Steam</value></data>
+  <data name="麦克风输入音量" xml:space="preserve"><value>Volumen del micrófono</value></data>
+  <data name="自动闭麦" xml:space="preserve"><value>Silencio automático</value></data>
+  <data name="播放前" xml:space="preserve"><value>Antes</value></data>
+  <data name="播放后" xml:space="preserve"><value>Después</value></data>
+  <data name="按下" xml:space="preserve"><value>Pulsar</value></data>
+  <data name="抬起" xml:space="preserve"><value>Soltar</value></data>
+  <data name="单击" xml:space="preserve"><value>Clic</value></data>
+  <data name="音频" xml:space="preserve"><value>&#xA;A</value></data>
+  <data name="输入" xml:space="preserve"><value>&#xA;I</value></data>
+  <data name="输出" xml:space="preserve"><value>&#xA;O</value></data>
+  <data name="全局音量" xml:space="preserve"><value>Volumen general</value></data>
+  <data name="运行中禁止更改设备" xml:space="preserve"><value>Detén PlayVoice para cambiar dispositivos</value></data>
+  <data name="耳返_In" xml:space="preserve"><value>Monitor del micrófono</value></data>
+  <data name="教程5_标题" xml:space="preserve"><value>¿No funcionan las teclas?</value></data>
+  <data name="教程5_内容" xml:space="preserve"><value>· Si se pulsa A antes de reproducir, Windows la mantiene pulsada y algunas aplicaciones ignoran la entrada. Pulsa A de nuevo para soltarla.</value></data>
+  <data name="教程2_标题" xml:space="preserve"><value>Iconos de preajustes</value></data>
+  <data name="教程2_内容_选择" xml:space="preserve"><value>Seleccionar</value></data>
+  <data name="教程2_内容_复制" xml:space="preserve"><value>Copiar</value></data>
+  <data name="教程2_内容_粘贴" xml:space="preserve"><value>Pegar</value></data>
+  <data name="教程2_内容_导入" xml:space="preserve"><value>Importar audio</value></data>
+  <data name="教程2_内容_上传" xml:space="preserve"><value>Página de subida</value></data>
+  <data name="教程2_内容_删除" xml:space="preserve"><value>Eliminar</value></data>
+  <data name="教程2_内容_文件" xml:space="preserve"><value>Abrir carpeta</value></data>
+  <data name="测试" xml:space="preserve"><value>Prueba</value></data>
+  <data name="音频输出音量" xml:space="preserve"><value>Volumen de salida</value></data>
+  <data name="音频耳返音量" xml:space="preserve"><value>Volumen del monitor</value></data>
+  <data name="响度归一化测试" xml:space="preserve"><value>Prueba de sonoridad</value></data>
+  <data name="未完成响度测试，音频响度可能过高" xml:space="preserve"><value>Sin la prueba, el audio puede estar demasiado alto.</value></data>
+  <data name="请先通过" xml:space="preserve"><value>Completa primero:</value></data>
+  <data name="好评" xml:space="preserve"><value>Me gusta</value></data>
+  <data name="差评" xml:space="preserve"><value>No me gusta</value></data>
+  <data name="喜欢" xml:space="preserve"><value>Añadir a favoritos</value></data>
+  <data name="Steam详情" xml:space="preserve"><value>Abrir en Steam</value></data>
+  <data name="复制链接" xml:space="preserve"><value>Copiar enlace</value></data>
+  <data name="举报" xml:space="preserve"><value>Denunciar</value></data>
+  <data name="关闭行为" xml:space="preserve"><value>Al cerrar</value></data>
+  <data name="最小化到托盘" xml:space="preserve"><value>Minimizar a la bandeja</value></data>
+  <data name="直接关闭" xml:space="preserve"><value>Salir</value></data>
+  <data name="显示主窗口" xml:space="preserve"><value>Mostrar ventana</value></data>
+  <data name="退出" xml:space="preserve"><value>Salir</value></data>
+  <data name="PlayVoice UGC 上传与 Steam 创意工坊服务协议" xml:space="preserve"><value>Acuerdo del Taller de Steam</value></data>
+  <data name="拒绝" xml:space="preserve"><value>Rechazar</value></data>
+  <data name="同意" xml:space="preserve"><value>Aceptar</value></data>
+  <data name="未绑定" xml:space="preserve"><value>sin configurar</value></data>
+  <data name="正在录音" xml:space="preserve"><value>Grabando... Habla con normalidad.</value></data>
+  <data name="录音结束" xml:space="preserve"><value>Grabación lista; analizando...</value></data>
+  <data name="已订阅" xml:space="preserve"><value>Suscrito</value></data>
+  <data name="浅色" xml:space="preserve"><value>Claro</value></data>
+  <data name="深色" xml:space="preserve"><value>Oscuro</value></data>
+  <data name="系统" xml:space="preserve"><value>Sistema</value></data>
+  <data name="预设已存在" xml:space="preserve"><value>El preajuste ya existe</value></data>
+  <data name="文件夹已存在" xml:space="preserve"><value>La carpeta $ ya existe</value></data>
+  <data name="未命名" xml:space="preserve"><value>Sin título</value></data>
+</root>

@@ -9,7 +9,8 @@ public class HeightToCornerRadiusConverter : IValueConverter
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
         double ratio = 0.5; // 默认半圆
-        if (parameter is string s && double.TryParse(s, out double p))
+        if (parameter is string s &&
+            double.TryParse(s, NumberStyles.Float, CultureInfo.InvariantCulture, out double p))
             ratio = p;
 
         if (value is double height)
