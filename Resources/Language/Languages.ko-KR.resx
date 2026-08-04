@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="软件名称" xml:space="preserve"><value>PlayVoice</value></data>
+  <data name="设置" xml:space="preserve"><value>설정</value></data>
+  <data name="物理麦克风" xml:space="preserve"><value>마이크</value></data>
+  <data name="物理扬声器" xml:space="preserve"><value>스피커</value></data>
+  <data name="虚拟扬声器" xml:space="preserve"><value>가상 스피커</value></data>
+  <data name="虚拟麦克风" xml:space="preserve"><value>가상 마이크</value></data>
+  <data name="请选择" xml:space="preserve"><value>선택...</value></data>
+  <data name="声卡绑定" xml:space="preserve"><value>오디오 장치</value></data>
+  <data name="系统设置" xml:space="preserve"><value>일반</value></data>
+  <data name="运行" xml:space="preserve"><value>실행</value></data>
+  <data name="语言" xml:space="preserve"><value>언어</value></data>
+  <data name="样式" xml:space="preserve"><value>테마</value></data>
+  <data name="去Steam" xml:space="preserve"><value>Steam에서 응원하기</value></data>
+  <data name="去Github" xml:space="preserve"><value>GitHub에서 응원하기</value></data>
+  <data name="虚拟声卡" xml:space="preserve"><value>가상 오디오</value></data>
+  <data name="安装" xml:space="preserve"><value>설치</value></data>
+  <data name="卸载" xml:space="preserve"><value>제거</value></data>
+  <data name="检测" xml:space="preserve"><value>확인</value></data>
+  <data name="去VB-AUDIO_Software" xml:space="preserve"><value>VB-AUDIO Software 후원</value></data>
+  <data name="VB-AUDIO_分销规则与感谢" xml:space="preserve"><value>프로젝트를 지원해 준 VB-AUDIO에 감사드립니다.&#xA;VB-CABLE은 기부형 소프트웨어입니다. 많은 후원 바랍니다.</value></data>
+  <data name="关于" xml:space="preserve"><value>정보</value></data>
+  <data name="创意工坊" xml:space="preserve"><value>창작마당</value></data>
+  <data name="预设" xml:space="preserve"><value>프리셋</value></data>
+  <data name="教程" xml:space="preserve"><value>도움말</value></data>
+  <data name="输入按键" xml:space="preserve"><value>단축키</value></data>
+  <data name="创建新预设" xml:space="preserve"><value>새 프리셋</value></data>
+  <data name="输入预设名称" xml:space="preserve"><value>프리셋 이름...</value></data>
+  <data name="确认" xml:space="preserve"><value>확인</value></data>
+  <data name="添加音频" xml:space="preserve"><value>오디오 추가</value></data>
+  <data name="音频文件" xml:space="preserve"><value>오디오 파일</value></data>
+  <data name="文件名称" xml:space="preserve"><value>파일 이름</value></data>
+  <data name="无" xml:space="preserve"><value>없음</value></data>
+  <data name="时长" xml:space="preserve"><value>길이</value></data>
+  <data name="名称" xml:space="preserve"><value>이름</value></data>
+  <data name="快捷键" xml:space="preserve"><value>단축키</value></data>
+  <data name="通知" xml:space="preserve"><value>알림</value></data>
+  <data name="未安装" xml:space="preserve"><value>설치 안 됨</value></data>
+  <data name="已安装" xml:space="preserve"><value>설치됨</value></data>
+  <data name="正在卸载" xml:space="preserve"><value>제거 중...</value></data>
+  <data name="卸载结束" xml:space="preserve"><value>제거됨</value></data>
+  <data name="卸载未完成" xml:space="preserve"><value>제거 실패</value></data>
+  <data name="正在安装" xml:space="preserve"><value>설치 중...</value></data>
+  <data name="安装结束" xml:space="preserve"><value>설치됨</value></data>
+  <data name="安装未完成" xml:space="preserve"><value>설치 실패</value></data>
+  <data name="启动" xml:space="preserve"><value>실행됨</value></data>
+  <data name="失败" xml:space="preserve"><value>오류</value></data>
+  <data name="请查看教程说明重新配置" xml:space="preserve"><value>도움말과 설정을 확인하세요</value></data>
+  <data name="请勿重复点击" xml:space="preserve"><value>잠시 기다리세요</value></data>
+  <data name="未绑定声卡" xml:space="preserve"><value>오디오 장치가 설정되지 않음</value></data>
+  <data name="耳返_Audio" xml:space="preserve"><value>오디오 모니터링</value></data>
+  <data name="请先启动程序" xml:space="preserve"><value>PlayVoice를 실행하세요</value></data>
+  <data name="我的订阅" xml:space="preserve"><value>내 구독</value></data>
+  <data name="我的创作" xml:space="preserve"><value>내 항목</value></data>
+  <data name="好友创作" xml:space="preserve"><value>친구 항목</value></data>
+  <data name="大小" xml:space="preserve"><value>크기</value></data>
+  <data name="所有" xml:space="preserve"><value>전체</value></data>
+  <data name="音乐" xml:space="preserve"><value>음악</value></data>
+  <data name="音效" xml:space="preserve"><value>효과음</value></data>
+  <data name="语音" xml:space="preserve"><value>음성</value></data>
+  <data name="搜索" xml:space="preserve"><value>검색</value></data>
+  <data name="关键词" xml:space="preserve"><value>검색어</value></data>
+  <data name="上传到创意工坊" xml:space="preserve"><value>창작마당에 업로드</value></data>
+  <data name="为你的资源命名" xml:space="preserve"><value>항목 이름</value></data>
+  <data name="放入预览图" xml:space="preserve"><value>이미지를 여기에 놓기</value></data>
+  <data name="标签" xml:space="preserve"><value>태그</value></data>
+  <data name="为你的资源添加描述" xml:space="preserve"><value>설명</value></data>
+  <data name="选择预览图" xml:space="preserve"><value>이미지 선택</value></data>
+  <data name="图片文件" xml:space="preserve"><value>이미지</value></data>
+  <data name="预览图要求" xml:space="preserve"><value>최대 1 MB · 1:1</value></data>
+  <data name="没有输入资源名称" xml:space="preserve"><value>항목 이름을 입력하세요</value></data>
+  <data name="没有选择上传的预设" xml:space="preserve"><value>프리셋을 선택하세요</value></data>
+  <data name="至少选择一个标签" xml:space="preserve"><value>태그를 하나 이상 선택하세요</value></data>
+  <data name="正在复制文件" xml:space="preserve"><value>파일 복사 중...</value></data>
+  <data name="开始上传" xml:space="preserve"><value>업로드 중...&#xA;결과를 기다리세요.&#xA;이 페이지를 닫지 마세요.</value></data>
+  <data name="已上传到Steam" xml:space="preserve"><value>Steam에 업로드됨</value></data>
+  <data name="上传Steam失败" xml:space="preserve"><value>Steam 업로드 실패</value></data>
+  <data name="可见" xml:space="preserve"><value>공개 범위</value></data>
+  <data name="仅自己" xml:space="preserve"><value>비공개</value></data>
+  <data name="仅好友" xml:space="preserve"><value>친구만</value></data>
+  <data name="所有人" xml:space="preserve"><value>공개</value></data>
+  <data name="热度" xml:space="preserve"><value>  인기</value></data>
+  <data name="评分" xml:space="preserve"><value>  평점</value></data>
+  <data name="最新" xml:space="preserve"><value>  최신</value></data>
+  <data name="订阅" xml:space="preserve"><value>  구독순</value></data>
+  <data name="排序" xml:space="preserve"><value>정렬</value></data>
+  <data name="订阅按钮" xml:space="preserve"><value>구독</value></data>
+  <data name="正在订阅" xml:space="preserve"><value>구독 중...</value></data>
+  <data name="取消订阅按钮" xml:space="preserve"><value>구독 취소</value></data>
+  <data name="订阅失败" xml:space="preserve"><value>구독 실패</value></data>
+  <data name="正在退订" xml:space="preserve"><value>취소 중...</value></data>
+  <data name="已退订" xml:space="preserve"><value>구독 취소됨</value></data>
+  <data name="退订失败" xml:space="preserve"><value>구독 취소 실패</value></data>
+  <data name="开始下载" xml:space="preserve"><value>다운로드 시작</value></data>
+  <data name="图片加载失败" xml:space="preserve"><value>이미지 로드 실패</value></data>
+  <data name="物品加载失败" xml:space="preserve"><value>항목 로드 실패</value></data>
+  <data name="全选" xml:space="preserve"><value>전체 선택</value></data>
+  <data name="复制" xml:space="preserve"><value>복사</value></data>
+  <data name="粘贴" xml:space="preserve"><value>붙여넣기</value></data>
+  <data name="导入" xml:space="preserve"><value>가져오기</value></data>
+  <data name="上传" xml:space="preserve"><value>업로드</value></data>
+  <data name="删除" xml:space="preserve"><value>삭제</value></data>
+  <data name="已复制" xml:space="preserve"><value>복사됨: </value></data>
+  <data name="删除预设" xml:space="preserve"><value>프리셋 삭제</value></data>
+  <data name="教程1_内容" xml:space="preserve"><value>· 설정에서 가상 오디오 장치를 설치하세요.&#xA;· Windows 소리 설정에서 가상 장치를 확인하세요.</value></data>
+  <data name="教程1_标题" xml:space="preserve"><value>첫 실행</value></data>
+  <data name="教程3_内容" xml:space="preserve"><value>· 장치 네 개를 설정하고 '실행'을 켜세요.&#xA;· 마이크와 앱 오디오가 가상 마이크로 출력됩니다.</value></data>
+  <data name="教程3_标题" xml:space="preserve"><value>PlayVoice 실행</value></data>
+  <data name="教程4_标题" xml:space="preserve"><value>게임 및 방송</value></data>
+  <data name="教程4_内容" xml:space="preserve"><value>· 게임이나 방송 앱에서 설정한 가상 마이크를 선택하세요.</value></data>
+  <data name="教程7_标题" xml:space="preserve"><value>도움이 필요하신가요?</value></data>
+  <data name="教程7_内容" xml:space="preserve"><value>· 연락처는 PlayVoice Steam 페이지에서 확인하세요.</value></data>
+  <data name="文件资源浏览器" xml:space="preserve"><value>폴더 열기</value></data>
+  <data name="教程6_标题" xml:space="preserve"><value>울림이 들리나요?</value></data>
+  <data name="教程6_内容" xml:space="preserve"><value>· 모니터링 중에는 마이크를 스피커에서 멀리 두어 울림을 방지하세요.</value></data>
+  <data name="Steam 未连接" xml:space="preserve"><value>Steam 연결 안 됨</value></data>
+  <data name="Steam 初始化失败" xml:space="preserve"><value>Steam 초기화 실패</value></data>
+  <data name="麦克风输入音量" xml:space="preserve"><value>마이크 음량</value></data>
+  <data name="自动闭麦" xml:space="preserve"><value>자동 음소거</value></data>
+  <data name="播放前" xml:space="preserve"><value>이전</value></data>
+  <data name="播放后" xml:space="preserve"><value>이후</value></data>
+  <data name="按下" xml:space="preserve"><value>누르기</value></data>
+  <data name="抬起" xml:space="preserve"><value>떼기</value></data>
+  <data name="单击" xml:space="preserve"><value>클릭</value></data>
+  <data name="音频" xml:space="preserve"><value>&#xA;A</value></data>
+  <data name="输入" xml:space="preserve"><value>&#xA;I</value></data>
+  <data name="输出" xml:space="preserve"><value>&#xA;O</value></data>
+  <data name="全局音量" xml:space="preserve"><value>전체 음량</value></data>
+  <data name="运行中禁止更改设备" xml:space="preserve"><value>장치 변경 전에 PlayVoice를 중지하세요</value></data>
+  <data name="耳返_In" xml:space="preserve"><value>마이크 모니터링</value></data>
+  <data name="教程5_标题" xml:space="preserve"><value>키가 작동하지 않나요?</value></data>
+  <data name="教程5_内容" xml:space="preserve"><value>· 재생 전에 A를 누르도록 설정하면 Windows가 키를 계속 누릅니다. 입력이 안 되면 A를 다시 누르세요.</value></data>
+  <data name="教程2_标题" xml:space="preserve"><value>프리셋 아이콘</value></data>
+  <data name="教程2_内容_选择" xml:space="preserve"><value>선택</value></data>
+  <data name="教程2_内容_复制" xml:space="preserve"><value>복사</value></data>
+  <data name="教程2_内容_粘贴" xml:space="preserve"><value>붙여넣기</value></data>
+  <data name="教程2_内容_导入" xml:space="preserve"><value>오디오 가져오기</value></data>
+  <data name="教程2_内容_上传" xml:space="preserve"><value>업로드 페이지</value></data>
+  <data name="教程2_内容_删除" xml:space="preserve"><value>삭제</value></data>
+  <data name="教程2_内容_文件" xml:space="preserve"><value>폴더 열기</value></data>
+  <data name="测试" xml:space="preserve"><value>테스트</value></data>
+  <data name="音频输出音量" xml:space="preserve"><value>출력 음량</value></data>
+  <data name="音频耳返音量" xml:space="preserve"><value>모니터 음량</value></data>
+  <data name="响度归一化测试" xml:space="preserve"><value>음량 테스트</value></data>
+  <data name="未完成响度测试，音频响度可能过高" xml:space="preserve"><value>테스트하지 않아 오디오가 너무 클 수 있습니다.</value></data>
+  <data name="请先通过" xml:space="preserve"><value>먼저 완료:</value></data>
+  <data name="好评" xml:space="preserve"><value>좋아요</value></data>
+  <data name="差评" xml:space="preserve"><value>싫어요</value></data>
+  <data name="喜欢" xml:space="preserve"><value>즐겨찾기 추가</value></data>
+  <data name="Steam详情" xml:space="preserve"><value>Steam에서 열기</value></data>
+  <data name="复制链接" xml:space="preserve"><value>링크 복사</value></data>
+  <data name="举报" xml:space="preserve"><value>신고</value></data>
+  <data name="关闭行为" xml:space="preserve"><value>닫을 때</value></data>
+  <data name="最小化到托盘" xml:space="preserve"><value>트레이로 최소화</value></data>
+  <data name="直接关闭" xml:space="preserve"><value>종료</value></data>
+  <data name="显示主窗口" xml:space="preserve"><value>창 표시</value></data>
+  <data name="退出" xml:space="preserve"><value>종료</value></data>
+  <data name="PlayVoice UGC 上传与 Steam 创意工坊服务协议" xml:space="preserve"><value>Steam 창작마당 서비스 약관</value></data>
+  <data name="拒绝" xml:space="preserve"><value>거부</value></data>
+  <data name="同意" xml:space="preserve"><value>동의</value></data>
+  <data name="未绑定" xml:space="preserve"><value>설정 안 됨</value></data>
+  <data name="正在录音" xml:space="preserve"><value>녹음 중... 평소처럼 말하세요.</value></data>
+  <data name="录音结束" xml:space="preserve"><value>녹음 완료, 분석 중...</value></data>
+  <data name="已订阅" xml:space="preserve"><value>구독됨</value></data>
+  <data name="浅色" xml:space="preserve"><value>라이트</value></data>
+  <data name="深色" xml:space="preserve"><value>다크</value></data>
+  <data name="系统" xml:space="preserve"><value>시스템</value></data>
+  <data name="预设已存在" xml:space="preserve"><value>프리셋이 이미 있습니다</value></data>
+  <data name="文件夹已存在" xml:space="preserve"><value>폴더 $ 이(가) 이미 있습니다</value></data>
+  <data name="未命名" xml:space="preserve"><value>제목 없음</value></data>
+</root>

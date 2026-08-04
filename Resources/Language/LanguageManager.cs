@@ -114,8 +114,13 @@ public sealed class LanguageManager : INotifyPropertyChanged
     public List<LanguageInfo> LanguageList = new()
     {
         new LanguageInfo { Key = "zh-CN", Value = "简体中文", Index = 0 },
-        new LanguageInfo { Key = "en-US", Value = "English", Index = 1 },
-        new LanguageInfo { Key = "ru-RU", Value = "Русский", Index = 2 },
-        new LanguageInfo { Key = "es-ES", Value = "Español", Index = 3 },
+        new LanguageInfo { Key = "zh-TW", Value = "繁體中文", Index = 1 },
+        new LanguageInfo { Key = "en-US", Value = "English", Index = 2 },
+        new LanguageInfo { Key = "ru-RU", Value = "Русский", Index = 3 },
+        new LanguageInfo { Key = "es-ES", Value = "Español", Index = 4 },
+        new LanguageInfo { Key = "pt-BR", Value = "Português (Brasil)", Index = 5 },
+        new LanguageInfo { Key = "ja-JP", Value = "日本語", Index = 6 },
+        new LanguageInfo { Key = "ko-KR", Value = "한국어", Index = 7 },
+        new LanguageInfo { Key = "de-DE", Value = "Deutsch", Index = 8 },
     };
 }
