@@ -545,6 +545,9 @@ O</value>
   <data name="测试" xml:space="preserve">
     <value>Test</value>
   </data>
+  <data name="音频音量" xml:space="preserve">
+    <value>Audio Volume</value>
+  </data>
   <data name="音频输出音量" xml:space="preserve">
     <value>Output Volume</value>
   </data>

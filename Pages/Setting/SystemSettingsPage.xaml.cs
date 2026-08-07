@@ -261,19 +261,27 @@ namespace PlayVoice.Pages.Setting
             }
 
             {
-                this.AudioOutVolumeSlider.Value = AudioData.DecibelToProportion(GlobalData.Inst.AudioProxy.AudioOutDecibel) * 100;
+                double audioOutVolume = AudioData.DecibelToProportion(GlobalData.Inst.AudioProxy.AudioOutDecibel) * 100;
+                this.AudioVolumeSlider.Value = audioOutVolume;
+                this.AudioOutVolumeSlider.Value = audioOutVolume;
+                this.AudioEarVolumeSlider.Value = AudioData.DecibelToProportion(GlobalData.Inst.AudioProxy.AudioEarDecibel) * 100;
+
+                AudioVolumeSlider.ValueChanged += (sender, value) =>
+                {
+                    if (isSyncingAudioVolumeSliders) return;
+                    SetAudioVolume(value.NewValue);
+                };
                 AudioOutVolumeSlider.ValueChanged += (sender, value) =>
                 {
+                    if (isSyncingAudioVolumeSliders) return;
                     GlobalData.Inst.AudioProxy.AudioOutDecibel = AudioData.ProportionToDecibel(value.NewValue / 100);
                 };
-            }
-
-            {
-                this.AudioEarVolumeSlider.Value = AudioData.DecibelToProportion(GlobalData.Inst.AudioProxy.AudioEarDecibel) * 100;
                 AudioEarVolumeSlider.ValueChanged += (sender, value) =>
                 {
+                    if (isSyncingAudioVolumeSliders) return;
                     GlobalData.Inst.AudioProxy.AudioEarDecibel = AudioData.ProportionToDecibel(value.NewValue / 100);
                 };
+                AudioVolumeExpandArrow.ExpandedChanged += AudioVolumeExpandArrow_ExpandedChanged;
             }
 
             {
@@ -331,6 +339,32 @@ namespace PlayVoice.Pages.Setting
         }
 
         private WasapiCapture physicalMicrophoneCapture;
+        private bool isSyncingAudioVolumeSliders;
+
+        private void AudioVolumeExpandArrow_ExpandedChanged(object sender, RoutedPropertyChangedEventArgs<bool> e)
+        {
+            AudioVolumeTextBlock.Visibility = e.NewValue ? Visibility.Collapsed : Visibility.Visible;
+            AudioVolumeSlider.Visibility = e.NewValue ? Visibility.Collapsed : Visibility.Visible;
+            AudioOutVolumeTextBlock.Visibility = e.NewValue ? Visibility.Visible : Visibility.Collapsed;
+            AudioOutVolumeSlider.Visibility = e.NewValue ? Visibility.Visible : Visibility.Collapsed;
+            AudioEarVolumePanel.Visibility = e.NewValue ? Visibility.Visible : Visibility.Collapsed;
+
+            if (!e.NewValue)
+                SetAudioVolume(AudioOutVolumeSlider.Value);
+        }
+
+        private void SetAudioVolume(double value)
+        {
+            isSyncingAudioVolumeSliders = true;
+            AudioVolumeSlider.Value = value;
+            AudioOutVolumeSlider.Value = value;
+            AudioEarVolumeSlider.Value = value;
+            isSyncingAudioVolumeSliders = false;
+
+            double decibel = AudioData.ProportionToDecibel(value / 100);
+            GlobalData.Inst.AudioProxy.AudioOutDecibel = decibel;
+            GlobalData.Inst.AudioProxy.AudioEarDecibel = decibel;
+        }
 
         public class PlayAudioKeyDataKeyAction
         {

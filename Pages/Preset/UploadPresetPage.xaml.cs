@@ -129,7 +129,10 @@ namespace PlayVoice.Pages.Preset
 
             if (!GlobalData.Inst.Config.AcceptedUserGeneratedContentAgreement)
             {
-                var agreementWindow = new UserGeneratedContentAgreementWindow { Owner = MainWindow.Inst };
+                var agreementWindow = new UserGeneratedContentAgreementWindow
+                {
+                    Owner = MainWindow.Inst
+                };
                 if (agreementWindow.ShowDialog() != true)
                     goto end;
 

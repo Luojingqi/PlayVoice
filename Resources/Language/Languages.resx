@@ -542,6 +542,9 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="测试" xml:space="preserve">
     <value>测试</value>
   </data>
+  <data name="音频音量" xml:space="preserve">
+    <value>音频音量</value>
+  </data>
   <data name="音频输出音量" xml:space="preserve">
     <value>音频输出音量</value>
   </data>

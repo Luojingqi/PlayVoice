@@ -144,6 +144,7 @@
   <data name="教程2_内容_删除" xml:space="preserve"><value>Удалить</value></data>
   <data name="教程2_内容_文件" xml:space="preserve"><value>Открыть папку</value></data>
   <data name="测试" xml:space="preserve"><value>Тест</value></data>
+  <data name="音频音量" xml:space="preserve"><value>Громкость аудио</value></data>
   <data name="音频输出音量" xml:space="preserve"><value>Громкость выхода</value></data>
   <data name="音频耳返音量" xml:space="preserve"><value>Громкость монитора</value></data>
   <data name="响度归一化测试" xml:space="preserve"><value>Тест громкости</value></data>
