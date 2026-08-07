@@ -12,6 +12,8 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 using static CommunityToolkit.Mvvm.ComponentModel.__Internals.__TaskExtensions.TaskAwaitableWithoutEndValidation;
 using static PlayVoice.Audio.AudioProxy;
 
@@ -343,14 +345,61 @@ namespace PlayVoice.Pages.Setting
 
         private void AudioVolumeExpandArrow_ExpandedChanged(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {
-            AudioVolumeTextBlock.Visibility = e.NewValue ? Visibility.Collapsed : Visibility.Visible;
-            AudioVolumeSlider.Visibility = e.NewValue ? Visibility.Collapsed : Visibility.Visible;
-            AudioOutVolumeTextBlock.Visibility = e.NewValue ? Visibility.Visible : Visibility.Collapsed;
-            AudioOutVolumeSlider.Visibility = e.NewValue ? Visibility.Visible : Visibility.Collapsed;
-            AudioEarVolumePanel.Visibility = e.NewValue ? Visibility.Visible : Visibility.Collapsed;
-
             if (!e.NewValue)
                 SetAudioVolume(AudioOutVolumeSlider.Value);
+
+            AnimateAudioVolumePanels(e.NewValue);
+        }
+
+        private void AnimateAudioVolumePanels(bool isExpanded)
+        {
+            AudioVolumePanel.IsHitTestVisible = !isExpanded;
+            AudioOutVolumePanel.IsHitTestVisible = isExpanded;
+            AudioEarVolumePanel.IsHitTestVisible = isExpanded;
+
+            AnimateOpacity(AudioVolumePanel, isExpanded ? 0 : 1);
+            AnimateTranslateY(AudioVolumePanel, isExpanded ? -4 : 0);
+            AnimateOpacity(AudioOutVolumePanel, isExpanded ? 1 : 0);
+            AnimateTranslateY(AudioOutVolumePanel, isExpanded ? 0 : 4);
+            AnimateOpacity(AudioEarVolumePanel, isExpanded ? 1 : 0);
+            AnimateTranslateY(AudioEarVolumePanel, isExpanded ? 0 : -6);
+            AnimateHeight(AudioEarVolumePanel, isExpanded ? 40.5 : 0);
+        }
+
+        private static void AnimateOpacity(UIElement element, double to)
+        {
+            element.BeginAnimation(
+                OpacityProperty,
+                CreateAudioVolumeAnimation(element.Opacity, to),
+                HandoffBehavior.SnapshotAndReplace);
+        }
+
+        private static void AnimateTranslateY(UIElement element, double to)
+        {
+            if (element.RenderTransform is not TranslateTransform transform) return;
+            transform.BeginAnimation(
+                TranslateTransform.YProperty,
+                CreateAudioVolumeAnimation(transform.Y, to),
+                HandoffBehavior.SnapshotAndReplace);
+        }
+
+        private static void AnimateHeight(FrameworkElement element, double to)
+        {
+            element.BeginAnimation(
+                HeightProperty,
+                CreateAudioVolumeAnimation(element.Height, to),
+                HandoffBehavior.SnapshotAndReplace);
+        }
+
+        private static DoubleAnimation CreateAudioVolumeAnimation(double from, double to)
+        {
+            return new DoubleAnimation
+            {
+                From = from,
+                To = to,
+                Duration = new Duration(TimeSpan.FromMilliseconds(200)),
+                EasingFunction = new QuadraticEase { EasingMode = EasingMode.EaseOut },
+            };
         }
 
         private void SetAudioVolume(double value)

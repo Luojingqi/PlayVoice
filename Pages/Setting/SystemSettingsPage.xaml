@@ -142,7 +142,6 @@
             <Grid Grid.Row="9" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="37.5"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
@@ -151,60 +150,85 @@
                                          HorizontalAlignment="Center"
                                          VerticalAlignment="Center"/>
 
-                <TextBlock x:Name="AudioVolumeTextBlock"
-                            Grid.Column="1"
-                            FontSize="16"
-                            Style="{StaticResource TextBlockLight}"
-                            Text="{L:Lan 音频音量}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"/>
-                
-                <AudioVolumeSlider:AudioVolumeSlider
-                            x:Name="AudioVolumeSlider"
-                            Grid.Column="2"
-                            Width="168"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Right"/>
+                <Grid x:Name="AudioVolumePanel" Grid.Column="1">
+                    <Grid.RenderTransform>
+                        <TranslateTransform Y="0"/>
+                    </Grid.RenderTransform>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
 
-                <TextBlock x:Name="AudioOutVolumeTextBlock"
-                            Grid.Column="1"
-                            FontSize="16"
-                            Style="{StaticResource TextBlockLight}"
-                            Text="{L:Lan 音频输出音量}"
-                            Visibility="Collapsed"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"/>
-                <AudioVolumeSlider:AudioVolumeSlider
-                            x:Name="AudioOutVolumeSlider"
-                            Grid.Column="2"
-                            Width="168"
-                            Visibility="Collapsed"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Right"/>
+                    <TextBlock Grid.Column="0"
+                               FontSize="16"
+                               Style="{StaticResource TextBlockLight}"
+                               Text="{L:Lan 音频音量}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"/>
+                    <AudioVolumeSlider:AudioVolumeSlider
+                               x:Name="AudioVolumeSlider"
+                               Grid.Column="1"
+                               Width="168"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"/>
+                </Grid>
+
+                <Grid x:Name="AudioOutVolumePanel"
+                      Grid.Column="1"
+                      Opacity="0"
+                      IsHitTestVisible="False">
+                    <Grid.RenderTransform>
+                        <TranslateTransform Y="4"/>
+                    </Grid.RenderTransform>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               FontSize="16"
+                               Style="{StaticResource TextBlockLight}"
+                               Text="{L:Lan 音频输出音量}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"/>
+                    <AudioVolumeSlider:AudioVolumeSlider
+                               x:Name="AudioOutVolumeSlider"
+                               Grid.Column="1"
+                               Width="168"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"/>
+                </Grid>
             </Grid>
             <Grid x:Name="AudioEarVolumePanel"
                   Grid.Row="10"
-                  Margin="0,1.5"
-                  Height="37.5"
-                  Visibility="Collapsed">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="37.5"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                  Height="0"
+                  Opacity="0"
+                  ClipToBounds="True"
+                  IsHitTestVisible="False">
+                <Grid.RenderTransform>
+                    <TranslateTransform Y="-6"/>
+                </Grid.RenderTransform>
 
-                <TextBlock Grid.Column="1"
-                            FontSize="16"
-                            Style="{StaticResource TextBlockLight}"
-                            Text="{L:Lan 音频耳返音量}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"/>
-                <AudioVolumeSlider:AudioVolumeSlider
-                            x:Name="AudioEarVolumeSlider"
-                            Grid.Column="2"
-                            Width="168"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Right"/>
+                <Grid Height="37.5" Margin="0,1.5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="37.5"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="1"
+                               FontSize="16"
+                               Style="{StaticResource TextBlockLight}"
+                               Text="{L:Lan 音频耳返音量}"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"/>
+                    <AudioVolumeSlider:AudioVolumeSlider
+                               x:Name="AudioEarVolumeSlider"
+                               Grid.Column="2"
+                               Width="168"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Right"/>
+                </Grid>
             </Grid>
 
             <Grid Grid.Row="11" Margin="0,1.5" Height="37.5">

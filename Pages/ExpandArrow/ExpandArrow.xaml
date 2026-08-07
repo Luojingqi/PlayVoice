@@ -29,17 +29,40 @@
                           VerticalAlignment="Center"
                           RenderTransformOrigin="0.5,0.5">
                         <Path.RenderTransform>
-                            <RotateTransform Angle="0"/>
+                            <RotateTransform x:Name="ArrowRotateTransform" Angle="0"/>
                         </Path.RenderTransform>
                     </Path>
                 </Border>
                 <ControlTemplate.Triggers>
                     <Trigger Property="IsChecked" Value="True">
-                        <Setter TargetName="Arrow" Property="RenderTransform">
-                            <Setter.Value>
-                                <RotateTransform Angle="90"/>
-                            </Setter.Value>
-                        </Setter>
+                        <Trigger.EnterActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="ArrowRotateTransform"
+                                                     Storyboard.TargetProperty="Angle"
+                                                     To="90"
+                                                     Duration="0:0:0.2">
+                                        <DoubleAnimation.EasingFunction>
+                                            <QuadraticEase EasingMode="EaseOut"/>
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.EnterActions>
+                        <Trigger.ExitActions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation Storyboard.TargetName="ArrowRotateTransform"
+                                                     Storyboard.TargetProperty="Angle"
+                                                     To="0"
+                                                     Duration="0:0:0.2">
+                                        <DoubleAnimation.EasingFunction>
+                                            <QuadraticEase EasingMode="EaseOut"/>
+                                        </DoubleAnimation.EasingFunction>
+                                    </DoubleAnimation>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </Trigger.ExitActions>
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter TargetName="ArrowBackground" Property="Background" Value="{DynamicResource BgLight}"/>
