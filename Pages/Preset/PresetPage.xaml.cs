@@ -1,117 +1,155 @@
-﻿using System.Windows;
+using PlayVoice.Pages.FunctionPreset;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PlayVoice.Pages.Preset;
 
 /// <summary>
-/// PresetPage.xaml 的交互逻辑
+/// 音频预设页面的交互逻辑。
 /// </summary>
 public partial class PresetPage : Page
 {
     public static PresetPage Inst { get; private set; }
-    public int Count => PageList.Count;
-    private List<PageData> PageList = new();
-    private AudioTrackGrid AudioTrackGridPage;
+    public int Count => pageList.Count;
 
-    private CreatePresetPage CreatePresetPage;
-    private DeletePresetPage DeletePresetPage;
-    private UploadPresetPage UploadPresetPage;
-    private bool isSynchronizingPresetSelection;
-    private bool isLoadingPresetFromPage;
+    private readonly List<PageData> pageList = new();
+    private readonly AudioTrackGrid audioTrackGridPage;
+    private readonly CreatePresetPage createPresetPage;
+    private readonly DeletePresetPage deletePresetPage;
+    private readonly UploadPresetPage uploadPresetPage;
+    private List<FunctionPresetData> functionPresets = new();
+    private bool isSynchronizingAudioPresetSelection;
+    private bool isSynchronizingFunctionPresetSelection;
+    private bool isLoadingAudioPresetFromPage;
 
     public PresetPage()
     {
         Inst = this;
         InitializeComponent();
-        AudioTrackGridPage = new AudioTrackGrid();
-        Frame0.Content = AudioTrackGridPage;
+
+        audioTrackGridPage = new AudioTrackGrid();
+        Frame0.Content = audioTrackGridPage;
         Frame0.Visibility = Visibility.Hidden;
         Frame1.Visibility = Visibility.Hidden;
-        CreatePresetPage = new();
-        DeletePresetPage = new();
-        UploadPresetPage = new();
-        CreatePresetPageFrame.Content = CreatePresetPage;
-        DeletePresetPageFrame.Content = DeletePresetPage;
-        UploadPresetPageFrame.Content = UploadPresetPage;
+
+        createPresetPage = new CreatePresetPage();
+        deletePresetPage = new DeletePresetPage();
+        uploadPresetPage = new UploadPresetPage();
+        CreatePresetPageFrame.Content = createPresetPage;
+        DeletePresetPageFrame.Content = deletePresetPage;
+        UploadPresetPageFrame.Content = uploadPresetPage;
+
+        foreach (var config in AudioPresetDataTool.GetAllAudioPresetConfigs())
+            pageList.Add(new PageData { Id = config.Id, Name = config.Name });
+        pageList.Add(PageData.CreateAddPage());
+
+        TopButtonListBox.ItemsSource = pageList;
+        TopButtonListBox.DisplayMemberPath = nameof(PageData.Name);
+        TopButtonListBox.SelectionChanged += TopButtonListBox_SelectionChanged;
+        FunctionPresetComboBox.SelectionChanged += FunctionPresetComboBox_SelectionChanged;
+
         Loaded += PresetPage_Loaded;
         Unloaded += PresetPage_Unloaded;
-        var presetNames = PresetDataTool.GetAllPresetName();
-        for (int i = 0; i < presetNames.Length; i++)
-        {
-            var name = presetNames[i];
-            PageList.Add(new PageData() { Name = name });
-        }
-        PageList.Add(new PageData() { Name = " + " });
-        TopButtonListBox.ItemsSource = PageList;
-        TopButtonListBox.DisplayMemberPath = "Name";
-        TopButtonListBox.SelectionChanged += TopButtonListBox_SelectionChanged;
-
     }
 
     private async void TopButtonListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (isSynchronizingPresetSelection) return;
+        if (isSynchronizingAudioPresetSelection) return;
 
-        var selectedPage = (PageData)TopButtonListBox.SelectedItem;
-        if (string.IsNullOrEmpty(selectedPage?.Name))
+        var selectedPage = TopButtonListBox.SelectedItem as PageData;
+        if (selectedPage == null)
         {
             Frame0.Visibility = Visibility.Hidden;
             Frame1.Visibility = Visibility.Hidden;
         }
-        else if (selectedPage.Name == " + ")
+        else if (selectedPage.IsAddPage)
         {
             Frame0.Visibility = Visibility.Hidden;
             Frame1.Visibility = Visibility.Visible;
-            DeletePresetPage.Open();
-            UploadPresetPage.Open(-1);
+            deletePresetPage.Open();
+            uploadPresetPage.Open(-1);
         }
         else
         {
             Frame0.Visibility = Visibility.Visible;
             Frame1.Visibility = Visibility.Hidden;
-            isLoadingPresetFromPage = true;
+            isLoadingAudioPresetFromPage = true;
             try
             {
-                await AudioTrackGridPage.InitLoadPreset(selectedPage.Name);
+                await audioTrackGridPage.InitLoadAudioPreset(selectedPage.Id);
             }
             finally
             {
-                isLoadingPresetFromPage = false;
+                isLoadingAudioPresetFromPage = false;
             }
         }
     }
 
-    private void PresetPage_Loaded(object sender, RoutedEventArgs e)
+    private void FunctionPresetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        GlobalData.Inst.PresetDataChanged -= UpdatePresetPage;
-        GlobalData.Inst.PresetDataChanged += UpdatePresetPage;
-        UpdatePresetPage(GlobalData.Inst.PresetData);
+        if (isSynchronizingFunctionPresetSelection) return;
+        if (FunctionPresetComboBox.SelectedItem is FunctionPresetData functionPreset)
+            GlobalData.Inst.ActiveFunctionPreset = functionPreset;
+    }
+
+    private async void PresetPage_Loaded(object sender, RoutedEventArgs e)
+    {
+        GlobalData.Inst.ActiveAudioPresetChanged -= UpdateAudioPresetPage;
+        GlobalData.Inst.ActiveAudioPresetChanged += UpdateAudioPresetPage;
+        GlobalData.Inst.ActiveFunctionPresetChanged -= UpdateFunctionPresetSelection;
+        GlobalData.Inst.ActiveFunctionPresetChanged += UpdateFunctionPresetSelection;
+
+        RefreshFunctionPresetList();
+        var audioPresetBeforeRestore = GlobalData.Inst.ActiveAudioPreset;
+        await GlobalData.Inst.RestoreActiveAudioPresetAsync();
+        if (ReferenceEquals(audioPresetBeforeRestore, GlobalData.Inst.ActiveAudioPreset))
+            UpdateAudioPresetPage(GlobalData.Inst.ActiveAudioPreset);
+        UpdateFunctionPresetSelection(GlobalData.Inst.ActiveFunctionPreset);
     }
 
     private void PresetPage_Unloaded(object sender, RoutedEventArgs e)
     {
-        GlobalData.Inst.PresetDataChanged -= UpdatePresetPage;
+        GlobalData.Inst.ActiveAudioPresetChanged -= UpdateAudioPresetPage;
+        GlobalData.Inst.ActiveFunctionPresetChanged -= UpdateFunctionPresetSelection;
     }
 
-    private async void UpdatePresetPage(PresetData presetData)
+    private void RefreshFunctionPresetList()
     {
-        if (isLoadingPresetFromPage) return;
+        functionPresets = FunctionPresetDataTool.GetAll();
+        if (functionPresets.Count == 0)
+        {
+            var defaultPreset = FunctionPresetDataTool.CreateDefault();
+            if (defaultPreset != null)
+                functionPresets.Add(defaultPreset);
+        }
+
+        FunctionPresetComboBox.ItemsSource = functionPresets;
+        var selectedPreset = functionPresets.FirstOrDefault(item =>
+            item.Id == GlobalData.Inst.ActiveFunctionPreset?.Id);
+        if (selectedPreset != null
+            && !ReferenceEquals(selectedPreset, GlobalData.Inst.ActiveFunctionPreset))
+            GlobalData.Inst.ActiveFunctionPreset = selectedPreset;
+    }
+
+    private async void UpdateAudioPresetPage(AudioPresetData audioPreset)
+    {
+        if (isLoadingAudioPresetFromPage) return;
         if (!Dispatcher.CheckAccess())
         {
-            Dispatcher.Invoke(() => UpdatePresetPage(presetData));
+            Dispatcher.Invoke(() => UpdateAudioPresetPage(audioPreset));
             return;
         }
 
-        int selectedIndex = PageList.Count - 1;
-        if (presetData != null)
+        int selectedIndex = pageList.Count - 1;
+        if (audioPreset != null)
         {
-            int presetIndex = PageList.FindIndex(page => page.Name == presetData.Config.Name);
+            int presetIndex = pageList.FindIndex(page => page.Id == audioPreset.Config.Id);
             if (presetIndex >= 0)
                 selectedIndex = presetIndex;
         }
 
-        isSynchronizingPresetSelection = true;
+        isSynchronizingAudioPresetSelection = true;
         try
         {
             TopButtonListBox.SelectedIndex = -1;
@@ -124,59 +162,79 @@ public partial class PresetPage : Page
         }
         finally
         {
-            isSynchronizingPresetSelection = false;
+            isSynchronizingAudioPresetSelection = false;
         }
 
-        if (presetData == null)
+        if (audioPreset == null)
         {
             Frame0.Visibility = Visibility.Hidden;
             Frame1.Visibility = Visibility.Visible;
-            DeletePresetPage.Open();
-            UploadPresetPage.Open(-1);
+            deletePresetPage.Open();
+            uploadPresetPage.Open(-1);
         }
         else
         {
             Frame0.Visibility = Visibility.Visible;
             Frame1.Visibility = Visibility.Hidden;
-            await AudioTrackGridPage.RefreshCurrentPreset();
+            await audioTrackGridPage.RefreshCurrentAudioPreset();
         }
+    }
+
+    private void UpdateFunctionPresetSelection(FunctionPresetData functionPreset)
+    {
+        if (!Dispatcher.CheckAccess())
+        {
+            Dispatcher.Invoke(() => UpdateFunctionPresetSelection(functionPreset));
+            return;
+        }
+
+        int selectedIndex = functionPresets.FindIndex(item => item.Id == functionPreset?.Id);
+        isSynchronizingFunctionPresetSelection = true;
+        FunctionPresetComboBox.SelectedIndex = selectedIndex;
+        isSynchronizingFunctionPresetSelection = false;
+        audioTrackGridPage.RefreshHotkeys();
     }
 
     private void DisableNavigation_CanExecute(object sender, CanExecuteRoutedEventArgs e)
     {
-        // 禁止执行该命令
         e.CanExecute = false;
-        // 标记为已处理，防止路由事件继续传递
         e.Handled = true;
     }
-    public void AddPresetPage(PresetData presetData)
-    {
-        var newPage = new PageData { Name = presetData.Config.Name };
-        PageList.Insert(PageList.Count - 1, newPage);
-        TopButtonListBox.Items.Refresh();
-        Application.Current.Dispatcher.InvokeAsync(() =>
-        {
-            TopButtonListBox.SelectedIndex = PageList.Count - 2;
-        }, System.Windows.Threading.DispatcherPriority.Loaded);
 
+    public void AddAudioPresetPage(AudioPresetData audioPreset)
+    {
+        var newPage = new PageData
+        {
+            Id = audioPreset.Config.Id,
+            Name = audioPreset.Config.Name
+        };
+        pageList.Insert(pageList.Count - 1, newPage);
+        TopButtonListBox.Items.Refresh();
+        GlobalData.Inst.ActiveAudioPreset = audioPreset;
     }
 
-    public void RemovePresetPage(string presetName)
+    public void RemoveAudioPresetPage(string idOrName)
     {
-        var pageToRemove = PageList.FirstOrDefault(p => p.Name == presetName);
-        if (pageToRemove != null)
-        {
-            PageList.Remove(pageToRemove);
-            TopButtonListBox.Items.Refresh();
-            Application.Current.Dispatcher.InvokeAsync(() =>
-            {
-                TopButtonListBox.SelectedIndex = PageList.Count - 1;
-            }, System.Windows.Threading.DispatcherPriority.Loaded);
-        }
+        var pageToRemove = pageList.FirstOrDefault(page =>
+            page.Id == idOrName || page.Name == idOrName);
+        if (pageToRemove == null) return;
+
+        pageList.Remove(pageToRemove);
+        TopButtonListBox.Items.Refresh();
+        if (GlobalData.Inst.ActiveAudioPreset == null)
+            TopButtonListBox.SelectedIndex = pageList.Count - 1;
     }
 
     public class PageData
     {
+        public string Id { get; set; }
         public string Name { get; set; }
+        public bool IsAddPage { get; set; }
+
+        public static PageData CreateAddPage() => new()
+        {
+            Name = " + ",
+            IsAddPage = true
+        };
     }
 }

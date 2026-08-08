@@ -17,7 +17,7 @@ namespace PlayVoice.Pages.Preset
 
         public void Open()
         {
-            var presetNameArray = PresetDataTool.GetAllPresetName();
+            var presetNameArray = AudioPresetDataTool.GetAllAudioPresetName();
             PresetComboBox.ItemsSource = presetNameArray;
             if (presetNameArray.Length > 0)
             {
@@ -29,9 +29,10 @@ namespace PlayVoice.Pages.Preset
         {
             if (ButtonGroupListBox.SelectedIndex == -1) return;
 
-            var presetName = (string)PresetComboBox.SelectedItem;
-            PresetDataTool.DeletePresetData(presetName);
-            PresetPage.Inst.RemovePresetPage(presetName);
+            var presetName = PresetComboBox.SelectedItem as string;
+            var config = AudioPresetDataTool.FindAudioPresetConfig(presetName);
+            if (config != null && AudioPresetDataTool.DeleteAudioPresetData(config.Id))
+                PresetPage.Inst.RemoveAudioPresetPage(config.Id);
             Open();
             ButtonGroupListBox.SelectedIndex = -1;
         }

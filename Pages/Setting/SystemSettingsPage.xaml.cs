@@ -3,6 +3,7 @@ using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using PlayVoice.Audio;
 using PlayVoice.Hotkey;
+using PlayVoice.Pages.FunctionPreset;
 using PlayVoice.Pages.Preset;
 using PlayVoice.Pages.Workshop;
 using PlayVoice.Resources.Language;
@@ -100,30 +101,40 @@ namespace PlayVoice.Pages.Setting
 
 
             {
-                var tempArray = PresetDataTool.GetAllPresetName();
-                presetNameArray.Add(LanguageManager.Inst.GetString("无"));
+                RefreshFunctionPresetOptions();
+                FunctionPresetComboBox.OnSelectionChanged += (previous, current) =>
+                {
+                    if (current is FunctionPresetData functionPreset)
+                        GlobalData.Inst.ActiveFunctionPreset = functionPreset;
+                };
+            }
+            {
+                var tempArray = AudioPresetDataTool.GetAllAudioPresetName();
+                audioPresetNames.Add(LanguageManager.Inst.GetString("无"));
                 int presetIndex = 0;
                 for (int i = 0; i < tempArray.Length; i++)
                 {
-                    presetNameArray.Add(tempArray[i]);
-                    if (GlobalData.Inst.PresetData != null && tempArray[i] == GlobalData.Inst.PresetData.Config.Name)
+                    audioPresetNames.Add(tempArray[i]);
+                    if (GlobalData.Inst.ActiveAudioPreset != null
+                        && tempArray[i] == GlobalData.Inst.ActiveAudioPreset.Config.Name)
                         presetIndex = i + 1;
                 }
-                PresetComboBox.ItemsSource = presetNameArray;
-                PresetComboBox.IsSyncing = true;
-                PresetComboBox.SelectedIndex = presetIndex;
-                PresetComboBox.IsSyncing = false;
+                AudioPresetComboBox.ItemsSource = audioPresetNames;
+                AudioPresetComboBox.IsSyncing = true;
+                AudioPresetComboBox.SelectedIndex = presetIndex;
+                AudioPresetComboBox.IsSyncing = false;
 
                 bool isSyncing = false;
-                PresetComboBox.OnSelectionChanged += async (obj0, obj1) =>
+                AudioPresetComboBox.OnSelectionChanged += async (obj0, obj1) =>
                 {
                     if (isSyncing == true) return;
                     isSyncing = true;
                     var presetName = (string)obj1;
                     if (presetName != LanguageManager.Inst.GetString("无"))
-                        GlobalData.Inst.PresetData = await PresetDataTool.LoadPresetData(presetName);
+                        GlobalData.Inst.ActiveAudioPreset =
+                            await AudioPresetDataTool.LoadAudioPresetData(presetName);
                     else
-                        GlobalData.Inst.PresetData = null;
+                        GlobalData.Inst.ActiveAudioPreset = null;
                     isSyncing = false;
                 };
             }
@@ -432,40 +443,78 @@ namespace PlayVoice.Pages.Setting
         {
             LanguageManager.Inst.CultureChanged -= UpdateLanguageAction;
             ThemeManager.ThemeChanged -= UpdateThemeAction;
-            GlobalData.Inst.PresetDataChanged -= UpdatePresetSelection;
+            GlobalData.Inst.ActiveAudioPresetChanged -= UpdateAudioPresetSelection;
+            GlobalData.Inst.ActiveFunctionPresetChanged -= UpdateFunctionPresetSelection;
             GlobalData.Inst.RunStateChanged -= UpdateRunAction;
             GlobalData.Inst.GoEar_AudioStateChanged -= UpdateGoEarAudioAction;
         }
 
         private void SystemSettingsPage_Loaded(object sender, RoutedEventArgs e)
         {
-            GlobalData.Inst.PresetDataChanged -= UpdatePresetSelection;
-            GlobalData.Inst.PresetDataChanged += UpdatePresetSelection;
-            UpdatePresetSelection(GlobalData.Inst.PresetData);
+            GlobalData.Inst.ActiveAudioPresetChanged -= UpdateAudioPresetSelection;
+            GlobalData.Inst.ActiveAudioPresetChanged += UpdateAudioPresetSelection;
+            GlobalData.Inst.ActiveFunctionPresetChanged -= UpdateFunctionPresetSelection;
+            GlobalData.Inst.ActiveFunctionPresetChanged += UpdateFunctionPresetSelection;
+            UpdateAudioPresetSelection(GlobalData.Inst.ActiveAudioPreset);
+            UpdateFunctionPresetSelection(GlobalData.Inst.ActiveFunctionPreset);
         }
 
-        private ObservableCollection<string> presetNameArray = new ObservableCollection<string>();
+        private ObservableCollection<string> audioPresetNames = new ObservableCollection<string>();
+        private List<FunctionPresetData> functionPresetOptions = new();
         private ObservableCollection<string> closeBehaviorOptions = new ObservableCollection<string>();
 
-        private void UpdatePresetSelection(PresetData presetData)
+        private void UpdateAudioPresetSelection(AudioPresetData presetData)
         {
             if (!Dispatcher.CheckAccess())
             {
-                Dispatcher.Invoke(() => UpdatePresetSelection(presetData));
+                Dispatcher.Invoke(() => UpdateAudioPresetSelection(presetData));
                 return;
             }
+
+            AudioPresetComboBox.IsSyncing = true;
+            audioPresetNames.Clear();
+            audioPresetNames.Add(LanguageManager.Inst.GetString("无"));
+            foreach (string name in AudioPresetDataTool.GetAllAudioPresetName())
+                audioPresetNames.Add(name);
 
             int presetIndex = 0;
             if (presetData != null)
             {
-                int nameIndex = presetNameArray.IndexOf(presetData.Config.Name);
+                int nameIndex = audioPresetNames.IndexOf(presetData.Config.Name);
                 if (nameIndex >= 0)
                     presetIndex = nameIndex;
             }
 
-            PresetComboBox.IsSyncing = true;
-            PresetComboBox.SelectedIndex = presetIndex;
-            PresetComboBox.IsSyncing = false;
+            AudioPresetComboBox.SelectedIndex = presetIndex;
+            AudioPresetComboBox.IsSyncing = false;
+        }
+
+        private void RefreshFunctionPresetOptions()
+        {
+            functionPresetOptions = FunctionPresetDataTool.GetAll();
+            if (functionPresetOptions.Count == 0)
+            {
+                var defaultPreset = FunctionPresetDataTool.CreateDefault();
+                if (defaultPreset != null)
+                    functionPresetOptions.Add(defaultPreset);
+            }
+
+            FunctionPresetComboBox.IsSyncing = true;
+            FunctionPresetComboBox.ItemsSource = functionPresetOptions;
+            FunctionPresetComboBox.SelectedIndex = functionPresetOptions.FindIndex(item =>
+                item.Id == GlobalData.Inst.ActiveFunctionPreset?.Id);
+            FunctionPresetComboBox.IsSyncing = false;
+        }
+
+        private void UpdateFunctionPresetSelection(FunctionPresetData functionPreset)
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.Invoke(() => UpdateFunctionPresetSelection(functionPreset));
+                return;
+            }
+
+            RefreshFunctionPresetOptions();
         }
 
         private void RefreshCloseBehaviorOptions()
@@ -485,11 +534,12 @@ namespace PlayVoice.Pages.Setting
             StyleListBox.SelectedIndex = themeIndex;
             StyleListBox.IsSyncing = false;
 
-            int index = PresetComboBox.SelectedIndex;
-            PresetComboBox.IsSyncing = true;
-            presetNameArray[0] = LanguageManager.Inst.GetString("无");
-            PresetComboBox.SelectedIndex = index;
-            PresetComboBox.IsSyncing = false;
+            int index = AudioPresetComboBox.SelectedIndex;
+            AudioPresetComboBox.IsSyncing = true;
+            audioPresetNames[0] = LanguageManager.Inst.GetString("无");
+            AudioPresetComboBox.SelectedIndex = index;
+            AudioPresetComboBox.IsSyncing = false;
+            RefreshFunctionPresetOptions();
 
             int closeBehaviorIndex = CloseBehaviorComboBox.SelectedIndex;
             CloseBehaviorComboBox.IsSyncing = true;

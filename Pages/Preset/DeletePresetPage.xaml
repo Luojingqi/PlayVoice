@@ -31,7 +31,7 @@
             </Grid.RowDefinitions>
             <TextBlock Style="{StaticResource TextBlockMedium}"
                             Grid.Row="0"
-                            Text="{L:Lan 删除预设}"
+                            Text="{L:Lan 删除音频预设}"
                             FontSize="16"
                             Margin="0,0,0,10"
                             TextAlignment="Center"/>

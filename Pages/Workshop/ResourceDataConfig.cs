@@ -29,7 +29,7 @@ public class ResourceDataConfig
     {
         public List<ResourceItem> ItemList { get; set; } = new();
 
-        public static Metadata Create(PresetData presetData)
+        public static Metadata Create(AudioPresetData presetData)
         {
             var metadata = new Metadata();
             for (int i = 0; i < presetData.AudioList.Count; i++)

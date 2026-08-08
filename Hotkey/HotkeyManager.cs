@@ -15,7 +15,7 @@ public class HotkeyManager
 
     public static HotkeyManager Inst { get; private set; }
 
-    private readonly HashSet<HotkeyData> _registeredHotkeys = new();
+    private readonly List<HotkeyData> _registeredHotkeys = new();
 
     public bool IsRecording { get; private set; }
     private Action<HotkeyData> _recordCallback;

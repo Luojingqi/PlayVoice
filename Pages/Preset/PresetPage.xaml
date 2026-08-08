@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="/Resources/Style/Button.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/PageBox.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/ListBox.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/ComboBox.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
@@ -25,10 +26,33 @@
         </Grid.RowDefinitions>
 
         <Border Grid.Row="0">
-            <ListBox Grid.Row="0" 
-                     Style="{StaticResource TransparentAndBottomLineListBoxStyle}"
-                     TransparentAndBottomLineListBox:ListBoxHelper.LinePosition="Top"
-                     x:Name="TopButtonListBox"/>
+            <Grid>
+                <ListBox Style="{StaticResource TransparentAndBottomLineListBoxStyle}"
+                         TransparentAndBottomLineListBox:ListBoxHelper.LinePosition="Top"
+                         x:Name="TopButtonListBox"/>
+                <Canvas Panel.ZIndex="10">
+                    <Border Canvas.Right="0"
+                            Canvas.Top="0"
+                            Background="{DynamicResource BgDark}"
+                            Padding="10,0">
+                        <Grid>
+                            <ComboBox x:Name="FunctionPresetComboBox"
+                                      Style="{StaticResource TransparentComboBoxStyle}"
+                                      DisplayMemberPath="DisplayName"
+                                      Width="130"
+                                      Height="32.5"
+                                      ToolTip="{L:Lan 功能预设}"/>
+                            <TextBlock Text="▼"
+                                       IsHitTestVisible="False"
+                                       Foreground="{DynamicResource TextPrimary}"
+                                       FontSize="9"
+                                       HorizontalAlignment="Right"
+                                       VerticalAlignment="Center"
+                                       Margin="0,0,10,0"/>
+                        </Grid>
+                    </Border>
+                </Canvas>
+            </Grid>
         </Border>
 
         <Border Grid.Row="1" Margin="10,13,10,0">

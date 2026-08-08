@@ -1,9 +1,9 @@
-﻿using System.Windows.Controls;
+using System.Windows.Controls;
 
 namespace PlayVoice.Pages.Preset
 {
     /// <summary>
-    /// CreatePresetPage.xaml 的交互逻辑
+    /// 创建音频预设页面的交互逻辑。
     /// </summary>
     public partial class CreatePresetPage : Page
     {
@@ -18,9 +18,10 @@ namespace PlayVoice.Pages.Preset
             if (ButtonGroupListBox.SelectedIndex == -1) return;
             string presetName = PresetNameInputTextBox.Text.Trim();
 
-            if (PresetDataTool.CreatePresetData(presetName, out PresetData presetData))
+            if (AudioPresetDataTool.CreateAudioPresetData(
+                presetName, out AudioPresetData presetData))
             {
-                PresetPage.Inst.AddPresetPage(presetData);
+                PresetPage.Inst.AddAudioPresetPage(presetData);
             }
 
             ButtonGroupListBox.SelectedIndex = -1;

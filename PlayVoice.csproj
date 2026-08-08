@@ -21,6 +21,14 @@
     <EmbeddedResource Remove="Resources\Preset\**" />
     <None Remove="Resources\Preset\**" />
     <Page Remove="Resources\Preset\**" />
+    <Compile Remove="Resources\AudioPreset\**" />
+    <EmbeddedResource Remove="Resources\AudioPreset\**" />
+    <None Remove="Resources\AudioPreset\**" />
+    <Page Remove="Resources\AudioPreset\**" />
+    <Compile Remove="Resources\FunctionPresets\**" />
+    <EmbeddedResource Remove="Resources\FunctionPresets\**" />
+    <None Remove="Resources\FunctionPresets\**" />
+    <Page Remove="Resources\FunctionPresets\**" />
   </ItemGroup>
 
   <ItemGroup>

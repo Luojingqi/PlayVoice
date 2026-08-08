@@ -49,10 +49,10 @@ namespace PlayVoice.Pages.Preset
             {
                 case 0: SelectAllButton_Click(); break;
                 case 1: CopyButton_Click(); break;
-                case 2: PasteButton_Click(); break;
-                case 3: await Task.Delay(75); ImportButton_Click(); break;
+                case 2: await PasteButton_Click(); break;
+                case 3: await Task.Delay(75); await ImportButton_Click(); break;
                 case 4: await Task.Delay(75); UploadButton_Click(); break;
-                case 5: DeleteButton_Click(); break;
+                case 5: await DeleteButton_Click(); break;
                 case 6: FolderButton_Click(); break;
             }
         }
@@ -75,7 +75,8 @@ namespace PlayVoice.Pages.Preset
                 if (item.Marked)
                 {
                     GlobalData.Inst.CopyAudioPathList.Add(
-                        Path.Combine(PresetDataTool.basePath, GlobalData.Inst.PresetData.Config.Name, item.Data.Config.Name));
+                        Path.Combine(AudioPresetDataTool.BasePath,
+                            GlobalData.Inst.ActiveAudioPreset.Config.Id, item.Data.Config.Name));
                     audioNameList.Add(item.Data.Config.Name);
                 }
             }
@@ -96,14 +97,14 @@ namespace PlayVoice.Pages.Preset
         {
             foreach (var path in GlobalData.Inst.CopyAudioPathList)
             {
-                var audioData = await GlobalData.Inst.PresetData.AddAudio(path);
+                var audioData = await GlobalData.Inst.ActiveAudioPreset.AddAudio(path);
                 await Task.Delay(25);
             }
-            GlobalData.Inst.PresetData.Save();
-            InitLoadPreset(GlobalData.Inst.PresetData.Config.Name);
+            GlobalData.Inst.ActiveAudioPreset.Save();
+            await InitLoadAudioPreset(GlobalData.Inst.ActiveAudioPreset.Config.Id);
         }
 
-        private async void ImportButton_Click()
+        private async Task ImportButton_Click()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = LanguageManager.Inst.GetString("添加音频");
@@ -119,11 +120,11 @@ namespace PlayVoice.Pages.Preset
                 string[] selectedFiles = openFileDialog.FileNames;
                 foreach (string file in selectedFiles)
                 {
-                    var audioData = await GlobalData.Inst.PresetData.AddAudio(file);
+                    var audioData = await GlobalData.Inst.ActiveAudioPreset.AddAudio(file);
                     await Task.Delay(25);
                 }
-                GlobalData.Inst.PresetData.Save();
-                InitLoadPreset(GlobalData.Inst.PresetData.Config.Name);
+                GlobalData.Inst.ActiveAudioPreset.Save();
+                await InitLoadAudioPreset(GlobalData.Inst.ActiveAudioPreset.Config.Id);
             }
         }
 
@@ -132,24 +133,25 @@ namespace PlayVoice.Pages.Preset
             PresetPage.Inst.TopButtonListBox.SelectedIndex = PresetPage.Inst.Count - 1;
         }
 
-        private void DeleteButton_Click()
+        private async Task DeleteButton_Click()
         {
-            foreach (var item in ShortcutList)
-            {
-                if (item.Marked)
-                {
-                    var index = item.Data.Index;
-                    GlobalData.Inst.PresetData.RemoveAudio(index);
-                }
-            }
-            GlobalData.Inst.PresetData.Save();
-            InitLoadPreset(GlobalData.Inst.PresetData.Config.Name);
+            var selectedIndexes = ShortcutList
+                .Where(item => item.Marked)
+                .Select(item => item.Data.Index)
+                .OrderByDescending(index => index)
+                .ToArray();
+            foreach (int index in selectedIndexes)
+                GlobalData.Inst.ActiveAudioPreset.RemoveAudio(index);
+
+            GlobalData.Inst.ActiveAudioPreset.Save();
+            await InitLoadAudioPreset(GlobalData.Inst.ActiveAudioPreset.Config.Id);
         }
 
 
         private void FolderButton_Click()
         {
-            var path = Path.Combine(PresetDataTool.basePath, GlobalData.Inst.PresetData.Config.Name);
+            var path = Path.Combine(AudioPresetDataTool.BasePath,
+                GlobalData.Inst.ActiveAudioPreset.Config.Id);
             if (Directory.Exists(path))
             {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
@@ -339,8 +341,8 @@ namespace PlayVoice.Pages.Preset
                 if (oldIndex >= 0 && newIndex >= 0 && oldIndex != newIndex)
                 {
                     ShortcutList.Move(oldIndex, newIndex);
-                    GlobalData.Inst.PresetData.SwapOrder(oldIndex, newIndex);
-                    GlobalData.Inst.PresetData.Save();
+                    GlobalData.Inst.ActiveAudioPreset.SwapOrder(oldIndex, newIndex);
+                    GlobalData.Inst.ActiveAudioPreset.Save();
                 }
             }
         }
@@ -357,19 +359,19 @@ namespace PlayVoice.Pages.Preset
         }
 
 
-        public async Task InitLoadPreset(string name)
+        public async Task InitLoadAudioPreset(string idOrName)
         {
-            var presetData = await PresetDataTool.LoadPresetData(name);
-            GlobalData.Inst.PresetData = presetData;
-            await RefreshCurrentPreset();
+            var presetData = await AudioPresetDataTool.LoadAudioPresetData(idOrName);
+            GlobalData.Inst.ActiveAudioPreset = presetData;
+            await RefreshCurrentAudioPreset();
         }
 
-        public async Task RefreshCurrentPreset()
+        public async Task RefreshCurrentAudioPreset()
         {
             ShortcutList.Clear();
             TopButtonGroupListBox.SelectedIndex = -1;
             SelectAll = false;
-            var presetData = GlobalData.Inst.PresetData;
+            var presetData = GlobalData.Inst.ActiveAudioPreset;
             if (presetData == null) return;
 
             foreach (var item in presetData.AudioList)
@@ -405,18 +407,24 @@ namespace PlayVoice.Pages.Preset
             }
         }
 
+        public void RefreshHotkeys()
+        {
+            foreach (var item in ShortcutList)
+                item.RefreshHotkey();
+        }
+
 
 
         public void Leave()
         {
-            var presetData = GlobalData.Inst.PresetData;
+            var presetData = GlobalData.Inst.ActiveAudioPreset;
             if (presetData == null) return;
             foreach (var item in presetData.AudioList)
             {
                 item.AnimationPlayAction = null;
                 item.AnimationStopAction = null;
             }
-            GlobalData.Inst.PresetData.Save();
+            GlobalData.Inst.ActiveAudioPreset.Save();
         }
 
         private void AudioTrackGrid_Unloaded(object sender, RoutedEventArgs e) => Leave();

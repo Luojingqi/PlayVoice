@@ -635,4 +635,31 @@ O</value>
   <data name="未命名" xml:space="preserve">
     <value>Untitled</value>
   </data>
+  <data name="音频预设" xml:space="preserve">
+    <value>Audio Presets</value>
+  </data>
+  <data name="功能预设" xml:space="preserve">
+    <value>Profiles</value>
+  </data>
+  <data name="默认" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="创建新音频预设" xml:space="preserve">
+    <value>Create Audio Preset</value>
+  </data>
+  <data name="输入音频预设名称" xml:space="preserve">
+    <value>Audio preset name...</value>
+  </data>
+  <data name="删除音频预设" xml:space="preserve">
+    <value>Delete Audio Preset</value>
+  </data>
+  <data name="没有选择上传的音频预设" xml:space="preserve">
+    <value>No audio preset selected for upload</value>
+  </data>
+  <data name="音频预设已存在" xml:space="preserve">
+    <value>Audio Preset Already Exists</value>
+  </data>
+  <data name="名称已存在" xml:space="preserve">
+    <value>Name $ already exists</value>
+  </data>
 </root>

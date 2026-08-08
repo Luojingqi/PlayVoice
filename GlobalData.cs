@@ -1,5 +1,6 @@
 ﻿using PlayVoice.Audio;
 using PlayVoice.Hotkey;
+using PlayVoice.Pages.FunctionPreset;
 using PlayVoice.Pages.Preset;
 using PlayVoice.Resources.Language;
 using PlayVoice.Resources.Themes;
@@ -20,45 +21,116 @@ internal class GlobalData
     private AudioProxy audioProxy;
     public AudioProxy AudioProxy => audioProxy;
 
-    private PresetData presetData;
+    private readonly List<IFunctionPresetFeatureHandler> functionPresetFeatures =
+        new() { new AudioHotkeyPresetFeatureHandler() };
 
-    public event Action<PresetData> PresetDataChanged;
+    private AudioPresetData activeAudioPreset;
+    private FunctionPresetData activeFunctionPreset;
 
-    public PresetData PresetData
+    public event Action<AudioPresetData> ActiveAudioPresetChanged;
+    public event Action<FunctionPresetData> ActiveFunctionPresetChanged;
+
+    public AudioPresetData ActiveAudioPreset
     {
-        get => presetData;
+        get => activeAudioPreset;
         set
         {
-            if (ReferenceEquals(presetData, value)) return;
-            if (presetData != null)
-            {
-                HotkeyManager.Inst.ClearHotkeys();
-                presetData.Dispose();
-            }
-            presetData = value;
-            if (presetData != null)
-            {
-                foreach (var item in presetData.AudioList)
-                {
-                    HotkeyManager.Inst.AddHotkey(item.Config.HotkeyData);
-                    item.Config.HotkeyData.Callback = () =>
-                    {
-                        if (run == true)
-                            item.Start();
-                    };
-                }
-            }
+            if (ReferenceEquals(activeAudioPreset, value)) return;
+
+            ClearFunctionPresetFeatures();
+            activeAudioPreset?.Dispose();
+            activeAudioPreset = value;
+            config.ActiveAudioPresetId = activeAudioPreset?.Config.Id;
+            ApplyFunctionPresetFeatures();
             config.Save();
-            PresetDataChanged?.Invoke(presetData);
+            ActiveAudioPresetChanged?.Invoke(activeAudioPreset);
         }
     }
 
-    public void DisposePresetForExit()
+    public FunctionPresetData ActiveFunctionPreset
     {
-        if (presetData == null) return;
-        HotkeyManager.Inst.ClearHotkeys();
-        presetData.Dispose();
-        presetData = null;
+        get => activeFunctionPreset;
+        set
+        {
+            if (ReferenceEquals(activeFunctionPreset, value)) return;
+
+            ClearFunctionPresetFeatures();
+            activeFunctionPreset = value;
+            config.ActiveFunctionPresetId = activeFunctionPreset?.Id;
+            ApplyFunctionPresetFeatures();
+            config.Save();
+            ActiveFunctionPresetChanged?.Invoke(activeFunctionPreset);
+        }
+    }
+
+    public async Task RestoreActiveAudioPresetAsync()
+    {
+        if (activeAudioPreset != null || string.IsNullOrWhiteSpace(config.ActiveAudioPresetId))
+            return;
+
+        var restoredPreset = await AudioPresetDataTool.LoadAudioPresetData(config.ActiveAudioPresetId);
+        if (restoredPreset == null)
+        {
+            config.ActiveAudioPresetId = null;
+            config.Save();
+            return;
+        }
+        ActiveAudioPreset = restoredPreset;
+    }
+
+    public HotkeyData GetAudioHotkey(AudioData audioData, bool create)
+    {
+        if (activeFunctionPreset == null || audioData?.AudioPreset == null)
+            return null;
+
+        return activeFunctionPreset.GetHotkey(
+            audioData.AudioPreset.Config.Id, audioData.Config.Id, create);
+    }
+
+    public void SaveActiveFunctionPreset()
+    {
+        activeFunctionPreset?.Save();
+    }
+
+    public void RebuildActiveHotkeys()
+    {
+        ClearFunctionPresetFeatures();
+        ApplyFunctionPresetFeatures();
+    }
+
+    public void RemoveAudioBinding(string audioPresetId, string audioId)
+    {
+        if (activeFunctionPreset?.RemoveHotkey(audioPresetId, audioId) == true)
+            activeFunctionPreset.Save();
+        FunctionPresetDataTool.RemoveAudioBindings(audioPresetId, audioId);
+        RebuildActiveHotkeys();
+    }
+
+    public void RemoveAudioPresetBindings(string audioPresetId)
+    {
+        if (activeFunctionPreset?.RemoveAudioPresetBindings(audioPresetId) == true)
+            activeFunctionPreset.Save();
+        FunctionPresetDataTool.RemoveAudioPresetBindings(audioPresetId);
+        RebuildActiveHotkeys();
+    }
+
+    private void ClearFunctionPresetFeatures()
+    {
+        foreach (var feature in functionPresetFeatures)
+            feature.Clear();
+    }
+
+    private void ApplyFunctionPresetFeatures()
+    {
+        foreach (var feature in functionPresetFeatures)
+            feature.Apply(activeFunctionPreset, activeAudioPreset);
+    }
+
+    public void DisposeAudioPresetForExit()
+    {
+        ClearFunctionPresetFeatures();
+        activeAudioPreset?.Dispose();
+        activeAudioPreset = null;
     }
 
     public bool GetRun() => run;
@@ -168,6 +240,10 @@ internal class GlobalData
 
         ThemeManager.SwitchTheme(config.Theme);
         LanguageManager.Inst.SetCulture(config.Language);
+
+        activeFunctionPreset = FunctionPresetDataTool.EnsureCurrent(config.ActiveFunctionPresetId);
+        config.ActiveFunctionPresetId = activeFunctionPreset?.Id;
+        config.Save();
 
         equipment = new();
         audioProxy = new();

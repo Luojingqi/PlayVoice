@@ -75,15 +75,20 @@ public class AudioTrackItemViewModel : INotifyPropertyChanged
         var config = audioData.Config;
         _header = config.FileName + config.FileFormat;
         Duration = audioData.AudioTrackArray[0].TotalTime;
-        _hotkey = config.HotkeyData.ToString();
+        _hotkey = GlobalData.Inst.GetAudioHotkey(audioData, create: false)?.ToString() ?? "None";
         _subHeader1 = AudioData.SizeToString(config.Size);
         _volumeSliderValue = AudioData.DecibelToProportion(config.Decibel) * 100;
         VolumeSliderValueChange += (value) =>
         {
             config.Decibel = AudioData.ProportionToDecibel(value / 100);
-            audioData.Preset.Save();
+            audioData.AudioPreset.Save();
             audioData.SetVolume(config.Decibel);
         };
+    }
+
+    public void RefreshHotkey()
+    {
+        Hotkey = GlobalData.Inst.GetAudioHotkey(Data, create: false)?.ToString() ?? "None";
     }
 
 

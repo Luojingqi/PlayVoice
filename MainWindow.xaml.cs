@@ -167,18 +167,18 @@ namespace PlayVoice
         private void UpdateTrayLanguage()
         {
             showTrayMenuItem.Text = LanguageManager.Inst.GetString("显示主窗口");
-            presetTrayMenuItem.Text = LanguageManager.Inst.GetString("预设");
+            presetTrayMenuItem.Text = LanguageManager.Inst.GetString("音频预设");
             exitTrayMenuItem.Text = LanguageManager.Inst.GetString("退出");
         }
 
         private void RefreshTrayPresetMenu()
         {
             presetTrayMenuItem.DropDownItems.Clear();
-            string currentPresetName = GlobalData.Inst.PresetData?.Config?.Name;
+            string currentPresetName = GlobalData.Inst.ActiveAudioPreset?.Config?.Name;
 
             var noPresetItem = new System.Windows.Forms.ToolStripMenuItem(LanguageManager.Inst.GetString("无"))
             {
-                Checked = GlobalData.Inst.PresetData == null
+                Checked = GlobalData.Inst.ActiveAudioPreset == null
             };
             noPresetItem.Click += async (s, e) => await SwitchPresetFromTrayAsync(null);
             presetTrayMenuItem.DropDownItems.Add(noPresetItem);
@@ -186,7 +186,7 @@ namespace PlayVoice
 
             try
             {
-                foreach (string presetName in PresetDataTool.GetAllPresetName().OrderBy(name => name))
+                foreach (string presetName in AudioPresetDataTool.GetAllAudioPresetName().OrderBy(name => name))
                 {
                     var presetItem = new System.Windows.Forms.ToolStripMenuItem(presetName)
                     {
@@ -198,11 +198,11 @@ namespace PlayVoice
             }
             catch (System.IO.DirectoryNotFoundException)
             {
-                // 预设目录尚未创建时仅显示“无”。
+                // 音频预设目录尚未创建时仅显示“无”。
             }
         }
 
-        private async Task SwitchPresetFromTrayAsync(string? presetName)
+        private async Task SwitchPresetFromTrayAsync(string presetName)
         {
             if (isSwitchingPreset) return;
             isSwitchingPreset = true;
@@ -212,16 +212,16 @@ namespace PlayVoice
             {
                 if (presetName == null)
                 {
-                    GlobalData.Inst.PresetData = null;
+                    GlobalData.Inst.ActiveAudioPreset = null;
                     return;
                 }
 
-                if (string.Equals(GlobalData.Inst.PresetData?.Config?.Name, presetName, StringComparison.OrdinalIgnoreCase))
+                if (string.Equals(GlobalData.Inst.ActiveAudioPreset?.Config?.Name, presetName, StringComparison.OrdinalIgnoreCase))
                     return;
 
-                var presetData = await PresetDataTool.LoadPresetData(presetName);
+                var presetData = await AudioPresetDataTool.LoadAudioPresetData(presetName);
                 if (presetData != null)
-                    GlobalData.Inst.PresetData = presetData;
+                    GlobalData.Inst.ActiveAudioPreset = presetData;
             }
             finally
             {

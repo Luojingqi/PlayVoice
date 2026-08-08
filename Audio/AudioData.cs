@@ -22,9 +22,9 @@ public class AudioData
 
     public System.Timers.Timer PlayTimer { get; set; } = new System.Timers.Timer();
 
-    public PresetData Preset { get; set; }
+    public AudioPresetData AudioPreset { get; set; }
 
-    public AudioDataConfig Config => Preset.Config.AudioDataConfigList[Index];
+    public AudioDataConfig Config => AudioPreset.Config.AudioDataConfigList[Index];
 
     public void SetVolume(double decibel)
     {
@@ -203,8 +203,6 @@ public class AudioData
     public void Dispose()
     {
         Stop();
-        if (Preset != null)
-            Config.HotkeyData.Callback = null;
         for (int i = 0; i < AudioTrackArray.Length; i++)
             AudioTrackArray[i].Dispose();
         AnimationPlayAction = null;

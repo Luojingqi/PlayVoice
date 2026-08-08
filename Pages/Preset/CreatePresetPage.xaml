@@ -29,7 +29,7 @@
             </Grid.RowDefinitions>
             <TextBlock Style="{StaticResource TextBlockMedium}"
                             Grid.Row="0"
-                            Text="{L:Lan 创建新预设}"
+                            Text="{L:Lan 创建新音频预设}"
                             FontSize="16"
                             Margin="0,0,0,10"
                             TextAlignment="Center"/>
@@ -39,7 +39,7 @@
                         Height="35"
                         Style="{StaticResource HorizontalButtonGroupStyle}">
                 <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
-                    <TextBox Tag="{L:Lan 输入预设名称}"
+                    <TextBox Tag="{L:Lan 输入音频预设名称}"
                                  x:Name="PresetNameInputTextBox"
                                  Style="{StaticResource GroupTextBoxStyle}"/>
                 </ListBoxItem>

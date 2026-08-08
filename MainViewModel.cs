@@ -24,7 +24,7 @@ internal class MainViewModel : ObservableObject
 
     private void InitializeMenuItems()
     {
-        MenuItems.Add(new SidebarItemViewModel("预设")
+        MenuItems.Add(new SidebarItemViewModel("音频预设")
         {
             PageUri = "Pages/Preset/PresetPage.xaml"
         });

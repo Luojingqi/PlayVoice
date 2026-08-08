@@ -77,13 +77,21 @@
                      Margin="0,1.5"
                      Padding="0,2.2"
                      Height="42.5"/>
-            <DropDownList:DropDownList
-                    Grid.Row="4"
-                    x:Name="PresetComboBox"
-                    Header="{L:Lan 预设}"
-                    DropDownWidth="130"
-                    Margin="0,1.5"
-                    Height="37.5"/>
+            <StackPanel Grid.Row="4">
+                <DropDownList:DropDownList
+                        x:Name="FunctionPresetComboBox"
+                        Header="{L:Lan 功能预设}"
+                        DisplayMemberPath="DisplayName"
+                        DropDownWidth="130"
+                        Margin="0,1.5"
+                        Height="37.5"/>
+                <DropDownList:DropDownList
+                        x:Name="AudioPresetComboBox"
+                        Header="{L:Lan 音频预设}"
+                        DropDownWidth="130"
+                        Margin="0,1.5"
+                        Height="37.5"/>
+            </StackPanel>
             <DropDownList:DropDownList
                     Grid.Row="5"
                     x:Name="LanguageComboBox"

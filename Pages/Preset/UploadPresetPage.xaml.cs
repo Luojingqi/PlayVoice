@@ -61,13 +61,14 @@ namespace PlayVoice.Pages.Preset
         public void Open(int index)
         {
             presetNameArray.Clear();
-            var tempArray = PresetDataTool.GetAllPresetName();
+            var tempArray = AudioPresetDataTool.GetAllAudioPresetName();
             presetNameArray.Add(LanguageManager.Inst.GetString("无"));
             int presetIndex = 0;
             for (int i = 0; i < tempArray.Length; i++)
             {
                 presetNameArray.Add(tempArray[i]);
-                if (GlobalData.Inst.PresetData != null && tempArray[i] == GlobalData.Inst.PresetData.Config.Name)
+                if (GlobalData.Inst.ActiveAudioPreset != null
+                    && tempArray[i] == GlobalData.Inst.ActiveAudioPreset.Config.Name)
                     presetIndex = i + 1;
             }
             PresetComboBox.ItemsSource = presetNameArray;
@@ -103,7 +104,7 @@ namespace PlayVoice.Pages.Preset
             {
                 MainWindow.Inst.AddNotification(
                     () => LanguageManager.Inst.GetString("通知"),
-                    () => LanguageManager.Inst.GetString("没有选择上传的预设"),
+                    () => LanguageManager.Inst.GetString("没有选择上传的音频预设"),
                     LabelStatus.Error, 4);
                 goto end;
             }
@@ -126,6 +127,10 @@ namespace PlayVoice.Pages.Preset
                     LabelStatus.Error, 4);
                 goto end;
             }
+
+            var audioPresetConfig = AudioPresetDataTool.FindAudioPresetConfig(presetName);
+            if (audioPresetConfig == null)
+                goto end;
 
             if (!GlobalData.Inst.Config.AcceptedUserGeneratedContentAgreement)
             {
@@ -150,8 +155,9 @@ namespace PlayVoice.Pages.Preset
                    () => LanguageManager.Inst.GetString("正在复制文件"),
                    LabelStatus.Warning, 3.3f);
 
-            string presetPath = Path.Combine(PresetDataTool.basePath, presetName);
-            string tempPresetPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/temp", presetName);
+            string presetPath = Path.Combine(AudioPresetDataTool.BasePath, audioPresetConfig.Id);
+            string tempRootPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "temp");
+            string tempPresetPath = Path.Combine(tempRootPath, audioPresetConfig.Id);
             Report(0.38f);
             await JsonTool.CopyDirectoryReplaceTrueAsync(presetPath, tempPresetPath);
             Report(0.66f);
@@ -162,10 +168,9 @@ namespace PlayVoice.Pages.Preset
             Report(0.82f);
 
             var metaData = ResourceDataConfig.Metadata.Create(
-                 await PresetDataTool.LoadPresetDataFromPath(
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/temp"),
-                    presetName));
-            File.Delete(Path.Combine(tempPresetPath, "PresetConfig.json"));
+                 await AudioPresetDataTool.LoadAudioPresetDataFromPath(
+                    tempRootPath, audioPresetConfig.Id));
+            File.Delete(Path.Combine(tempPresetPath, AudioPresetDataTool.ConfigFileName));
 
             if (string.IsNullOrEmpty(imagePath) || !File.Exists(imagePath))
                 imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Thumbnail.png");

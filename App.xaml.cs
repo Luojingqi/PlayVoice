@@ -51,7 +51,7 @@ namespace PlayVoice
             if (GlobalData.Inst != null)
             {
                 GlobalData.Inst.TryRun(false);
-                GlobalData.Inst.DisposePresetForExit();
+                GlobalData.Inst.DisposeAudioPresetForExit();
             }
             HotkeyManager.Inst.Stop();
             //SteamClient.Init(480);

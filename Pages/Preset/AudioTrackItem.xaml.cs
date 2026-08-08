@@ -119,25 +119,31 @@ public partial class AudioTrackItem : UserControl
             else
             {
                 var viewModel = ViewModel;
-                var hotkeyData = viewModel.Data.Config.HotkeyData;
+                var hotkeyData = GlobalData.Inst.GetAudioHotkey(viewModel.Data, create: true);
+                if (hotkeyData == null)
+                {
+                    Keyboard.Focus(null);
+                    return;
+                }
                 hotkeyData.Modifiers = newHotkey.Modifiers;
                 hotkeyData.VkCode = newHotkey.VkCode;
                 hotkeyData.IsMouse = newHotkey.IsMouse;
 
-                viewModel.Hotkey = hotkeyData.ToString();
+                viewModel.RefreshHotkey();
                 KeyboardKeyInputTextBox.SelectionStart = KeyboardKeyInputTextBox.Text.Length;
             }
             Keyboard.Focus(null);
-            GlobalData.Inst.PresetData.Save();
+            GlobalData.Inst.SaveActiveFunctionPreset();
+            GlobalData.Inst.RebuildActiveHotkeys();
         });
     }
 
     private void ClearHotkey()
     {
-        var hotkeyData = ViewModel.Data.Config.HotkeyData;
-        hotkeyData.Clear();
-
-        ViewModel.Hotkey = hotkeyData.ToString();
+        var audioData = ViewModel.Data;
+        GlobalData.Inst.ActiveFunctionPreset?.RemoveHotkey(
+            audioData.AudioPreset.Config.Id, audioData.Config.Id);
+        ViewModel.RefreshHotkey();
         KeyboardKeyInputTextBox.SelectionStart = KeyboardKeyInputTextBox.Text.Length;
     }
 }

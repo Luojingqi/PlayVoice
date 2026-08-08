@@ -632,4 +632,31 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="未命名" xml:space="preserve">
     <value>未命名</value>
   </data>
+  <data name="音频预设" xml:space="preserve">
+    <value>音频预设</value>
+  </data>
+  <data name="功能预设" xml:space="preserve">
+    <value>功能预设</value>
+  </data>
+  <data name="默认" xml:space="preserve">
+    <value>默认</value>
+  </data>
+  <data name="创建新音频预设" xml:space="preserve">
+    <value>创建新音频预设</value>
+  </data>
+  <data name="输入音频预设名称" xml:space="preserve">
+    <value>输入音频预设名称...</value>
+  </data>
+  <data name="删除音频预设" xml:space="preserve">
+    <value>删除音频预设</value>
+  </data>
+  <data name="没有选择上传的音频预设" xml:space="preserve">
+    <value>没有选择上传的音频预设</value>
+  </data>
+  <data name="音频预设已存在" xml:space="preserve">
+    <value>音频预设已存在</value>
+  </data>
+  <data name="名称已存在" xml:space="preserve">
+    <value>名称 $ 已存在</value>
+  </data>
 </root>
