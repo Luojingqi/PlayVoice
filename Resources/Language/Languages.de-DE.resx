@@ -174,4 +174,5 @@
   <data name="预设已存在" xml:space="preserve"><value>Preset ist bereits vorhanden</value></data>
   <data name="文件夹已存在" xml:space="preserve"><value>Ordner $ ist bereits vorhanden</value></data>
   <data name="未命名" xml:space="preserve"><value>Ohne Titel</value></data>
+  <data name="默认" xml:space="preserve"><value>Standard</value></data>
 </root>

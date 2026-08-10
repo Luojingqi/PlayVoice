@@ -9,7 +9,7 @@ internal class Config
     public ThemeManager.ThemeEnum Theme { get; set; } = ThemeManager.ThemeEnum.Dark;
     public string Language { get; set; } = "zh-CN";
 
-    public bool AutoMute { get; set; } = false;
+    public bool AutoMute { get; set; } = true;
 
     public bool MinimizeToTrayOnClose { get; set; } = false;
 

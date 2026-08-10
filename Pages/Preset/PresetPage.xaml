@@ -31,26 +31,23 @@
                          TransparentAndBottomLineListBox:ListBoxHelper.LinePosition="Top"
                          x:Name="TopButtonListBox"/>
                 <Canvas Panel.ZIndex="10">
-                    <Border Canvas.Right="0"
-                            Canvas.Top="0"
-                            Background="{DynamicResource BgDark}"
-                            Padding="10,0">
-                        <Grid>
-                            <ComboBox x:Name="FunctionPresetComboBox"
-                                      Style="{StaticResource TransparentComboBoxStyle}"
-                                      DisplayMemberPath="DisplayName"
-                                      Width="130"
-                                      Height="32.5"
-                                      ToolTip="{L:Lan 功能预设}"/>
-                            <TextBlock Text="▼"
-                                       IsHitTestVisible="False"
-                                       Foreground="{DynamicResource TextPrimary}"
-                                       FontSize="9"
-                                       HorizontalAlignment="Right"
-                                       VerticalAlignment="Center"
-                                       Margin="0,0,10,0"/>
-                        </Grid>
-                    </Border>
+                    <Grid Canvas.Right="10"
+                          Canvas.Top="3">
+                        <ComboBox x:Name="FunctionPresetComboBox"
+                                  Style="{StaticResource TransparentComboBoxStyle}"
+                                  DisplayMemberPath="DisplayName"
+                                  Background="{DynamicResource BgDark}"
+                                  Width="130"
+                                  Height="32.5"
+                                  ToolTip="{L:Lan 游戏预设}"/>
+                        <TextBlock Text="▼"
+                                   IsHitTestVisible="False"
+                                   Foreground="{DynamicResource TextPrimary}"
+                                   FontSize="9"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Margin="0,0,10,0"/>
+                    </Grid>
                 </Canvas>
             </Grid>
         </Border>
@@ -76,16 +73,37 @@
                             </Grid.ColumnDefinitions>
                             <Frame Grid.Column="0"
                                     HorizontalAlignment="Right"
-                                    x:Name="CreatePresetPageFrame"
+                                    x:Name="CreateAudioPresetPageFrame"
                                     Margin="0,0,12,0"/>
                             <Frame Grid.Column="1"
                                     HorizontalAlignment="Left"
-                                    x:Name="DeletePresetPageFrame"
+                                    x:Name="CreateFunctionPresetPageFrame"
                                     Margin="12,0,0,0"/>
                         </Grid>
                         <Frame Grid.Row="1" 
                                 x:Name="UploadPresetPageFrame"
                                 VerticalAlignment="Top"/>
+                    </Grid>
+                </Border>
+                <Border x:Name="Frame2"
+                        BorderBrush="{DynamicResource AccentColor}"
+                        BorderThickness="1"
+                        CornerRadius="6"
+                        Background="{DynamicResource BgMedium}"
+                        Padding="10">
+                    <Grid VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Frame Grid.Column="0"
+                               x:Name="DeleteAudioPresetPageFrame"
+                               HorizontalAlignment="Right"
+                               Margin="0,0,12,0"/>
+                        <Frame Grid.Column="1"
+                               x:Name="DeleteFunctionPresetPageFrame"
+                               HorizontalAlignment="Left"
+                               Margin="12,0,0,0"/>
                     </Grid>
                 </Border>
             </Grid>

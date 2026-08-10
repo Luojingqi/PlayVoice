@@ -111,7 +111,7 @@ public static class FunctionPresetDataTool
     {
         foreach (var preset in GetAll())
         {
-            if (preset.RemoveHotkey(audioPresetId, audioId))
+            if (preset.RemoveAudioBinding(audioPresetId, audioId))
                 Save(preset);
         }
     }

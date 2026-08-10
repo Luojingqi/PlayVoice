@@ -130,7 +130,7 @@ namespace PlayVoice.Pages.Preset
 
         private void UploadButton_Click()
         {
-            PresetPage.Inst.TopButtonListBox.SelectedIndex = PresetPage.Inst.Count - 1;
+            PresetPage.Inst.SelectCreateManagementPage();
         }
 
         private async Task DeleteButton_Click()
@@ -407,10 +407,10 @@ namespace PlayVoice.Pages.Preset
             }
         }
 
-        public void RefreshHotkeys()
+        public void RefreshFunctionPresetValues()
         {
             foreach (var item in ShortcutList)
-                item.RefreshHotkey();
+                item.RefreshFunctionPresetValues();
         }
 
 

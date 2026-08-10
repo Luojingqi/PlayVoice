@@ -29,7 +29,9 @@ public class AudioData
     public void SetVolume(double decibel)
     {
         double normalizationDecibel = 0;
-        if (Config.Lufs.HasValue && GlobalData.Inst.Config.MicrophoneLufs.HasValue)
+        if (AudioPreset != null
+            && Config.Lufs.HasValue
+            && GlobalData.Inst.Config.MicrophoneLufs.HasValue)
             normalizationDecibel = GlobalData.Inst.Config.MicrophoneLufs.Value - Config.Lufs.Value;
 
         var volume = (float)DecibelToVolume(normalizationDecibel + decibel);
@@ -131,7 +133,7 @@ public class AudioData
 
             if (canPlay == false) return;
             PlayTimer.Interval = AudioTrackArray[0].TotalTime.TotalMilliseconds;
-            SetVolume(Config.Decibel);
+            SetVolume(GlobalData.Inst.GetAudioDecibel(this));
             audioProxy.AddAudio(this);
             PlayTimer.Start();
             AnimationPlayAction?.Invoke();
@@ -155,7 +157,7 @@ public class AudioData
                 VolumeProvider_ToPL = new VolumeSampleProvider(
                   new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }.ToSampleProvider());
                 PlayTimer.Interval = AudioTrackArray[0].TotalTime.TotalMilliseconds;
-                SetVolume(Config.Decibel);
+                SetVolume(0);
                 audioProxy.AddAudio(this);
                 PlayTimer.Start();
                 AnimationPlayAction?.Invoke();

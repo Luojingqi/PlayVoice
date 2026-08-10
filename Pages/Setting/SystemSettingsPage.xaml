@@ -80,7 +80,7 @@
             <StackPanel Grid.Row="4">
                 <DropDownList:DropDownList
                         x:Name="FunctionPresetComboBox"
-                        Header="{L:Lan 功能预设}"
+                        Header="{L:Lan 游戏预设}"
                         DisplayMemberPath="DisplayName"
                         DropDownWidth="130"
                         Margin="0,1.5"

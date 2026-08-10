@@ -28,7 +28,6 @@ namespace PlayVoice.Pages.Setting
         public SystemSettingsPage()
         {
             InitializeComponent();
-            LanguageManager.Inst.CultureChanged += UpdateLanguageAction;
             Loaded += SystemSettingsPage_Loaded;
             Unloaded += SystemSettingsPage_Unloaded;
             {
@@ -451,6 +450,8 @@ namespace PlayVoice.Pages.Setting
 
         private void SystemSettingsPage_Loaded(object sender, RoutedEventArgs e)
         {
+            LanguageManager.Inst.CultureChanged -= UpdateLanguageAction;
+            LanguageManager.Inst.CultureChanged += UpdateLanguageAction;
             GlobalData.Inst.ActiveAudioPresetChanged -= UpdateAudioPresetSelection;
             GlobalData.Inst.ActiveAudioPresetChanged += UpdateAudioPresetSelection;
             GlobalData.Inst.ActiveFunctionPresetChanged -= UpdateFunctionPresetSelection;

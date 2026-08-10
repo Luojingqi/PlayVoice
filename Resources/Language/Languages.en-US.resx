@@ -662,4 +662,19 @@ O</value>
   <data name="名称已存在" xml:space="preserve">
     <value>Name $ already exists</value>
   </data>
+  <data name="游戏预设" xml:space="preserve">
+    <value>Game Presets</value>
+  </data>
+  <data name="创建新游戏预设" xml:space="preserve">
+    <value>Create Game Preset</value>
+  </data>
+  <data name="输入游戏预设名称" xml:space="preserve">
+    <value>Game preset name...</value>
+  </data>
+  <data name="删除游戏预设" xml:space="preserve">
+    <value>Delete Game Preset</value>
+  </data>
+  <data name="游戏预设已存在" xml:space="preserve">
+    <value>Game Preset Already Exists</value>
+  </data>
 </root>

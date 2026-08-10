@@ -174,4 +174,5 @@
   <data name="预设已存在" xml:space="preserve"><value>預設已存在</value></data>
   <data name="文件夹已存在" xml:space="preserve"><value>資料夾 $ 已存在</value></data>
   <data name="未命名" xml:space="preserve"><value>未命名</value></data>
+  <data name="默认" xml:space="preserve"><value>預設</value></data>
 </root>

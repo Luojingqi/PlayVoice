@@ -22,7 +22,11 @@ internal class GlobalData
     public AudioProxy AudioProxy => audioProxy;
 
     private readonly List<IFunctionPresetFeatureHandler> functionPresetFeatures =
-        new() { new AudioHotkeyPresetFeatureHandler() };
+        new()
+        {
+            new AudioHotkeyPresetFeatureHandler(),
+            new AudioVolumePresetFeatureHandler()
+        };
 
     private AudioPresetData activeAudioPreset;
     private FunctionPresetData activeFunctionPreset;
@@ -87,6 +91,27 @@ internal class GlobalData
             audioData.AudioPreset.Config.Id, audioData.Config.Id, create);
     }
 
+    public double GetAudioDecibel(AudioData audioData)
+    {
+        if (activeFunctionPreset == null || audioData?.AudioPreset == null)
+            return 0;
+
+        return activeFunctionPreset.GetAudioDecibel(
+            audioData.AudioPreset.Config.Id, audioData.Config.Id);
+    }
+
+    public void SetAudioDecibel(AudioData audioData, double decibel)
+    {
+        if (activeFunctionPreset == null || audioData?.AudioPreset == null)
+            return;
+
+        activeFunctionPreset.SetAudioDecibel(
+            audioData.AudioPreset.Config.Id,
+            audioData.Config.Id,
+            Math.Clamp(decibel, AudioData.MinDecibel, AudioData.MaxDecibel));
+        activeFunctionPreset.Save();
+    }
+
     public void SaveActiveFunctionPreset()
     {
         activeFunctionPreset?.Save();
@@ -100,7 +125,7 @@ internal class GlobalData
 
     public void RemoveAudioBinding(string audioPresetId, string audioId)
     {
-        if (activeFunctionPreset?.RemoveHotkey(audioPresetId, audioId) == true)
+        if (activeFunctionPreset?.RemoveAudioBinding(audioPresetId, audioId) == true)
             activeFunctionPreset.Save();
         FunctionPresetDataTool.RemoveAudioBindings(audioPresetId, audioId);
         RebuildActiveHotkeys();

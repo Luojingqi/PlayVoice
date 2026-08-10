@@ -174,4 +174,5 @@
   <data name="预设已存在" xml:space="preserve"><value>프리셋이 이미 있습니다</value></data>
   <data name="文件夹已存在" xml:space="preserve"><value>폴더 $ 이(가) 이미 있습니다</value></data>
   <data name="未命名" xml:space="preserve"><value>제목 없음</value></data>
+  <data name="默认" xml:space="preserve"><value>기본값</value></data>
 </root>

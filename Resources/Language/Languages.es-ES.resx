@@ -174,4 +174,5 @@
   <data name="预设已存在" xml:space="preserve"><value>El preajuste ya existe</value></data>
   <data name="文件夹已存在" xml:space="preserve"><value>La carpeta $ ya existe</value></data>
   <data name="未命名" xml:space="preserve"><value>Sin título</value></data>
+  <data name="默认" xml:space="preserve"><value>Predeterminado</value></data>
 </root>

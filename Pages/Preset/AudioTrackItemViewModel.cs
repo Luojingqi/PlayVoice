@@ -77,18 +77,27 @@ public class AudioTrackItemViewModel : INotifyPropertyChanged
         Duration = audioData.AudioTrackArray[0].TotalTime;
         _hotkey = GlobalData.Inst.GetAudioHotkey(audioData, create: false)?.ToString() ?? "None";
         _subHeader1 = AudioData.SizeToString(config.Size);
-        _volumeSliderValue = AudioData.DecibelToProportion(config.Decibel) * 100;
+        _volumeSliderValue = AudioData.DecibelToProportion(
+            GlobalData.Inst.GetAudioDecibel(audioData)) * 100;
         VolumeSliderValueChange += (value) =>
         {
-            config.Decibel = AudioData.ProportionToDecibel(value / 100);
-            audioData.AudioPreset.Save();
-            audioData.SetVolume(config.Decibel);
+            double decibel = AudioData.ProportionToDecibel(value / 100);
+            GlobalData.Inst.SetAudioDecibel(audioData, decibel);
+            audioData.SetVolume(decibel);
         };
     }
 
     public void RefreshHotkey()
     {
         Hotkey = GlobalData.Inst.GetAudioHotkey(Data, create: false)?.ToString() ?? "None";
+    }
+
+    public void RefreshFunctionPresetValues()
+    {
+        RefreshHotkey();
+        _volumeSliderValue = AudioData.DecibelToProportion(
+            GlobalData.Inst.GetAudioDecibel(Data)) * 100;
+        OnPropertyChanged(nameof(VolumeSliderValue));
     }
 
 

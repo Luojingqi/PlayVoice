@@ -174,4 +174,5 @@
   <data name="预设已存在" xml:space="preserve"><value>プリセットは既にあります</value></data>
   <data name="文件夹已存在" xml:space="preserve"><value>フォルダー $ は既にあります</value></data>
   <data name="未命名" xml:space="preserve"><value>無題</value></data>
+  <data name="默认" xml:space="preserve"><value>デフォルト</value></data>
 </root>

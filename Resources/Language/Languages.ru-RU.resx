@@ -174,4 +174,5 @@
   <data name="预设已存在" xml:space="preserve"><value>Пресет уже существует</value></data>
   <data name="文件夹已存在" xml:space="preserve"><value>Папка $ уже существует</value></data>
   <data name="未命名" xml:space="preserve"><value>Без названия</value></data>
+  <data name="默认" xml:space="preserve"><value>По умолчанию</value></data>
 </root>

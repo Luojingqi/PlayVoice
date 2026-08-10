@@ -659,4 +659,19 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="名称已存在" xml:space="preserve">
     <value>名称 $ 已存在</value>
   </data>
+  <data name="游戏预设" xml:space="preserve">
+    <value>游戏预设</value>
+  </data>
+  <data name="创建新游戏预设" xml:space="preserve">
+    <value>创建新游戏预设</value>
+  </data>
+  <data name="输入游戏预设名称" xml:space="preserve">
+    <value>输入游戏预设名称...</value>
+  </data>
+  <data name="删除游戏预设" xml:space="preserve">
+    <value>删除游戏预设</value>
+  </data>
+  <data name="游戏预设已存在" xml:space="preserve">
+    <value>游戏预设已存在</value>
+  </data>
 </root>

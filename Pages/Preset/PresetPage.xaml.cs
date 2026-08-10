@@ -1,4 +1,5 @@
 using PlayVoice.Pages.FunctionPreset;
+using PlayVoice.Resources.Language;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,12 +12,13 @@ namespace PlayVoice.Pages.Preset;
 public partial class PresetPage : Page
 {
     public static PresetPage Inst { get; private set; }
-    public int Count => pageList.Count;
 
     private readonly List<PageData> pageList = new();
     private readonly AudioTrackGrid audioTrackGridPage;
-    private readonly CreatePresetPage createPresetPage;
-    private readonly DeletePresetPage deletePresetPage;
+    private readonly CreatePresetPage createAudioPresetPage;
+    private readonly CreateFunctionPresetPage createFunctionPresetPage;
+    private readonly DeletePresetPage deleteAudioPresetPage;
+    private readonly DeleteFunctionPresetPage deleteFunctionPresetPage;
     private readonly UploadPresetPage uploadPresetPage;
     private List<FunctionPresetData> functionPresets = new();
     private bool isSynchronizingAudioPresetSelection;
@@ -32,17 +34,23 @@ public partial class PresetPage : Page
         Frame0.Content = audioTrackGridPage;
         Frame0.Visibility = Visibility.Hidden;
         Frame1.Visibility = Visibility.Hidden;
+        Frame2.Visibility = Visibility.Hidden;
 
-        createPresetPage = new CreatePresetPage();
-        deletePresetPage = new DeletePresetPage();
+        createAudioPresetPage = new CreatePresetPage();
+        createFunctionPresetPage = new CreateFunctionPresetPage();
+        deleteAudioPresetPage = new DeletePresetPage();
+        deleteFunctionPresetPage = new DeleteFunctionPresetPage();
         uploadPresetPage = new UploadPresetPage();
-        CreatePresetPageFrame.Content = createPresetPage;
-        DeletePresetPageFrame.Content = deletePresetPage;
+        CreateAudioPresetPageFrame.Content = createAudioPresetPage;
+        CreateFunctionPresetPageFrame.Content = createFunctionPresetPage;
+        DeleteAudioPresetPageFrame.Content = deleteAudioPresetPage;
+        DeleteFunctionPresetPageFrame.Content = deleteFunctionPresetPage;
         UploadPresetPageFrame.Content = uploadPresetPage;
 
         foreach (var config in AudioPresetDataTool.GetAllAudioPresetConfigs())
             pageList.Add(new PageData { Id = config.Id, Name = config.Name });
         pageList.Add(PageData.CreateAddPage());
+        pageList.Add(PageData.CreateDeletePage());
 
         TopButtonListBox.ItemsSource = pageList;
         TopButtonListBox.DisplayMemberPath = nameof(PageData.Name);
@@ -62,18 +70,28 @@ public partial class PresetPage : Page
         {
             Frame0.Visibility = Visibility.Hidden;
             Frame1.Visibility = Visibility.Hidden;
+            Frame2.Visibility = Visibility.Hidden;
         }
         else if (selectedPage.IsAddPage)
         {
             Frame0.Visibility = Visibility.Hidden;
             Frame1.Visibility = Visibility.Visible;
-            deletePresetPage.Open();
+            Frame2.Visibility = Visibility.Hidden;
             uploadPresetPage.Open(-1);
+        }
+        else if (selectedPage.IsDeletePage)
+        {
+            Frame0.Visibility = Visibility.Hidden;
+            Frame1.Visibility = Visibility.Hidden;
+            Frame2.Visibility = Visibility.Visible;
+            deleteAudioPresetPage.Open();
+            deleteFunctionPresetPage.Open();
         }
         else
         {
             Frame0.Visibility = Visibility.Visible;
             Frame1.Visibility = Visibility.Hidden;
+            Frame2.Visibility = Visibility.Hidden;
             isLoadingAudioPresetFromPage = true;
             try
             {
@@ -99,6 +117,8 @@ public partial class PresetPage : Page
         GlobalData.Inst.ActiveAudioPresetChanged += UpdateAudioPresetPage;
         GlobalData.Inst.ActiveFunctionPresetChanged -= UpdateFunctionPresetSelection;
         GlobalData.Inst.ActiveFunctionPresetChanged += UpdateFunctionPresetSelection;
+        LanguageManager.Inst.CultureChanged -= UpdateLanguage;
+        LanguageManager.Inst.CultureChanged += UpdateLanguage;
 
         RefreshFunctionPresetList();
         var audioPresetBeforeRestore = GlobalData.Inst.ActiveAudioPreset;
@@ -112,9 +132,18 @@ public partial class PresetPage : Page
     {
         GlobalData.Inst.ActiveAudioPresetChanged -= UpdateAudioPresetPage;
         GlobalData.Inst.ActiveFunctionPresetChanged -= UpdateFunctionPresetSelection;
+        LanguageManager.Inst.CultureChanged -= UpdateLanguage;
     }
 
-    private void RefreshFunctionPresetList()
+    private void UpdateLanguage(
+        System.Globalization.CultureInfo culture,
+        LanguageManager.LanguageInfo languageInfo)
+    {
+        FunctionPresetComboBox.Items.Refresh();
+        deleteFunctionPresetPage.RefreshLanguage();
+    }
+
+    public void RefreshFunctionPresetList()
     {
         functionPresets = FunctionPresetDataTool.GetAll();
         if (functionPresets.Count == 0)
@@ -141,7 +170,11 @@ public partial class PresetPage : Page
             return;
         }
 
-        int selectedIndex = pageList.Count - 1;
+        bool keepDeleteManagementPage =
+            (TopButtonListBox.SelectedItem as PageData)?.IsDeletePage == true;
+        int selectedIndex = pageList.FindIndex(page => keepDeleteManagementPage
+            ? page.IsDeletePage
+            : page.IsAddPage);
         if (audioPreset != null)
         {
             int presetIndex = pageList.FindIndex(page => page.Id == audioPreset.Config.Id);
@@ -168,14 +201,27 @@ public partial class PresetPage : Page
         if (audioPreset == null)
         {
             Frame0.Visibility = Visibility.Hidden;
-            Frame1.Visibility = Visibility.Visible;
-            deletePresetPage.Open();
-            uploadPresetPage.Open(-1);
+            Frame1.Visibility = keepDeleteManagementPage
+                ? Visibility.Hidden
+                : Visibility.Visible;
+            Frame2.Visibility = keepDeleteManagementPage
+                ? Visibility.Visible
+                : Visibility.Hidden;
+            if (keepDeleteManagementPage)
+            {
+                deleteAudioPresetPage.Open();
+                deleteFunctionPresetPage.Open();
+            }
+            else
+            {
+                uploadPresetPage.Open(-1);
+            }
         }
         else
         {
             Frame0.Visibility = Visibility.Visible;
             Frame1.Visibility = Visibility.Hidden;
+            Frame2.Visibility = Visibility.Hidden;
             await audioTrackGridPage.RefreshCurrentAudioPreset();
         }
     }
@@ -192,7 +238,7 @@ public partial class PresetPage : Page
         isSynchronizingFunctionPresetSelection = true;
         FunctionPresetComboBox.SelectedIndex = selectedIndex;
         isSynchronizingFunctionPresetSelection = false;
-        audioTrackGridPage.RefreshHotkeys();
+        audioTrackGridPage.RefreshFunctionPresetValues();
     }
 
     private void DisableNavigation_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -208,9 +254,21 @@ public partial class PresetPage : Page
             Id = audioPreset.Config.Id,
             Name = audioPreset.Config.Name
         };
-        pageList.Insert(pageList.Count - 1, newPage);
+        int managementPageIndex = pageList.FindIndex(page => page.IsAddPage || page.IsDeletePage);
+        pageList.Insert(managementPageIndex, newPage);
         TopButtonListBox.Items.Refresh();
         GlobalData.Inst.ActiveAudioPreset = audioPreset;
+    }
+
+    public void AddFunctionPreset(FunctionPresetData functionPreset)
+    {
+        GlobalData.Inst.ActiveFunctionPreset = functionPreset;
+        RefreshFunctionPresetList();
+    }
+
+    public void SelectCreateManagementPage()
+    {
+        TopButtonListBox.SelectedIndex = pageList.FindIndex(page => page.IsAddPage);
     }
 
     public void RemoveAudioPresetPage(string idOrName)
@@ -222,7 +280,7 @@ public partial class PresetPage : Page
         pageList.Remove(pageToRemove);
         TopButtonListBox.Items.Refresh();
         if (GlobalData.Inst.ActiveAudioPreset == null)
-            TopButtonListBox.SelectedIndex = pageList.Count - 1;
+            SelectCreateManagementPage();
     }
 
     public class PageData
@@ -230,11 +288,18 @@ public partial class PresetPage : Page
         public string Id { get; set; }
         public string Name { get; set; }
         public bool IsAddPage { get; set; }
+        public bool IsDeletePage { get; set; }
 
         public static PageData CreateAddPage() => new()
         {
             Name = " + ",
             IsAddPage = true
+        };
+
+        public static PageData CreateDeletePage() => new()
+        {
+            Name = " - ",
+            IsDeletePage = true
         };
     }
 }

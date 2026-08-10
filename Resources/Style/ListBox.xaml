@@ -526,7 +526,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TextBox">
-                    <Grid>
+                    <Grid Background="{TemplateBinding Background}">
                         <TextBlock Style="{StaticResource TextBlockLight}"
                                 x:Name="PlaceholderText"
                                 Text="{TemplateBinding Tag}"

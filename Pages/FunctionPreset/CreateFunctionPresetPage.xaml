@@ -1,0 +1,60 @@
+<Page x:Class="PlayVoice.Pages.FunctionPreset.CreateFunctionPresetPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:L="clr-namespace:PlayVoice.Resources.Language"
+      mc:Ignorable="d">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Style/ListBox.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Border Width="176"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            BorderBrush="{DynamicResource AccentColor}"
+            BorderThickness="1"
+            CornerRadius="6"
+            Padding="0,13">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0"
+                       Style="{StaticResource TextBlockMedium}"
+                       Text="{L:Lan 创建新游戏预设}"
+                       FontSize="16"
+                       Margin="0,0,0,10"
+                       TextAlignment="Center"/>
+            <ListBox Grid.Row="1"
+                     Margin="0,5"
+                     Width="130"
+                     Height="35"
+                     Style="{StaticResource HorizontalButtonGroupStyle}">
+                <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
+                    <TextBox x:Name="FunctionPresetNameInputTextBox"
+                             Tag="{L:Lan 输入游戏预设名称}"
+                             Style="{StaticResource GroupTextBoxStyle}"/>
+                </ListBoxItem>
+            </ListBox>
+            <ListBox Grid.Row="2"
+                     x:Name="ButtonGroupListBox"
+                     Tag="Uniform"
+                     Width="80"
+                     Margin="0,5"
+                     Style="{StaticResource HorizontalButtonGroupStyle}">
+                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
+                    <TextBlock Text="{L:Lan 确认}"
+                               Style="{StaticResource TextBlockLight}"/>
+                </ListBoxItem>
+            </ListBox>
+        </Grid>
+    </Border>
+</Page>
