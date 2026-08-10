@@ -14,7 +14,7 @@ public sealed class AudioVolumePresetFeatureHandler : IFunctionPresetFeatureHand
         foreach (var audio in audioPreset.AudioList)
         {
             double decibel = functionPreset.GetAudioDecibel(
-                audioPreset.Config.Id, audio.Config.Id);
+                audioPreset.Config.Name, audio.Config.Id);
             audio.SetVolume(decibel);
         }
     }

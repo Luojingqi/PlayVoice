@@ -178,4 +178,7 @@
   <data name="文件夹已存在" xml:space="preserve"><value>A pasta $ já existe</value></data>
   <data name="未命名" xml:space="preserve"><value>Sem título</value></data>
   <data name="默认" xml:space="preserve"><value>Padrão</value></data>
+  <data name="教程提示" xml:space="preserve"><value>Guia</value></data>
+  <data name="教程提示_内容" xml:space="preserve"><value>Você pode consultar o guia em “Configurações” na barra lateral.</value></data>
+  <data name="确定" xml:space="preserve"><value>OK</value></data>
 </root>

@@ -73,6 +73,26 @@ namespace PlayVoice
             exitTrayMenuItem.Click += (s, e) => Dispatcher.Invoke(ExitApplication);
             UpdateTrayLanguage();
             LanguageManager.Inst.CultureChanged += (culture, language) => UpdateTrayLanguage();
+            Loaded += MainWindow_OnLoaded;
+        }
+
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Loaded -= MainWindow_OnLoaded;
+
+            if (GlobalData.Inst.Config.HasAcknowledgedTutorialPrompt)
+                return;
+
+            var tutorialPromptWindow = new TutorialPromptWindow
+            {
+                Owner = this
+            };
+
+            if (tutorialPromptWindow.ShowDialog() != true)
+                return;
+
+            GlobalData.Inst.Config.HasAcknowledgedTutorialPrompt = true;
+            GlobalData.Inst.Config.Save();
         }
 
         private void ContentFrame_Navigating(object sender, NavigatingCancelEventArgs e)
@@ -270,6 +290,13 @@ namespace PlayVoice
         public void AddNotification(Func<string> title, Func<string> message, Pages.LabelStatus status, float autoDismissSeconds = 5)
         {
             NotificationPanel.AddNotification(title, message, status, autoDismissSeconds);
+        }
+
+        public void SetBodyInteractionBlocked(bool isBlocked)
+        {
+            BodyInteractionBlocker.Visibility = isBlocked
+                ? Visibility.Visible
+                : Visibility.Collapsed;
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)

@@ -234,6 +234,12 @@
                     </Grid>
                 </Border>
             </Grid>
+
+            <Border x:Name="BodyInteractionBlocker"
+                    Grid.Row="1"
+                    Panel.ZIndex="1000"
+                    Background="Transparent"
+                    Visibility="Collapsed"/>
         </Grid>
     </Border>
 </Window>

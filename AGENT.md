@@ -59,7 +59,8 @@ PlayVoice 是一个仅面向 Windows 的 WPF 桌面应用，用于把本地音�
 本项目会写入 `AppDomain.CurrentDomain.BaseDirectory`，而不是仓库中的固定开发路径：
 
 - `config.json`：全局设置。
-- `Resources/Preset/<预设名>/PresetConfig.json`：预设配置及其音频文件。
+- `Resources/Preset/<音频预设名称>/AudioPresetConfig.json`：音频预设配置及其音频文件。
+- `Resources/Preset/<功能预设名称>.json`：游戏/功能预设配置。
 - `Resources/temp/`：创意工坊上传的临时副本。
 - 创意工坊资源使用 `ResourceConfig.json`、`Thumbnail.<扩展名>` 和音频文件。
 

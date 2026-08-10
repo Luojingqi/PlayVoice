@@ -178,4 +178,7 @@
   <data name="文件夹已存在" xml:space="preserve"><value>폴더 $ 이(가) 이미 있습니다</value></data>
   <data name="未命名" xml:space="preserve"><value>제목 없음</value></data>
   <data name="默认" xml:space="preserve"><value>기본값</value></data>
+  <data name="教程提示" xml:space="preserve"><value>도움말</value></data>
+  <data name="教程提示_内容" xml:space="preserve"><value>왼쪽 사이드바의 ‘설정’ 페이지에서 도움말을 확인할 수 있습니다.</value></data>
+  <data name="确定" xml:space="preserve"><value>확인</value></data>
 </root>

@@ -7,15 +7,14 @@ namespace PlayVoice.Pages.Preset;
 public static class AudioPresetDataTool
 {
     public const string ConfigFileName = "AudioPresetConfig.json";
-    public static readonly string BasePath = Path.Combine(
-        AppDomain.CurrentDomain.BaseDirectory, "Resources", "AudioPreset");
+    public static readonly string BasePath = PresetStorage.BasePath;
 
-    public static async Task<AudioPresetData> LoadAudioPresetData(string idOrName)
+    public static async Task<AudioPresetData> LoadAudioPresetData(string name)
     {
-        var config = FindAudioPresetConfig(idOrName);
+        var config = FindAudioPresetConfig(name);
         return config == null
             ? null
-            : await LoadAudioPresetDataFromPath(BasePath, config.Id);
+            : await LoadAudioPresetDataFromPath(BasePath, config.Name);
     }
 
     public static async Task<AudioPresetData> LoadAudioPresetDataFromPath(string folderPath, string folderName)
@@ -56,8 +55,7 @@ public static class AudioPresetDataTool
 
     public static bool CreateAudioPresetData(string name, out AudioPresetData presetData)
     {
-        string normalizedName = name?.Trim();
-        if (string.IsNullOrWhiteSpace(normalizedName))
+        if (!PresetStorage.TryNormalizeName(name, out string normalizedName))
         {
             presetData = null;
             return false;
@@ -76,7 +74,7 @@ public static class AudioPresetDataTool
         }
 
         var config = new AudioPresetDataConfig { Name = normalizedName };
-        string path = Path.Combine(BasePath, config.Id);
+        string path = Path.Combine(BasePath, config.Name);
         Directory.CreateDirectory(path);
         presetData = new AudioPresetData { Config = config };
         if (presetData.Save())
@@ -86,20 +84,23 @@ public static class AudioPresetDataTool
         return false;
     }
 
-    public static bool DeleteAudioPresetData(string idOrName)
+    public static bool DeleteAudioPresetData(string name)
     {
-        var config = FindAudioPresetConfig(idOrName);
+        var config = FindAudioPresetConfig(name);
         if (config == null)
             return false;
 
-        string path = Path.Combine(BasePath, config.Id);
+        string path = Path.Combine(BasePath, config.Name);
         if (!Directory.Exists(path))
             return false;
 
-        if (GlobalData.Inst.ActiveAudioPreset?.Config.Id == config.Id)
+        if (string.Equals(
+            GlobalData.Inst.ActiveAudioPreset?.Config.Name,
+            config.Name,
+            StringComparison.OrdinalIgnoreCase))
             GlobalData.Inst.ActiveAudioPreset = null;
         Directory.Delete(path, true);
-        GlobalData.Inst.RemoveAudioPresetBindings(config.Id);
+        GlobalData.Inst.RemoveAudioPresetBindings(config.Name);
         return true;
     }
 
@@ -108,7 +109,7 @@ public static class AudioPresetDataTool
 
     public static List<AudioPresetDataConfig> GetAllAudioPresetConfigs()
     {
-        Directory.CreateDirectory(BasePath);
+        PresetStorage.EnsureInitialized();
         var result = new List<AudioPresetDataConfig>();
         foreach (string directory in Directory.GetDirectories(BasePath))
         {
@@ -122,13 +123,12 @@ public static class AudioPresetDataTool
         return result.OrderBy(item => item.Name).ToList();
     }
 
-    public static AudioPresetDataConfig FindAudioPresetConfig(string idOrName)
+    public static AudioPresetDataConfig FindAudioPresetConfig(string name)
     {
-        if (string.IsNullOrWhiteSpace(idOrName))
+        if (string.IsNullOrWhiteSpace(name))
             return null;
 
         return GetAllAudioPresetConfigs().FirstOrDefault(item =>
-            string.Equals(item.Id, idOrName, StringComparison.OrdinalIgnoreCase)
-            || string.Equals(item.Name, idOrName, StringComparison.OrdinalIgnoreCase));
+            string.Equals(item.Name, name, StringComparison.OrdinalIgnoreCase));
     }
 }

@@ -178,4 +178,7 @@
   <data name="文件夹已存在" xml:space="preserve"><value>La carpeta $ ya existe</value></data>
   <data name="未命名" xml:space="preserve"><value>Sin título</value></data>
   <data name="默认" xml:space="preserve"><value>Predeterminado</value></data>
+  <data name="教程提示" xml:space="preserve"><value>Guía</value></data>
+  <data name="教程提示_内容" xml:space="preserve"><value>Puedes consultar la guía en «Ajustes» en la barra lateral.</value></data>
+  <data name="确定" xml:space="preserve"><value>Aceptar</value></data>
 </root>

@@ -31,8 +31,8 @@ namespace PlayVoice.Pages.Preset
 
             var presetName = PresetComboBox.SelectedItem as string;
             var config = AudioPresetDataTool.FindAudioPresetConfig(presetName);
-            if (config != null && AudioPresetDataTool.DeleteAudioPresetData(config.Id))
-                PresetPage.Inst.RemoveAudioPresetPage(config.Id);
+            if (config != null && AudioPresetDataTool.DeleteAudioPresetData(config.Name))
+                PresetPage.Inst.RemoveAudioPresetPage(config.Name);
             Open();
             ButtonGroupListBox.SelectedIndex = -1;
         }

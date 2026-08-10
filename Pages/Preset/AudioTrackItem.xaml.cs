@@ -142,7 +142,7 @@ public partial class AudioTrackItem : UserControl
     {
         var audioData = ViewModel.Data;
         GlobalData.Inst.ActiveFunctionPreset?.ClearHotkey(
-            audioData.AudioPreset.Config.Id, audioData.Config.Id);
+            audioData.AudioPreset.Config.Name, audioData.Config.Id);
         ViewModel.RefreshHotkey();
         KeyboardKeyInputTextBox.SelectionStart = KeyboardKeyInputTextBox.Text.Length;
     }

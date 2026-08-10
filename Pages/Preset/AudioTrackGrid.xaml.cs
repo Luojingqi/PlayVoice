@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
 namespace PlayVoice.Pages.Preset
@@ -23,6 +24,7 @@ namespace PlayVoice.Pages.Preset
 
 
         public ObservableCollection<AudioTrackItemViewModel> ShortcutList { get; set; } = new();
+        private bool isImporting;
 
         private bool selectAll = false;
         private bool SelectAll
@@ -50,7 +52,7 @@ namespace PlayVoice.Pages.Preset
                 case 0: SelectAllButton_Click(); break;
                 case 1: CopyButton_Click(); break;
                 case 2: await PasteButton_Click(); break;
-                case 3: await Task.Delay(75); await ImportButton_Click(); break;
+                case 3: await StartImportAsync(); break;
                 case 4: await Task.Delay(75); UploadButton_Click(); break;
                 case 5: await DeleteButton_Click(); break;
                 case 6: FolderButton_Click(); break;
@@ -76,7 +78,7 @@ namespace PlayVoice.Pages.Preset
                 {
                     GlobalData.Inst.CopyAudioPathList.Add(
                         Path.Combine(AudioPresetDataTool.BasePath,
-                            GlobalData.Inst.ActiveAudioPreset.Config.Id, item.Data.Config.Name));
+                            GlobalData.Inst.ActiveAudioPreset.Config.Name, item.Data.Config.Name));
                     audioNameList.Add(item.Data.Config.Name);
                 }
             }
@@ -101,7 +103,24 @@ namespace PlayVoice.Pages.Preset
                 await Task.Delay(25);
             }
             GlobalData.Inst.ActiveAudioPreset.Save();
-            await InitLoadAudioPreset(GlobalData.Inst.ActiveAudioPreset.Config.Id);
+            await InitLoadAudioPreset(GlobalData.Inst.ActiveAudioPreset.Config.Name);
+        }
+
+        private async Task StartImportAsync()
+        {
+            if (isImporting) return;
+
+            isImporting = true;
+            try
+            {
+                await Task.Delay(75);
+                await ImportButton_Click();
+            }
+            finally
+            {
+                HideImportProgress();
+                isImporting = false;
+            }
         }
 
         private async Task ImportButton_Click()
@@ -118,14 +137,74 @@ namespace PlayVoice.Pages.Preset
             if (result == true)
             {
                 string[] selectedFiles = openFileDialog.FileNames;
-                foreach (string file in selectedFiles)
+                var targetPreset = GlobalData.Inst.ActiveAudioPreset;
+                if (selectedFiles.Length == 0 || targetPreset == null)
+                    return;
+
+                ShowImportProgress(selectedFiles.Length);
+                for (int i = 0; i < selectedFiles.Length; i++)
                 {
-                    var audioData = await GlobalData.Inst.ActiveAudioPreset.AddAudio(file);
+                    string file = selectedFiles[i];
+                    SetImportProgress(
+                        (double)i / selectedFiles.Length,
+                        file,
+                        i + 1,
+                        selectedFiles.Length);
+
+                    await targetPreset.AddAudio(file);
+                    SetImportProgress(
+                        (double)(i + 1) / selectedFiles.Length,
+                        file,
+                        i + 1,
+                        selectedFiles.Length);
                     await Task.Delay(25);
                 }
-                GlobalData.Inst.ActiveAudioPreset.Save();
-                await InitLoadAudioPreset(GlobalData.Inst.ActiveAudioPreset.Config.Id);
+                targetPreset.Save();
+
+                if (ReferenceEquals(GlobalData.Inst.ActiveAudioPreset, targetPreset))
+                    await InitLoadAudioPreset(targetPreset.Config.Name);
             }
+        }
+
+        private void ShowImportProgress(int totalFiles)
+        {
+            ImportProgressScale.BeginAnimation(ScaleTransform.ScaleXProperty, null);
+            ImportProgressScale.ScaleX = 0;
+            ImportFileNameText.Text = string.Empty;
+            ImportProgressText.Text = $"0/{totalFiles} · 0%";
+            ImportProgressOverlay.Visibility = Visibility.Visible;
+            MainWindow.Inst.SetBodyInteractionBlocked(true);
+        }
+
+        private void SetImportProgress(
+            double progress,
+            string filePath,
+            int currentFile,
+            int totalFiles)
+        {
+            progress = Math.Clamp(progress, 0, 1);
+            var animation = new DoubleAnimation
+            {
+                To = progress,
+                Duration = TimeSpan.FromMilliseconds(200),
+                EasingFunction = new QuadraticEase
+                {
+                    EasingMode = EasingMode.EaseOut
+                }
+            };
+            ImportProgressScale.BeginAnimation(
+                ScaleTransform.ScaleXProperty,
+                animation,
+                HandoffBehavior.SnapshotAndReplace);
+            ImportFileNameText.Text = Path.GetFileName(filePath);
+            ImportProgressText.Text =
+                $"{currentFile}/{totalFiles} · {(int)Math.Round(progress * 100)}%";
+        }
+
+        private void HideImportProgress()
+        {
+            ImportProgressOverlay.Visibility = Visibility.Collapsed;
+            MainWindow.Inst.SetBodyInteractionBlocked(false);
         }
 
         private void UploadButton_Click()
@@ -144,14 +223,14 @@ namespace PlayVoice.Pages.Preset
                 GlobalData.Inst.ActiveAudioPreset.RemoveAudio(index);
 
             GlobalData.Inst.ActiveAudioPreset.Save();
-            await InitLoadAudioPreset(GlobalData.Inst.ActiveAudioPreset.Config.Id);
+            await InitLoadAudioPreset(GlobalData.Inst.ActiveAudioPreset.Config.Name);
         }
 
 
         private void FolderButton_Click()
         {
             var path = Path.Combine(AudioPresetDataTool.BasePath,
-                GlobalData.Inst.ActiveAudioPreset.Config.Id);
+                GlobalData.Inst.ActiveAudioPreset.Config.Name);
             if (Directory.Exists(path))
             {
                 System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
@@ -359,9 +438,9 @@ namespace PlayVoice.Pages.Preset
         }
 
 
-        public async Task InitLoadAudioPreset(string idOrName)
+        public async Task InitLoadAudioPreset(string name)
         {
-            var presetData = await AudioPresetDataTool.LoadAudioPresetData(idOrName);
+            var presetData = await AudioPresetDataTool.LoadAudioPresetData(name);
             GlobalData.Inst.ActiveAudioPreset = presetData;
             await RefreshCurrentAudioPreset();
         }

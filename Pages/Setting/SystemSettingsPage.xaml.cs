@@ -287,8 +287,7 @@ namespace PlayVoice.Pages.Setting
                 float[] sampleBuffer = new float[8192];
                 MeteringSampleProvider meteringSample = null;
                 string testPath = Path.Combine(
-                    AppDomain.CurrentDomain.BaseDirectory,
-                    "Resources/temp/VolumeTest.wav");
+                    PresetStorage.TempPath, "VolumeTest.wav");
 
                 capture = new WasapiCapture(equipment.PhysicalMicrophone)
                 {
@@ -574,7 +573,10 @@ namespace PlayVoice.Pages.Setting
             FunctionPresetComboBox.IsSyncing = true;
             FunctionPresetComboBox.ItemsSource = functionPresetOptions;
             FunctionPresetComboBox.SelectedIndex = functionPresetOptions.FindIndex(item =>
-                item.Id == GlobalData.Inst.ActiveFunctionPreset?.Id);
+                string.Equals(
+                    item.Name,
+                    GlobalData.Inst.ActiveFunctionPreset?.Name,
+                    StringComparison.OrdinalIgnoreCase));
             FunctionPresetComboBox.IsSyncing = false;
         }
 

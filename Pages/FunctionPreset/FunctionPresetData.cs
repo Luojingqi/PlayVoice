@@ -8,8 +8,6 @@ namespace PlayVoice.Pages.FunctionPreset;
 
 public class FunctionPresetData
 {
-    public int SchemaVersion { get; set; } = 3;
-    public string Id { get; set; } = Guid.NewGuid().ToString("N");
     public string Name { get; set; }
     public bool IsDefault { get; set; }
     public List<FunctionPresetAudioBinding> Bindings { get; set; } = new();
@@ -28,28 +26,28 @@ public class FunctionPresetData
         ? LanguageManager.Inst.GetString("默认")
         : Name;
 
-    public HotkeyData GetHotkey(string audioPresetId, string audioId, bool create)
+    public HotkeyData GetHotkey(string audioPresetName, string audioId, bool create)
     {
-        var binding = GetAudioBinding(audioPresetId, audioId, create);
+        var binding = GetAudioBinding(audioPresetName, audioId, create);
         if (binding != null)
             return binding.HotkeyData;
         return null;
     }
 
-    public double GetAudioDecibel(string audioPresetId, string audioId) =>
-        GetAudioBinding(audioPresetId, audioId, create: false)?.Decibel ?? 0;
+    public double GetAudioDecibel(string audioPresetName, string audioId) =>
+        GetAudioBinding(audioPresetName, audioId, create: false)?.Decibel ?? 0;
 
-    public void SetAudioDecibel(string audioPresetId, string audioId, double decibel)
+    public void SetAudioDecibel(string audioPresetName, string audioId, double decibel)
     {
-        var binding = GetAudioBinding(audioPresetId, audioId, create: true);
+        var binding = GetAudioBinding(audioPresetName, audioId, create: true);
         binding.Decibel = decibel;
         if (decibel == 0 && binding.HotkeyData.VkCode == 0)
             Bindings.Remove(binding);
     }
 
-    public bool ClearHotkey(string audioPresetId, string audioId)
+    public bool ClearHotkey(string audioPresetName, string audioId)
     {
-        var binding = GetAudioBinding(audioPresetId, audioId, create: false);
+        var binding = GetAudioBinding(audioPresetName, audioId, create: false);
         if (binding == null)
             return false;
 
@@ -59,26 +57,39 @@ public class FunctionPresetData
         return true;
     }
 
-    public bool RemoveAudioBinding(string audioPresetId, string audioId) =>
+    public bool RemoveAudioBinding(string audioPresetName, string audioId) =>
         Bindings.RemoveAll(item =>
-            item.AudioPresetId == audioPresetId && item.AudioId == audioId) > 0;
+            item.AudioPresetName == audioPresetName && item.AudioId == audioId) > 0;
 
-    public bool RemoveAudioPresetBindings(string audioPresetId) =>
-        Bindings.RemoveAll(item => item.AudioPresetId == audioPresetId) > 0;
+    public bool RemoveAudioPresetBindings(string audioPresetName) =>
+        Bindings.RemoveAll(item => item.AudioPresetName == audioPresetName) > 0;
+
+    public bool RenameAudioPresetBindings(string oldName, string newName)
+    {
+        bool changed = false;
+        foreach (var binding in Bindings.Where(item =>
+            string.Equals(
+                item.AudioPresetName, oldName, StringComparison.OrdinalIgnoreCase)))
+        {
+            binding.AudioPresetName = newName;
+            changed = true;
+        }
+        return changed;
+    }
 
     public bool Save() => FunctionPresetDataTool.Save(this);
 
     private FunctionPresetAudioBinding GetAudioBinding(
-        string audioPresetId, string audioId, bool create)
+        string audioPresetName, string audioId, bool create)
     {
         var binding = Bindings.FirstOrDefault(item =>
-            item.AudioPresetId == audioPresetId && item.AudioId == audioId);
+            item.AudioPresetName == audioPresetName && item.AudioId == audioId);
         if (binding != null || !create)
             return binding;
 
         binding = new FunctionPresetAudioBinding
         {
-            AudioPresetId = audioPresetId,
+            AudioPresetName = audioPresetName,
             AudioId = audioId,
         };
         Bindings.Add(binding);
@@ -88,7 +99,7 @@ public class FunctionPresetData
 
 public class FunctionPresetAudioBinding
 {
-    public string AudioPresetId { get; set; }
+    public string AudioPresetName { get; set; }
     public string AudioId { get; set; }
     public HotkeyData HotkeyData { get; set; } = new();
     public double Decibel { get; set; }

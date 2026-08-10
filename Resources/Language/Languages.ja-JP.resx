@@ -178,4 +178,7 @@
   <data name="文件夹已存在" xml:space="preserve"><value>フォルダー $ は既にあります</value></data>
   <data name="未命名" xml:space="preserve"><value>無題</value></data>
   <data name="默认" xml:space="preserve"><value>デフォルト</value></data>
+  <data name="教程提示" xml:space="preserve"><value>チュートリアル</value></data>
+  <data name="教程提示_内容" xml:space="preserve"><value>チュートリアルは左側の「設定」ページから確認できます。</value></data>
+  <data name="确定" xml:space="preserve"><value>OK</value></data>
 </root>

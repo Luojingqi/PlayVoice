@@ -17,7 +17,7 @@ public sealed class AudioHotkeyPresetFeatureHandler : IFunctionPresetFeatureHand
         foreach (var audio in audioPreset.AudioList)
         {
             var hotkey = functionPreset.GetHotkey(
-                audioPreset.Config.Id, audio.Config.Id, create: false);
+                audioPreset.Config.Name, audio.Config.Id, create: false);
             if (hotkey == null || hotkey.VkCode == 0)
                 continue;
 

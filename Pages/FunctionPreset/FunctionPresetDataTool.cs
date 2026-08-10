@@ -1,4 +1,5 @@
 using PlayVoice.Hotkey;
+using PlayVoice.Pages.Preset;
 using PlayVoice.Pages.Workshop;
 using System.IO;
 
@@ -6,12 +7,11 @@ namespace PlayVoice.Pages.FunctionPreset;
 
 public static class FunctionPresetDataTool
 {
-    public static readonly string BasePath = Path.Combine(
-        AppDomain.CurrentDomain.BaseDirectory, "Resources", "FunctionPresets");
+    public static readonly string BasePath = PresetStorage.BasePath;
 
     public static List<FunctionPresetData> GetAll()
     {
-        Directory.CreateDirectory(BasePath);
+        PresetStorage.EnsureInitialized();
         var presets = new List<FunctionPresetData>();
         foreach (var path in Directory.GetFiles(BasePath, "*.json"))
         {
@@ -31,20 +31,19 @@ public static class FunctionPresetDataTool
                     Action = PlayAudioKeyData.KeyAction.抬起
                 };
                 preset.AfterPlayingKey.HotkeyData ??= new();
-                preset.SchemaVersion = Math.Max(preset.SchemaVersion, 3);
                 presets.Add(preset);
             }
         }
         return presets.OrderBy(preset => preset.DisplayName).ToList();
     }
 
-    public static FunctionPresetData Load(string id) =>
-        GetAll().FirstOrDefault(preset => preset.Id == id);
+    public static FunctionPresetData Load(string name) =>
+        GetAll().FirstOrDefault(preset =>
+            string.Equals(preset.Name, name, StringComparison.OrdinalIgnoreCase));
 
     public static FunctionPresetData Create(string name)
     {
-        string normalizedName = name?.Trim();
-        if (string.IsNullOrWhiteSpace(normalizedName))
+        if (!PresetStorage.TryNormalizeName(name, out string normalizedName))
             return null;
         if (GetAll().Any(preset =>
             string.Equals(preset.Name, normalizedName, StringComparison.OrdinalIgnoreCase)))
@@ -70,16 +69,18 @@ public static class FunctionPresetDataTool
 
     public static bool Save(FunctionPresetData preset)
     {
-        if (preset == null || string.IsNullOrWhiteSpace(preset.Id))
+        if (preset == null
+            || !PresetStorage.TryNormalizeName(preset.Name, out string normalizedName))
             return false;
+        preset.Name = normalizedName;
         Directory.CreateDirectory(BasePath);
-        return JsonTool.SaveJson(Path.Combine(BasePath, $"{preset.Id}.json"), preset);
+        return JsonTool.SaveJson(Path.Combine(BasePath, $"{preset.Name}.json"), preset);
     }
 
     public static FunctionPresetData Copy(FunctionPresetData source, string name)
     {
-        string normalizedName = name?.Trim();
-        if (source == null || string.IsNullOrWhiteSpace(normalizedName))
+        if (source == null
+            || !PresetStorage.TryNormalizeName(name, out string normalizedName))
             return null;
         if (GetAll().Any(preset =>
             string.Equals(preset.Name, normalizedName, StringComparison.OrdinalIgnoreCase)))
@@ -88,7 +89,6 @@ public static class FunctionPresetDataTool
         var copy = JsonTool.ToObject<FunctionPresetData>(JsonTool.ToJson(source));
         if (copy == null)
             return null;
-        copy.Id = Guid.NewGuid().ToString("N");
         copy.Name = normalizedName;
         copy.IsDefault = false;
         return Save(copy) ? copy : null;
@@ -96,86 +96,90 @@ public static class FunctionPresetDataTool
 
     public static bool Rename(FunctionPresetData preset, string name)
     {
-        string normalizedName = name?.Trim();
-        if (preset == null || preset.IsDefault || string.IsNullOrWhiteSpace(normalizedName))
+        if (preset == null
+            || preset.IsDefault
+            || !PresetStorage.TryNormalizeName(name, out string normalizedName))
             return false;
-        if (GetAll().Any(item => item.Id != preset.Id
-            && string.Equals(item.Name, normalizedName, StringComparison.OrdinalIgnoreCase)))
+        string oldName = preset.Name;
+        if (!string.Equals(oldName, normalizedName, StringComparison.OrdinalIgnoreCase)
+            && GetAll().Any(item => string.Equals(
+                item.Name, normalizedName, StringComparison.OrdinalIgnoreCase)))
             return false;
 
         preset.Name = normalizedName;
-        return Save(preset);
+        if (!Save(preset))
+        {
+            preset.Name = oldName;
+            return false;
+        }
+
+        string oldPath = Path.Combine(BasePath, $"{oldName}.json");
+        string newPath = Path.Combine(BasePath, $"{normalizedName}.json");
+        if (!string.Equals(oldPath, newPath, StringComparison.OrdinalIgnoreCase)
+            && File.Exists(oldPath))
+            File.Delete(oldPath);
+
+        var globalData = GlobalData.Inst;
+        if (globalData != null && string.Equals(
+            globalData.Config.ActiveFunctionPresetName,
+            oldName,
+            StringComparison.OrdinalIgnoreCase))
+        {
+            globalData.Config.ActiveFunctionPresetName = normalizedName;
+            globalData.Config.Save();
+        }
+        return true;
     }
 
-    public static bool Delete(string id)
+    public static bool Delete(string name)
     {
-        var preset = GetAll().FirstOrDefault(item => item.Id == id);
+        var preset = Load(name);
         if (preset == null || preset.IsDefault)
             return false;
 
-        string path = Path.Combine(BasePath, $"{id}.json");
+        string path = Path.Combine(BasePath, $"{preset.Name}.json");
         if (!File.Exists(path))
             return false;
         File.Delete(path);
         return true;
     }
 
-    public static void RemoveAudioBindings(string audioPresetId, string audioId)
+    public static void RemoveAudioBindings(string audioPresetName, string audioId)
     {
         foreach (var preset in GetAll())
         {
-            if (preset.RemoveAudioBinding(audioPresetId, audioId))
+            if (preset.RemoveAudioBinding(audioPresetName, audioId))
                 Save(preset);
         }
     }
 
-    public static void RemoveAudioPresetBindings(string audioPresetId)
+    public static void RemoveAudioPresetBindings(string audioPresetName)
     {
         foreach (var preset in GetAll())
         {
-            if (preset.RemoveAudioPresetBindings(audioPresetId))
+            if (preset.RemoveAudioPresetBindings(audioPresetName))
                 Save(preset);
         }
     }
 
-    public static bool MigratePlayingKeys(
-        PlayAudioKeyData beforePlayingKey,
-        PlayAudioKeyData afterPlayingKey)
+    public static void RenameAudioPresetBindings(string oldName, string newName)
     {
-        if (beforePlayingKey == null && afterPlayingKey == null)
-            return true;
-
-        bool saved = true;
         foreach (var preset in GetAll())
         {
-            if (beforePlayingKey != null)
-                preset.BeforePlayingKey = ClonePlayingKey(beforePlayingKey);
-            if (afterPlayingKey != null)
-                preset.AfterPlayingKey = ClonePlayingKey(afterPlayingKey);
-            preset.SchemaVersion = Math.Max(preset.SchemaVersion, 3);
-            saved &= Save(preset);
+            if (preset.RenameAudioPresetBindings(oldName, newName))
+                Save(preset);
         }
-        return saved;
     }
 
-    public static FunctionPresetData EnsureCurrent(string currentId)
+    public static FunctionPresetData EnsureCurrent(string currentName)
     {
         var presets = GetAll();
         if (presets.Count == 0)
             return CreateDefault();
-        return presets.FirstOrDefault(preset => preset.Id == currentId)
+        return presets.FirstOrDefault(preset => string.Equals(
+                preset.Name, currentName, StringComparison.OrdinalIgnoreCase))
             ?? presets.FirstOrDefault(preset => preset.IsDefault)
             ?? presets[0];
     }
 
-    private static PlayAudioKeyData ClonePlayingKey(PlayAudioKeyData source) => new()
-    {
-        Action = source.Action,
-        HotkeyData = new HotkeyData
-        {
-            Modifiers = source.HotkeyData?.Modifiers ?? Win32Modifiers.None,
-            VkCode = source.HotkeyData?.VkCode ?? 0,
-            IsMouse = source.HotkeyData?.IsMouse ?? false
-        }
-    };
 }

@@ -22,6 +22,7 @@ namespace PlayVoice.Pages.Preset
         private ObservableCollection<string> presetNameArray = new ObservableCollection<string>();
 
         private CircularProgressBar loadingPage;
+        private bool isUploading;
         public UploadPresetPage()
         {
             InitializeComponent();
@@ -89,7 +90,7 @@ namespace PlayVoice.Pages.Preset
 
         private async void ConfirmButton_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (ConfirmButton.SelectedIndex == -1) return;
+            if (ConfirmButton.SelectedIndex == -1 || isUploading) return;
 
             if (SteamClient.IsValid == false)
             {
@@ -145,96 +146,102 @@ namespace PlayVoice.Pages.Preset
                 GlobalData.Inst.Config.Save();
             }
 
-            ContentGrid.IsEnabled = false;
-            loadingPage.Visibility = Visibility.Visible;
-            loadingPage.SetProgress(0, 0);
-
-            string resourceDescription = ResourceDescriptionInputTextBox.Text;
-            MainWindow.Inst.AddNotification(
-                   () => LanguageManager.Inst.GetString("通知"),
-                   () => LanguageManager.Inst.GetString("正在复制文件"),
-                   LabelStatus.Warning, 3.3f);
-
-            string presetPath = Path.Combine(AudioPresetDataTool.BasePath, audioPresetConfig.Id);
-            string tempRootPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources", "temp");
-            string tempPresetPath = Path.Combine(tempRootPath, audioPresetConfig.Id);
-            Report(0.38f);
-            await JsonTool.CopyDirectoryReplaceTrueAsync(presetPath, tempPresetPath);
-            Report(0.66f);
-            string extendedExplanationPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/ExtendedExplanation");
-            string tempExtendedExplanationPath = Path.Combine(tempPresetPath, "ExtendedExplanation");
-            Directory.CreateDirectory(tempExtendedExplanationPath);
-            await JsonTool.CopyDirectoryReplaceTrueAsync(extendedExplanationPath, tempExtendedExplanationPath);
-            Report(0.82f);
-
-            var metaData = ResourceDataConfig.Metadata.Create(
-                 await AudioPresetDataTool.LoadAudioPresetDataFromPath(
-                    tempRootPath, audioPresetConfig.Id));
-            File.Delete(Path.Combine(tempPresetPath, AudioPresetDataTool.ConfigFileName));
-
-            if (string.IsNullOrEmpty(imagePath) || !File.Exists(imagePath))
-                imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Thumbnail.png");
-
-            var resourceDataConfig = new ResourceDataConfig
+            isUploading = true;
+            MainWindow.Inst.SetBodyInteractionBlocked(true);
+            try
             {
-                Title = resourceName,
-                Description = resourceDescription,
-                Data = metaData,
-                ThumbnailFormat = Path.GetExtension(imagePath)
-            };
-            JsonTool.SaveJson(Path.Combine(tempPresetPath, "ResourceConfig.json"), resourceDataConfig);
-            File.Copy(imagePath, Path.Combine(tempPresetPath, $"Thumbnail{resourceDataConfig.ThumbnailFormat}"));
+                loadingPage.Visibility = Visibility.Visible;
+                loadingPage.SetProgress(0, 0);
 
-
-            MainWindow.Inst.AddNotification(
-                  () => LanguageManager.Inst.GetString("通知"),
-                  () => LanguageManager.Inst.GetString("开始上传"),
-                  LabelStatus.Warning, 9f);
-
-            var editor = Editor.NewCommunityFile
-                .WithTitle(resourceName)
-                .WithDescription(resourceDescription);
-            foreach (var tab in tabSelectionSet)
-                editor = editor.WithTag(WorkshopPage.TabTypeToSteam(tab.Type));
-            editor = editor.WithContent(tempPresetPath);
-            if (File.Exists(imagePath))
-                editor = editor.WithPreviewFile(imagePath);
-
-            editor = editor.WithMetaData(JsonTool.ToJson(metaData, writeIndented: false));
-            switch (VisibleComboBox.SelectedIndex)
-            {
-                case 0:
-                    editor = editor.WithPrivateVisibility();
-                    break;
-                case 1:
-                    editor = editor.WithFriendsOnlyVisibility();
-                    break;
-                case 2:
-                    editor = editor.WithPublicVisibility();
-                    break;
-            }
-            Report(0.01f);
-            var result = await editor.SubmitAsync(this);
-
-            if (result.Success)
-            {
+                string resourceDescription = ResourceDescriptionInputTextBox.Text;
                 MainWindow.Inst.AddNotification(
-                    () => LanguageManager.Inst.GetString("通知"),
-                    () => LanguageManager.Inst.GetString("已上传到Steam"),
-                LabelStatus.Success, 4f);
-            }
-            else
-            {
+                       () => LanguageManager.Inst.GetString("通知"),
+                       () => LanguageManager.Inst.GetString("正在复制文件"),
+                       LabelStatus.Warning, 3.3f);
+
+                string presetPath = Path.Combine(AudioPresetDataTool.BasePath, audioPresetConfig.Name);
+                string tempRootPath = PresetStorage.TempPath;
+                string tempPresetPath = Path.Combine(tempRootPath, audioPresetConfig.Name);
+                Report(0.38f);
+                await JsonTool.CopyDirectoryReplaceTrueAsync(presetPath, tempPresetPath);
+                Report(0.66f);
+                string extendedExplanationPath = PresetStorage.ExtendedExplanationPath;
+                string tempExtendedExplanationPath = Path.Combine(tempPresetPath, "ExtendedExplanation");
+                Directory.CreateDirectory(tempExtendedExplanationPath);
+                await JsonTool.CopyDirectoryReplaceTrueAsync(extendedExplanationPath, tempExtendedExplanationPath);
+                Report(0.82f);
+
+                var metaData = ResourceDataConfig.Metadata.Create(
+                     await AudioPresetDataTool.LoadAudioPresetDataFromPath(
+                        tempRootPath, audioPresetConfig.Name));
+                File.Delete(Path.Combine(tempPresetPath, AudioPresetDataTool.ConfigFileName));
+
+                if (string.IsNullOrEmpty(imagePath) || !File.Exists(imagePath))
+                    imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Thumbnail.png");
+
+                var resourceDataConfig = new ResourceDataConfig
+                {
+                    Title = resourceName,
+                    Description = resourceDescription,
+                    Data = metaData,
+                    ThumbnailFormat = Path.GetExtension(imagePath)
+                };
+                JsonTool.SaveJson(Path.Combine(tempPresetPath, "ResourceConfig.json"), resourceDataConfig);
+                File.Copy(imagePath, Path.Combine(tempPresetPath, $"Thumbnail{resourceDataConfig.ThumbnailFormat}"));
+
+
                 MainWindow.Inst.AddNotification(
-                    () => LanguageManager.Inst.GetString("通知"),
-                    () => LanguageManager.Inst.GetString("上传Steam失败") + $" : {result.Result}",
-                    LabelStatus.Error, 4f);
+                      () => LanguageManager.Inst.GetString("通知"),
+                      () => LanguageManager.Inst.GetString("开始上传"),
+                      LabelStatus.Warning, 9f);
+
+                var editor = Editor.NewCommunityFile
+                    .WithTitle(resourceName)
+                    .WithDescription(resourceDescription);
+                foreach (var tab in tabSelectionSet)
+                    editor = editor.WithTag(WorkshopPage.TabTypeToSteam(tab.Type));
+                editor = editor.WithContent(tempPresetPath);
+                if (File.Exists(imagePath))
+                    editor = editor.WithPreviewFile(imagePath);
+
+                editor = editor.WithMetaData(JsonTool.ToJson(metaData, writeIndented: false));
+                switch (VisibleComboBox.SelectedIndex)
+                {
+                    case 0:
+                        editor = editor.WithPrivateVisibility();
+                        break;
+                    case 1:
+                        editor = editor.WithFriendsOnlyVisibility();
+                        break;
+                    case 2:
+                        editor = editor.WithPublicVisibility();
+                        break;
+                }
+                Report(0.01f);
+                var result = await editor.SubmitAsync(this);
+
+                if (result.Success)
+                {
+                    MainWindow.Inst.AddNotification(
+                        () => LanguageManager.Inst.GetString("通知"),
+                        () => LanguageManager.Inst.GetString("已上传到Steam"),
+                    LabelStatus.Success, 4f);
+                }
+                else
+                {
+                    MainWindow.Inst.AddNotification(
+                        () => LanguageManager.Inst.GetString("通知"),
+                        () => LanguageManager.Inst.GetString("上传Steam失败") + $" : {result.Result}",
+                        LabelStatus.Error, 4f);
+                }
+                Directory.Delete(tempPresetPath, true);
             }
-            Directory.Delete(tempPresetPath, true);
-
-
-            loadingPage.Visibility = Visibility.Hidden;
-            ContentGrid.IsEnabled = true;
+            finally
+            {
+                loadingPage.Visibility = Visibility.Hidden;
+                MainWindow.Inst.SetBodyInteractionBlocked(false);
+                isUploading = false;
+            }
         end:
             ConfirmButton.SelectedIndex = -1;
         }

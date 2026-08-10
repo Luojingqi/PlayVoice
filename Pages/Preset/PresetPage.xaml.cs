@@ -48,7 +48,7 @@ public partial class PresetPage : Page
         UploadPresetPageFrame.Content = uploadPresetPage;
 
         foreach (var config in AudioPresetDataTool.GetAllAudioPresetConfigs())
-            pageList.Add(new PageData { Id = config.Id, Name = config.Name });
+            pageList.Add(new PageData { Name = config.Name });
         pageList.Add(PageData.CreateAddPage());
         pageList.Add(PageData.CreateDeletePage());
 
@@ -95,7 +95,7 @@ public partial class PresetPage : Page
             isLoadingAudioPresetFromPage = true;
             try
             {
-                await audioTrackGridPage.InitLoadAudioPreset(selectedPage.Id);
+                await audioTrackGridPage.InitLoadAudioPreset(selectedPage.Name);
             }
             finally
             {
@@ -155,7 +155,10 @@ public partial class PresetPage : Page
 
         FunctionPresetComboBox.ItemsSource = functionPresets;
         var selectedPreset = functionPresets.FirstOrDefault(item =>
-            item.Id == GlobalData.Inst.ActiveFunctionPreset?.Id);
+            string.Equals(
+                item.Name,
+                GlobalData.Inst.ActiveFunctionPreset?.Name,
+                StringComparison.OrdinalIgnoreCase));
         if (selectedPreset != null
             && !ReferenceEquals(selectedPreset, GlobalData.Inst.ActiveFunctionPreset))
             GlobalData.Inst.ActiveFunctionPreset = selectedPreset;
@@ -177,7 +180,10 @@ public partial class PresetPage : Page
             : page.IsAddPage);
         if (audioPreset != null)
         {
-            int presetIndex = pageList.FindIndex(page => page.Id == audioPreset.Config.Id);
+            int presetIndex = pageList.FindIndex(page => string.Equals(
+                page.Name,
+                audioPreset.Config.Name,
+                StringComparison.OrdinalIgnoreCase));
             if (presetIndex >= 0)
                 selectedIndex = presetIndex;
         }
@@ -234,7 +240,10 @@ public partial class PresetPage : Page
             return;
         }
 
-        int selectedIndex = functionPresets.FindIndex(item => item.Id == functionPreset?.Id);
+        int selectedIndex = functionPresets.FindIndex(item => string.Equals(
+            item.Name,
+            functionPreset?.Name,
+            StringComparison.OrdinalIgnoreCase));
         isSynchronizingFunctionPresetSelection = true;
         FunctionPresetComboBox.SelectedIndex = selectedIndex;
         isSynchronizingFunctionPresetSelection = false;
@@ -251,7 +260,6 @@ public partial class PresetPage : Page
     {
         var newPage = new PageData
         {
-            Id = audioPreset.Config.Id,
             Name = audioPreset.Config.Name
         };
         int managementPageIndex = pageList.FindIndex(page => page.IsAddPage || page.IsDeletePage);
@@ -271,10 +279,10 @@ public partial class PresetPage : Page
         TopButtonListBox.SelectedIndex = pageList.FindIndex(page => page.IsAddPage);
     }
 
-    public void RemoveAudioPresetPage(string idOrName)
+    public void RemoveAudioPresetPage(string name)
     {
         var pageToRemove = pageList.FirstOrDefault(page =>
-            page.Id == idOrName || page.Name == idOrName);
+            string.Equals(page.Name, name, StringComparison.OrdinalIgnoreCase));
         if (pageToRemove == null) return;
 
         pageList.Remove(pageToRemove);
@@ -285,7 +293,6 @@ public partial class PresetPage : Page
 
     public class PageData
     {
-        public string Id { get; set; }
         public string Name { get; set; }
         public bool IsAddPage { get; set; }
         public bool IsDeletePage { get; set; }

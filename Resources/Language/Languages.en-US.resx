@@ -686,4 +686,13 @@ O</value>
   <data name="游戏预设已存在" xml:space="preserve">
     <value>Game Preset Already Exists</value>
   </data>
+  <data name="教程提示" xml:space="preserve">
+    <value>Tutorial</value>
+  </data>
+  <data name="教程提示_内容" xml:space="preserve">
+    <value>You can find the tutorial under Settings in the left sidebar.</value>
+  </data>
+  <data name="确定" xml:space="preserve">
+    <value>OK</value>
+  </data>
 </root>

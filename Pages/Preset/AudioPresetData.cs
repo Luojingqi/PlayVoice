@@ -12,7 +12,7 @@ public class AudioPresetData
 
     public bool Save()
     {
-        string path = Path.Combine(AudioPresetDataTool.BasePath, Config.Id);
+        string path = Path.Combine(AudioPresetDataTool.BasePath, Config.Name);
         return Directory.Exists(path)
             && JsonTool.SaveJson(Path.Combine(path, AudioPresetDataTool.ConfigFileName), Config);
     }
@@ -25,11 +25,6 @@ public class AudioPresetData
         (AudioList[index0], AudioList[index1]) = (AudioList[index1], AudioList[index0]);
         (Config.AudioDataConfigList[index0], Config.AudioDataConfigList[index1]) =
             (Config.AudioDataConfigList[index1], Config.AudioDataConfigList[index0]);
-    }
-
-    public void ChangeName(string newName)
-    {
-        Config.Name = newName;
     }
 
     public async Task<AudioData> AddAudio(string completePath)
@@ -53,7 +48,7 @@ public class AudioPresetData
             if (!actualLufs.HasValue)
                 return null;
 
-            string presetPath = Path.Combine(AudioPresetDataTool.BasePath, Config.Id);
+            string presetPath = Path.Combine(AudioPresetDataTool.BasePath, Config.Name);
             string destPath = Path.Combine(presetPath, Path.GetFileName(completePath));
             if (File.Exists(destPath))
             {
@@ -99,7 +94,8 @@ public class AudioPresetData
 
         var audioData = AudioList[index];
         string audioId = audioData.Config.Id;
-        string filePath = Path.Combine(AudioPresetDataTool.BasePath, Config.Id, audioData.Config.Name);
+        string filePath = Path.Combine(
+            AudioPresetDataTool.BasePath, Config.Name, audioData.Config.Name);
         if (!File.Exists(filePath))
             return false;
 
@@ -110,7 +106,7 @@ public class AudioPresetData
         for (int i = index; i < AudioList.Count; i++)
             AudioList[i].Index = i;
 
-        GlobalData.Inst.RemoveAudioBinding(Config.Id, audioId);
+        GlobalData.Inst.RemoveAudioBinding(Config.Name, audioId);
         return true;
     }
 

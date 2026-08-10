@@ -7,13 +7,14 @@ namespace PlayVoice;
 
 internal class Config
 {
-    public ThemeManager.ThemeEnum Theme { get; set; } = ThemeManager.ThemeEnum.Dark;
+    public ThemeManager.ThemeEnum Theme { get; set; } = ThemeManager.ThemeEnum.System;
     public string Language { get; set; } = "zh-CN";
 
     public bool AutoMute { get; set; } = true;
 
     public bool MinimizeToTrayOnClose { get; set; } = false;
     public bool HasSelectedCloseBehavior { get; set; } = false;
+    public bool HasAcknowledgedTutorialPrompt { get; set; } = false;
 
     public double AudioOutDecibel { get; set; } = 0;
     public double AudioEarDecibel { get; set; } = 0;
@@ -28,14 +29,8 @@ internal class Config
     public string VirtualMicrophoneID { get; set; }
     public string VirtualLoudspeakerID { get; set; }
 
-    public string ActiveAudioPresetId { get; set; }
-    public string ActiveFunctionPresetId { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public PlayAudioKeyData BeforePlayingKey { get; set; }
-
-    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-    public PlayAudioKeyData AfterPlayingKey { get; set; }
+    public string ActiveAudioPresetName { get; set; }
+    public string ActiveFunctionPresetName { get; set; }
 
     public bool Save()
     {

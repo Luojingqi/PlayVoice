@@ -178,4 +178,7 @@
   <data name="文件夹已存在" xml:space="preserve"><value>Папка $ уже существует</value></data>
   <data name="未命名" xml:space="preserve"><value>Без названия</value></data>
   <data name="默认" xml:space="preserve"><value>По умолчанию</value></data>
+  <data name="教程提示" xml:space="preserve"><value>Руководство</value></data>
+  <data name="教程提示_内容" xml:space="preserve"><value>Руководство находится в разделе «Настройки» в боковом меню.</value></data>
+  <data name="确定" xml:space="preserve"><value>ОК</value></data>
 </root>

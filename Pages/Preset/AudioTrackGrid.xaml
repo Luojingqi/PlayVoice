@@ -150,6 +150,54 @@
 
                 <Border x:Name="InsertionLine" Height="3" Background="{DynamicResource AccentColor}" CornerRadius="1.5" Visibility="Collapsed"/>
             </Canvas>
+
+            <Border x:Name="ImportProgressOverlay"
+                    Grid.RowSpan="2"
+                    Panel.ZIndex="100"
+                    Background="Transparent"
+                    CornerRadius="5"
+                    Visibility="Collapsed">
+                <Border Width="420"
+                        Padding="24,20"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="{DynamicResource BgDark}"
+                        BorderBrush="{DynamicResource AccentColor}"
+                        BorderThickness="1"
+                        CornerRadius="8">
+                    <StackPanel>
+                        <TextBlock Text="{L:Lan 导入}"
+                                   Style="{StaticResource TextBlockMedium}"
+                                   FontSize="18"
+                                   HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="ImportFileNameText"
+                                   Margin="0,12,0,10"
+                                   Style="{StaticResource TextBlockLight}"
+                                   FontSize="13"
+                                   TextAlignment="Center"
+                                   TextTrimming="CharacterEllipsis"/>
+                        <Grid x:Name="ImportProgressTrack"
+                              Height="8"
+                              Background="{DynamicResource BgLight}"
+                              ClipToBounds="True">
+                            <Border x:Name="ImportProgressFill"
+                                    Width="{Binding ElementName=ImportProgressTrack, Path=ActualWidth}"
+                                    HorizontalAlignment="Left"
+                                    Background="{DynamicResource AccentColor}"
+                                    RenderTransformOrigin="0,0.5">
+                                <Border.RenderTransform>
+                                    <ScaleTransform x:Name="ImportProgressScale" ScaleX="0"/>
+                                </Border.RenderTransform>
+                            </Border>
+                        </Grid>
+                        <TextBlock x:Name="ImportProgressText"
+                                   Margin="0,8,0,0"
+                                   Style="{StaticResource TextBlockLight}"
+                                   FontSize="13"
+                                   HorizontalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+            </Border>
         </Grid>
     </Border>
 </Page>

@@ -30,12 +30,15 @@ public partial class DeleteFunctionPresetPage : Page
 
         if (FunctionPresetComboBox.SelectedItem is FunctionPresetData functionPreset)
         {
-            bool wasActive = GlobalData.Inst.ActiveFunctionPreset?.Id == functionPreset.Id;
-            if (FunctionPresetDataTool.Delete(functionPreset.Id))
+            bool wasActive = string.Equals(
+                GlobalData.Inst.ActiveFunctionPreset?.Name,
+                functionPreset.Name,
+                StringComparison.OrdinalIgnoreCase);
+            if (FunctionPresetDataTool.Delete(functionPreset.Name))
             {
                 if (wasActive)
                     GlobalData.Inst.ActiveFunctionPreset =
-                        FunctionPresetDataTool.EnsureCurrent(currentId: null);
+                        FunctionPresetDataTool.EnsureCurrent(currentName: null);
                 PresetPage.Inst.RefreshFunctionPresetList();
             }
         }

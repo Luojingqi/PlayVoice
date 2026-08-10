@@ -44,7 +44,7 @@ internal class GlobalData
             ClearFunctionPresetFeatures();
             activeAudioPreset?.Dispose();
             activeAudioPreset = value;
-            config.ActiveAudioPresetId = activeAudioPreset?.Config.Id;
+            config.ActiveAudioPresetName = activeAudioPreset?.Config.Name;
             ApplyFunctionPresetFeatures();
             config.Save();
             ActiveAudioPresetChanged?.Invoke(activeAudioPreset);
@@ -60,7 +60,7 @@ internal class GlobalData
 
             ClearFunctionPresetFeatures();
             activeFunctionPreset = value;
-            config.ActiveFunctionPresetId = activeFunctionPreset?.Id;
+            config.ActiveFunctionPresetName = activeFunctionPreset?.Name;
             ApplyFunctionPresetFeatures();
             config.Save();
             ActiveFunctionPresetChanged?.Invoke(activeFunctionPreset);
@@ -69,13 +69,13 @@ internal class GlobalData
 
     public async Task RestoreActiveAudioPresetAsync()
     {
-        if (activeAudioPreset != null || string.IsNullOrWhiteSpace(config.ActiveAudioPresetId))
+        if (activeAudioPreset != null || string.IsNullOrWhiteSpace(config.ActiveAudioPresetName))
             return;
 
-        var restoredPreset = await AudioPresetDataTool.LoadAudioPresetData(config.ActiveAudioPresetId);
+        var restoredPreset = await AudioPresetDataTool.LoadAudioPresetData(config.ActiveAudioPresetName);
         if (restoredPreset == null)
         {
-            config.ActiveAudioPresetId = null;
+            config.ActiveAudioPresetName = null;
             config.Save();
             return;
         }
@@ -88,7 +88,7 @@ internal class GlobalData
             return null;
 
         return activeFunctionPreset.GetHotkey(
-            audioData.AudioPreset.Config.Id, audioData.Config.Id, create);
+            audioData.AudioPreset.Config.Name, audioData.Config.Id, create);
     }
 
     public double GetAudioDecibel(AudioData audioData)
@@ -97,7 +97,7 @@ internal class GlobalData
             return 0;
 
         return activeFunctionPreset.GetAudioDecibel(
-            audioData.AudioPreset.Config.Id, audioData.Config.Id);
+            audioData.AudioPreset.Config.Name, audioData.Config.Id);
     }
 
     public void SetAudioDecibel(AudioData audioData, double decibel)
@@ -106,7 +106,7 @@ internal class GlobalData
             return;
 
         activeFunctionPreset.SetAudioDecibel(
-            audioData.AudioPreset.Config.Id,
+            audioData.AudioPreset.Config.Name,
             audioData.Config.Id,
             Math.Clamp(decibel, AudioData.MinDecibel, AudioData.MaxDecibel));
         activeFunctionPreset.Save();
@@ -123,19 +123,19 @@ internal class GlobalData
         ApplyFunctionPresetFeatures();
     }
 
-    public void RemoveAudioBinding(string audioPresetId, string audioId)
+    public void RemoveAudioBinding(string audioPresetName, string audioId)
     {
-        if (activeFunctionPreset?.RemoveAudioBinding(audioPresetId, audioId) == true)
+        if (activeFunctionPreset?.RemoveAudioBinding(audioPresetName, audioId) == true)
             activeFunctionPreset.Save();
-        FunctionPresetDataTool.RemoveAudioBindings(audioPresetId, audioId);
+        FunctionPresetDataTool.RemoveAudioBindings(audioPresetName, audioId);
         RebuildActiveHotkeys();
     }
 
-    public void RemoveAudioPresetBindings(string audioPresetId)
+    public void RemoveAudioPresetBindings(string audioPresetName)
     {
-        if (activeFunctionPreset?.RemoveAudioPresetBindings(audioPresetId) == true)
+        if (activeFunctionPreset?.RemoveAudioPresetBindings(audioPresetName) == true)
             activeFunctionPreset.Save();
-        FunctionPresetDataTool.RemoveAudioPresetBindings(audioPresetId);
+        FunctionPresetDataTool.RemoveAudioPresetBindings(audioPresetName);
         RebuildActiveHotkeys();
     }
 
@@ -255,6 +255,7 @@ internal class GlobalData
     public GlobalData()
     {
         Inst = this;
+        PresetStorage.EnsureInitialized();
         JsonTool.LoadJson(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json"), out config);
 
         if (config == null)
@@ -265,21 +266,10 @@ internal class GlobalData
 
         ThemeManager.SwitchTheme(config.Theme);
         LanguageManager.Inst.SetCulture(config.Language);
+        autoMute = config.AutoMute;
 
-        activeFunctionPreset = FunctionPresetDataTool.EnsureCurrent(config.ActiveFunctionPresetId);
-        if (config.BeforePlayingKey != null || config.AfterPlayingKey != null)
-        {
-            bool playingKeysMigrated = FunctionPresetDataTool.MigratePlayingKeys(
-                config.BeforePlayingKey, config.AfterPlayingKey);
-            if (playingKeysMigrated)
-            {
-                activeFunctionPreset = FunctionPresetDataTool.Load(activeFunctionPreset?.Id)
-                    ?? activeFunctionPreset;
-                config.BeforePlayingKey = null;
-                config.AfterPlayingKey = null;
-            }
-        }
-        config.ActiveFunctionPresetId = activeFunctionPreset?.Id;
+        activeFunctionPreset = FunctionPresetDataTool.EnsureCurrent(config.ActiveFunctionPresetName);
+        config.ActiveFunctionPresetName = activeFunctionPreset?.Name;
         config.Save();
 
         equipment = new();
