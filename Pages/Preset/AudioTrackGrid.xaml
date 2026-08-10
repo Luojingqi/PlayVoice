@@ -25,7 +25,7 @@
     <Border BorderBrush="{DynamicResource AccentColor}" 
             BorderThickness="1" 
             CornerRadius="6" 
-            Background="{DynamicResource BgMedium}" 
+            Background="{DynamicResource BgLight}"
             Padding="10">
 
         <Grid>

@@ -1,3 +1,5 @@
+using PlayVoice.Hotkey;
+using PlayVoice.Pages.Workshop;
 using System.IO;
 
 namespace PlayVoice.Pages.FunctionPreset;
@@ -19,6 +21,17 @@ public static class FunctionPresetDataTool
                 preset.FeatureData ??= new();
                 foreach (var binding in preset.Bindings)
                     binding.HotkeyData ??= new();
+                preset.BeforePlayingKey ??= new()
+                {
+                    Action = PlayAudioKeyData.KeyAction.按下
+                };
+                preset.BeforePlayingKey.HotkeyData ??= new();
+                preset.AfterPlayingKey ??= new()
+                {
+                    Action = PlayAudioKeyData.KeyAction.抬起
+                };
+                preset.AfterPlayingKey.HotkeyData ??= new();
+                preset.SchemaVersion = Math.Max(preset.SchemaVersion, 3);
                 presets.Add(preset);
             }
         }
@@ -125,6 +138,26 @@ public static class FunctionPresetDataTool
         }
     }
 
+    public static bool MigratePlayingKeys(
+        PlayAudioKeyData beforePlayingKey,
+        PlayAudioKeyData afterPlayingKey)
+    {
+        if (beforePlayingKey == null && afterPlayingKey == null)
+            return true;
+
+        bool saved = true;
+        foreach (var preset in GetAll())
+        {
+            if (beforePlayingKey != null)
+                preset.BeforePlayingKey = ClonePlayingKey(beforePlayingKey);
+            if (afterPlayingKey != null)
+                preset.AfterPlayingKey = ClonePlayingKey(afterPlayingKey);
+            preset.SchemaVersion = Math.Max(preset.SchemaVersion, 3);
+            saved &= Save(preset);
+        }
+        return saved;
+    }
+
     public static FunctionPresetData EnsureCurrent(string currentId)
     {
         var presets = GetAll();
@@ -134,4 +167,15 @@ public static class FunctionPresetDataTool
             ?? presets.FirstOrDefault(preset => preset.IsDefault)
             ?? presets[0];
     }
+
+    private static PlayAudioKeyData ClonePlayingKey(PlayAudioKeyData source) => new()
+    {
+        Action = source.Action,
+        HotkeyData = new HotkeyData
+        {
+            Modifiers = source.HotkeyData?.Modifiers ?? Win32Modifiers.None,
+            VkCode = source.HotkeyData?.VkCode ?? 0,
+            IsMouse = source.HotkeyData?.IsMouse ?? false
+        }
+    };
 }

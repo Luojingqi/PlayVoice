@@ -19,23 +19,24 @@
                 <Style TargetType="ListBoxItem">
                     <Setter Property="Margin" Value="0,2" />
                     <Setter Property="Padding" Value="0" />
+                    <Setter Property="Foreground" Value="{DynamicResource AccentColor}" />
                     <Setter Property="HorizontalContentAlignment" Value="Stretch" />
                     <Setter Property="VerticalContentAlignment" Value="Center" />
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="ListBoxItem">
                                 <Border x:Name="Container"
-                                        Background="{DynamicResource Border}"
+                                        Background="{DynamicResource AccentSurfaceSubtle}"
                                         CornerRadius="8"
                                         Height="60">
-                                    <ContentPresenter/>
+                                    <ContentPresenter TextElement.Foreground="{TemplateBinding Foreground}"/>
                                 </Border>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="Container" Property="Background" Value="{DynamicResource BgLight}" />
+                                        <Setter TargetName="Container" Property="Background" Value="{DynamicResource AccentSurface}" />
                                     </Trigger>
                                     <Trigger Property="IsSelected" Value="True">
-                                        <Setter TargetName="Container" Property="Background" Value="{DynamicResource AccentColor}" />
+                                        <Setter TargetName="Container" Property="Background" Value="{DynamicResource AccentSurface}" />
                                         <Setter Property="Foreground" Value="{DynamicResource TextPrimary}" />
                                     </Trigger>
                                 </ControlTemplate.Triggers>

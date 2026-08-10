@@ -249,18 +249,18 @@ internal class AudioProxy
         {
             if (VLAudioSet.Count == 0)
             {
-                var config = GlobalData.Inst.Config;
-                switch (config.BeforePlayingKey.Action)
+                var beforePlayingKey = GlobalData.Inst.ActiveFunctionPreset?.BeforePlayingKey;
+                switch (beforePlayingKey?.Action)
                 {
                     case PlayAudioKeyData.KeyAction.按下:
-                        HotkeyManager.Inst.SimulateHotkey(config.BeforePlayingKey.HotkeyData, HotkeyManager.KeyAction.Down);
+                        HotkeyManager.Inst.SimulateHotkey(beforePlayingKey.HotkeyData, HotkeyManager.KeyAction.Down);
                         break;
                     case PlayAudioKeyData.KeyAction.抬起:
-                        HotkeyManager.Inst.SimulateHotkey(config.BeforePlayingKey.HotkeyData, HotkeyManager.KeyAction.Up);
+                        HotkeyManager.Inst.SimulateHotkey(beforePlayingKey.HotkeyData, HotkeyManager.KeyAction.Up);
                         break;
                     case PlayAudioKeyData.KeyAction.单击:
-                        HotkeyManager.Inst.SimulateHotkey(config.BeforePlayingKey.HotkeyData, HotkeyManager.KeyAction.Down);
-                        HotkeyManager.Inst.SimulateHotkey(config.BeforePlayingKey.HotkeyData, HotkeyManager.KeyAction.Up);
+                        HotkeyManager.Inst.SimulateHotkey(beforePlayingKey.HotkeyData, HotkeyManager.KeyAction.Down);
+                        HotkeyManager.Inst.SimulateHotkey(beforePlayingKey.HotkeyData, HotkeyManager.KeyAction.Up);
                         break;
                 }
             }
@@ -285,18 +285,18 @@ internal class AudioProxy
             VLAudioSet.Remove(audioData);
             if (VLAudioSet.Count == 0)
             {
-                var config = GlobalData.Inst.Config;
-                switch (config.AfterPlayingKey.Action)
+                var afterPlayingKey = GlobalData.Inst.ActiveFunctionPreset?.AfterPlayingKey;
+                switch (afterPlayingKey?.Action)
                 {
                     case PlayAudioKeyData.KeyAction.按下:
-                        HotkeyManager.Inst.SimulateHotkey(config.AfterPlayingKey.HotkeyData, HotkeyManager.KeyAction.Down);
+                        HotkeyManager.Inst.SimulateHotkey(afterPlayingKey.HotkeyData, HotkeyManager.KeyAction.Down);
                         break;
                     case PlayAudioKeyData.KeyAction.抬起:
-                        HotkeyManager.Inst.SimulateHotkey(config.AfterPlayingKey.HotkeyData, HotkeyManager.KeyAction.Up);
+                        HotkeyManager.Inst.SimulateHotkey(afterPlayingKey.HotkeyData, HotkeyManager.KeyAction.Up);
                         break;
                     case PlayAudioKeyData.KeyAction.单击:
-                        HotkeyManager.Inst.SimulateHotkey(config.AfterPlayingKey.HotkeyData, HotkeyManager.KeyAction.Down);
-                        HotkeyManager.Inst.SimulateHotkey(config.AfterPlayingKey.HotkeyData, HotkeyManager.KeyAction.Up);
+                        HotkeyManager.Inst.SimulateHotkey(afterPlayingKey.HotkeyData, HotkeyManager.KeyAction.Down);
+                        HotkeyManager.Inst.SimulateHotkey(afterPlayingKey.HotkeyData, HotkeyManager.KeyAction.Up);
                         break;
                 }
             }

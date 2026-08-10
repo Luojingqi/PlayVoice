@@ -246,39 +246,19 @@ namespace PlayVoice.Pages.Setting
             }
 
             {
-                KeyboardKeyInputTextBox0.Text = GlobalData.Inst.Config.BeforePlayingKey.HotkeyData.ToString();
-                KeyboardKeyInputTextBox1.Text = GlobalData.Inst.Config.AfterPlayingKey.HotkeyData.ToString();
-
-                List<PlayAudioKeyDataKeyAction> list0 = new()
-                {
-                    new (PlayAudioKeyData.KeyAction.按下),
-                    new (PlayAudioKeyData.KeyAction.单击),
-                };
-                List<PlayAudioKeyDataKeyAction> list1 = new()
-                {
-                    new (PlayAudioKeyData.KeyAction.抬起),
-                    new (PlayAudioKeyData.KeyAction.单击),
-                };
-                BeforePlayingComboBox.ItemsSource = list0;
-                BeforePlayingComboBox.DisplayMemberPath = "Name";
-                BeforePlayingComboBox.IsSyncing = true;
-                BeforePlayingComboBox.SelectedIndex = list0.FindIndex(x => x.keyAction == GlobalData.Inst.Config.BeforePlayingKey.Action);
-                BeforePlayingComboBox.IsSyncing = false;
-                AfterPlayingComboBox.ItemsSource = list1;
-                AfterPlayingComboBox.DisplayMemberPath = "Name";
-                AfterPlayingComboBox.IsSyncing = true;
-                AfterPlayingComboBox.SelectedIndex = list1.FindIndex(x => x.keyAction == GlobalData.Inst.Config.AfterPlayingKey.Action);
-                AfterPlayingComboBox.IsSyncing = false;
+                RefreshPlayingKeySettings();
 
                 BeforePlayingComboBox.OnSelectionChanged += (item0, item1) =>
                 {
-                    GlobalData.Inst.Config.BeforePlayingKey.Action = ((PlayAudioKeyDataKeyAction)item1).keyAction;
-                    GlobalData.Inst.Config.Save();
+                    GlobalData.Inst.ActiveFunctionPreset.BeforePlayingKey.Action =
+                        ((PlayAudioKeyDataKeyAction)item1).keyAction;
+                    GlobalData.Inst.SaveActiveFunctionPreset();
                 };
                 AfterPlayingComboBox.OnSelectionChanged += (item0, item1) =>
                 {
-                    GlobalData.Inst.Config.AfterPlayingKey.Action = ((PlayAudioKeyDataKeyAction)item1).keyAction;
-                    GlobalData.Inst.Config.Save();
+                    GlobalData.Inst.ActiveFunctionPreset.AfterPlayingKey.Action =
+                        ((PlayAudioKeyDataKeyAction)item1).keyAction;
+                    GlobalData.Inst.SaveActiveFunctionPreset();
                 };
             }
         }
@@ -607,6 +587,7 @@ namespace PlayVoice.Pages.Setting
             }
 
             RefreshFunctionPresetOptions();
+            RefreshPlayingKeySettings();
         }
 
         private void RefreshCloseBehaviorOptions()
@@ -644,23 +625,43 @@ namespace PlayVoice.Pages.Setting
             LanguageComboBox.IsSyncing = false;
 
 
-            List<PlayAudioKeyDataKeyAction> list0 = new()
-                {
-                    new (PlayAudioKeyData.KeyAction.按下),
-                    new (PlayAudioKeyData.KeyAction.单击),
-                };
-            List<PlayAudioKeyDataKeyAction> list1 = new()
-                {
-                    new (PlayAudioKeyData.KeyAction.抬起),
-                    new (PlayAudioKeyData.KeyAction.单击),
-                };
+            RefreshPlayingKeySettings();
+        }
+
+        private void RefreshPlayingKeySettings()
+        {
+            var functionPreset = GlobalData.Inst.ActiveFunctionPreset;
+            if (functionPreset == null)
+                return;
+
+            KeyboardKeyInputTextBox0.Text =
+                functionPreset.BeforePlayingKey.HotkeyData.ToString();
+            KeyboardKeyInputTextBox1.Text =
+                functionPreset.AfterPlayingKey.HotkeyData.ToString();
+
+            List<PlayAudioKeyDataKeyAction> beforeActions = new()
+            {
+                new(PlayAudioKeyData.KeyAction.按下),
+                new(PlayAudioKeyData.KeyAction.单击),
+            };
+            List<PlayAudioKeyDataKeyAction> afterActions = new()
+            {
+                new(PlayAudioKeyData.KeyAction.抬起),
+                new(PlayAudioKeyData.KeyAction.单击),
+            };
+
             BeforePlayingComboBox.IsSyncing = true;
-            BeforePlayingComboBox.ItemsSource = list0;
-            BeforePlayingComboBox.SelectedIndex = list0.FindIndex(x => x.keyAction == GlobalData.Inst.Config.BeforePlayingKey.Action);
+            BeforePlayingComboBox.ItemsSource = beforeActions;
+            BeforePlayingComboBox.DisplayMemberPath = "Name";
+            BeforePlayingComboBox.SelectedIndex = beforeActions.FindIndex(item =>
+                item.keyAction == functionPreset.BeforePlayingKey.Action);
             BeforePlayingComboBox.IsSyncing = false;
+
             AfterPlayingComboBox.IsSyncing = true;
-            AfterPlayingComboBox.ItemsSource = list1;
-            AfterPlayingComboBox.SelectedIndex = list1.FindIndex(x => x.keyAction == GlobalData.Inst.Config.AfterPlayingKey.Action);
+            AfterPlayingComboBox.ItemsSource = afterActions;
+            AfterPlayingComboBox.DisplayMemberPath = "Name";
+            AfterPlayingComboBox.SelectedIndex = afterActions.FindIndex(item =>
+                item.keyAction == functionPreset.AfterPlayingKey.Action);
             AfterPlayingComboBox.IsSyncing = false;
         }
 
@@ -722,7 +723,7 @@ namespace PlayVoice.Pages.Setting
                     ClearHotkey(0);
                 else
                 {
-                    var hotkeyData = GlobalData.Inst.Config.BeforePlayingKey.HotkeyData;
+                    var hotkeyData = GlobalData.Inst.ActiveFunctionPreset.BeforePlayingKey.HotkeyData;
                     hotkeyData.Modifiers = newHotkey.Modifiers;
                     hotkeyData.VkCode = newHotkey.VkCode;
                     hotkeyData.IsMouse = newHotkey.IsMouse;
@@ -731,7 +732,7 @@ namespace PlayVoice.Pages.Setting
                     KeyboardKeyInputTextBox0.SelectionStart = KeyboardKeyInputTextBox0.Text.Length;
                 }
                 Keyboard.Focus(null);
-                GlobalData.Inst.Config.Save();
+                GlobalData.Inst.SaveActiveFunctionPreset();
             });
         }
 
@@ -753,7 +754,7 @@ namespace PlayVoice.Pages.Setting
                     ClearHotkey(1);
                 else
                 {
-                    var hotkeyData = GlobalData.Inst.Config.AfterPlayingKey.HotkeyData;
+                    var hotkeyData = GlobalData.Inst.ActiveFunctionPreset.AfterPlayingKey.HotkeyData;
                     hotkeyData.Modifiers = newHotkey.Modifiers;
                     hotkeyData.VkCode = newHotkey.VkCode;
                     hotkeyData.IsMouse = newHotkey.IsMouse;
@@ -762,7 +763,7 @@ namespace PlayVoice.Pages.Setting
                     KeyboardKeyInputTextBox1.SelectionStart = KeyboardKeyInputTextBox1.Text.Length;
                 }
                 Keyboard.Focus(null);
-                GlobalData.Inst.Config.Save();
+                GlobalData.Inst.SaveActiveFunctionPreset();
             });
         }
 
@@ -772,10 +773,10 @@ namespace PlayVoice.Pages.Setting
             switch (index)
             {
                 case 0:
-                    hotkeyData = GlobalData.Inst.Config.BeforePlayingKey.HotkeyData;
+                    hotkeyData = GlobalData.Inst.ActiveFunctionPreset.BeforePlayingKey.HotkeyData;
                     break;
                 case 1:
-                    hotkeyData = GlobalData.Inst.Config.AfterPlayingKey.HotkeyData;
+                    hotkeyData = GlobalData.Inst.ActiveFunctionPreset.AfterPlayingKey.HotkeyData;
                     break;
             }
 

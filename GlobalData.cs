@@ -267,6 +267,18 @@ internal class GlobalData
         LanguageManager.Inst.SetCulture(config.Language);
 
         activeFunctionPreset = FunctionPresetDataTool.EnsureCurrent(config.ActiveFunctionPresetId);
+        if (config.BeforePlayingKey != null || config.AfterPlayingKey != null)
+        {
+            bool playingKeysMigrated = FunctionPresetDataTool.MigratePlayingKeys(
+                config.BeforePlayingKey, config.AfterPlayingKey);
+            if (playingKeysMigrated)
+            {
+                activeFunctionPreset = FunctionPresetDataTool.Load(activeFunctionPreset?.Id)
+                    ?? activeFunctionPreset;
+                config.BeforePlayingKey = null;
+                config.AfterPlayingKey = null;
+            }
+        }
         config.ActiveFunctionPresetId = activeFunctionPreset?.Id;
         config.Save();
 

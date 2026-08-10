@@ -31,7 +31,7 @@
                 BorderThickness="0,3,0,0"/>
         
         
-        <Border Height="50" Grid.Row="1" Background="{DynamicResource BgMedium}" BorderThickness="2,0,0,0" CornerRadius="0,0,5,5">
+        <Border Height="50" Grid.Row="1" Background="{DynamicResource BgLight}" BorderThickness="2,0,0,0" CornerRadius="0,0,5,5">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>

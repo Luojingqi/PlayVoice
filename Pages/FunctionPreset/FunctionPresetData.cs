@@ -1,4 +1,5 @@
 using PlayVoice.Hotkey;
+using PlayVoice.Pages.Workshop;
 using PlayVoice.Resources.Language;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -7,12 +8,20 @@ namespace PlayVoice.Pages.FunctionPreset;
 
 public class FunctionPresetData
 {
-    public int SchemaVersion { get; set; } = 2;
+    public int SchemaVersion { get; set; } = 3;
     public string Id { get; set; } = Guid.NewGuid().ToString("N");
     public string Name { get; set; }
     public bool IsDefault { get; set; }
     public List<FunctionPresetAudioBinding> Bindings { get; set; } = new();
     public Dictionary<string, JsonElement> FeatureData { get; set; } = new();
+    public PlayAudioKeyData BeforePlayingKey { get; set; } = new()
+    {
+        Action = PlayAudioKeyData.KeyAction.按下
+    };
+    public PlayAudioKeyData AfterPlayingKey { get; set; } = new()
+    {
+        Action = PlayAudioKeyData.KeyAction.抬起
+    };
 
     [JsonIgnore]
     public string DisplayName => IsDefault

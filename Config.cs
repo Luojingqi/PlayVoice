@@ -1,6 +1,7 @@
 ﻿using PlayVoice.Pages.Workshop;
 using PlayVoice.Resources.Themes;
 using System.IO;
+using System.Text.Json.Serialization;
 
 namespace PlayVoice;
 
@@ -30,9 +31,11 @@ internal class Config
     public string ActiveAudioPresetId { get; set; }
     public string ActiveFunctionPresetId { get; set; }
 
-    public PlayAudioKeyData BeforePlayingKey { get; set; } = new() { Action = PlayAudioKeyData.KeyAction.按下 };
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public PlayAudioKeyData BeforePlayingKey { get; set; }
 
-    public PlayAudioKeyData AfterPlayingKey { get; set; } = new() { Action = PlayAudioKeyData.KeyAction.抬起 };
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+    public PlayAudioKeyData AfterPlayingKey { get; set; }
 
     public bool Save()
     {
