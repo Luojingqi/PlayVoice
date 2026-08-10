@@ -566,6 +566,9 @@ O</value>
   <data name="响度分析失败，请重试" xml:space="preserve">
     <value>Loudness analysis failed. Please try again.</value>
   </data>
+  <data name="分析结束" xml:space="preserve">
+    <value>Analysis complete.</value>
+  </data>
   <data name="响度归一化测试" xml:space="preserve">
     <value>Loudness Test</value>
   </data>
@@ -595,6 +598,9 @@ O</value>
   </data>
   <data name="关闭行为" xml:space="preserve">
     <value>On Close</value>
+  </data>
+  <data name="关闭 PlayVoice 时，希望如何处理？" xml:space="preserve">
+    <value>What should PlayVoice do when you close it?</value>
   </data>
   <data name="最小化到托盘" xml:space="preserve">
     <value>Minimize to tray</value>

@@ -157,6 +157,7 @@
   <data name="复制链接" xml:space="preserve"><value>リンクをコピー</value></data>
   <data name="举报" xml:space="preserve"><value>報告</value></data>
   <data name="关闭行为" xml:space="preserve"><value>閉じるとき</value></data>
+  <data name="关闭 PlayVoice 时，希望如何处理？" xml:space="preserve"><value>PlayVoice を閉じるときの動作を選択してください。</value></data>
   <data name="最小化到托盘" xml:space="preserve"><value>トレイに最小化</value></data>
   <data name="直接关闭" xml:space="preserve"><value>終了</value></data>
   <data name="显示主窗口" xml:space="preserve"><value>ウィンドウを表示</value></data>
@@ -168,6 +169,7 @@
   <data name="正在录音" xml:space="preserve"><value>録音を開始しました。テストのため普段どおりに話してください...</value></data>
   <data name="录音结束" xml:space="preserve"><value>録音が終了しました。解析が終わるまでお待ちください...</value></data>
   <data name="响度分析失败，请重试" xml:space="preserve"><value>ラウドネス解析に失敗しました。もう一度お試しください。</value></data>
+  <data name="分析结束" xml:space="preserve"><value>解析が完了しました。</value></data>
   <data name="已订阅" xml:space="preserve"><value>サブスク済み</value></data>
   <data name="浅色" xml:space="preserve"><value>ライト</value></data>
   <data name="深色" xml:space="preserve"><value>ダーク</value></data>

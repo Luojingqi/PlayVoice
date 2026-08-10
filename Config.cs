@@ -12,6 +12,7 @@ internal class Config
     public bool AutoMute { get; set; } = true;
 
     public bool MinimizeToTrayOnClose { get; set; } = false;
+    public bool HasSelectedCloseBehavior { get; set; } = false;
 
     public double AudioOutDecibel { get; set; } = 0;
     public double AudioEarDecibel { get; set; } = 0;

@@ -66,6 +66,7 @@ namespace PlayVoice.Pages.Setting
                 CloseBehaviorComboBox.OnSelectionChanged += (obj0, obj1) =>
                 {
                     GlobalData.Inst.Config.MinimizeToTrayOnClose = CloseBehaviorComboBox.SelectedIndex == 0;
+                    GlobalData.Inst.Config.HasSelectedCloseBehavior = true;
                     GlobalData.Inst.Config.Save();
                 };
             }
@@ -175,115 +176,24 @@ namespace PlayVoice.Pages.Setting
             }
 
             {
-                VolumeTestGroupListBox.SelectionChanged += (obj0, obj1) =>
+                VolumeTestGroupListBox.SelectionChanged += async (obj0, obj1) =>
                 {
                     if (VolumeTestGroupListBox.SelectedIndex == -1) return;
                     if (VolumeTestGroupListBox.SelectedIndex != 0) return;
-
-                    if (physicalMicrophoneCapture != null)
-                    {
-                        physicalMicrophoneCapture.StopRecording();
-                        physicalMicrophoneCapture.Dispose();
-                        physicalMicrophoneCapture = null;
-                        Vol(MainWindow.Inst.IL, MainWindow.Inst.IR, 0, 0);
-                    }
+                    VolumeTestGroupListBox.SelectedIndex = -1;
+                    if (isVolumeTestRunning) return;
 
                     var equipment = GlobalData.Inst.Equipment;
-                    if (equipment.PhysicalMicrophoneState == false)
+                    if (!equipment.PhysicalMicrophoneState)
                     {
                         MainWindow.Inst.AddNotification(
                             () => $"{LanguageManager.Inst.GetString("通知")}",
                             () => $"{LanguageManager.Inst.GetString("物理麦克风")} {LanguageManager.Inst.GetString("未绑定")}",
                             Pages.LabelStatus.Warning, 4);
-                        goto end;
+                        return;
                     }
-                    WaveFormat targetFormat = equipment.PhysicalMicrophone.AudioClient.MixFormat;
-                    physicalMicrophoneCapture = new WasapiCapture(equipment.PhysicalMicrophone);
-                    var physicalMicrophoneWaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(targetFormat.SampleRate, targetFormat.Channels);
-                    physicalMicrophoneCapture.WaveFormat = physicalMicrophoneWaveFormat;
-                    var buffer = new BufferedWaveProvider(physicalMicrophoneWaveFormat);
-                    float[] sampleBuffer = new float[8192];
-                    MeteringSampleProvider meteringSample = null;
-                    string testPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Resources/temp/VolumeTest.wav");
-                    var writer = new WaveFileWriter(testPath, physicalMicrophoneWaveFormat);
-                    physicalMicrophoneCapture.DataAvailable += (sender, e) =>
-                    {
-                        buffer.AddSamples(e.Buffer, 0, e.BytesRecorded);
-                        int samplesToRead = e.BytesRecorded / 4;
-                        if (sampleBuffer.Length < samplesToRead)
-                            sampleBuffer = new float[sampleBuffer.Length * 2];
 
-                        int samplesRead = meteringSample.Read(sampleBuffer, 0, samplesToRead);
-                        if (samplesRead > 0)
-                        {
-                            writer.WriteSamples(sampleBuffer, 0, samplesRead);
-                        }
-                    };
-                    physicalMicrophoneCapture.RecordingStopped += (sender, e) =>
-                    {
-                        writer.Dispose();
-                    };
-                    var volumeSample = new VolumeSampleProvider(buffer.ToSampleProvider());
-                    volumeSample.Volume = (float)AudioData.DecibelToVolume(GlobalData.Inst.AudioProxy.MicrophoneInputDecibel);
-                    meteringSample = new MeteringSampleProvider(volumeSample);
-                    SetStreamVolume(meteringSample, SampleEnum.In);
-                    physicalMicrophoneCapture.StartRecording();
-
-
-                    MainWindow.Inst.AddNotification(
-                            () => $"{LanguageManager.Inst.GetString("通知")}",
-                            () => $"{LanguageManager.Inst.GetString("正在录音")}",
-                            Pages.LabelStatus.Warning, 7);
-                    Task.Run(async () =>
-                    {
-                        await Task.Delay(7000);
-                        Application.Current?.Dispatcher?.Invoke(async () =>
-                        {
-                            if (physicalMicrophoneCapture != null)
-                            {
-                                physicalMicrophoneCapture.StopRecording();
-                                physicalMicrophoneCapture.Dispose();
-                                physicalMicrophoneCapture = null;
-                                Vol(MainWindow.Inst.IL, MainWindow.Inst.IR, 0, 0);
-
-                                MainWindow.Inst.AddNotification(
-                                    () => $"{LanguageManager.Inst.GetString("通知")}",
-                                    () => $"{LanguageManager.Inst.GetString("录音结束")}",
-                                    Pages.LabelStatus.Warning, 3.5f);
-                                bool analysisSucceeded = false;
-                                try
-                                {
-                                    double? microphoneLufs = await AudioData.MeasureLufs(testPath);
-                                    if (microphoneLufs.HasValue)
-                                    {
-                                        double? previousMicrophoneLufs =
-                                            GlobalData.Inst.Config.MicrophoneLufs;
-                                        GlobalData.Inst.Config.MicrophoneLufs = microphoneLufs.Value;
-                                        analysisSucceeded = GlobalData.Inst.Config.Save();
-                                        if (!analysisSucceeded)
-                                        {
-                                            GlobalData.Inst.Config.MicrophoneLufs =
-                                                previousMicrophoneLufs;
-                                        }
-                                    }
-                                }
-                                catch (Exception exception)
-                                {
-                                    Console.WriteLine($"[错误] 响度分析失败：{exception}");
-                                }
-
-                                if (!analysisSucceeded)
-                                {
-                                    MainWindow.Inst.AddNotification(
-                                        () => $"{LanguageManager.Inst.GetString("通知")}",
-                                        () => $"{LanguageManager.Inst.GetString("响度分析失败，请重试")}",
-                                        Pages.LabelStatus.Error, 4);
-                                }
-                            }
-                        });
-                    });
-                end:
-                    VolumeTestGroupListBox.SelectedIndex = -1;
+                    await RunMicrophoneLoudnessTestAsync();
                 };
             }
 
@@ -373,8 +283,166 @@ namespace PlayVoice.Pages.Setting
             }
         }
 
-        private WasapiCapture physicalMicrophoneCapture;
+        private bool isVolumeTestRunning;
         private bool isSyncingAudioVolumeSliders;
+
+        private async Task RunMicrophoneLoudnessTestAsync()
+        {
+            isVolumeTestRunning = true;
+            VolumeTestGroupListBox.IsEnabled = false;
+
+            WasapiCapture capture = null;
+            WaveFileWriter writer = null;
+            bool captureStarted = false;
+            bool analysisSucceeded = false;
+
+            try
+            {
+                var equipment = GlobalData.Inst.Equipment;
+                WaveFormat targetFormat =
+                    equipment.PhysicalMicrophone.AudioClient.MixFormat;
+                var microphoneWaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(
+                    targetFormat.SampleRate, targetFormat.Channels);
+                var buffer = new BufferedWaveProvider(microphoneWaveFormat);
+                float[] sampleBuffer = new float[8192];
+                MeteringSampleProvider meteringSample = null;
+                string testPath = Path.Combine(
+                    AppDomain.CurrentDomain.BaseDirectory,
+                    "Resources/temp/VolumeTest.wav");
+
+                capture = new WasapiCapture(equipment.PhysicalMicrophone)
+                {
+                    WaveFormat = microphoneWaveFormat
+                };
+                writer = new WaveFileWriter(testPath, microphoneWaveFormat);
+                capture.DataAvailable += (sender, e) =>
+                {
+                    buffer.AddSamples(e.Buffer, 0, e.BytesRecorded);
+                    int samplesToRead = e.BytesRecorded / 4;
+                    if (sampleBuffer.Length < samplesToRead)
+                    {
+                        sampleBuffer = new float[Math.Max(
+                            sampleBuffer.Length * 2, samplesToRead)];
+                    }
+
+                    int samplesRead = meteringSample.Read(
+                        sampleBuffer, 0, samplesToRead);
+                    if (samplesRead > 0)
+                        writer.WriteSamples(sampleBuffer, 0, samplesRead);
+                };
+
+                var volumeSample = new VolumeSampleProvider(buffer.ToSampleProvider())
+                {
+                    Volume = (float)AudioData.DecibelToVolume(
+                        GlobalData.Inst.AudioProxy.MicrophoneInputDecibel)
+                };
+                meteringSample = new MeteringSampleProvider(volumeSample);
+                SetStreamVolume(meteringSample, SampleEnum.In);
+
+                capture.StartRecording();
+                captureStarted = true;
+                MainWindow.Inst.AddNotification(
+                    () => $"{LanguageManager.Inst.GetString("通知")}",
+                    () => $"{LanguageManager.Inst.GetString("正在录音")}",
+                    Pages.LabelStatus.Warning, 7);
+
+                await Task.Delay(7000);
+
+                capture.StopRecording();
+                captureStarted = false;
+                capture.Dispose();
+                capture = null;
+                writer.Dispose();
+                writer = null;
+                Vol(MainWindow.Inst.IL, MainWindow.Inst.IR, 0, 0);
+
+                MainWindow.Inst.AddNotification(
+                    () => $"{LanguageManager.Inst.GetString("通知")}",
+                    () => $"{LanguageManager.Inst.GetString("录音结束")}",
+                    Pages.LabelStatus.Warning, 3.5f);
+
+                double? microphoneLufs = await AudioData.MeasureLufs(testPath);
+                if (microphoneLufs.HasValue)
+                {
+                    double? previousMicrophoneLufs =
+                        GlobalData.Inst.Config.MicrophoneLufs;
+                    GlobalData.Inst.Config.MicrophoneLufs = microphoneLufs.Value;
+                    analysisSucceeded = GlobalData.Inst.Config.Save();
+                    if (!analysisSucceeded)
+                    {
+                        GlobalData.Inst.Config.MicrophoneLufs =
+                            previousMicrophoneLufs;
+                    }
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"[错误] 响度测试失败：{exception}");
+            }
+            finally
+            {
+                if (capture != null)
+                {
+                    if (captureStarted)
+                    {
+                        try
+                        {
+                            capture.StopRecording();
+                        }
+                        catch (Exception exception)
+                        {
+                            Console.WriteLine($"[错误] 停止录音失败：{exception}");
+                        }
+                    }
+
+                    try
+                    {
+                        capture.Dispose();
+                    }
+                    catch (Exception exception)
+                    {
+                        Console.WriteLine($"[错误] 释放录音设备失败：{exception}");
+                    }
+                }
+
+                try
+                {
+                    writer?.Dispose();
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine($"[错误] 释放录音文件失败：{exception}");
+                }
+
+                try
+                {
+                    Vol(MainWindow.Inst.IL, MainWindow.Inst.IR, 0, 0);
+                }
+                catch (Exception exception)
+                {
+                    Console.WriteLine($"[错误] 重置录音电平失败：{exception}");
+                }
+
+                isVolumeTestRunning = false;
+                VolumeTestGroupListBox.IsEnabled = true;
+                VolumeTestGroupListBox.SelectedIndex = -1;
+            }
+
+            if (analysisSucceeded)
+            {
+                MainWindow.Inst.AddNotification(
+                    () => $"{LanguageManager.Inst.GetString("通知")}",
+                    () => $"{LanguageManager.Inst.GetString("分析结束")}",
+                    Pages.LabelStatus.Success, 4);
+            }
+            else
+            {
+                MainWindow.Inst.AddNotification(
+                    () => $"{LanguageManager.Inst.GetString("通知")}",
+                    () => $"{LanguageManager.Inst.GetString("响度分析失败，请重试")}",
+                    Pages.LabelStatus.Error, 4);
+            }
+        }
 
         private void AudioVolumeExpandArrow_ExpandedChanged(object sender, RoutedPropertyChangedEventArgs<bool> e)
         {

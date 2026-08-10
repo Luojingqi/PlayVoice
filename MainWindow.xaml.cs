@@ -1,4 +1,5 @@
 ﻿using PlayVoice.Pages.Sidebar;
+using PlayVoice.Pages.Setting;
 using PlayVoice.Resources.Language;
 using PlayVoice.Pages.Preset;
 using PlayVoice.Resources.Themes;
@@ -124,11 +125,36 @@ namespace PlayVoice
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (!isSystemSessionEnding && GlobalData.Inst.Config.MinimizeToTrayOnClose)
+            if (!isSystemSessionEnding
+                && !GlobalData.Inst.Config.HasSelectedCloseBehavior)
             {
                 e.Cancel = true;
-                ShowInTaskbar = false;
-                Hide();
+                var selectionWindow = new CloseBehaviorSelectionWindow
+                {
+                    Owner = this
+                };
+                if (selectionWindow.ShowDialog() != true
+                    || !selectionWindow.SelectedBehavior.HasValue)
+                    return;
+
+                bool minimizeToTray = selectionWindow.SelectedBehavior ==
+                    CloseBehaviorSelectionWindow.CloseBehavior.MinimizeToTray;
+                GlobalData.Inst.Config.MinimizeToTrayOnClose = minimizeToTray;
+                GlobalData.Inst.Config.HasSelectedCloseBehavior = true;
+                GlobalData.Inst.Config.Save();
+
+                if (minimizeToTray)
+                    MinimizeToTray();
+                else
+                    ExitApplication();
+                return;
+            }
+
+            if (!isSystemSessionEnding
+                && GlobalData.Inst.Config.MinimizeToTrayOnClose)
+            {
+                e.Cancel = true;
+                MinimizeToTray();
                 return;
             }
 
@@ -143,6 +169,12 @@ namespace PlayVoice
             trayMenu.Dispose();
             trayIconImage?.Dispose();
             base.OnClosing(e);
+        }
+
+        private void MinimizeToTray()
+        {
+            ShowInTaskbar = false;
+            Hide();
         }
 
         private void RestoreFromTray()

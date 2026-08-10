@@ -581,6 +581,9 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="关闭行为" xml:space="preserve">
     <value>关闭行为</value>
   </data>
+  <data name="关闭 PlayVoice 时，希望如何处理？" xml:space="preserve">
+    <value>关闭 PlayVoice 时，希望如何处理？</value>
+  </data>
   <data name="最小化到托盘" xml:space="preserve">
     <value>最小化到托盘</value>
   </data>
@@ -616,6 +619,9 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   </data>
   <data name="响度分析失败，请重试" xml:space="preserve">
     <value>响度分析失败，请重试</value>
+  </data>
+  <data name="分析结束" xml:space="preserve">
+    <value>分析结束</value>
   </data>
   <data name="浅色" xml:space="preserve">
     <value>浅色</value>

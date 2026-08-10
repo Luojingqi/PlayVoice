@@ -157,6 +157,7 @@
   <data name="复制链接" xml:space="preserve"><value>Копировать ссылку</value></data>
   <data name="举报" xml:space="preserve"><value>Пожаловаться</value></data>
   <data name="关闭行为" xml:space="preserve"><value>При закрытии</value></data>
+  <data name="关闭 PlayVoice 时，希望如何处理？" xml:space="preserve"><value>Что должен делать PlayVoice при закрытии?</value></data>
   <data name="最小化到托盘" xml:space="preserve"><value>В трей</value></data>
   <data name="直接关闭" xml:space="preserve"><value>Выход</value></data>
   <data name="显示主窗口" xml:space="preserve"><value>Показать окно</value></data>
@@ -168,6 +169,7 @@
   <data name="正在录音" xml:space="preserve"><value>Запись началась. Говорите как обычно для теста...</value></data>
   <data name="录音结束" xml:space="preserve"><value>Запись завершена. Дождитесь окончания анализа...</value></data>
   <data name="响度分析失败，请重试" xml:space="preserve"><value>Не удалось проанализировать громкость. Повторите попытку.</value></data>
+  <data name="分析结束" xml:space="preserve"><value>Анализ завершён.</value></data>
   <data name="已订阅" xml:space="preserve"><value>Подписка оформлена</value></data>
   <data name="浅色" xml:space="preserve"><value>Светлая</value></data>
   <data name="深色" xml:space="preserve"><value>Тёмная</value></data>
