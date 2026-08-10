@@ -165,8 +165,9 @@
   <data name="拒绝" xml:space="preserve"><value>拒否</value></data>
   <data name="同意" xml:space="preserve"><value>同意</value></data>
   <data name="未绑定" xml:space="preserve"><value>未設定</value></data>
-  <data name="正在录音" xml:space="preserve"><value>録音中... 普通に話してください。</value></data>
-  <data name="录音结束" xml:space="preserve"><value>録音完了、解析中...</value></data>
+  <data name="正在录音" xml:space="preserve"><value>録音を開始しました。テストのため普段どおりに話してください...</value></data>
+  <data name="录音结束" xml:space="preserve"><value>録音が終了しました。解析が終わるまでお待ちください...</value></data>
+  <data name="响度分析失败，请重试" xml:space="preserve"><value>ラウドネス解析に失敗しました。もう一度お試しください。</value></data>
   <data name="已订阅" xml:space="preserve"><value>サブスク済み</value></data>
   <data name="浅色" xml:space="preserve"><value>ライト</value></data>
   <data name="深色" xml:space="preserve"><value>ダーク</value></data>

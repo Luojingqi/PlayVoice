@@ -165,8 +165,9 @@
   <data name="拒绝" xml:space="preserve"><value>Rechazar</value></data>
   <data name="同意" xml:space="preserve"><value>Aceptar</value></data>
   <data name="未绑定" xml:space="preserve"><value>sin configurar</value></data>
-  <data name="正在录音" xml:space="preserve"><value>Grabando... Habla con normalidad.</value></data>
-  <data name="录音结束" xml:space="preserve"><value>Grabación lista; analizando...</value></data>
+  <data name="正在录音" xml:space="preserve"><value>Grabación iniciada. Habla con normalidad para la prueba...</value></data>
+  <data name="录音结束" xml:space="preserve"><value>Grabación finalizada. Espera mientras se analiza...</value></data>
+  <data name="响度分析失败，请重试" xml:space="preserve"><value>El análisis de sonoridad falló. Inténtalo de nuevo.</value></data>
   <data name="已订阅" xml:space="preserve"><value>Suscrito</value></data>
   <data name="浅色" xml:space="preserve"><value>Claro</value></data>
   <data name="深色" xml:space="preserve"><value>Oscuro</value></data>

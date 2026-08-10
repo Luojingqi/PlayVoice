@@ -165,8 +165,9 @@
   <data name="拒绝" xml:space="preserve"><value>Отклонить</value></data>
   <data name="同意" xml:space="preserve"><value>Принять</value></data>
   <data name="未绑定" xml:space="preserve"><value>— нет привязки</value></data>
-  <data name="正在录音" xml:space="preserve"><value>Запись... Говорите обычно.</value></data>
-  <data name="录音结束" xml:space="preserve"><value>Запись готова; анализ...</value></data>
+  <data name="正在录音" xml:space="preserve"><value>Запись началась. Говорите как обычно для теста...</value></data>
+  <data name="录音结束" xml:space="preserve"><value>Запись завершена. Дождитесь окончания анализа...</value></data>
+  <data name="响度分析失败，请重试" xml:space="preserve"><value>Не удалось проанализировать громкость. Повторите попытку.</value></data>
   <data name="已订阅" xml:space="preserve"><value>Подписка оформлена</value></data>
   <data name="浅色" xml:space="preserve"><value>Светлая</value></data>
   <data name="深色" xml:space="preserve"><value>Тёмная</value></data>

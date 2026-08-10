@@ -165,8 +165,9 @@
   <data name="拒绝" xml:space="preserve"><value>拒絕</value></data>
   <data name="同意" xml:space="preserve"><value>同意</value></data>
   <data name="未绑定" xml:space="preserve"><value>未設定</value></data>
-  <data name="正在录音" xml:space="preserve"><value>正在錄音...請正常說話。</value></data>
-  <data name="录音结束" xml:space="preserve"><value>錄音完成，正在分析...</value></data>
+  <data name="正在录音" xml:space="preserve"><value>錄音開始，請正常說話測試...</value></data>
+  <data name="录音结束" xml:space="preserve"><value>錄音結束，請等待分析...</value></data>
+  <data name="响度分析失败，请重试" xml:space="preserve"><value>響度分析失敗，請重試</value></data>
   <data name="已订阅" xml:space="preserve"><value>已訂閱</value></data>
   <data name="浅色" xml:space="preserve"><value>淺色</value></data>
   <data name="深色" xml:space="preserve"><value>深色</value></data>

@@ -609,10 +609,13 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
     <value>未绑定</value>
   </data>
   <data name="正在录音" xml:space="preserve">
-    <value>正在录音</value>
+    <value>录音开始，请正常说话测试...</value>
   </data>
   <data name="录音结束" xml:space="preserve">
-    <value>录音结束</value>
+    <value>录音结束，请等待分析...</value>
+  </data>
+  <data name="响度分析失败，请重试" xml:space="preserve">
+    <value>响度分析失败，请重试</value>
   </data>
   <data name="浅色" xml:space="preserve">
     <value>浅色</value>

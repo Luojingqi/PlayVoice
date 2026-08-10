@@ -558,10 +558,13 @@ O</value>
     <value>not set</value>
   </data>
   <data name="正在录音" xml:space="preserve">
-    <value>Recording... Speak normally.</value>
+    <value>Recording started. Please speak normally for the test...</value>
   </data>
   <data name="录音结束" xml:space="preserve">
-    <value>Recording complete; analyzing...</value>
+    <value>Recording finished. Please wait while analyzing...</value>
+  </data>
+  <data name="响度分析失败，请重试" xml:space="preserve">
+    <value>Loudness analysis failed. Please try again.</value>
   </data>
   <data name="响度归一化测试" xml:space="preserve">
     <value>Loudness Test</value>

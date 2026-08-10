@@ -250,11 +250,34 @@ namespace PlayVoice.Pages.Setting
                                     () => $"{LanguageManager.Inst.GetString("通知")}",
                                     () => $"{LanguageManager.Inst.GetString("录音结束")}",
                                     Pages.LabelStatus.Warning, 3.5f);
-                                double? microphoneLufs = await AudioData.MeasureLufs(testPath);
-                                if (microphoneLufs.HasValue)
+                                bool analysisSucceeded = false;
+                                try
                                 {
-                                    GlobalData.Inst.Config.MicrophoneLufs = microphoneLufs.Value;
-                                    GlobalData.Inst.Config.Save();
+                                    double? microphoneLufs = await AudioData.MeasureLufs(testPath);
+                                    if (microphoneLufs.HasValue)
+                                    {
+                                        double? previousMicrophoneLufs =
+                                            GlobalData.Inst.Config.MicrophoneLufs;
+                                        GlobalData.Inst.Config.MicrophoneLufs = microphoneLufs.Value;
+                                        analysisSucceeded = GlobalData.Inst.Config.Save();
+                                        if (!analysisSucceeded)
+                                        {
+                                            GlobalData.Inst.Config.MicrophoneLufs =
+                                                previousMicrophoneLufs;
+                                        }
+                                    }
+                                }
+                                catch (Exception exception)
+                                {
+                                    Console.WriteLine($"[错误] 响度分析失败：{exception}");
+                                }
+
+                                if (!analysisSucceeded)
+                                {
+                                    MainWindow.Inst.AddNotification(
+                                        () => $"{LanguageManager.Inst.GetString("通知")}",
+                                        () => $"{LanguageManager.Inst.GetString("响度分析失败，请重试")}",
+                                        Pages.LabelStatus.Error, 4);
                                 }
                             }
                         });
