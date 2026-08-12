@@ -4,12 +4,28 @@ using PlayVoice.Pages.FunctionPreset;
 using PlayVoice.Pages.Preset;
 using PlayVoice.Resources.Language;
 using PlayVoice.Resources.Themes;
+using Steamworks;
 using System.IO;
 
 namespace PlayVoice;
 
 internal class GlobalData
 {
+    private static readonly Dictionary<string, string> SteamLanguageMap =
+        new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["schinese"] = "zh-CN",
+            ["tchinese"] = "zh-TW",
+            ["english"] = "en-US",
+            ["russian"] = "ru-RU",
+            ["spanish"] = "es-ES",
+            ["latam"] = "es-ES",
+            ["brazilian"] = "pt-BR",
+            ["japanese"] = "ja-JP",
+            ["koreana"] = "ko-KR",
+            ["german"] = "de-DE"
+        };
+
     public static GlobalData Inst { get; private set; }
 
     private Config config;
@@ -264,6 +280,7 @@ internal class GlobalData
             config.Save();
         }
 
+        TryDetectInitialSteamLanguage();
         ThemeManager.SwitchTheme(config.Theme);
         LanguageManager.Inst.SetCulture(config.Language);
         autoMute = config.AutoMute;
@@ -276,6 +293,32 @@ internal class GlobalData
         audioProxy = new();
         audioProxy.Init();
         equipment.Init();
+    }
+
+    private void TryDetectInitialSteamLanguage()
+    {
+        if (config.HasDetectedInitialSteamLanguage)
+            return;
+
+        try
+        {
+            if (!SteamClient.IsValid)
+                SteamClient.Init(4907460);
+
+            string steamLanguage = SteamApps.GameLanguage;
+            if (string.IsNullOrWhiteSpace(steamLanguage))
+                return;
+
+            config.Language = SteamLanguageMap.TryGetValue(steamLanguage, out string language)
+                ? language
+                : "en-US";
+            config.HasDetectedInitialSteamLanguage = true;
+            config.Save();
+        }
+        catch
+        {
+            // 首次 Steam 语言检测失败时静默保留原配置，下次启动继续尝试。
+        }
     }
 
     public List<string> CopyAudioPathList = new();
