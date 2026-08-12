@@ -29,6 +29,7 @@ namespace PlayVoice.Pages.Workshop
         {
             Inst = this;
             InitializeComponent();
+            TablePage.SetOwner(this);
             loadingPage = new();
             LoadingPageFrame.Content = loadingPage;
 
@@ -134,16 +135,16 @@ namespace PlayVoice.Pages.Workshop
         };
 
         #region 下载图片
-        public static async Task<BitmapImage> DownloadImageAsBitmapAsync(Item item)
+        public static async Task<BitmapImage> DownloadImageAsBitmapAsync(Item item, CancellationToken cancellationToken = default)
         {
             string imageUrl = item.PreviewImageUrl;
-            return await DownloadImageAsBitmapAsync(imageUrl);
+            return await DownloadImageAsBitmapAsync(imageUrl, cancellationToken);
         }
-        private static async Task<BitmapImage> DownloadImageAsBitmapAsync(string url)
+        private static async Task<BitmapImage> DownloadImageAsBitmapAsync(string url, CancellationToken cancellationToken)
         {
             try
             {
-                byte[] imageData = await _httpClient.GetByteArrayAsync(url);
+                byte[] imageData = await _httpClient.GetByteArrayAsync(url, cancellationToken);
 
                 using (MemoryStream stream = new MemoryStream(imageData))
                 {
@@ -156,6 +157,10 @@ namespace PlayVoice.Pages.Workshop
 
                     return bitmap;
                 }
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                return null;
             }
             catch (Exception ex)
             {

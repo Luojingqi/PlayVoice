@@ -23,6 +23,7 @@ public partial class CircularProgressBar : UserControl
     /// <param name="value">范围 0.0 - 1.0</param>
     public void SetProgress(double value,int duration = 300)
     {
+        value = Math.Clamp(value, 0, 1);
         DoubleAnimation animation = new DoubleAnimation
         {
             To = value,   
@@ -32,6 +33,23 @@ public partial class CircularProgressBar : UserControl
         };
 
         this.BeginAnimation(ProgressValueProperty, animation);
+    }
+
+    public void SetProgressInstant(double value)
+    {
+        value = Math.Clamp(value, 0, 1);
+        BeginAnimation(ProgressValueProperty, null);
+        SetCurrentValue(ProgressValueProperty, value);
+        DrawProgress(value);
+    }
+
+    public void SetWaiting(string text)
+    {
+        BeginAnimation(ProgressValueProperty, null);
+        SetCurrentValue(ProgressValueProperty, 0.0);
+        ProgressPath.Data = null;
+        PercentText.FontSize = 14;
+        PercentText.Text = text;
     }
 
     public static readonly DependencyProperty ProgressValueProperty =
@@ -59,6 +77,7 @@ public partial class CircularProgressBar : UserControl
     {
         value = Math.Max(0.0, Math.Min(1.0, value));
 
+        PercentText.FontSize = 20;
         PercentText.Text = $"{value * 100:0.#}%";
 
         if (value <= 0)

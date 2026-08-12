@@ -2,11 +2,10 @@
 using Steamworks.Data;
 using Steamworks.Ugc;
 using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Media;
+using System.Windows.Threading;
 
 namespace PlayVoice.Pages.Workshop;
 
@@ -19,59 +18,69 @@ public partial class TablePage : UserControl
     private const int ItemMinColumn = 1;
 
     private ObservableCollection<TablePageItem> TableItemList = new();
-
-    public static HashSet<TablePageItem> NowDownloadingItemSet = new();
+    private readonly DispatcherTimer _downloadProgressTimer;
+    private readonly HashSet<PublishedFileId> _refreshingItemIds = new();
+    private int _loadGeneration;
+    private WorkshopPage _owner;
 
     public TablePage()
     {
         InitializeComponent();
 
         ItemsControl.ItemsSource = TableItemList;
-
-        Application.Current.Dispatcher.InvokeAsync(() =>
+        _downloadProgressTimer = new DispatcherTimer(DispatcherPriority.Background)
         {
-            CompositionTarget.Rendering += CompositionTarget_Rendering;
-        }, System.Windows.Threading.DispatcherPriority.Loaded);
-
+            Interval = TimeSpan.FromMilliseconds(200)
+        };
+        _downloadProgressTimer.Tick += DownloadProgressTimer_Tick;
+        Loaded += TablePage_Loaded;
+        Unloaded += TablePage_Unloaded;
+        SizeChanged += TablePage_SizeChanged;
     }
 
-    static TablePage()
+    public void SetOwner(WorkshopPage owner) => _owner = owner;
+
+    private void TablePage_Loaded(object sender, RoutedEventArgs e) => _downloadProgressTimer.Start();
+
+    private void TablePage_Unloaded(object sender, RoutedEventArgs e)
     {
-        CheckDownload();
+        _downloadProgressTimer.Stop();
+        _loadGeneration++;
+        _refreshingItemIds.Clear();
+        TableItemList.Clear();
     }
 
-    private static List<TablePageItem> removeTableItemList = new();
-    private static async void CheckDownload()
+    private void DownloadProgressTimer_Tick(object sender, EventArgs e)
     {
-        while (true)
+        foreach (var tableItem in TableItemList.ToArray())
         {
-            await Task.Delay(500);
-            foreach (var tableItem in NowDownloadingItemSet)
-            {
-                if (tableItem.Item.HasValue)
-                {
-                    tableItem.LoadingBar.SetProgress(tableItem.Item.Value.DownloadAmount);
+            if (!tableItem.Item.HasValue || !tableItem.UpdateDownloadProgress()) continue;
 
-                    var reItem = await SteamUGC.QueryFileAsync(tableItem.Item.Value.Id);
-                    if (reItem.HasValue && reItem.Value.IsInstalled == false) continue;
-                    else
-                    {
-                        removeTableItemList.Add(tableItem);
-                    }
-                }
-            }
-            foreach(var tableItem in removeTableItemList)
-            {
-                NowDownloadingItemSet.Remove(tableItem);
-                await WorkshopPage.Inst.TablePage.ReLoadItem(tableItem);
-            }
-            removeTableItemList.Clear();
+            var itemId = tableItem.Item.Value.Id;
+            if (_refreshingItemIds.Add(itemId))
+                _ = RefreshCompletedItemAsync(tableItem, itemId);
+        }
+    }
+
+    private async Task RefreshCompletedItemAsync(TablePageItem tableItem, PublishedFileId itemId)
+    {
+        try
+        {
+            await ReLoadItem(tableItem);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"刷新创意工坊物品失败: {ex.Message}");
+        }
+        finally
+        {
+            _refreshingItemIds.Remove(itemId);
         }
     }
 
 
     #region 拖拽宽度，子元素自适应
-    private void CompositionTarget_Rendering(object sender, EventArgs e) => RecalculateLayout();
+    private void TablePage_SizeChanged(object sender, SizeChangedEventArgs e) => RecalculateLayout();
     private void DynamicGrid_Loaded(object sender, RoutedEventArgs e) => _dynamicGrid = sender as UniformGrid;
     private void RecalculateLayout()
     {
@@ -85,7 +94,7 @@ public partial class TablePage : UserControl
         {
             columns++;
         }
-        if (_dynamicGrid.Columns != columns)
+        if (_dynamicGrid != null && _dynamicGrid.Columns != columns)
             _dynamicGrid.Columns = columns;
     }
     #endregion
@@ -94,8 +103,10 @@ public partial class TablePage : UserControl
 
     public async Task SwitchPage(WorkshopPage.PageType pageType, int nowPage = 1)
     {
-        Clear();
-        WorkshopPage.Inst.PageNumberSelection.Close();
+        int generation = ++_loadGeneration;
+        TableItemList.Clear();
+        _refreshingItemIds.Clear();
+        _owner.PageNumberSelection.Close();
         switch (pageType)
         {
             case WorkshopPage.PageType.我的订阅:
@@ -103,24 +114,25 @@ public partial class TablePage : UserControl
                     if (SteamClient.IsValid == false && MainWindow.Inst.SteamInit() == false)
                         if (SteamClient.IsValid == false) return;
                     //只有此，需要再次判断，如果未登录，但是steam已经启动，可以尝试获取缓存
-                    var query = Query.Items.WhereUserSubscribed().AllowCachedResponse(10);
+                    var query = Query.Items.WhereUserSubscribed();
                     query = query.WithMetadata(true);
                     ResultPage? page = await query.GetPageAsync(nowPage);
+                    if (!IsCurrentLoad(generation)) return;
                     if (page.HasValue && page.Value.ResultCount > 0)
                     {
                         int totalItems = page.Value.TotalCount;
                         int totalPages = (int)Math.Ceiling((double)totalItems / 50);
-                        WorkshopPage.Inst.PageNumberSelection.Open(nowPage, totalPages);
+                        _owner.PageNumberSelection.Open(nowPage, totalPages);
                         foreach (Item item in page.Value.Entries)
                             if (item.IsInstalled)
                             {
                                 var tableItem = AddItem(item, item.Directory);
-                                tableItem.OnClick += WorkshopPage.Inst.OnClickTableItem_OpenLocalDetailPage;
+                                tableItem.OnClick += _owner.OnClickTableItem_OpenLocalDetailPage;
                             }
                             else
                             {
                                 var tableItem = AddItem(item, null);
-                                tableItem.OnClick += WorkshopPage.Inst.OnClickTableItem_OpenDetailPage;
+                                tableItem.OnClick += _owner.OnClickTableItem_OpenDetailPage;
                             }
                        
                     }
@@ -133,15 +145,16 @@ public partial class TablePage : UserControl
                     var query = Query.All.WhereUserPublished().AllowCachedResponse(10);
                     query = query.WithMetadata(true);
                     var page = await query.GetPageAsync(nowPage);
+                    if (!IsCurrentLoad(generation)) return;
                     if (page.HasValue && page.Value.ResultCount > 0)
                     {
                         int totalItems = page.Value.TotalCount;
                         int totalPages = (int)Math.Ceiling((double)totalItems / 50);
-                        WorkshopPage.Inst.PageNumberSelection.Open(nowPage, totalPages);
+                        _owner.PageNumberSelection.Open(nowPage, totalPages);
                         foreach (Item item in page.Value.Entries)
                         {
                             var tableItem = AddItem(item, null);
-                            tableItem.OnClick += WorkshopPage.Inst.OnClickTableItem_OpenDetailPage;
+                            tableItem.OnClick += _owner.OnClickTableItem_OpenDetailPage;
                         }
                     }
                     break;
@@ -153,15 +166,16 @@ public partial class TablePage : UserControl
                     var query = Query.Screenshots.CreatedByFriends().AllowCachedResponse(10);
                     query = query.WithMetadata(true);
                     var page = await query.GetPageAsync(nowPage);
+                    if (!IsCurrentLoad(generation)) return;
                     if (page.HasValue && page.Value.ResultCount > 0)
                     {
                         int totalItems = page.Value.TotalCount;
                         int totalPages = (int)Math.Ceiling((double)totalItems / 50);
-                        WorkshopPage.Inst.PageNumberSelection.Open(nowPage, totalPages);
+                        _owner.PageNumberSelection.Open(nowPage, totalPages);
                         foreach (Item item in page.Value.Entries)
                         {
                             var tableItem = AddItem(item, null);
-                            tableItem.OnClick += WorkshopPage.Inst.OnClickTableItem_OpenDetailPage;
+                            tableItem.OnClick += _owner.OnClickTableItem_OpenDetailPage;
                         }
                     }
                     break;
@@ -171,14 +185,14 @@ public partial class TablePage : UserControl
                     if (SteamClient.IsValid == false && MainWindow.Inst.SteamInit() == false)
                         return;
                     var query = Query.All.AllowCachedResponse(10);
-                    if (WorkshopPage.Inst.SearchText != null && !string.IsNullOrEmpty(WorkshopPage.Inst.SearchText.Trim()))
+                    if (_owner.SearchText != null && !string.IsNullOrEmpty(_owner.SearchText.Trim()))
                     {
-                        query = query.WhereSearchText(WorkshopPage.Inst.SearchText.Trim())
+                        query = query.WhereSearchText(_owner.SearchText.Trim())
                             .RankedByTextSearch();
                     }
                     else
                     {
-                        switch ((WorkshopPage.RankedType)WorkshopPage.Inst.RankedComboBox.SelectedIndex)
+                        switch ((WorkshopPage.RankedType)_owner.RankedComboBox.SelectedIndex)
                         {
                             case WorkshopPage.RankedType.热度:
                                 query = query.RankedByTrend();
@@ -195,27 +209,31 @@ public partial class TablePage : UserControl
                         }
                     }
 
-                    foreach (var item in WorkshopPage.Inst.BottomButtonListBox.SelectedItems)
+                    foreach (var item in _owner.BottomButtonListBox.SelectedItems)
                         query = query.WithTag(WorkshopPage.TabTypeToSteam(((WorkshopPage.TabItem<WorkshopPage.TabType>)item).Type));
                     query = query.MatchAnyTag();
                     query = query.WithMetadata(true);
 
                     var page = await query.GetPageAsync(nowPage);
+                    if (!IsCurrentLoad(generation)) return;
                     if (page.HasValue && page.Value.ResultCount > 0)
                     {
                         int totalItems = page.Value.TotalCount;
                         int totalPages = (int)Math.Ceiling((double)totalItems / 50);
-                        WorkshopPage.Inst.PageNumberSelection.Open(nowPage, totalPages);
+                        _owner.PageNumberSelection.Open(nowPage, totalPages);
                         foreach (Item item in page.Value.Entries)
                         {
                             var tableItem = AddItem(item, null);
-                            tableItem.OnClick += WorkshopPage.Inst.OnClickTableItem_OpenDetailPage;
+                            tableItem.OnClick += _owner.OnClickTableItem_OpenDetailPage;
                         }
                     }
                 }
                 break;
         }
     }
+
+    private bool IsCurrentLoad(int generation) =>
+        generation == _loadGeneration && IsLoaded && ReferenceEquals(_owner.TablePage, this);
 
     public TablePageItem AddItem(Item? item, string localItemPath)
     {
@@ -228,28 +246,30 @@ public partial class TablePage : UserControl
 
     public async Task<TablePageItem> ReLoadItem(TablePageItem tableItem)
     {
-
-        for (int i = 0; i < TableItemList.Count; i++)
+        if (!tableItem.Item.HasValue)
         {
-            if (tableItem == TableItemList[i])
-            {
-                if (tableItem.Item.HasValue)
-                {
-                    var item = await SteamUGC.QueryFileAsync(tableItem.Item.Value.Id);
-                    if (item.HasValue)
-                    {
-                        var newTableItem = new TablePageItem(tableItem.Item.Value, null);
-                        TableItemList[i] = newTableItem;
-                        return newTableItem;
-                    }
-                }
-                else
-                {
-                    TableItemList.RemoveAt(i);
-                    return null;
-                }
-            }
+            TableItemList.Remove(tableItem);
+            return null;
         }
+
+        var item = await SteamUGC.QueryFileAsync(tableItem.Item.Value.Id);
+        if (!item.HasValue) return null;
+
+        int index = TableItemList.IndexOf(tableItem);
+        if (index < 0) return null;
+
+        var newTableItem = new TablePageItem(item.Value, item.Value.IsInstalled ? item.Value.Directory : null);
+        newTableItem.OnClick += item.Value.IsInstalled
+            ? _owner.OnClickTableItem_OpenLocalDetailPage
+            : _owner.OnClickTableItem_OpenDetailPage;
+
+        // IndexOf 后集合仍只可能在 UI 线程变化；当前 continuation 也回到 UI 线程。
+        if (index < TableItemList.Count && ReferenceEquals(TableItemList[index], tableItem))
+        {
+            TableItemList[index] = newTableItem;
+            return newTableItem;
+        }
+
         return null;
     }
 
@@ -257,8 +277,8 @@ public partial class TablePage : UserControl
 
     public void Clear()
     {
+        _loadGeneration++;
         TableItemList.Clear();
-        removeTableItemList.Clear();
-        NowDownloadingItemSet.Clear();
+        _refreshingItemIds.Clear();
     }
 }

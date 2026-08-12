@@ -430,6 +430,9 @@ Do not leave this page.</value>
   <data name="开始下载" xml:space="preserve">
     <value>Download started</value>
   </data>
+  <data name="等待下载" xml:space="preserve">
+    <value>Waiting</value>
+  </data>
   <data name="图片加载失败" xml:space="preserve">
     <value>Image loading failed</value>
   </data>

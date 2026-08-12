@@ -94,7 +94,7 @@ PlayVoice 是一个仅面向 Windows 的 WPF 桌面应用，用于把本地音�
 
 ## UI、主题与本地化
 
-- 用户可见字符串优先加入 `Resources/Language/Languages.resx` 与 `Languages.en-US.resx`，两份资源保持相同键集合。
+- 所有界面 UI 的新增和改动都必须支持当前全部语言，不得只补充中文或英文。凡新增、修改用户可见字符串，必须同步更新 `Resources/Language/Languages.resx`、`Languages.zh-TW.resx`、`Languages.en-US.resx`、`Languages.ru-RU.resx`、`Languages.es-ES.resx`、`Languages.pt-BR.resx`、`Languages.ja-JP.resx`、`Languages.ko-KR.resx` 和 `Languages.de-DE.resx`，并保持所有语言资源文件的键集合一致。
 - XAML 使用 `{lan:Lan Key=...}`；代码中使用 `LanguageManager.Inst.GetString(...)`。运行时切换语言的视图模型还需响应 `CultureChanged`。
 - 颜色和画刷使用 `{DynamicResource ...}` 并复用现有主题键，确保浅色、深色和跟随系统三种模式均可用。
 - 可复用控件样式放在 `Resources/Style/`；页面业务布局保留在对应 `Pages/.../*.xaml`。
