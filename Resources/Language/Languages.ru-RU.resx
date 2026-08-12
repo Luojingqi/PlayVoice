@@ -102,6 +102,7 @@
   <data name="开始上传" xml:space="preserve"><value>Публикация...&#xA;Дождитесь сообщения с результатом.&#xA;Не покидайте эту страницу.</value></data>
   <data name="已上传到Steam" xml:space="preserve"><value>Опубликовано в Steam</value></data>
   <data name="上传Steam失败" xml:space="preserve"><value>Не удалось опубликовать в Steam</value></data>
+  <data name="扩展说明归档失败" xml:space="preserve"><value>Загрузка в Steam выполнена, но не удалось архивировать расширенное описание</value></data>
   <data name="可见" xml:space="preserve"><value>Видимость</value></data>
   <data name="仅自己" xml:space="preserve"><value>Только я</value></data>
   <data name="仅好友" xml:space="preserve"><value>Друзья</value></data>

@@ -102,6 +102,7 @@
   <data name="开始上传" xml:space="preserve"><value>업로드 중...&#xA;결과를 기다리세요.&#xA;이 페이지를 닫지 마세요.</value></data>
   <data name="已上传到Steam" xml:space="preserve"><value>Steam에 업로드됨</value></data>
   <data name="上传Steam失败" xml:space="preserve"><value>Steam 업로드 실패</value></data>
+  <data name="扩展说明归档失败" xml:space="preserve"><value>Steam 업로드는 완료되었지만 확장 설명을 보관하지 못했습니다</value></data>
   <data name="可见" xml:space="preserve"><value>공개 범위</value></data>
   <data name="仅自己" xml:space="preserve"><value>비공개</value></data>
   <data name="仅好友" xml:space="preserve"><value>친구만</value></data>

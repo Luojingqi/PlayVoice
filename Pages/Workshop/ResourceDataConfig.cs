@@ -1,4 +1,5 @@
 ﻿using PlayVoice.Pages.Preset;
+using System.IO;
 using System.Text.Json.Serialization;
 using static PlayVoice.Pages.Workshop.ResourceDataConfig;
 
@@ -29,7 +30,22 @@ public class ResourceDataConfig
     {
         public List<ResourceItem> ItemList { get; set; } = new();
 
-        public static Metadata Create(AudioPresetData presetData)
+        /// <summary>
+        /// 所有音频资源的总大小（字节）。旧版元数据缺少此字段时默认为 0。
+        /// </summary>
+        public long AudioTotalSize { get; set; }
+
+        /// <summary>
+        /// ExtendedExplanation 目录内所有文件的总大小（字节）。
+        /// </summary>
+        public long ExtendedExplanationTotalSize { get; set; }
+
+        /// <summary>
+        /// 音频资源与 ExtendedExplanation 内容的总大小（字节）。
+        /// </summary>
+        public long TotalSize { get; set; }
+
+        public static Metadata Create(AudioPresetData presetData, string contentPath = null)
         {
             var metadata = new Metadata();
             for (int i = 0; i < presetData.AudioList.Count; i++)
@@ -40,9 +56,18 @@ public class ResourceDataConfig
                 resourceItem.FileName = audioDataConfig.FileName;
                 resourceItem.FileFormat = audioDataConfig.FileFormat;
                 resourceItem.Duration = audioData.AudioTrackArray[0].TotalTime;
-                resourceItem.Size = audioDataConfig.Size;
+                string audioPath = string.IsNullOrEmpty(contentPath)
+                    ? null
+                    : Path.Combine(contentPath, audioDataConfig.Name);
+                resourceItem.Size = audioPath != null && File.Exists(audioPath)
+                    ? new FileInfo(audioPath).Length
+                    : audioDataConfig.Size;
                 metadata.ItemList.Add(resourceItem);
             }
+
+            metadata.AudioTotalSize = metadata.ItemList.Aggregate(
+                0L,
+                (total, item) => checked(total + item.Size));
             return metadata;
         }
     }

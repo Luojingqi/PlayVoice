@@ -379,6 +379,9 @@ Do not leave this page.</value>
   <data name="上传Steam失败" xml:space="preserve">
     <value>Upload to Steam failed</value>
   </data>
+  <data name="扩展说明归档失败" xml:space="preserve">
+    <value>Steam upload succeeded, but archiving the extended explanation failed</value>
+  </data>
   <data name="可见" xml:space="preserve">
     <value>Visibility</value>
   </data>

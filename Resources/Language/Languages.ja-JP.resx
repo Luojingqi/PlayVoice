@@ -102,6 +102,7 @@
   <data name="开始上传" xml:space="preserve"><value>アップロード中...&#xA;結果をお待ちください。&#xA;このページを閉じないでください。</value></data>
   <data name="已上传到Steam" xml:space="preserve"><value>Steamへ投稿しました</value></data>
   <data name="上传Steam失败" xml:space="preserve"><value>Steamへの投稿に失敗</value></data>
+  <data name="扩展说明归档失败" xml:space="preserve"><value>Steamへのアップロードは完了しましたが、拡張説明のアーカイブに失敗しました</value></data>
   <data name="可见" xml:space="preserve"><value>公開範囲</value></data>
   <data name="仅自己" xml:space="preserve"><value>非公開</value></data>
   <data name="仅好友" xml:space="preserve"><value>フレンドのみ</value></data>

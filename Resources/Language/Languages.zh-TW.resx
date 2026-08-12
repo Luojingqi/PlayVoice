@@ -102,6 +102,7 @@
   <data name="开始上传" xml:space="preserve"><value>正在上傳...&#xA;請等待上傳結果。&#xA;請勿離開此頁面。</value></data>
   <data name="已上传到Steam" xml:space="preserve"><value>已上傳至 Steam</value></data>
   <data name="上传Steam失败" xml:space="preserve"><value>上傳至 Steam 失敗</value></data>
+  <data name="扩展说明归档失败" xml:space="preserve"><value>Steam 上傳成功，但延伸說明封存失敗</value></data>
   <data name="可见" xml:space="preserve"><value>可見性</value></data>
   <data name="仅自己" xml:space="preserve"><value>僅自己</value></data>
   <data name="仅好友" xml:space="preserve"><value>僅好友</value></data>

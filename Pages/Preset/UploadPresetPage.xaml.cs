@@ -23,6 +23,7 @@ namespace PlayVoice.Pages.Preset
 
         private CircularProgressBar loadingPage;
         private bool isUploading;
+        private bool isReportingSteamUploadProgress;
         public UploadPresetPage()
         {
             InitializeComponent();
@@ -148,6 +149,7 @@ namespace PlayVoice.Pages.Preset
 
             isUploading = true;
             MainWindow.Inst.SetBodyInteractionBlocked(true);
+            string tempPresetPath = null;
             try
             {
                 loadingPage.Visibility = Visibility.Visible;
@@ -161,19 +163,37 @@ namespace PlayVoice.Pages.Preset
 
                 string presetPath = Path.Combine(AudioPresetDataTool.BasePath, audioPresetConfig.Name);
                 string tempRootPath = PresetStorage.TempPath;
-                string tempPresetPath = Path.Combine(tempRootPath, audioPresetConfig.Name);
+                tempPresetPath = Path.Combine(tempRootPath, audioPresetConfig.Name);
+                string extendedExplanationPath = PresetStorage.ExtendedExplanationPath;
+                Directory.CreateDirectory(extendedExplanationPath);
                 Report(0.38f);
                 await JsonTool.CopyDirectoryReplaceTrueAsync(presetPath, tempPresetPath);
                 Report(0.66f);
-                string extendedExplanationPath = PresetStorage.ExtendedExplanationPath;
                 string tempExtendedExplanationPath = Path.Combine(tempPresetPath, "ExtendedExplanation");
                 Directory.CreateDirectory(tempExtendedExplanationPath);
                 await JsonTool.CopyDirectoryReplaceTrueAsync(extendedExplanationPath, tempExtendedExplanationPath);
+                long extendedExplanationTotalSize = PresetStorage.GetDirectorySize(tempExtendedExplanationPath);
                 Report(0.82f);
 
-                var metaData = ResourceDataConfig.Metadata.Create(
-                     await AudioPresetDataTool.LoadAudioPresetDataFromPath(
-                        tempRootPath, audioPresetConfig.Name));
+                var uploadPresetData = await AudioPresetDataTool.LoadAudioPresetDataFromPath(
+                    tempRootPath,
+                    audioPresetConfig.Name);
+                if (uploadPresetData == null)
+                    throw new InvalidOperationException(LanguageManager.Inst.GetString("物品加载失败"));
+
+                ResourceDataConfig.Metadata metaData;
+                try
+                {
+                    metaData = ResourceDataConfig.Metadata.Create(uploadPresetData, tempPresetPath);
+                }
+                finally
+                {
+                    uploadPresetData.Dispose();
+                }
+
+                metaData.ExtendedExplanationTotalSize = extendedExplanationTotalSize;
+                metaData.TotalSize = checked(
+                    metaData.AudioTotalSize + metaData.ExtendedExplanationTotalSize);
                 File.Delete(Path.Combine(tempPresetPath, AudioPresetDataTool.ConfigFileName));
 
                 if (string.IsNullOrEmpty(imagePath) || !File.Exists(imagePath))
@@ -186,7 +206,8 @@ namespace PlayVoice.Pages.Preset
                     Data = metaData,
                     ThumbnailFormat = Path.GetExtension(imagePath)
                 };
-                JsonTool.SaveJson(Path.Combine(tempPresetPath, "ResourceConfig.json"), resourceDataConfig);
+                if (!JsonTool.SaveJson(Path.Combine(tempPresetPath, "ResourceConfig.json"), resourceDataConfig))
+                    throw new IOException(LanguageManager.Inst.GetString("上传Steam失败"));
                 File.Copy(imagePath, Path.Combine(tempPresetPath, $"Thumbnail{resourceDataConfig.ThumbnailFormat}"));
 
 
@@ -217,15 +238,28 @@ namespace PlayVoice.Pages.Preset
                         editor = editor.WithPublicVisibility();
                         break;
                 }
-                Report(0.01f);
+                isReportingSteamUploadProgress = true;
                 var result = await editor.SubmitAsync(this);
+                isReportingSteamUploadProgress = false;
 
                 if (result.Success)
                 {
-                    MainWindow.Inst.AddNotification(
-                        () => LanguageManager.Inst.GetString("通知"),
-                        () => LanguageManager.Inst.GetString("已上传到Steam"),
-                    LabelStatus.Success, 4f);
+                    try
+                    {
+                        PresetStorage.ArchiveExtendedExplanation();
+                        Report(1f);
+                        MainWindow.Inst.AddNotification(
+                            () => LanguageManager.Inst.GetString("通知"),
+                            () => LanguageManager.Inst.GetString("已上传到Steam"),
+                            LabelStatus.Success, 4f);
+                    }
+                    catch (Exception ex)
+                    {
+                        MainWindow.Inst.AddNotification(
+                            () => LanguageManager.Inst.GetString("通知"),
+                            () => $"{LanguageManager.Inst.GetString("扩展说明归档失败")} : {ex.Message}",
+                            LabelStatus.Error, 6f);
+                    }
                 }
                 else
                 {
@@ -234,10 +268,28 @@ namespace PlayVoice.Pages.Preset
                         () => LanguageManager.Inst.GetString("上传Steam失败") + $" : {result.Result}",
                         LabelStatus.Error, 4f);
                 }
-                Directory.Delete(tempPresetPath, true);
+            }
+            catch (Exception ex)
+            {
+                MainWindow.Inst.AddNotification(
+                    () => LanguageManager.Inst.GetString("通知"),
+                    () => $"{LanguageManager.Inst.GetString("上传Steam失败")} : {ex.Message}",
+                    LabelStatus.Error, 6f);
             }
             finally
             {
+                isReportingSteamUploadProgress = false;
+                if (!string.IsNullOrEmpty(tempPresetPath) && Directory.Exists(tempPresetPath))
+                {
+                    try
+                    {
+                        Directory.Delete(tempPresetPath, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"清理创意工坊上传临时目录失败: {ex.Message}");
+                    }
+                }
                 loadingPage.Visibility = Visibility.Hidden;
                 MainWindow.Inst.SetBodyInteractionBlocked(false);
                 isUploading = false;
@@ -329,8 +381,11 @@ namespace PlayVoice.Pages.Preset
 
         public void Report(float value)
         {
-            SetProgress(value, 250);
-            loadingPage.SetProgress(value, 250);
+            double progress = isReportingSteamUploadProgress
+                ? 0.82 + Math.Clamp(value, 0, 1) * 0.15
+                : value;
+            SetProgress(progress, 250);
+            loadingPage.SetProgress(progress, 250);
         }
     }
 }

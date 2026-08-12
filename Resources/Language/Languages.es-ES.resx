@@ -102,6 +102,7 @@
   <data name="开始上传" xml:space="preserve"><value>Subiendo...&#xA;Espera al resultado.&#xA;No salgas de esta página.</value></data>
   <data name="已上传到Steam" xml:space="preserve"><value>Subido a Steam</value></data>
   <data name="上传Steam失败" xml:space="preserve"><value>Error al subir a Steam</value></data>
+  <data name="扩展说明归档失败" xml:space="preserve"><value>La subida a Steam se completó, pero no se pudo archivar la explicación ampliada</value></data>
   <data name="可见" xml:space="preserve"><value>Visibilidad</value></data>
   <data name="仅自己" xml:space="preserve"><value>Privado</value></data>
   <data name="仅好友" xml:space="preserve"><value>Solo amigos</value></data>

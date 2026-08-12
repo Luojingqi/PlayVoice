@@ -379,6 +379,9 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="上传Steam失败" xml:space="preserve">
     <value>上传 Steam 失败</value>
   </data>
+  <data name="扩展说明归档失败" xml:space="preserve">
+    <value>Steam 上传成功，但扩展说明归档失败</value>
+  </data>
   <data name="可见" xml:space="preserve">
     <value>可见</value>
   </data>
