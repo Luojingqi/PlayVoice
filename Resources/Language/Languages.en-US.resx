@@ -147,6 +147,9 @@
   <data name="运行" xml:space="preserve">
     <value>Run</value>
   </data>
+  <data name="运行_说明" xml:space="preserve">
+    <value>Mixes the physical microphone and audio played by PlayVoice, then sends them to the virtual microphone. Complete the loudness normalization test and bind all four audio devices before running.</value>
+  </data>
   <data name="语言" xml:space="preserve">
     <value>Language</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="去Github" xml:space="preserve">
     <value>Support us on GitHub</value>
+  </data>
+  <data name="官网" xml:space="preserve">
+    <value>PlayVoice Website</value>
   </data>
   <data name="虚拟声卡" xml:space="preserve">
     <value>Virtual Sound Card</value>
@@ -435,6 +441,9 @@ Do not leave this page.</value>
   </data>
   <data name="教程1_标题" xml:space="preserve">
     <value>First Run</value>
+  </data>
+  <data name="点击观看视频演示" xml:space="preserve">
+    <value>Click to watch the video demo</value>
   </data>
   <data name="教程3_内容" xml:space="preserve">
     <value>· Configure all four devices, then enable “Run.”

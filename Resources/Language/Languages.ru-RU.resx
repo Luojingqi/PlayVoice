@@ -14,10 +14,12 @@
   <data name="声卡绑定" xml:space="preserve"><value>Аудиоустройства</value></data>
   <data name="系统设置" xml:space="preserve"><value>Основные</value></data>
   <data name="运行" xml:space="preserve"><value>Запуск</value></data>
+  <data name="运行_说明" xml:space="preserve"><value>Смешивает физический микрофон со звуком, воспроизводимым PlayVoice, и выводит их на виртуальный микрофон. Перед запуском выполните тест нормализации громкости и подключите все четыре аудиоустройства.</value></data>
   <data name="语言" xml:space="preserve"><value>Язык</value></data>
   <data name="样式" xml:space="preserve"><value>Тема</value></data>
   <data name="去Steam" xml:space="preserve"><value>Поддержать нас в Steam</value></data>
   <data name="去Github" xml:space="preserve"><value>Поддержать нас на GitHub</value></data>
+  <data name="官网" xml:space="preserve"><value>Официальный сайт PlayVoice</value></data>
   <data name="虚拟声卡" xml:space="preserve"><value>Вирт. аудиокарта</value></data>
   <data name="安装" xml:space="preserve"><value>Установить</value></data>
   <data name="卸载" xml:space="preserve"><value>Удалить</value></data>
@@ -109,6 +111,7 @@
   <data name="删除预设" xml:space="preserve"><value>Удалить пресет</value></data>
   <data name="教程1_内容" xml:space="preserve"><value>· Установите виртуальную аудиокарту в настройках.&#xA;· Затем проверьте виртуальные устройства в параметрах звука Windows.</value></data>
   <data name="教程1_标题" xml:space="preserve"><value>Первый запуск</value></data>
+  <data name="点击观看视频演示" xml:space="preserve"><value>Посмотреть видеодемонстрацию</value></data>
   <data name="教程3_内容" xml:space="preserve"><value>· Настройте четыре устройства и включите «Запуск».&#xA;· Микрофон и аудио приложения пойдут на виртуальный микрофон.</value></data>
   <data name="教程3_标题" xml:space="preserve"><value>Запуск PlayVoice</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>Игры и трансляции</value></data>

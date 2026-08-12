@@ -16,6 +16,8 @@
                 <ResourceDictionary Source="/Resources/Style/Github.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/Steam.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <BitmapImage x:Key="PlayVoiceIcon"
+                         UriSource="pack://application:,,,/Resources/Style/PlayVoice.png"/>
         </ResourceDictionary>
     </Page.Resources>
 
@@ -35,7 +37,7 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="140"/>
+                    <ColumnDefinition Width="160"/>
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{L:Lan 设置}" VerticalAlignment="Center" HorizontalAlignment="Left" Padding="20,0,0,0"
@@ -45,7 +47,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Button Style="{StaticResource ImageButtonStyle}"
                             Content="{StaticResource SteamIcon}"
@@ -59,6 +61,12 @@
                             ToolTip="{L:Lan 去Github}" 
                             Width="36" Height="36"
                             Grid.Column="1"/>
+                        <Button Style="{StaticResource ImageButtonStyle}"
+                            Content="{StaticResource PlayVoiceIcon}"
+                            Hyperlink:HyperlinkBehavior.Url="https://source-xu.top/projects/playvoice"
+                            ToolTip="{L:Lan 官网}"
+                            Width="36" Height="36"
+                            Grid.Column="2"/>
                     </Grid>
                 </Border>
             </Grid>

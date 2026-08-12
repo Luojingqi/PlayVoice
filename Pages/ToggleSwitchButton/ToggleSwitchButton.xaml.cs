@@ -33,6 +33,15 @@ namespace PlayVoice.Pages.ToggleSwitchButton
             set => SetValue(HeaderProperty, value);
         }
 
+        public static readonly DependencyProperty ToolTipTextProperty =
+            DependencyProperty.Register("ToolTipText", typeof(string), typeof(ToggleSwitchButton), new PropertyMetadata(null));
+
+        public string ToolTipText
+        {
+            get => (string)GetValue(ToolTipTextProperty);
+            set => SetValue(ToolTipTextProperty, value);
+        }
+
 
         public static readonly DependencyProperty TextBlockFontSizeProperty =
             DependencyProperty.Register("TextBlockFontSize", typeof(int), typeof(ToggleSwitchButton), new PropertyMetadata(16));

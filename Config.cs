@@ -1,7 +1,5 @@
-﻿using PlayVoice.Pages.Workshop;
-using PlayVoice.Resources.Themes;
+﻿using PlayVoice.Resources.Themes;
 using System.IO;
-using System.Text.Json.Serialization;
 
 namespace PlayVoice;
 

@@ -49,6 +49,7 @@
                      Grid.Row="0"
                      x:Name="RunToggle"
                      Header="{L:Lan 运行}"
+                     ToolTipText="{L:Lan 运行_说明}"
                      ButtonWidth="80"
                      Margin="0,1.5"
                      Padding="0,2.2"

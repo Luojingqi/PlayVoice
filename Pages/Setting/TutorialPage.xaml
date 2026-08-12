@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PlayVoice.Pages.Setting"
       xmlns:L="clr-namespace:PlayVoice.Resources.Language"
+      xmlns:Hyperlink="clr-namespace:PlayVoice.Pages.Hyperlink"
       mc:Ignorable="d" >
 
     <Page.Resources>
@@ -49,11 +50,39 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" 
-                    Text="{L:Lan 教程1_标题}"
-                    Style="{StaticResource TextBlockMedium}"
-                    Margin="0,5,0,0"
-                    FontSize="15"/>
+            <StackPanel Grid.Row="0">
+                <Button Background="Transparent"
+                        BorderThickness="0"
+                        Cursor="Hand"
+                        HorizontalAlignment="Left"
+                        Padding="0"
+                        Margin="0,5,0,0"
+                        Hyperlink:HyperlinkBehavior.Url="https://source-xu.top/projects/playvoice">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{L:Lan 点击观看视频演示}"
+                                   Style="{StaticResource TextBlockMedium}"
+                                   FontSize="15"/>
+                        <Path Width="14"
+                              Height="14"
+                              Margin="6,0,0,0"
+                              VerticalAlignment="Center"
+                              Stretch="Uniform"
+                              Stroke="{DynamicResource AccentColor}"
+                              StrokeThickness="1.5"
+                              StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round"
+                              StrokeLineJoin="Round"
+                              Data="M2,3 L2,12 L11,12 L11,9 M7,2 L12,2 L12,7 M12,2 L6,8"/>
+                    </StackPanel>
+                </Button>
+                <Border Height="1"
+                        Background="{DynamicResource Border}"
+                        Margin="20,8,20,3"/>
+                <TextBlock Text="{L:Lan 教程1_标题}"
+                           Style="{StaticResource TextBlockMedium}"
+                           Margin="0,5,0,0"
+                           FontSize="15"/>
+            </StackPanel>
             <TextBlock Grid.Row="1" 
                     Text="{L:Lan 教程1_内容}"
                     TextWrapping="Wrap"

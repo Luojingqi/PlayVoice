@@ -14,10 +14,12 @@
   <data name="声卡绑定" xml:space="preserve"><value>Dispositivos de áudio</value></data>
   <data name="系统设置" xml:space="preserve"><value>Geral</value></data>
   <data name="运行" xml:space="preserve"><value>Iniciar</value></data>
+  <data name="运行_说明" xml:space="preserve"><value>Mistura o microfone físico com o áudio reproduzido pelo PlayVoice e envia tudo ao microfone virtual. Antes de iniciar, conclua o teste de normalização de volume e vincule os quatro dispositivos de áudio.</value></data>
   <data name="语言" xml:space="preserve"><value>Idioma</value></data>
   <data name="样式" xml:space="preserve"><value>Tema</value></data>
   <data name="去Steam" xml:space="preserve"><value>Apoie-nos na Steam</value></data>
   <data name="去Github" xml:space="preserve"><value>Apoie-nos no GitHub</value></data>
+  <data name="官网" xml:space="preserve"><value>Site oficial do PlayVoice</value></data>
   <data name="虚拟声卡" xml:space="preserve"><value>Áudio virtual</value></data>
   <data name="安装" xml:space="preserve"><value>Instalar</value></data>
   <data name="卸载" xml:space="preserve"><value>Desinstalar</value></data>
@@ -109,6 +111,7 @@
   <data name="删除预设" xml:space="preserve"><value>Excluir preset</value></data>
   <data name="教程1_内容" xml:space="preserve"><value>· Instale o dispositivo de áudio virtual nas configurações.&#xA;· Depois, verifique-o nas configurações de som do Windows.</value></data>
   <data name="教程1_标题" xml:space="preserve"><value>Primeira execução</value></data>
+  <data name="点击观看视频演示" xml:space="preserve"><value>Clique para assistir à demonstração em vídeo</value></data>
   <data name="教程3_内容" xml:space="preserve"><value>· Configure os quatro dispositivos e ative “Iniciar”.&#xA;· O microfone e o áudio do app irão para o microfone virtual.</value></data>
   <data name="教程3_标题" xml:space="preserve"><value>Iniciar PlayVoice</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>Jogos e streaming</value></data>

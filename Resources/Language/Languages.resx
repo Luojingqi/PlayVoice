@@ -147,6 +147,9 @@
   <data name="运行" xml:space="preserve">
     <value>运行</value>
   </data>
+  <data name="运行_说明" xml:space="preserve">
+    <value>开启后，将物理麦克风与 PlayVoice 播放的音频混合输出到虚拟麦克风。运行前需完成响度归一化测试，并确保四个音频设备均已成功绑定。</value>
+  </data>
   <data name="语言" xml:space="preserve">
     <value>语言</value>
   </data>
@@ -158,6 +161,9 @@
   </data>
   <data name="去Github" xml:space="preserve">
     <value>去 Github 支持我们</value>
+  </data>
+  <data name="官网" xml:space="preserve">
+    <value>PlayVoice 官网</value>
   </data>
   <data name="虚拟声卡" xml:space="preserve">
     <value>虚拟声卡</value>
@@ -435,6 +441,9 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   </data>
   <data name="教程1_标题" xml:space="preserve">
     <value>第一次使用</value>
+  </data>
+  <data name="点击观看视频演示" xml:space="preserve">
+    <value>点击观看视频演示</value>
   </data>
   <data name="教程3_内容" xml:space="preserve">
     <value>· 绑定4个设备全部成功后          开启“运行”按钮

@@ -7,7 +7,7 @@
         <Setter Property="ToolTipService.HorizontalOffset" Value="6"/>
         <Setter Property="ToolTipService.VerticalOffset" Value="18"/>
         <Setter Property="ToolTipService.HasDropShadow" Value="false"/>
-        <Setter Property="ToolTipService.InitialShowDelay" Value="30"/>
+        <Setter Property="ToolTipService.InitialShowDelay" Value="0"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>

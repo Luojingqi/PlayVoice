@@ -14,10 +14,12 @@
   <data name="声卡绑定" xml:space="preserve"><value>音訊裝置</value></data>
   <data name="系统设置" xml:space="preserve"><value>一般</value></data>
   <data name="运行" xml:space="preserve"><value>啟動</value></data>
+  <data name="运行_说明" xml:space="preserve"><value>開啟後，將實體麥克風與 PlayVoice 播放的音訊混合輸出至虛擬麥克風。啟動前需完成音量正規化測試，並確認四個音訊裝置均已成功綁定。</value></data>
   <data name="语言" xml:space="preserve"><value>語言</value></data>
   <data name="样式" xml:space="preserve"><value>主題</value></data>
   <data name="去Steam" xml:space="preserve"><value>前往 Steam 支持我們</value></data>
   <data name="去Github" xml:space="preserve"><value>前往 GitHub 支持我們</value></data>
+  <data name="官网" xml:space="preserve"><value>PlayVoice 官網</value></data>
   <data name="虚拟声卡" xml:space="preserve"><value>虛擬音訊</value></data>
   <data name="安装" xml:space="preserve"><value>安裝</value></data>
   <data name="卸载" xml:space="preserve"><value>解除安裝</value></data>
@@ -109,6 +111,7 @@
   <data name="删除预设" xml:space="preserve"><value>刪除預設</value></data>
   <data name="教程1_内容" xml:space="preserve"><value>· 請在設定中安裝虛擬音訊裝置。&#xA;· 接著在 Windows 音效設定中確認虛擬裝置。</value></data>
   <data name="教程1_标题" xml:space="preserve"><value>首次啟動</value></data>
+  <data name="点击观看视频演示" xml:space="preserve"><value>點擊觀看影片示範</value></data>
   <data name="教程3_内容" xml:space="preserve"><value>· 設定四個裝置後開啟「啟動」。&#xA;· 麥克風和應用程式音訊將輸出至虛擬麥克風。</value></data>
   <data name="教程3_标题" xml:space="preserve"><value>啟動 PlayVoice</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>遊戲與直播</value></data>

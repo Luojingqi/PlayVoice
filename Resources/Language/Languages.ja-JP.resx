@@ -14,10 +14,12 @@
   <data name="声卡绑定" xml:space="preserve"><value>オーディオデバイス</value></data>
   <data name="系统设置" xml:space="preserve"><value>一般</value></data>
   <data name="运行" xml:space="preserve"><value>開始</value></data>
+  <data name="运行_说明" xml:space="preserve"><value>物理マイクとPlayVoiceで再生する音声をミックスし、仮想マイクへ出力します。開始前に音量正規化テストを完了し、4つのオーディオデバイスをすべて接続してください。</value></data>
   <data name="语言" xml:space="preserve"><value>言語</value></data>
   <data name="样式" xml:space="preserve"><value>テーマ</value></data>
   <data name="去Steam" xml:space="preserve"><value>Steamで応援</value></data>
   <data name="去Github" xml:space="preserve"><value>GitHubで応援</value></data>
+  <data name="官网" xml:space="preserve"><value>PlayVoice 公式サイト</value></data>
   <data name="虚拟声卡" xml:space="preserve"><value>仮想オーディオ</value></data>
   <data name="安装" xml:space="preserve"><value>インストール</value></data>
   <data name="卸载" xml:space="preserve"><value>アンインストール</value></data>
@@ -109,6 +111,7 @@
   <data name="删除预设" xml:space="preserve"><value>プリセットを削除</value></data>
   <data name="教程1_内容" xml:space="preserve"><value>· 設定から仮想オーディオをインストールします。&#xA;· Windowsのサウンド設定で仮想デバイスを確認します。</value></data>
   <data name="教程1_标题" xml:space="preserve"><value>初回起動</value></data>
+  <data name="点击观看视频演示" xml:space="preserve"><value>クリックして動画デモを見る</value></data>
   <data name="教程3_内容" xml:space="preserve"><value>· 4つのデバイスを設定して「開始」をオンにします。&#xA;· マイクとアプリの音声が仮想マイクへ出力されます。</value></data>
   <data name="教程3_标题" xml:space="preserve"><value>PlayVoiceを開始</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>ゲームと配信</value></data>
