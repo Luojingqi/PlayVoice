@@ -732,4 +732,10 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="确定" xml:space="preserve">
     <value>确定</value>
   </data>
+  <data name="最大同时播放" xml:space="preserve">
+    <value>最大同时播放</value>
+  </data>
+  <data name="最大同时播放_说明" xml:space="preserve">
+    <value>设置允许同时播放的最大音频数量。超过上限时停止最早开始播放的音频。</value>
+  </data>
 </root>

@@ -115,7 +115,9 @@
             Orientation="Horizontal"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
-            Minimum="0" Maximum="200"
-            IsSnapToTickEnabled="True" TickFrequency="1"
+            Minimum="{Binding Minimum, ElementName=RootControl}"
+            Maximum="{Binding Maximum, ElementName=RootControl}"
+            IsSnapToTickEnabled="True"
+            TickFrequency="{Binding TickFrequency, ElementName=RootControl}"
             Value="{Binding Value, ElementName=RootControl, Mode=TwoWay}"/>
 </UserControl>

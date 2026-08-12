@@ -219,4 +219,6 @@
   <data name="输入游戏预设名称" xml:space="preserve"><value>Nombre del preajuste de juego...</value></data>
   <data name="删除游戏预设" xml:space="preserve"><value>Eliminar preajuste de juego</value></data>
   <data name="游戏预设已存在" xml:space="preserve"><value>El preajuste de juego ya existe</value></data>
+  <data name="最大同时播放" xml:space="preserve"><value>Máximo simultáneo</value></data>
+  <data name="最大同时播放_说明" xml:space="preserve"><value>Establece el número máximo de audios que pueden reproducirse simultáneamente. Al superar el límite, se detiene el audio que comenzó primero.</value></data>
 </root>

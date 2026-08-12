@@ -219,4 +219,6 @@
   <data name="输入游戏预设名称" xml:space="preserve"><value>Nome do preset de jogo...</value></data>
   <data name="删除游戏预设" xml:space="preserve"><value>Excluir preset de jogo</value></data>
   <data name="游戏预设已存在" xml:space="preserve"><value>O preset de jogo já existe</value></data>
+  <data name="最大同时播放" xml:space="preserve"><value>Máximo simultâneo</value></data>
+  <data name="最大同时播放_说明" xml:space="preserve"><value>Define o número máximo de áudios que podem ser reproduzidos simultaneamente. Ao exceder o limite, o áudio iniciado primeiro é interrompido.</value></data>
 </root>

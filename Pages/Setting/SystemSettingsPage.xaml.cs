@@ -246,6 +246,14 @@ namespace PlayVoice.Pages.Setting
             }
 
             {
+                MaxPlayingAudioCountSlider.Value = GlobalData.Inst.AudioProxy.MaxPlayingAudioCount;
+                MaxPlayingAudioCountSlider.ValueChanged += (sender, value) =>
+                {
+                    GlobalData.Inst.AudioProxy.MaxPlayingAudioCount = (int)value.NewValue;
+                };
+            }
+
+            {
                 RefreshPlayingKeySettings();
 
                 BeforePlayingComboBox.OnSelectionChanged += (item0, item1) =>

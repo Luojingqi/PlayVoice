@@ -93,7 +93,23 @@ internal class AudioProxy
         }
     }
 
-    public int MaxPlayingAudioCount { get; private set; }
+    private int maxPlayingAudioCount;
+    public int MaxPlayingAudioCount
+    {
+        get => maxPlayingAudioCount;
+        set
+        {
+            int newValue = Math.Clamp(value, 1, 10);
+            if (newValue == maxPlayingAudioCount) return;
+
+            maxPlayingAudioCount = newValue;
+            GlobalData.Inst.Config.MaxPlayingAudioCount = maxPlayingAudioCount;
+            GlobalData.Inst.Config.Save();
+
+            while (AllAudioList.Count > maxPlayingAudioCount)
+                AllAudioList[0].Stop();
+        }
+    }
 
     public AudioProxy()
     {
@@ -128,7 +144,12 @@ internal class AudioProxy
         audioEarDecibel = GlobalData.Inst.Config.AudioEarDecibel;
         microphoneInputDecibel = GlobalData.Inst.Config.MicrophoneInputDecibel;
         globalDecibel = GlobalData.Inst.Config.GlobalDecibel;
-        MaxPlayingAudioCount = GlobalData.Inst.Config.MaxPlayingAudioCount;
+        maxPlayingAudioCount = Math.Clamp(GlobalData.Inst.Config.MaxPlayingAudioCount, 1, 10);
+        if (maxPlayingAudioCount != GlobalData.Inst.Config.MaxPlayingAudioCount)
+        {
+            GlobalData.Inst.Config.MaxPlayingAudioCount = maxPlayingAudioCount;
+            GlobalData.Inst.Config.Save();
+        }
     }
 
 
@@ -277,7 +298,7 @@ internal class AudioProxy
         }
 
         AllAudioList.Add(audioData);
-        if (AllAudioList.Count > MaxPlayingAudioCount)
+        while (AllAudioList.Count > MaxPlayingAudioCount)
             AllAudioList[0].Stop();
     }
 

@@ -44,6 +44,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <ToggleSwitchButton:ToggleSwitchButton
@@ -286,6 +287,29 @@
 
             <Grid Grid.Row="13" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <HeaderToolTip:HeaderToolTip Grid.Column="0"
+                                             Header="{L:Lan 最大同时播放}"
+                                             ToolTipText="{L:Lan 最大同时播放_说明}"
+                                             Margin="13.5,0,0,0"
+                                             VerticalAlignment="Center"
+                                             HorizontalAlignment="Left"/>
+                <AudioVolumeSlider:AudioVolumeSlider
+                            x:Name="MaxPlayingAudioCountSlider"
+                            Grid.Column="1"
+                            Minimum="1"
+                            Maximum="10"
+                            TickFrequency="1"
+                            Width="168"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right"/>
+            </Grid>
+
+            <Grid Grid.Row="14" Margin="0,1.5" Height="37.5">
+                <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
@@ -310,7 +334,7 @@
                     </ListBoxItem>
                 </ListBox>
             </Grid>
-            <Grid Grid.Row="14" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="15" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -339,7 +363,7 @@
 
 
 
-            <Border Grid.Row="15" Margin="0,1.5,0,0"/>
+            <Border Grid.Row="16" Margin="0,1.5,0,0"/>
         </Grid>
     </HeaderedContentControl>
 </Page>

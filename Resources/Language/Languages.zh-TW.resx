@@ -219,4 +219,6 @@
   <data name="输入游戏预设名称" xml:space="preserve"><value>輸入遊戲預設名稱...</value></data>
   <data name="删除游戏预设" xml:space="preserve"><value>刪除遊戲預設</value></data>
   <data name="游戏预设已存在" xml:space="preserve"><value>遊戲預設已存在</value></data>
+  <data name="最大同时播放" xml:space="preserve"><value>最大同時播放</value></data>
+  <data name="最大同时播放_说明" xml:space="preserve"><value>設定允許同時播放的最大音訊數量。超過上限時停止最早開始播放的音訊。</value></data>
 </root>

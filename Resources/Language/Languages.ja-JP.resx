@@ -219,4 +219,6 @@
   <data name="输入游戏预设名称" xml:space="preserve"><value>ゲームプリセット名...</value></data>
   <data name="删除游戏预设" xml:space="preserve"><value>ゲームプリセットを削除</value></data>
   <data name="游戏预设已存在" xml:space="preserve"><value>ゲームプリセットは既にあります</value></data>
+  <data name="最大同时播放" xml:space="preserve"><value>最大同時再生数</value></data>
+  <data name="最大同时播放_说明" xml:space="preserve"><value>同時に再生できる音声の最大数を設定します。上限を超えると、最初に再生を開始した音声を停止します。</value></data>
 </root>
