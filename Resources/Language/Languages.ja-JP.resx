@@ -204,6 +204,7 @@
   <data name="默认" xml:space="preserve"><value>デフォルト</value></data>
   <data name="教程提示" xml:space="preserve"><value>チュートリアル</value></data>
   <data name="教程提示_内容" xml:space="preserve"><value>チュートリアルは左側の「設定」ページから確認できます。</value></data>
+  <data name="教程提示_抢先体验内容" xml:space="preserve"><value>本製品は現在早期アクセス版です。未知のバグが発生した場合は、速やかにご連絡ください。&#xA;最適な連絡方法は Steam ストアページでご確認いただけます。&#xA;ご不便をおかけして申し訳ございません。&#xA;バグを速やかにご報告いただいた方には、追加の CKD を無料で提供いたします。</value></data>
   <data name="确定" xml:space="preserve"><value>OK</value></data>
   <data name="等待下载" xml:space="preserve"><value>ダウンロード待機中</value></data>
   <data name="音频预设" xml:space="preserve"><value>音声プリセット</value></data>

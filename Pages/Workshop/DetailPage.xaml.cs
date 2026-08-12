@@ -190,7 +190,6 @@ namespace PlayVoice.Pages.Workshop
                 if (!string.IsNullOrWhiteSpace(item.Description))
                 {
                     ResourceDescriptionText.Text = item.Description;
-                    DescriptionRow.Height = new GridLength(1, GridUnitType.Star);
                     ResourceDescriptionPanel.Visibility = Visibility.Visible;
                 }
                 MetadataLoadingPanel.Visibility = Visibility.Collapsed;
@@ -230,7 +229,6 @@ namespace PlayVoice.Pages.Workshop
             AuthorName.Text = string.Empty;
             ResourceDescriptionText.Text = string.Empty;
             ResourceDescriptionPanel.Visibility = Visibility.Collapsed;
-            DescriptionRow.Height = new GridLength(0);
             ResourceSizeText.Text = string.Empty;
             ResourceSizeText.Visibility = Visibility.Collapsed;
             SteamScoreText.Text = "★ --";

@@ -184,7 +184,7 @@
 
         <Grid Grid.Row="2">
             <Grid.RowDefinitions>
-                <RowDefinition x:Name="DescriptionRow" Height="0"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
@@ -192,11 +192,13 @@
                           x:Name="ResourceDescriptionPanel"
                           Visibility="Collapsed"
                           Margin="8,5"
+                          MaxHeight="80"
                           VerticalScrollBarVisibility="Auto"
                           HorizontalScrollBarVisibility="Disabled">
                 <TextBlock x:Name="ResourceDescriptionText"
                            Style="{StaticResource TextBlockMedium}"
                            Foreground="{DynamicResource TextSecondary}"
+                           LineHeight="20"
                            TextWrapping="Wrap"/>
             </ScrollViewer>
 
