@@ -8,6 +8,8 @@
         <Setter Property="ToolTipService.VerticalOffset" Value="18"/>
         <Setter Property="ToolTipService.HasDropShadow" Value="false"/>
         <Setter Property="ToolTipService.InitialShowDelay" Value="0"/>
+        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+        <Setter Property="FontFamily" Value="{DynamicResource FontLight}"/>
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -19,8 +21,8 @@
                             Padding="5,3">
                         <ContentPresenter HorizontalAlignment="Left" 
                                         VerticalAlignment="Center"
-                                        TextBlock.FontFamily="{DynamicResource FontLight}"
-                                        TextBlock.Foreground="{DynamicResource TextPrimary}"/>
+                                        TextBlock.FontFamily="{TemplateBinding FontFamily}"
+                                        TextBlock.Foreground="{TemplateBinding Foreground}"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

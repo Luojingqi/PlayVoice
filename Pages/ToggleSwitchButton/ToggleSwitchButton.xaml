@@ -6,6 +6,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:PlayVoice.Pages.ToggleSwitchButton"
              xmlns:pages="clr-namespace:PlayVoice.Pages"
+             xmlns:HeaderToolTip="clr-namespace:PlayVoice.Pages.HeaderToolTip"
              mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -44,82 +45,13 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Grid.Column="0"
-                            Orientation="Horizontal"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"
-                            Margin="13.5,0,0,0"
-                            ToolTipService.InitialShowDelay="180"
-                            ToolTip="{Binding ToolTipText, ElementName=self}">
-                    <StackPanel.Triggers>
-                        <EventTrigger RoutedEvent="MouseEnter">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="HelpIconScale"
-                                                     Storyboard.TargetProperty="ScaleX"
-                                                     To="1.18"
-                                                     Duration="0:0:0.18"/>
-                                    <DoubleAnimation Storyboard.TargetName="HelpIconScale"
-                                                     Storyboard.TargetProperty="ScaleY"
-                                                     To="1.18"
-                                                     Duration="0:0:0.18"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                        <EventTrigger RoutedEvent="MouseLeave">
-                            <BeginStoryboard>
-                                <Storyboard>
-                                    <DoubleAnimation Storyboard.TargetName="HelpIconScale"
-                                                     Storyboard.TargetProperty="ScaleX"
-                                                     To="1"
-                                                     Duration="0:0:0.12"/>
-                                    <DoubleAnimation Storyboard.TargetName="HelpIconScale"
-                                                     Storyboard.TargetProperty="ScaleY"
-                                                     To="1"
-                                                     Duration="0:0:0.12"/>
-                                </Storyboard>
-                            </BeginStoryboard>
-                        </EventTrigger>
-                    </StackPanel.Triggers>
-                    <TextBlock Text="{Binding Header, ElementName=self}"
-                               Style="{StaticResource TextBlockLight}"
-                               VerticalAlignment="Center"
-                               FontSize="{Binding TextBlockFontSize, ElementName=self}"
-                               TextAlignment="Left"/>
-                    <Border Width="13"
-                            Height="13"
-                            Margin="5,0,0,0"
-                            VerticalAlignment="Center"
-                            BorderBrush="{DynamicResource TextSecondary}"
-                            BorderThickness="1"
-                            CornerRadius="6.5"
-                            RenderTransformOrigin="0.5,0.5">
-                        <Border.RenderTransform>
-                            <ScaleTransform x:Name="HelpIconScale"/>
-                        </Border.RenderTransform>
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Visibility" Value="Visible"/>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding ToolTipText, ElementName=self}" Value="{x:Null}">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                    <DataTrigger Binding="{Binding ToolTipText, ElementName=self}" Value="">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <TextBlock Text="?"
-                                   Foreground="{DynamicResource TextSecondary}"
-                                   FontFamily="{DynamicResource FontMedium}"
-                                   FontSize="9"
-                                   LineHeight="11"
-                                   TextAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   HorizontalAlignment="Center"/>
-                    </Border>
-                </StackPanel>
+                <HeaderToolTip:HeaderToolTip Grid.Column="0"
+                                                 Header="{Binding Header, ElementName=self}"
+                                                 ToolTipText="{Binding ToolTipText, ElementName=self}"
+                                                 HeaderFontSize="{Binding TextBlockFontSize, ElementName=self}"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"
+                                                 Margin="13.5,0,0,0"/>
 
                 <ToggleButton x:Name="toggleButton"
                     Style="{StaticResource ToggleSwitchStyle}"

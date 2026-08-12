@@ -14,7 +14,27 @@
   <data name="声卡绑定" xml:space="preserve"><value>Dispositivos de áudio</value></data>
   <data name="系统设置" xml:space="preserve"><value>Geral</value></data>
   <data name="运行" xml:space="preserve"><value>Iniciar</value></data>
-  <data name="运行_说明" xml:space="preserve"><value>Mistura o microfone físico com o áudio reproduzido pelo PlayVoice e envia tudo ao microfone virtual. Antes de iniciar, conclua o teste de normalização de volume e vincule os quatro dispositivos de áudio.</value></data>
+  <data name="运行_说明" xml:space="preserve"><value>Mistura o microfone físico com o áudio reproduzido pelo PlayVoice e envia o resultado ao microfone virtual. Antes de iniciar, conclua o teste de normalização e vincule os quatro dispositivos.</value></data>
+  <data name="耳返_Audio_说明" xml:space="preserve"><value>Também envia o áudio do PlayVoice aos alto-falantes físicos. Primeiro ative “Iniciar”. Esse monitoramento não representa necessariamente o que outras pessoas ouvem.</value></data>
+  <data name="耳返_In_说明" xml:space="preserve"><value>Permite monitorar seu microfone. Primeiro ative “Iniciar”. Aproximar o microfone dos alto-falantes pode causar eco ou microfonia.</value></data>
+  <data name="自动闭麦_说明" xml:space="preserve"><value>Pausa o microfone enquanto qualquer áudio do preset está tocando e o restaura quando todo o áudio termina.</value></data>
+  <data name="游戏预设_说明" xml:space="preserve"><value>Seleciona o preset de jogo ativo, que salva atalhos, volumes e ações de tecla antes e depois da reprodução.</value></data>
+  <data name="音频预设_说明" xml:space="preserve"><value>Seleciona o preset de áudio ativo e determina a lista de faixas disponíveis.</value></data>
+  <data name="语言_说明" xml:space="preserve"><value>Altera o idioma da interface do PlayVoice.</value></data>
+  <data name="样式_说明" xml:space="preserve"><value>Alterna entre tema claro, escuro ou correspondente ao sistema.</value></data>
+  <data name="关闭行为_说明" xml:space="preserve"><value>Escolhe o que acontece ao clicar no botão de fechar a janela.</value></data>
+  <data name="响度归一化测试_说明" xml:space="preserve"><value>Grava o microfone físico por cerca de 7 segundos e analisa o volume para evitar áudio de saída muito alto. Fale continuamente no seu volume normal.</value></data>
+  <data name="音频音量_说明" xml:space="preserve"><value>Ajusta o áudio do PlayVoice para o microfone virtual e o monitoramento nos alto-falantes ao mesmo tempo.</value></data>
+  <data name="音频输出音量_说明" xml:space="preserve"><value>Ajusta o áudio enviado ao microfone virtual sem alterar o volume de monitoramento.</value></data>
+  <data name="音频耳返音量_说明" xml:space="preserve"><value>Ajusta o monitoramento nos alto-falantes físicos sem alterar a saída do microfone virtual.</value></data>
+  <data name="麦克风输入音量_说明" xml:space="preserve"><value>Ajusta o nível do microfone físico que entra na mixagem.</value></data>
+  <data name="全局音量_说明" xml:space="preserve"><value>Ajusta o nível geral da saída final após misturar todas as fontes.</value></data>
+  <data name="播放前_说明" xml:space="preserve"><value>Define a ação de tecla simulada ao iniciar o primeiro áudio. “Manter” segura a tecla; “Clique” pressiona e solta imediatamente.</value></data>
+  <data name="播放后_说明" xml:space="preserve"><value>Define a ação ao terminar o último áudio. “Soltar” libera uma tecla mantida; “Clique” executa um pressionamento completo.</value></data>
+  <data name="物理麦克风_说明" xml:space="preserve"><value>Selecione o microfone usado para falar. Escolha um dispositivo diferente do VB-CABLE.</value></data>
+  <data name="物理扬声器_说明" xml:space="preserve"><value>Selecione os fones ou alto-falantes usados para ouvir. Escolha um dispositivo diferente do VB-CABLE.</value></data>
+  <data name="虚拟麦克风_说明" xml:space="preserve"><value>Selecione a ponta de gravação do VB-CABLE como entrada de microfone em jogos, voz ou streaming. A mixagem final do PlayVoice sai por este dispositivo.</value></data>
+  <data name="虚拟扬声器_说明" xml:space="preserve"><value>Selecione a ponta de reprodução do VB-CABLE que recebe o microfone físico e o áudio dos presets já misturados.</value></data>
   <data name="语言" xml:space="preserve"><value>Idioma</value></data>
   <data name="样式" xml:space="preserve"><value>Tema</value></data>
   <data name="去Steam" xml:space="preserve"><value>Apoie-nos na Steam</value></data>

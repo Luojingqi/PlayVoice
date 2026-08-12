@@ -14,7 +14,27 @@
   <data name="声卡绑定" xml:space="preserve"><value>Аудиоустройства</value></data>
   <data name="系统设置" xml:space="preserve"><value>Основные</value></data>
   <data name="运行" xml:space="preserve"><value>Запуск</value></data>
-  <data name="运行_说明" xml:space="preserve"><value>Смешивает физический микрофон со звуком, воспроизводимым PlayVoice, и выводит их на виртуальный микрофон. Перед запуском выполните тест нормализации громкости и подключите все четыре аудиоустройства.</value></data>
+  <data name="运行_说明" xml:space="preserve"><value>Смешивает физический микрофон со звуком PlayVoice и выводит результат на виртуальный микрофон. Перед запуском выполните тест нормализации и подключите все четыре устройства.</value></data>
+  <data name="耳返_Audio_说明" xml:space="preserve"><value>Дополнительно выводит звук PlayVoice на физические динамики. Сначала включите «Запуск». Этот мониторинг не обязательно совпадает с тем, что слышат другие.</value></data>
+  <data name="耳返_In_说明" xml:space="preserve"><value>Позволяет слышать свой микрофон. Сначала включите «Запуск». Микрофон рядом с динамиками может вызвать эхо или обратную связь.</value></data>
+  <data name="自动闭麦_说明" xml:space="preserve"><value>Приостанавливает микрофон, пока воспроизводится звук пресета, и восстанавливает его после завершения всего звука.</value></data>
+  <data name="游戏预设_说明" xml:space="preserve"><value>Выбирает активный игровой пресет с горячими клавишами, громкостью и действиями клавиш до и после воспроизведения.</value></data>
+  <data name="音频预设_说明" xml:space="preserve"><value>Выбирает активный аудиопресет и определяет список доступных дорожек.</value></data>
+  <data name="语言_说明" xml:space="preserve"><value>Изменяет язык интерфейса PlayVoice.</value></data>
+  <data name="样式_说明" xml:space="preserve"><value>Переключает светлую, тёмную или системную тему интерфейса.</value></data>
+  <data name="关闭行为_说明" xml:space="preserve"><value>Выбирает действие при нажатии кнопки закрытия окна.</value></data>
+  <data name="响度归一化测试_说明" xml:space="preserve"><value>Записывает физический микрофон около 7 секунд и анализирует громкость, чтобы исходящий звук не был слишком громким. Говорите непрерывно обычным голосом.</value></data>
+  <data name="音频音量_说明" xml:space="preserve"><value>Одновременно регулирует звук PlayVoice для виртуального микрофона и мониторинга через динамики.</value></data>
+  <data name="音频输出音量_说明" xml:space="preserve"><value>Регулирует звук на виртуальном микрофоне, не изменяя громкость мониторинга.</value></data>
+  <data name="音频耳返音量_说明" xml:space="preserve"><value>Регулирует мониторинг через физические динамики, не изменяя выход виртуального микрофона.</value></data>
+  <data name="麦克风输入音量_说明" xml:space="preserve"><value>Регулирует уровень физического микрофона, поступающего в микс.</value></data>
+  <data name="全局音量_说明" xml:space="preserve"><value>Регулирует общий уровень итогового выхода после смешивания всех источников.</value></data>
+  <data name="播放前_说明" xml:space="preserve"><value>Задаёт действие клавиши при запуске первого аудио. «Нажать» удерживает клавишу; «Щелчок» сразу нажимает и отпускает её.</value></data>
+  <data name="播放后_说明" xml:space="preserve"><value>Задаёт действие при завершении последнего аудио. «Отпустить» освобождает удерживаемую клавишу; «Щелчок» выполняет полное нажатие.</value></data>
+  <data name="物理麦克风_说明" xml:space="preserve"><value>Выберите микрофон, в который вы говорите. Не выбирайте устройство VB-CABLE.</value></data>
+  <data name="物理扬声器_说明" xml:space="preserve"><value>Выберите наушники или динамики, через которые вы слушаете. Не выбирайте устройство VB-CABLE.</value></data>
+  <data name="虚拟麦克风_说明" xml:space="preserve"><value>Выберите записывающий конец VB-CABLE как микрофон в играх, голосовых или стриминговых приложениях. Итоговый микс PlayVoice выводится сюда.</value></data>
+  <data name="虚拟扬声器_说明" xml:space="preserve"><value>Выберите воспроизводящий конец VB-CABLE, принимающий смешанный физический микрофон и звук пресетов.</value></data>
   <data name="语言" xml:space="preserve"><value>Язык</value></data>
   <data name="样式" xml:space="preserve"><value>Тема</value></data>
   <data name="去Steam" xml:space="preserve"><value>Поддержать нас в Steam</value></data>

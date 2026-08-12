@@ -31,6 +31,7 @@
                 Grid.Row="0"
                 x:Name="PhysicalMicrophoneComboBox"
                 Header="{L:Lan 物理麦克风}"
+                ToolTipText="{L:Lan 物理麦克风_说明}"
                 DropDownWidth="130"
                 Margin="0,1.5,0,1.5"
                 Height="37.5"/>
@@ -38,6 +39,7 @@
                 Grid.Row="1"
                 x:Name="PhysicalLoudspeakerComboBox"
                 Header="{L:Lan 物理扬声器}"
+                ToolTipText="{L:Lan 物理扬声器_说明}"
                 DropDownWidth="130"
                 Margin="0,1.5,0,1.5"
                 Height="37.5"/>
@@ -45,6 +47,7 @@
                 Grid.Row="2"
                 x:Name="VirtualMicrophoneComboBox"
                 Header="{L:Lan 虚拟麦克风}"
+                ToolTipText="{L:Lan 虚拟麦克风_说明}"
                 DropDownWidth="130"
                 Margin="0,1.5,0,1.5"
                 Height="37.5"/>
@@ -52,6 +55,7 @@
                 Grid.Row="3"
                 x:Name="VirtualLoudspeakerComboBox"
                 Header="{L:Lan 虚拟扬声器}"
+                ToolTipText="{L:Lan 虚拟扬声器_说明}"
                 DropDownWidth="130"
                 Margin="0,1.5,0,1.5"
                 Height="37.5"/>

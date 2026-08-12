@@ -15,6 +15,26 @@
   <data name="系统设置" xml:space="preserve"><value>一般</value></data>
   <data name="运行" xml:space="preserve"><value>啟動</value></data>
   <data name="运行_说明" xml:space="preserve"><value>開啟後，將實體麥克風與 PlayVoice 播放的音訊混合輸出至虛擬麥克風。啟動前需完成音量正規化測試，並確認四個音訊裝置均已成功綁定。</value></data>
+  <data name="耳返_Audio_说明" xml:space="preserve"><value>將 PlayVoice 播放的音訊同時送至實體揚聲器。必須先開啟「啟動」。此監聽效果不一定代表對方最終聽到的效果。</value></data>
+  <data name="耳返_In_说明" xml:space="preserve"><value>監聽您的麥克風聲音。必須先開啟「啟動」。麥克風靠近揚聲器時可能產生回音或嘯叫。</value></data>
+  <data name="自动闭麦_说明" xml:space="preserve"><value>播放任何預設音訊期間暫停麥克風輸入，所有音訊結束後恢復麥克風。</value></data>
+  <data name="游戏预设_说明" xml:space="preserve"><value>選擇目前遊戲預設。遊戲預設保存各音訊的快速鍵、音量，以及播放前後的模擬按鍵設定。</value></data>
+  <data name="音频预设_说明" xml:space="preserve"><value>選擇目前音訊預設。此預設決定可播放的音訊清單。</value></data>
+  <data name="语言_说明" xml:space="preserve"><value>切換 PlayVoice 的介面語言。</value></data>
+  <data name="样式_说明" xml:space="preserve"><value>切換淺色、深色或跟隨系統的介面主題。</value></data>
+  <data name="关闭行为_说明" xml:space="preserve"><value>選擇按下視窗關閉按鈕時的行為。</value></data>
+  <data name="响度归一化测试_说明" xml:space="preserve"><value>使用目前實體麥克風錄音約 7 秒並分析音量，避免傳出音訊過大。測試時請以正常音量持續說話。</value></data>
+  <data name="音频音量_说明" xml:space="preserve"><value>同時調整 PlayVoice 音訊傳送至虛擬麥克風和實體揚聲器監聽的音量。</value></data>
+  <data name="音频输出音量_说明" xml:space="preserve"><value>調整 PlayVoice 音訊傳送至虛擬麥克風的音量，不影響音訊監聽音量。</value></data>
+  <data name="音频耳返音量_说明" xml:space="preserve"><value>調整 PlayVoice 音訊傳送至實體揚聲器的監聽音量，不影響虛擬麥克風輸出。</value></data>
+  <data name="麦克风输入音量_说明" xml:space="preserve"><value>調整實體麥克風進入混音鏈路的音量。</value></data>
+  <data name="全局音量_说明" xml:space="preserve"><value>調整 PlayVoice 混合各音源後最終輸出的整體音量。</value></data>
+  <data name="播放前_说明" xml:space="preserve"><value>設定第一段音訊開始時模擬的按鍵動作。「按下」會持續按住按鍵，「單擊」會立即按下並放開。</value></data>
+  <data name="播放后_说明" xml:space="preserve"><value>設定最後一段音訊結束時模擬的按鍵動作。「放開」會釋放先前按住的按鍵，「單擊」會執行一次完整點擊。</value></data>
+  <data name="物理麦克风_说明" xml:space="preserve"><value>選擇實際用於說話的麥克風。請選擇非 VB-CABLE 裝置。</value></data>
+  <data name="物理扬声器_说明" xml:space="preserve"><value>選擇實際用於聆聽的耳機或揚聲器。請選擇非 VB-CABLE 裝置。</value></data>
+  <data name="虚拟麦克风_说明" xml:space="preserve"><value>選擇 VB-CABLE 的錄音端，作為遊戲、語音或直播軟體的麥克風輸入。PlayVoice 的最終混音會從此裝置輸出。</value></data>
+  <data name="虚拟扬声器_说明" xml:space="preserve"><value>選擇 VB-CABLE 的播放端，用於接收混合後的實體麥克風與預設音訊。</value></data>
   <data name="语言" xml:space="preserve"><value>語言</value></data>
   <data name="样式" xml:space="preserve"><value>主題</value></data>
   <data name="去Steam" xml:space="preserve"><value>前往 Steam 支持我們</value></data>

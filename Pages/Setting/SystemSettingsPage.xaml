@@ -11,6 +11,7 @@
         xmlns:pages="clr-namespace:PlayVoice.Pages"
         xmlns:AudioVolumeSlider="clr-namespace:PlayVoice.Pages.AudioVolumeSlider"
         xmlns:ExpandArrow="clr-namespace:PlayVoice.Pages.ExpandArrow"
+        xmlns:HeaderToolTip="clr-namespace:PlayVoice.Pages.HeaderToolTip"
         mc:Ignorable="d">
 
     <Page.Resources>
@@ -58,6 +59,7 @@
                      Grid.Row="1"
                      x:Name="EarAudioToggle"
                      Header="{L:Lan 耳返_Audio}"
+                     ToolTipText="{L:Lan 耳返_Audio_说明}"
                      ButtonWidth="80"
                      Margin="0,1.5"
                      Padding="0,2.2"
@@ -66,6 +68,7 @@
                      Grid.Row="2"
                      x:Name="EarInToggle"
                      Header="{L:Lan 耳返_In}"
+                     ToolTipText="{L:Lan 耳返_In_说明}"
                      ButtonWidth="80"
                      Margin="0,1.5"
                      Padding="0,2.2"
@@ -74,6 +77,7 @@
                      Grid.Row="3"
                      x:Name="AutoMuteToggle"
                      Header="{L:Lan 自动闭麦}"
+                     ToolTipText="{L:Lan 自动闭麦_说明}"
                      ButtonWidth="80"
                      Margin="0,1.5"
                      Padding="0,2.2"
@@ -82,6 +86,7 @@
                 <DropDownList:DropDownList
                         x:Name="FunctionPresetComboBox"
                         Header="{L:Lan 游戏预设}"
+                        ToolTipText="{L:Lan 游戏预设_说明}"
                         DisplayMemberPath="DisplayName"
                         DropDownWidth="130"
                         Margin="0,1.5"
@@ -89,6 +94,7 @@
                 <DropDownList:DropDownList
                         x:Name="AudioPresetComboBox"
                         Header="{L:Lan 音频预设}"
+                        ToolTipText="{L:Lan 音频预设_说明}"
                         DropDownWidth="130"
                         Margin="0,1.5"
                         Height="37.5"/>
@@ -97,6 +103,7 @@
                     Grid.Row="5"
                     x:Name="LanguageComboBox"
                     Header="{L:Lan 语言}"
+                    ToolTipText="{L:Lan 语言_说明}"
                     DropDownWidth="130"
                     Margin="0,1.5"
                     Height="37.5"/>
@@ -104,6 +111,7 @@
                     Grid.Row="6"
                     x:Name="StyleListBox"
                     Header="{L:Lan 样式}"
+                    ToolTipText="{L:Lan 样式_说明}"
                     DropDownWidth="130"
                     Margin="0,1.5"
                     Height="37.5"/>
@@ -111,6 +119,7 @@
                     Grid.Row="7"
                     x:Name="CloseBehaviorComboBox"
                     Header="{L:Lan 关闭行为}"
+                    ToolTipText="{L:Lan 关闭行为_说明}"
                     DropDownWidth="130"
                     Margin="0,1.5"
                     Height="37.5"/>
@@ -121,14 +130,12 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock  Grid.Column="0"
-                            FontSize="16"
-                            Text="{L:Lan 响度归一化测试}" 
-                            Style="{StaticResource TextBlockLight}"
-                            VerticalAlignment="Center" 
-                            Margin="13.5,0,0,0" 
-                            HorizontalAlignment="Left"
-                            TextAlignment="Left"/>
+                <HeaderToolTip:HeaderToolTip Grid.Column="0"
+                                             Header="{L:Lan 响度归一化测试}"
+                                             ToolTipText="{L:Lan 响度归一化测试_说明}"
+                                             VerticalAlignment="Center"
+                                             HorizontalAlignment="Left"
+                                             Margin="13.5,0,0,0"/>
                 <ListBox  Grid.Column="1"
                         Width="130"
                         Style="{StaticResource HorizontalButtonGroupStyle}"
@@ -168,12 +175,11 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0"
-                               FontSize="16"
-                               Style="{StaticResource TextBlockLight}"
-                               Text="{L:Lan 音频音量}"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"/>
+                    <HeaderToolTip:HeaderToolTip Grid.Column="0"
+                                                 Header="{L:Lan 音频音量}"
+                                                 ToolTipText="{L:Lan 音频音量_说明}"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"/>
                     <AudioVolumeSlider:AudioVolumeSlider
                                x:Name="AudioVolumeSlider"
                                Grid.Column="1"
@@ -194,12 +200,11 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="0"
-                               FontSize="16"
-                               Style="{StaticResource TextBlockLight}"
-                               Text="{L:Lan 音频输出音量}"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"/>
+                    <HeaderToolTip:HeaderToolTip Grid.Column="0"
+                                                 Header="{L:Lan 音频输出音量}"
+                                                 ToolTipText="{L:Lan 音频输出音量_说明}"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"/>
                     <AudioVolumeSlider:AudioVolumeSlider
                                x:Name="AudioOutVolumeSlider"
                                Grid.Column="1"
@@ -225,12 +230,11 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <TextBlock Grid.Column="1"
-                               FontSize="16"
-                               Style="{StaticResource TextBlockLight}"
-                               Text="{L:Lan 音频耳返音量}"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left"/>
+                    <HeaderToolTip:HeaderToolTip Grid.Column="1"
+                                                 Header="{L:Lan 音频耳返音量}"
+                                                 ToolTipText="{L:Lan 音频耳返音量_说明}"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"/>
                     <AudioVolumeSlider:AudioVolumeSlider
                                x:Name="AudioEarVolumeSlider"
                                Grid.Column="2"
@@ -246,13 +250,12 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0"
-                            Margin="13.5,0,0,0"
-                            FontSize="16"
-                            Style="{StaticResource TextBlockLight}"
-                            Text="{L:Lan 麦克风输入音量}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"/>
+                <HeaderToolTip:HeaderToolTip Grid.Column="0"
+                                             Header="{L:Lan 麦克风输入音量}"
+                                             ToolTipText="{L:Lan 麦克风输入音量_说明}"
+                                             Margin="13.5,0,0,0"
+                                             VerticalAlignment="Center"
+                                             HorizontalAlignment="Left"/>
                 <AudioVolumeSlider:AudioVolumeSlider
                             x:Name="MicrophoneVolumeSlider"
                             Grid.Column="1"
@@ -267,13 +270,12 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Column="0"
-                            Margin="13.5,0,0,0"
-                            FontSize="16"
-                            Style="{StaticResource TextBlockLight}"
-                            Text="{L:Lan 全局音量}"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"/>
+                <HeaderToolTip:HeaderToolTip Grid.Column="0"
+                                             Header="{L:Lan 全局音量}"
+                                             ToolTipText="{L:Lan 全局音量_说明}"
+                                             Margin="13.5,0,0,0"
+                                             VerticalAlignment="Center"
+                                             HorizontalAlignment="Left"/>
                 <AudioVolumeSlider:AudioVolumeSlider
                             x:Name="GlobalVolumeSlider"
                             Grid.Column="1"
@@ -291,6 +293,7 @@
                             Grid.Column="0"
                             x:Name="BeforePlayingComboBox"
                             Header="{L:Lan 播放前}"
+                            ToolTipText="{L:Lan 播放前_说明}"
                             DropDownWidth="80"/>
                 <ListBox Grid.Column="1" Margin="10,0,0,0"
                         Style="{StaticResource HorizontalButtonGroupStyle}"
@@ -316,6 +319,7 @@
                             Grid.Column="0"
                             x:Name="AfterPlayingComboBox"
                             Header="{L:Lan 播放后}"
+                            ToolTipText="{L:Lan 播放后_说明}"
                             DropDownWidth="80"/>
                 <ListBox Grid.Column="1" Margin="10,0,0,0"
                         Style="{StaticResource HorizontalButtonGroupStyle}"

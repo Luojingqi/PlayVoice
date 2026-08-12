@@ -14,7 +14,27 @@
   <data name="声卡绑定" xml:space="preserve"><value>オーディオデバイス</value></data>
   <data name="系统设置" xml:space="preserve"><value>一般</value></data>
   <data name="运行" xml:space="preserve"><value>開始</value></data>
-  <data name="运行_说明" xml:space="preserve"><value>物理マイクとPlayVoiceで再生する音声をミックスし、仮想マイクへ出力します。開始前に音量正規化テストを完了し、4つのオーディオデバイスをすべて接続してください。</value></data>
+  <data name="运行_说明" xml:space="preserve"><value>物理マイクとPlayVoiceの音声をミックスして仮想マイクへ出力します。開始前に音量正規化テストを完了し、4つのデバイスをすべて接続してください。</value></data>
+  <data name="耳返_Audio_说明" xml:space="preserve"><value>PlayVoiceの音声を物理スピーカーにも出力します。先に「開始」を有効にしてください。このモニター音は相手が聞く音と必ずしも同じではありません。</value></data>
+  <data name="耳返_In_说明" xml:space="preserve"><value>自分のマイク音声をモニターします。先に「開始」を有効にしてください。マイクをスピーカーに近づけるとエコーやハウリングが発生する場合があります。</value></data>
+  <data name="自动闭麦_说明" xml:space="preserve"><value>プリセット音声の再生中はマイク入力を停止し、すべての音声が終了すると元に戻します。</value></data>
+  <data name="游戏预设_说明" xml:space="preserve"><value>使用するゲームプリセットを選択します。各音声のホットキー、音量、再生前後のキー操作を保存します。</value></data>
+  <data name="音频预设_说明" xml:space="preserve"><value>使用する音声プリセットを選択し、再生可能な音声一覧を切り替えます。</value></data>
+  <data name="语言_说明" xml:space="preserve"><value>PlayVoiceの表示言語を切り替えます。</value></data>
+  <data name="样式_说明" xml:space="preserve"><value>ライト、ダーク、またはシステムに合わせたテーマへ切り替えます。</value></data>
+  <data name="关闭行为_说明" xml:space="preserve"><value>ウィンドウの閉じるボタンを押したときの動作を選択します。</value></data>
+  <data name="响度归一化测试_说明" xml:space="preserve"><value>物理マイクを約7秒録音して音量を解析し、送信音声が大きすぎることを防ぎます。テスト中は普段の音量で話し続けてください。</value></data>
+  <data name="音频音量_说明" xml:space="preserve"><value>仮想マイク出力と物理スピーカーのモニター音量を同時に調整します。</value></data>
+  <data name="音频输出音量_说明" xml:space="preserve"><value>モニター音量を変えずに、仮想マイクへ送るPlayVoice音声を調整します。</value></data>
+  <data name="音频耳返音量_说明" xml:space="preserve"><value>仮想マイク出力を変えずに、物理スピーカーのモニター音量を調整します。</value></data>
+  <data name="麦克风输入音量_说明" xml:space="preserve"><value>ミックスへ入る物理マイクの音量を調整します。</value></data>
+  <data name="全局音量_说明" xml:space="preserve"><value>すべての音源をミックスした最終出力の全体音量を調整します。</value></data>
+  <data name="播放前_说明" xml:space="preserve"><value>最初の音声開始時に行うキー操作を設定します。「押す」は保持し、「クリック」はすぐに押して離します。</value></data>
+  <data name="播放后_说明" xml:space="preserve"><value>最後の音声終了時に行うキー操作を設定します。「離す」は保持中のキーを解放し、「クリック」は1回の押下を行います。</value></data>
+  <data name="物理麦克风_说明" xml:space="preserve"><value>実際に話すマイクを選択します。VB-CABLE以外のデバイスを選んでください。</value></data>
+  <data name="物理扬声器_说明" xml:space="preserve"><value>実際に聞くヘッドホンまたはスピーカーを選択します。VB-CABLE以外を選んでください。</value></data>
+  <data name="虚拟麦克风_说明" xml:space="preserve"><value>ゲーム、通話、配信ソフトのマイク入力としてVB-CABLEの録音側を選択します。PlayVoiceの最終ミックスはここから出力されます。</value></data>
+  <data name="虚拟扬声器_说明" xml:space="preserve"><value>物理マイクとプリセット音声のミックスを受け取るVB-CABLEの再生側を選択します。</value></data>
   <data name="语言" xml:space="preserve"><value>言語</value></data>
   <data name="样式" xml:space="preserve"><value>テーマ</value></data>
   <data name="去Steam" xml:space="preserve"><value>Steamで応援</value></data>

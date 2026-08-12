@@ -148,8 +148,33 @@
     <value>运行</value>
   </data>
   <data name="运行_说明" xml:space="preserve">
-    <value>开启后，将物理麦克风与 PlayVoice 播放的音频混合输出到虚拟麦克风。运行前需完成响度归一化测试，并确保四个音频设备均已成功绑定。</value>
+    <value>开启后，将物理麦克风与 PlayVoice 播放的音频混合输出到虚拟麦克风。
+运行前需完成响度归一化测试，并确保四个音频设备均已成功绑定。</value>
   </data>
+  <data name="耳返_Audio_说明" xml:space="preserve"><value>将 PlayVoice 播放的音频同时送到物理扬声器。必须先开启“运行”。
+此效果不意味着最终对方听到的效果。</value></data>
+  <data name="耳返_In_说明" xml:space="preserve"><value>监听您的麦克风声音。必须先开启“运行”。
+麦克风靠近扬声器时可能产生回声或啸叫。</value></data>
+  <data name="自动闭麦_说明" xml:space="preserve"><value>播放任意预设音频期间，暂停您的麦克风输入，音频全部结束后恢复麦克风。</value></data>
+  <data name="游戏预设_说明" xml:space="preserve"><value>选择当前游戏预设。游戏预设保存各音频的快捷键、音量，以及播放前后的模拟按键设置。</value></data>
+  <data name="音频预设_说明" xml:space="preserve"><value>选择当前音频预设。该预设决定可播放的音频列表。</value></data>
+  <data name="语言_说明" xml:space="preserve"><value>切换 PlayVoice 的界面语言。</value></data>
+  <data name="样式_说明" xml:space="preserve"><value>切换浅色、深色或跟随系统的界面主题。</value></data>
+  <data name="关闭行为_说明" xml:space="preserve"><value>选择点击窗口关闭按钮时的行为。</value></data>
+  <data name="响度归一化测试_说明" xml:space="preserve"><value>使用当前物理麦克风录音约 7 秒并分析响度，结果用于音频响度校准，防止传出音频过吵。
+测试时请以正常音量持续说话。</value></data>
+  <data name="音频音量_说明" xml:space="preserve"><value>同时调整 PlayVoice 音频发送到虚拟麦克风和物理扬声器耳返的音量。</value></data>
+  <data name="音频输出音量_说明" xml:space="preserve"><value>调整 PlayVoice 音频发送到虚拟麦克风的音量，不影响音频耳返音量。</value></data>
+  <data name="音频耳返音量_说明" xml:space="preserve"><value>调整 PlayVoice 音频发送到物理扬声器的监听音量，不影响虚拟麦克风输出。</value></data>
+  <data name="麦克风输入音量_说明" xml:space="preserve"><value>调整物理麦克风进入混音链路的音量。</value></data>
+  <data name="全局音量_说明" xml:space="preserve"><value>调整 PlayVoice 混合各音源最终输出的整体音量。</value></data>
+  <data name="播放前_说明" xml:space="preserve"><value>设置每次开始播放第一条音频时模拟的按键动作。“按下”会保持按键按住，“单击”会立即按下并抬起。</value></data>
+  <data name="播放后_说明" xml:space="preserve"><value>设置最后一条音频结束时模拟的按键动作。“抬起”用于释放播放前按住的按键，“单击”会执行一次完整点击。</value></data>
+  <data name="物理麦克风_说明" xml:space="preserve"><value>选择实际用于说话的麦克风。请选择非 VB-CABLE 设备。</value></data>
+  <data name="物理扬声器_说明" xml:space="preserve"><value>选择你实际用于听声音的耳机或扬声器。请选择非 VB-CABLE 设备。</value></data>
+  <data name="虚拟麦克风_说明" xml:space="preserve"><value>选择 VB-CABLE 的录音端，作为游戏、语音或直播软件中的麦克风输入。
+PlayVoice 的最终混音会从此设备输出。</value></data>
+  <data name="虚拟扬声器_说明" xml:space="preserve"><value>选择 VB-CABLE 的播放端，用于接收 PlayVoice 混合后的物理麦克风与预设音频。</value></data>
   <data name="语言" xml:space="preserve">
     <value>语言</value>
   </data>

@@ -14,7 +14,27 @@
   <data name="声卡绑定" xml:space="preserve"><value>Dispositivos de audio</value></data>
   <data name="系统设置" xml:space="preserve"><value>General</value></data>
   <data name="运行" xml:space="preserve"><value>Iniciar</value></data>
-  <data name="运行_说明" xml:space="preserve"><value>Mezcla el micrófono físico con el audio reproducido por PlayVoice y lo envía al micrófono virtual. Antes de iniciar, completa la prueba de normalización de volumen y vincula los cuatro dispositivos de audio.</value></data>
+  <data name="运行_说明" xml:space="preserve"><value>Mezcla el micrófono físico con el audio reproducido por PlayVoice y envía el resultado al micrófono virtual. Antes de iniciar, completa la prueba de normalización y vincula los cuatro dispositivos.</value></data>
+  <data name="耳返_Audio_说明" xml:space="preserve"><value>También envía el audio de PlayVoice a los altavoces físicos. Primero debes activar «Iniciar». Esta monitorización no representa necesariamente lo que oyen los demás.</value></data>
+  <data name="耳返_In_说明" xml:space="preserve"><value>Permite escuchar tu micrófono. Primero debes activar «Iniciar». Acercar el micrófono a los altavoces puede causar eco o acople.</value></data>
+  <data name="自动闭麦_说明" xml:space="preserve"><value>Pausa el micrófono mientras se reproduce cualquier audio del preajuste y lo restaura cuando termina todo el audio.</value></data>
+  <data name="游戏预设_说明" xml:space="preserve"><value>Selecciona el preajuste de juego activo, que guarda atajos, volúmenes y acciones de tecla antes y después de reproducir.</value></data>
+  <data name="音频预设_说明" xml:space="preserve"><value>Selecciona el preajuste de audio activo y determina la lista de pistas disponibles.</value></data>
+  <data name="语言_说明" xml:space="preserve"><value>Cambia el idioma de la interfaz de PlayVoice.</value></data>
+  <data name="样式_说明" xml:space="preserve"><value>Cambia entre tema claro, oscuro o igual al del sistema.</value></data>
+  <data name="关闭行为_说明" xml:space="preserve"><value>Elige qué ocurre al pulsar el botón de cerrar la ventana.</value></data>
+  <data name="响度归一化测试_说明" xml:space="preserve"><value>Graba el micrófono físico unos 7 segundos y analiza el volumen para evitar que el audio saliente sea demasiado alto. Habla continuamente con tu volumen normal.</value></data>
+  <data name="音频音量_说明" xml:space="preserve"><value>Ajusta conjuntamente el audio de PlayVoice para el micrófono virtual y la monitorización por altavoces.</value></data>
+  <data name="音频输出音量_说明" xml:space="preserve"><value>Ajusta el audio enviado al micrófono virtual sin cambiar el volumen de monitorización.</value></data>
+  <data name="音频耳返音量_说明" xml:space="preserve"><value>Ajusta la monitorización por altavoces físicos sin cambiar la salida del micrófono virtual.</value></data>
+  <data name="麦克风输入音量_说明" xml:space="preserve"><value>Ajusta el nivel del micrófono físico que entra en la mezcla.</value></data>
+  <data name="全局音量_说明" xml:space="preserve"><value>Ajusta el nivel final general después de mezclar todas las fuentes.</value></data>
+  <data name="播放前_说明" xml:space="preserve"><value>Define la acción de tecla simulada al iniciar el primer audio. «Mantener» deja la tecla pulsada; «Clic» la pulsa y suelta.</value></data>
+  <data name="播放后_说明" xml:space="preserve"><value>Define la acción al terminar el último audio. «Soltar» libera una tecla mantenida; «Clic» realiza una pulsación completa.</value></data>
+  <data name="物理麦克风_说明" xml:space="preserve"><value>Selecciona el micrófono que utilizas para hablar. Elige un dispositivo que no sea VB-CABLE.</value></data>
+  <data name="物理扬声器_说明" xml:space="preserve"><value>Selecciona los auriculares o altavoces que utilizas para escuchar. Elige un dispositivo que no sea VB-CABLE.</value></data>
+  <data name="虚拟麦克风_说明" xml:space="preserve"><value>Selecciona el extremo de grabación de VB-CABLE como entrada de micrófono en juegos, voz o streaming. La mezcla final de PlayVoice sale por este dispositivo.</value></data>
+  <data name="虚拟扬声器_说明" xml:space="preserve"><value>Selecciona el extremo de reproducción de VB-CABLE que recibe el micrófono físico y el audio de preajustes mezclados.</value></data>
   <data name="语言" xml:space="preserve"><value>Idioma</value></data>
   <data name="样式" xml:space="preserve"><value>Tema</value></data>
   <data name="去Steam" xml:space="preserve"><value>Apóyanos en Steam</value></data>

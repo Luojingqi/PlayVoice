@@ -148,8 +148,33 @@
     <value>Run</value>
   </data>
   <data name="运行_说明" xml:space="preserve">
-    <value>Mixes the physical microphone and audio played by PlayVoice, then sends them to the virtual microphone. Complete the loudness normalization test and bind all four audio devices before running.</value>
+    <value>Mixes the physical microphone with audio played by PlayVoice and sends the result to the virtual microphone.
+Complete the loudness normalization test and bind all four audio devices before running.</value>
   </data>
+  <data name="耳返_Audio_说明" xml:space="preserve"><value>Sends audio played by PlayVoice to your physical speakers as well. Run must be enabled first.
+This monitoring signal does not necessarily match what others hear.</value></data>
+  <data name="耳返_In_说明" xml:space="preserve"><value>Lets you monitor your microphone. Run must be enabled first.
+Keeping the microphone near speakers may cause echo or feedback.</value></data>
+  <data name="自动闭麦_说明" xml:space="preserve"><value>Pauses microphone input while any preset audio is playing, then restores it when all audio finishes.</value></data>
+  <data name="游戏预设_说明" xml:space="preserve"><value>Selects the active game preset. It stores each track's hotkey and volume, plus simulated key actions before and after playback.</value></data>
+  <data name="音频预设_说明" xml:space="preserve"><value>Selects the active audio preset, which determines the list of audio tracks available to play.</value></data>
+  <data name="语言_说明" xml:space="preserve"><value>Changes the PlayVoice interface language.</value></data>
+  <data name="样式_说明" xml:space="preserve"><value>Switches between light, dark, or system-matched interface themes.</value></data>
+  <data name="关闭行为_说明" xml:space="preserve"><value>Chooses what happens when you click the window's close button.</value></data>
+  <data name="响度归一化测试_说明" xml:space="preserve"><value>Records the physical microphone for about 7 seconds and analyzes loudness to prevent outgoing audio from being too loud.
+Speak continuously at your normal volume during the test.</value></data>
+  <data name="音频音量_说明" xml:space="preserve"><value>Adjusts PlayVoice audio volume for both the virtual microphone output and physical-speaker monitoring.</value></data>
+  <data name="音频输出音量_说明" xml:space="preserve"><value>Adjusts PlayVoice audio sent to the virtual microphone without changing monitor volume.</value></data>
+  <data name="音频耳返音量_说明" xml:space="preserve"><value>Adjusts PlayVoice audio monitored through physical speakers without changing virtual microphone output.</value></data>
+  <data name="麦克风输入音量_说明" xml:space="preserve"><value>Adjusts the physical microphone level entering the mix.</value></data>
+  <data name="全局音量_说明" xml:space="preserve"><value>Adjusts the overall final output level after PlayVoice mixes all audio sources.</value></data>
+  <data name="播放前_说明" xml:space="preserve"><value>Sets the simulated key action when the first audio starts. Hold keeps the key down; Click presses and releases it immediately.</value></data>
+  <data name="播放后_说明" xml:space="preserve"><value>Sets the simulated key action when the last audio ends. Release frees a held key; Click performs one complete key press.</value></data>
+  <data name="物理麦克风_说明" xml:space="preserve"><value>Select the microphone you actually speak into. Choose a device other than VB-CABLE.</value></data>
+  <data name="物理扬声器_说明" xml:space="preserve"><value>Select the headphones or speakers you actually listen through. Choose a device other than VB-CABLE.</value></data>
+  <data name="虚拟麦克风_说明" xml:space="preserve"><value>Select the VB-CABLE recording endpoint to use as the microphone input in games, voice apps, or streaming software.
+PlayVoice's final mix is output through this device.</value></data>
+  <data name="虚拟扬声器_说明" xml:space="preserve"><value>Select the VB-CABLE playback endpoint that receives the mixed physical microphone and preset audio.</value></data>
   <data name="语言" xml:space="preserve">
     <value>Language</value>
   </data>

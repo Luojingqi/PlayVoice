@@ -6,6 +6,7 @@
                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
                 xmlns:local="clr-namespace:PlayVoice.Pages.HorizontalList"
                 xmlns:pages="clr-namespace:PlayVoice.Pages"
+                xmlns:HeaderToolTip="clr-namespace:PlayVoice.Pages.HeaderToolTip"
                 mc:Ignorable="d">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -21,14 +22,13 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <TextBlock Text="{Binding Header, ElementName=self}" 
-                Style="{StaticResource TextBlockLight}"
-                VerticalAlignment="Center" 
-                Margin="13.5,0,0,0" 
-                FontSize="{Binding TextBlockFontSize, ElementName=self}" 
-                HorizontalAlignment="Left"
-                TextAlignment="Left"
-                Grid.Column="0"/>
+        <HeaderToolTip:HeaderToolTip Grid.Column="0"
+                                         Header="{Binding Header, ElementName=self}"
+                                         ToolTipText="{Binding ToolTipText, ElementName=self}"
+                                         HeaderFontSize="{Binding TextBlockFontSize, ElementName=self}"
+                                         VerticalAlignment="Center"
+                                         HorizontalAlignment="Left"
+                                         Margin="13.5,0,0,0"/>
 
         <ListBox x:Name="listBox"
                 Style="{StaticResource TransparentListBoxStyle}"
@@ -40,7 +40,6 @@
                 SelectedValue="{Binding SelectedValue, ElementName=self}"
                 Width="{Binding DropDownWidth, ElementName=self}"
                 FontSize="{Binding ListBoxFontSize, ElementName=self}"
-                ToolTip="{Binding ToolTipText, ElementName=self}"
                 pages:LabelStatusHelper.LabelStatus="{Binding LabelStatus, ElementName=self}"
                 Grid.Column="1"
                 HorizontalAlignment="Right"
