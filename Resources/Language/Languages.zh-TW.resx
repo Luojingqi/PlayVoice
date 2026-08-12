@@ -204,4 +204,18 @@
   <data name="教程提示" xml:space="preserve"><value>教學提示</value></data>
   <data name="教程提示_内容" xml:space="preserve"><value>可在左側的「設定」頁面查看教學。</value></data>
   <data name="确定" xml:space="preserve"><value>確定</value></data>
+  <data name="等待下载" xml:space="preserve"><value>等待下載</value></data>
+  <data name="音频预设" xml:space="preserve"><value>音訊預設</value></data>
+  <data name="功能预设" xml:space="preserve"><value>功能預設</value></data>
+  <data name="创建新音频预设" xml:space="preserve"><value>新增音訊預設</value></data>
+  <data name="输入音频预设名称" xml:space="preserve"><value>輸入音訊預設名稱...</value></data>
+  <data name="删除音频预设" xml:space="preserve"><value>刪除音訊預設</value></data>
+  <data name="没有选择上传的音频预设" xml:space="preserve"><value>請選擇要上傳的音訊預設</value></data>
+  <data name="音频预设已存在" xml:space="preserve"><value>音訊預設已存在</value></data>
+  <data name="名称已存在" xml:space="preserve"><value>名稱 $ 已存在</value></data>
+  <data name="游戏预设" xml:space="preserve"><value>遊戲預設</value></data>
+  <data name="创建新游戏预设" xml:space="preserve"><value>新增遊戲預設</value></data>
+  <data name="输入游戏预设名称" xml:space="preserve"><value>輸入遊戲預設名稱...</value></data>
+  <data name="删除游戏预设" xml:space="preserve"><value>刪除遊戲預設</value></data>
+  <data name="游戏预设已存在" xml:space="preserve"><value>遊戲預設已存在</value></data>
 </root>

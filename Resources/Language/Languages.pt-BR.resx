@@ -204,4 +204,18 @@
   <data name="教程提示" xml:space="preserve"><value>Guia</value></data>
   <data name="教程提示_内容" xml:space="preserve"><value>Você pode consultar o guia em “Configurações” na barra lateral.</value></data>
   <data name="确定" xml:space="preserve"><value>OK</value></data>
+  <data name="等待下载" xml:space="preserve"><value>Aguardando download</value></data>
+  <data name="音频预设" xml:space="preserve"><value>Presets de áudio</value></data>
+  <data name="功能预设" xml:space="preserve"><value>Presets de funções</value></data>
+  <data name="创建新音频预设" xml:space="preserve"><value>Novo preset de áudio</value></data>
+  <data name="输入音频预设名称" xml:space="preserve"><value>Nome do preset de áudio...</value></data>
+  <data name="删除音频预设" xml:space="preserve"><value>Excluir preset de áudio</value></data>
+  <data name="没有选择上传的音频预设" xml:space="preserve"><value>Escolha um preset de áudio para enviar</value></data>
+  <data name="音频预设已存在" xml:space="preserve"><value>O preset de áudio já existe</value></data>
+  <data name="名称已存在" xml:space="preserve"><value>O nome $ já existe</value></data>
+  <data name="游戏预设" xml:space="preserve"><value>Presets de jogo</value></data>
+  <data name="创建新游戏预设" xml:space="preserve"><value>Novo preset de jogo</value></data>
+  <data name="输入游戏预设名称" xml:space="preserve"><value>Nome do preset de jogo...</value></data>
+  <data name="删除游戏预设" xml:space="preserve"><value>Excluir preset de jogo</value></data>
+  <data name="游戏预设已存在" xml:space="preserve"><value>O preset de jogo já existe</value></data>
 </root>

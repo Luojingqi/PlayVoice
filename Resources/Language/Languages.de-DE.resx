@@ -204,4 +204,18 @@
   <data name="教程提示" xml:space="preserve"><value>Anleitung</value></data>
   <data name="教程提示_内容" xml:space="preserve"><value>Die Anleitung finden Sie links unter „Einstellungen“.</value></data>
   <data name="确定" xml:space="preserve"><value>OK</value></data>
+  <data name="等待下载" xml:space="preserve"><value>Warten auf Download</value></data>
+  <data name="音频预设" xml:space="preserve"><value>Audio-Presets</value></data>
+  <data name="功能预设" xml:space="preserve"><value>Funktions-Presets</value></data>
+  <data name="创建新音频预设" xml:space="preserve"><value>Neues Audio-Preset</value></data>
+  <data name="输入音频预设名称" xml:space="preserve"><value>Name des Audio-Presets...</value></data>
+  <data name="删除音频预设" xml:space="preserve"><value>Audio-Preset löschen</value></data>
+  <data name="没有选择上传的音频预设" xml:space="preserve"><value>Audio-Preset für den Upload auswählen</value></data>
+  <data name="音频预设已存在" xml:space="preserve"><value>Audio-Preset ist bereits vorhanden</value></data>
+  <data name="名称已存在" xml:space="preserve"><value>Name $ ist bereits vorhanden</value></data>
+  <data name="游戏预设" xml:space="preserve"><value>Spiele-Presets</value></data>
+  <data name="创建新游戏预设" xml:space="preserve"><value>Neues Spiele-Preset</value></data>
+  <data name="输入游戏预设名称" xml:space="preserve"><value>Name des Spiele-Presets...</value></data>
+  <data name="删除游戏预设" xml:space="preserve"><value>Spiele-Preset löschen</value></data>
+  <data name="游戏预设已存在" xml:space="preserve"><value>Spiele-Preset ist bereits vorhanden</value></data>
 </root>

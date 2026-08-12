@@ -204,4 +204,18 @@
   <data name="教程提示" xml:space="preserve"><value>チュートリアル</value></data>
   <data name="教程提示_内容" xml:space="preserve"><value>チュートリアルは左側の「設定」ページから確認できます。</value></data>
   <data name="确定" xml:space="preserve"><value>OK</value></data>
+  <data name="等待下载" xml:space="preserve"><value>ダウンロード待機中</value></data>
+  <data name="音频预设" xml:space="preserve"><value>音声プリセット</value></data>
+  <data name="功能预设" xml:space="preserve"><value>機能プリセット</value></data>
+  <data name="创建新音频预设" xml:space="preserve"><value>新規音声プリセット</value></data>
+  <data name="输入音频预设名称" xml:space="preserve"><value>音声プリセット名...</value></data>
+  <data name="删除音频预设" xml:space="preserve"><value>音声プリセットを削除</value></data>
+  <data name="没有选择上传的音频预设" xml:space="preserve"><value>アップロードする音声プリセットを選択してください</value></data>
+  <data name="音频预设已存在" xml:space="preserve"><value>音声プリセットは既にあります</value></data>
+  <data name="名称已存在" xml:space="preserve"><value>名前 $ は既にあります</value></data>
+  <data name="游戏预设" xml:space="preserve"><value>ゲームプリセット</value></data>
+  <data name="创建新游戏预设" xml:space="preserve"><value>新規ゲームプリセット</value></data>
+  <data name="输入游戏预设名称" xml:space="preserve"><value>ゲームプリセット名...</value></data>
+  <data name="删除游戏预设" xml:space="preserve"><value>ゲームプリセットを削除</value></data>
+  <data name="游戏预设已存在" xml:space="preserve"><value>ゲームプリセットは既にあります</value></data>
 </root>
