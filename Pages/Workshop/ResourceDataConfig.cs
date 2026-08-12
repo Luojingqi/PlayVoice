@@ -40,6 +40,8 @@ public class ResourceDataConfig
         /// </summary>
         public long ExtendedExplanationTotalSize { get; set; }
 
+        public long Size => AudioTotalSize + ExtendedExplanationTotalSize;
+
         public static Metadata Create(AudioPresetData presetData, string contentPath = null)
         {
             var metadata = new Metadata();

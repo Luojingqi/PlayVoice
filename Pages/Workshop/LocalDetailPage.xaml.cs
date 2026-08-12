@@ -273,6 +273,18 @@ namespace PlayVoice.Pages.Workshop
                         await Task.Delay(2, cancellationToken);
                     }
 
+                    if (IsCurrentLoad(generation))
+                    {
+                        long metadataTotalSize = resourceDataConfig.Data?.Size ?? 0;
+                        long totalSize = metadataTotalSize > 0
+                            ? metadataTotalSize
+                            : resourceItems.Aggregate(
+                                0L,
+                                (total, resourceItem) => checked(total + resourceItem.Size));
+                        ResourceSizeText.Text = AudioData.SizeToString(totalSize);
+                        ResourceSizeText.Visibility = Visibility.Visible;
+                    }
+
                     MetadataLoadingBar.SetProgress(0.82, 180);
                     await CheckSubscribe(tableItem);
                 }
@@ -316,6 +328,8 @@ namespace PlayVoice.Pages.Workshop
             AuthorPanel.Visibility = Visibility.Hidden;
             AuthorAvatar.Source = null;
             AuthorName.Text = string.Empty;
+            ResourceSizeText.Text = string.Empty;
+            ResourceSizeText.Visibility = Visibility.Collapsed;
             SteamScoreText.Text = "★ --";
             FeedbackButton.SelectedIndex = -1;
             userVote = null;

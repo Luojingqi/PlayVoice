@@ -1,4 +1,5 @@
 ﻿using PlayVoice.Resources.Language;
+using PlayVoice.Audio;
 using Steamworks;
 using Steamworks.Ugc;
 using System.Collections.ObjectModel;
@@ -163,6 +164,17 @@ namespace PlayVoice.Pages.Workshop
                     await Task.Delay(16, cancellationToken);
                 }
 
+                if (metaData != null && IsCurrentLoad(generation))
+                {
+                    long totalSize = metaData.Size > 0
+                        ? metaData.Size
+                        : metadataItems.Aggregate(
+                            0L,
+                            (total, metadataItem) => checked(total + metadataItem.Size));
+                    ResourceSizeText.Text = AudioData.SizeToString(totalSize);
+                    ResourceSizeText.Visibility = Visibility.Visible;
+                }
+
                 MetadataLoadingBar.SetProgress(0.78, 180);
                 await CheckSubscribe(tableItem);
                 if (!IsCurrentLoad(generation)) return;
@@ -210,6 +222,8 @@ namespace PlayVoice.Pages.Workshop
             AuthorPanel.Visibility = Visibility.Hidden;
             AuthorAvatar.Source = null;
             AuthorName.Text = string.Empty;
+            ResourceSizeText.Text = string.Empty;
+            ResourceSizeText.Visibility = Visibility.Collapsed;
             SteamScoreText.Text = "★ --";
             userVote = null;
             isFavorite = false;
