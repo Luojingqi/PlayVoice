@@ -31,19 +31,14 @@ public class ResourceDataConfig
         public List<ResourceItem> ItemList { get; set; } = new();
 
         /// <summary>
-        /// 所有音频资源的总大小（字节）。旧版元数据缺少此字段时默认为 0。
+        /// 所有音频资源的总大小（字节）
         /// </summary>
         public long AudioTotalSize { get; set; }
 
         /// <summary>
-        /// ExtendedExplanation 目录内所有文件的总大小（字节）。
+        /// ExtendedExplanation 目录内所有文件的总大小（字节）
         /// </summary>
         public long ExtendedExplanationTotalSize { get; set; }
-
-        /// <summary>
-        /// 音频资源与 ExtendedExplanation 内容的总大小（字节）。
-        /// </summary>
-        public long TotalSize { get; set; }
 
         public static Metadata Create(AudioPresetData presetData, string contentPath = null)
         {

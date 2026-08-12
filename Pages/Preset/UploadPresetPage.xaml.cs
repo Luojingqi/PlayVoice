@@ -192,8 +192,6 @@ namespace PlayVoice.Pages.Preset
                 }
 
                 metaData.ExtendedExplanationTotalSize = extendedExplanationTotalSize;
-                metaData.TotalSize = checked(
-                    metaData.AudioTotalSize + metaData.ExtendedExplanationTotalSize);
                 File.Delete(Path.Combine(tempPresetPath, AudioPresetDataTool.ConfigFileName));
 
                 if (string.IsNullOrEmpty(imagePath) || !File.Exists(imagePath))
