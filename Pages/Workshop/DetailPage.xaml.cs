@@ -187,6 +187,12 @@ namespace PlayVoice.Pages.Workshop
                 UpdateFeedbackState();
                 MetadataLoadingBar.SetProgress(1, 120);
                 await Task.Delay(100, cancellationToken);
+                if (!string.IsNullOrWhiteSpace(item.Description))
+                {
+                    ResourceDescriptionText.Text = item.Description;
+                    DescriptionRow.Height = new GridLength(1, GridUnitType.Star);
+                    ResourceDescriptionPanel.Visibility = Visibility.Visible;
+                }
                 MetadataLoadingPanel.Visibility = Visibility.Collapsed;
 
                 await imageTask;
@@ -222,6 +228,9 @@ namespace PlayVoice.Pages.Workshop
             AuthorPanel.Visibility = Visibility.Hidden;
             AuthorAvatar.Source = null;
             AuthorName.Text = string.Empty;
+            ResourceDescriptionText.Text = string.Empty;
+            ResourceDescriptionPanel.Visibility = Visibility.Collapsed;
+            DescriptionRow.Height = new GridLength(0);
             ResourceSizeText.Text = string.Empty;
             ResourceSizeText.Visibility = Visibility.Collapsed;
             SteamScoreText.Text = "★ --";

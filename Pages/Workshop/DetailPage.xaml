@@ -182,37 +182,56 @@
             </StackPanel>
         </Border>
 
-        <ListBox Grid.Row="2"
-                x:Name="AudioListBox"
-                Background="Transparent"
-                BorderThickness="0"
-                ScrollViewer.HorizontalScrollBarVisibility="Disabled">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <local:DetailPageItem />
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-            <ListBox.ItemContainerStyle>
-                <Style TargetType="ListBoxItem">
-                    <Setter Property="Background" Value="Transparent"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                    <Setter Property="Template">
-                        <Setter.Value>
-                            <ControlTemplate TargetType="ListBoxItem">
-                                <ContentPresenter />
-                            </ControlTemplate>
-                        </Setter.Value>
-                    </Setter>
-                </Style>
-            </ListBox.ItemContainerStyle>
-        </ListBox>
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition x:Name="DescriptionRow" Height="0"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <Border Grid.Row="2" Background="{DynamicResource BgMedium}" Opacity="0.94"
-                x:Name="MetadataLoadingPanel" Visibility="Collapsed" IsHitTestVisible="False">
-            <local:CircularProgressBar x:Name="MetadataLoadingBar"
-                                       Width="90" Height="90"
-                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        </Border>
+            <ScrollViewer Grid.Row="0"
+                          x:Name="ResourceDescriptionPanel"
+                          Visibility="Collapsed"
+                          Margin="8,5"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled">
+                <TextBlock x:Name="ResourceDescriptionText"
+                           Style="{StaticResource TextBlockMedium}"
+                           Foreground="{DynamicResource TextSecondary}"
+                           TextWrapping="Wrap"/>
+            </ScrollViewer>
+
+            <ListBox Grid.Row="1"
+                    x:Name="AudioListBox"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <local:DetailPageItem />
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+                <ListBox.ItemContainerStyle>
+                    <Style TargetType="ListBoxItem">
+                        <Setter Property="Background" Value="Transparent"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ListBoxItem">
+                                    <ContentPresenter />
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ListBox.ItemContainerStyle>
+            </ListBox>
+
+            <Border Grid.RowSpan="2" Background="{DynamicResource BgMedium}" Opacity="0.94"
+                    x:Name="MetadataLoadingPanel" Visibility="Collapsed" IsHitTestVisible="False">
+                <local:CircularProgressBar x:Name="MetadataLoadingBar"
+                                           Width="90" Height="90"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+        </Grid>
     </Grid>
 
 </UserControl>
