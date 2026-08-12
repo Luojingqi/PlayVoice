@@ -56,11 +56,12 @@
                 <local:CircularProgressBar x:Name="ImageLoadingBar"/>
             </Border>
 
-            <Border Grid.Column="1">
+            <Border Grid.Column="1" Height="160">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
                     <Border Margin="0,5" Grid.Row="0">
                         <TextBlock Style="{StaticResource TextBlockMedium}"
@@ -94,6 +95,16 @@
                                    Margin="8,0,0,0"
                                    Visibility="Collapsed"/>
                     </StackPanel>
+                    <ScrollViewer Grid.Row="2"
+                                  Margin="12,4,12,8"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Disabled">
+                        <TextBlock x:Name="ResourceDescriptionText"
+                                   Style="{StaticResource TextBlockMedium}"
+                                   Foreground="{DynamicResource TextSecondary}"
+                                   TextWrapping="Wrap"
+                                   TextAlignment="Left"/>
+                    </ScrollViewer>
                 </Grid>
             </Border>
 

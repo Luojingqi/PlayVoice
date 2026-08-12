@@ -247,6 +247,7 @@ namespace PlayVoice.Pages.Workshop
                 if (JsonTool.LoadJson<ResourceDataConfig>(Path.Combine(path, "ResourceConfig.json"), out var resourceDataConfig))
                 {
                     ItemTitle.Text = resourceDataConfig.Title;
+                    ResourceDescriptionText.Text = resourceDataConfig.Description ?? string.Empty;
                     ImageLoadingBar.SetProgress(0.45, 120);
                     BgImage.Source = WorkshopPage.LoadImage(Path.Combine(path, $"Thumbnail{resourceDataConfig.ThumbnailFormat}"));
                     await CompleteLocalImageProgressAsync(generation, cancellationToken);
@@ -328,6 +329,7 @@ namespace PlayVoice.Pages.Workshop
             AuthorPanel.Visibility = Visibility.Hidden;
             AuthorAvatar.Source = null;
             AuthorName.Text = string.Empty;
+            ResourceDescriptionText.Text = string.Empty;
             ResourceSizeText.Text = string.Empty;
             ResourceSizeText.Visibility = Visibility.Collapsed;
             SteamScoreText.Text = "★ --";
