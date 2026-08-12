@@ -93,6 +93,8 @@ internal class AudioProxy
         }
     }
 
+    public int MaxPlayingAudioCount { get; private set; }
+
     public AudioProxy()
     {
         Inst = this;
@@ -126,6 +128,7 @@ internal class AudioProxy
         audioEarDecibel = GlobalData.Inst.Config.AudioEarDecibel;
         microphoneInputDecibel = GlobalData.Inst.Config.MicrophoneInputDecibel;
         globalDecibel = GlobalData.Inst.Config.GlobalDecibel;
+        MaxPlayingAudioCount = GlobalData.Inst.Config.MaxPlayingAudioCount;
     }
 
 
@@ -151,9 +154,9 @@ internal class AudioProxy
 
     private void StopPLEquipmentClear()
     {
-        foreach (var item in PLEquipmentSet)
+        foreach (var item in PLEquipmentList.ToArray())
             item.Stop();
-        PLEquipmentSet.Clear();
+        PLEquipmentList.Clear();
     }
 
     private void StopPLEquipment()
@@ -195,7 +198,7 @@ internal class AudioProxy
         physicalMicrophoneCapture.WaveFormat = physicalMicrophoneWaveFormat;
         physicalMicrophoneCapture.DataAvailable += (sender, e) =>
         {
-            if (GlobalData.Inst.AutoMute && AllAudioSet.Count > 0)
+            if (GlobalData.Inst.AutoMute && AllAudioList.Count > 0)
                 return;
             physicalMicrophoneBufferArray[0].AddSamples(e.Buffer, 0, e.BytesRecorded);
 
@@ -240,14 +243,14 @@ internal class AudioProxy
         virtualLoudspeakerOutput.Play();
     }
 
-    private HashSet<AudioData> AllAudioSet = new();
-    private HashSet<AudioData> VLAudioSet = new();
-    private HashSet<AudioData> PLEquipmentSet = new();
+    private List<AudioData> AllAudioList = new();
+    private List<AudioData> VLAudioList = new();
+    private List<AudioData> PLEquipmentList = new();
     public void AddAudio(AudioData audioData)
     {
         if ((audioData.PlayMode & AudioData.PlayModeEnum.VL播放) == AudioData.PlayModeEnum.VL播放)
         {
-            if (VLAudioSet.Count == 0)
+            if (VLAudioList.Count == 0)
             {
                 var beforePlayingKey = GlobalData.Inst.ActiveFunctionPreset?.BeforePlayingKey;
                 switch (beforePlayingKey?.Action)
@@ -265,25 +268,27 @@ internal class AudioProxy
                 }
             }
             audioMixToVL.AddMixerInput(audioData.VolumeProvider_ToVM);
-            VLAudioSet.Add(audioData);
+            VLAudioList.Add(audioData);
         }
         if ((audioData.PlayMode & AudioData.PlayModeEnum.PL播放) == AudioData.PlayModeEnum.PL播放)
         {
             audioMixToPL.AddMixerInput(audioData.VolumeProvider_ToPL);
-            PLEquipmentSet.Add(audioData);
+            PLEquipmentList.Add(audioData);
         }
 
-        AllAudioSet.Add(audioData);
+        AllAudioList.Add(audioData);
+        if (AllAudioList.Count > MaxPlayingAudioCount)
+            AllAudioList[0].Stop();
     }
 
     public void RemoveAudio(AudioData audioData)
     {
-        AllAudioSet.Remove(audioData);
+        AllAudioList.Remove(audioData);
         if ((audioData.PlayMode & AudioData.PlayModeEnum.VL播放) == AudioData.PlayModeEnum.VL播放)
         {
             audioMixToVL.RemoveMixerInput(audioData.VolumeProvider_ToVM);
-            VLAudioSet.Remove(audioData);
-            if (VLAudioSet.Count == 0)
+            VLAudioList.Remove(audioData);
+            if (VLAudioList.Count == 0)
             {
                 var afterPlayingKey = GlobalData.Inst.ActiveFunctionPreset?.AfterPlayingKey;
                 switch (afterPlayingKey?.Action)
@@ -304,17 +309,17 @@ internal class AudioProxy
         if ((audioData.PlayMode & AudioData.PlayModeEnum.PL播放) == AudioData.PlayModeEnum.PL播放)
         {
             audioMixToPL.RemoveMixerInput(audioData.VolumeProvider_ToPL);
-            PLEquipmentSet.Remove(audioData);
+            PLEquipmentList.Remove(audioData);
         }
     }
 
     public void StopClear()
     {
-        foreach (var item in AllAudioSet)
+        foreach (var item in AllAudioList.ToArray())
             item.Stop();
-        AllAudioSet.Clear();
-        VLAudioSet.Clear();
-        PLEquipmentSet.Clear();
+        AllAudioList.Clear();
+        VLAudioList.Clear();
+        PLEquipmentList.Clear();
     }
 
     public void Stop()

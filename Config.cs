@@ -21,6 +21,11 @@ internal class Config
     public bool AutoMute { get; set; } = true;
 
     /// <summary>
+    /// 同时播放的最大音频数量。
+    /// </summary>
+    public int MaxPlayingAudioCount { get; set; } = 2;
+
+    /// <summary>
     /// 关闭主窗口时是否最小化到系统托盘。
     /// </summary>
     public bool MinimizeToTrayOnClose { get; set; } = false;
