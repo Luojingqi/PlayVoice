@@ -18,6 +18,8 @@ namespace PlayVoice.Pages.Workshop
     {
         private bool? userVote;
         private bool isFavorite;
+        private CancellationTokenSource _loadCancellation;
+        private int _loadGeneration;
 
         public LocalDetailPage()
         {
@@ -209,7 +211,11 @@ namespace PlayVoice.Pages.Workshop
         private List<AudioData> AudioDataList = new();
         public async Task SetTableItem(TablePageItem tableItem)
         {
+            Close();
             this.tableItem = tableItem;
+            int generation = _loadGeneration;
+            _loadCancellation = new CancellationTokenSource();
+            CancellationToken cancellationToken = _loadCancellation.Token;
             FeedbackButton.SelectedIndex = -1;
             userVote = null;
             isFavorite = false;
@@ -217,44 +223,87 @@ namespace PlayVoice.Pages.Workshop
             AuthorPanel.Visibility = Visibility.Hidden;
             AuthorAvatar.Source = null;
             AuthorName.Text = string.Empty;
-            if (tableItem.Item.HasValue)
+            ImageLoadingPanel.Visibility = Visibility.Visible;
+            MetadataLoadingPanel.Visibility = Visibility.Visible;
+            ImageLoadingBar.SetProgressInstant(0.08);
+            MetadataLoadingBar.SetProgressInstant(0.08);
+
+            try
             {
-                SteamScoreText.Text = $"★ {tableItem.Item.Value.Score * 5:0.0}";
-                await LoadAuthor(tableItem.Item.Value.Owner.Id);
-                var vote = await tableItem.Item.Value.GetUserVote();
-                userVote = vote?.VotedUp == true ? true : vote?.VotedDown == true ? false : null;
-                UpdateFeedbackState();
-            }
-            else
-                SteamScoreText.Text = "★ --";
-            var path = tableItem.LocalItemPath;
-            if (JsonTool.LoadJson<ResourceDataConfig>(Path.Combine(path, "ResourceConfig.json"), out var resourceDataConfig))
-            {
-                ItemTitle.Text = resourceDataConfig.Title;
-                BgImage.Source = WorkshopPage.LoadImage(Path.Combine(path, $"Thumbnail{resourceDataConfig.ThumbnailFormat}"));
-                LocalDetailItemList.Clear();
-                AudioDataList.Clear();
-                for (int i = 0; i < resourceDataConfig.Data.ItemList.Count; i++)
+                Task authorTask = Task.CompletedTask;
+                Task voteTask = Task.CompletedTask;
+                if (tableItem.Item.HasValue)
                 {
-                    var item = resourceDataConfig.Data.ItemList[i];
-                    if (File.Exists(Path.Combine(path, item.Name)))
-                    {
-                        var audioData = new AudioData();
-                        var audioPath = Path.Combine(path, item.Name);
-                        audioData.AudioTrackArray[0] = new AudioFileReader(audioPath);
-                        audioData.AudioTrackArray[1] = new AudioFileReader(audioPath);
-                        audioData.Index = i;
-                        AudioDataList.Add(audioData);
-                        LocalDetailItemList.Add(new LocalDetailPageItemViewModel(audioData, item));
-                    }
-                    await Task.Delay(2);
+                    SteamScoreText.Text = $"★ {tableItem.Item.Value.Score * 5:0.0}";
+                    authorTask = LoadAuthor(tableItem.Item.Value.Owner.Id, generation, cancellationToken);
+                    voteTask = LoadVoteAsync(tableItem.Item.Value, generation, cancellationToken);
                 }
-                CheckSubscribe();
+                else
+                {
+                    SteamScoreText.Text = "★ --";
+                }
+
+                var path = tableItem.LocalItemPath;
+                if (JsonTool.LoadJson<ResourceDataConfig>(Path.Combine(path, "ResourceConfig.json"), out var resourceDataConfig))
+                {
+                    ItemTitle.Text = resourceDataConfig.Title;
+                    ImageLoadingBar.SetProgress(0.45, 120);
+                    BgImage.Source = WorkshopPage.LoadImage(Path.Combine(path, $"Thumbnail{resourceDataConfig.ThumbnailFormat}"));
+                    await CompleteLocalImageProgressAsync(generation, cancellationToken);
+
+                    var resourceItems = resourceDataConfig.Data?.ItemList ?? new List<ResourceDataConfig.ResourceItem>();
+                    for (int i = 0; i < resourceItems.Count; i++)
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        if (!IsCurrentLoad(generation)) return;
+
+                        var item = resourceItems[i];
+                        if (File.Exists(Path.Combine(path, item.Name)))
+                        {
+                            var audioData = new AudioData();
+                            var audioPath = Path.Combine(path, item.Name);
+                            audioData.AudioTrackArray[0] = new AudioFileReader(audioPath);
+                            audioData.AudioTrackArray[1] = new AudioFileReader(audioPath);
+                            audioData.Index = i;
+                            AudioDataList.Add(audioData);
+                            LocalDetailItemList.Add(new LocalDetailPageItemViewModel(audioData, item));
+                        }
+
+                        MetadataLoadingBar.SetProgressInstant(0.12 + 0.62 * (i + 1) / Math.Max(1, resourceItems.Count));
+                        await Task.Delay(2, cancellationToken);
+                    }
+
+                    MetadataLoadingBar.SetProgress(0.82, 180);
+                    await CheckSubscribe(tableItem);
+                }
+
+                await Task.WhenAll(authorTask, voteTask);
+                if (!IsCurrentLoad(generation)) return;
+
+                MetadataLoadingBar.SetProgress(1, 120);
+                await Task.Delay(100, cancellationToken);
+                MetadataLoadingPanel.Visibility = Visibility.Collapsed;
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"加载本地创意工坊详情失败: {ex.Message}");
+                if (IsCurrentLoad(generation))
+                {
+                    ImageLoadingPanel.Visibility = Visibility.Collapsed;
+                    MetadataLoadingPanel.Visibility = Visibility.Collapsed;
+                }
             }
         }
 
         public void Close()
         {
+            _loadGeneration++;
+            _loadCancellation?.Cancel();
+            _loadCancellation?.Dispose();
+            _loadCancellation = null;
             for (int i = 0; i < AudioDataList.Count; i++)
             {
                 var data = AudioDataList[i];
@@ -272,16 +321,42 @@ namespace PlayVoice.Pages.Workshop
             userVote = null;
             isFavorite = false;
             UpdateFeedbackState();
+            ImageLoadingPanel.Visibility = Visibility.Collapsed;
+            MetadataLoadingPanel.Visibility = Visibility.Collapsed;
         }
 
-        private async Task LoadAuthor(SteamId owner)
+        private async Task LoadAuthor(SteamId owner, int generation, CancellationToken cancellationToken)
         {
             var author = await WorkshopAuthorInfo.LoadAsync(owner);
-            if (tableItem?.Item.HasValue != true || tableItem.Item.Value.Owner.Id != owner) return;
+            cancellationToken.ThrowIfCancellationRequested();
+            if (!IsCurrentLoad(generation) || tableItem.Item.Value.Owner.Id != owner) return;
 
             AuthorName.Text = author.Name;
             AuthorAvatar.Source = author.Avatar;
             AuthorPanel.Visibility = Visibility.Visible;
+        }
+
+        private async Task LoadVoteAsync(Steamworks.Ugc.Item item, int generation, CancellationToken cancellationToken)
+        {
+            var vote = await item.GetUserVote();
+            cancellationToken.ThrowIfCancellationRequested();
+            if (!IsCurrentLoad(generation)) return;
+
+            userVote = vote?.VotedUp == true ? true : vote?.VotedDown == true ? false : null;
+            UpdateFeedbackState();
+        }
+
+        private bool IsCurrentLoad(int generation) =>
+            generation == _loadGeneration && tableItem != null;
+
+        private async Task CompleteLocalImageProgressAsync(int generation, CancellationToken cancellationToken)
+        {
+            ImageLoadingBar.SetProgress(0.78, 140);
+            await Task.Delay(140, cancellationToken);
+            ImageLoadingBar.SetProgress(1, 120);
+            await Task.Delay(120, cancellationToken);
+            if (IsCurrentLoad(generation))
+                ImageLoadingPanel.Visibility = Visibility.Collapsed;
         }
 
         private void AuthorName_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -324,16 +399,17 @@ namespace PlayVoice.Pages.Workshop
             icon.SetResourceReference(System.Windows.Shapes.Shape.FillProperty, active ? brushKey : "AccentColor");
         }
 
-        private async Task<bool> CheckSubscribe()
+        private async Task<bool> CheckSubscribe(TablePageItem expectedItem = null)
         {
-            if (tableItem == null)
+            expectedItem ??= tableItem;
+            if (expectedItem?.Item.HasValue != true)
             {
                 SubscribeButton.Visibility = Visibility.Collapsed;
                 UnSubscribeButton.Visibility = Visibility.Collapsed;
                 return false;
             }
-            if (tableItem.Item.HasValue == false) return false;
-            var item = await SteamUGC.QueryFileAsync(tableItem.Item.Value.Id);
+            var item = await SteamUGC.QueryFileAsync(expectedItem.Item.Value.Id);
+            if (!ReferenceEquals(tableItem, expectedItem)) return false;
             if (item.HasValue)
             {
                 bool ret = item.Value.IsSubscribed;

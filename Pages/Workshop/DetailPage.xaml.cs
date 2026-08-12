@@ -1,5 +1,6 @@
 ﻿using PlayVoice.Resources.Language;
 using Steamworks;
+using Steamworks.Ugc;
 using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +14,8 @@ namespace PlayVoice.Pages.Workshop
     {
         private bool? userVote;
         private bool isFavorite;
+        private CancellationTokenSource _loadCancellation;
+        private int _loadGeneration;
 
         public DetailPage()
         {
@@ -132,25 +135,72 @@ namespace PlayVoice.Pages.Workshop
         {
             Close();
             this.tableItem = tableItem;
+            int generation = _loadGeneration;
+            _loadCancellation = new CancellationTokenSource();
+            CancellationToken cancellationToken = _loadCancellation.Token;
             var item = tableItem.Item.Value;
             ItemTitle.Text = item.Title;
             SteamScoreText.Text = $"★ {item.Score * 5:0.0}";
-            BgImage.Source = await WorkshopPage.DownloadImageAsBitmapAsync(item);
-            await LoadAuthor(item.Owner.Id);
-            var metaData = JsonTool.ToObject<ResourceDataConfig.Metadata>(item.Metadata);
-            foreach (var data in metaData.ItemList)
+            ImageLoadingPanel.Visibility = Visibility.Visible;
+            MetadataLoadingPanel.Visibility = Visibility.Visible;
+            ImageLoadingBar.SetProgressInstant(0.08);
+            MetadataLoadingBar.SetProgressInstant(0.08);
+
+            try
             {
-                var detailItem = new DetailPageItem(data);
-                DetailItemList.Add(detailItem);
+                var imageTask = LoadImageAsync(item, generation, cancellationToken);
+                var authorTask = LoadAuthor(item.Owner.Id, generation, cancellationToken);
+
+                var metaData = JsonTool.ToObject<ResourceDataConfig.Metadata>(item.Metadata);
+                var metadataItems = metaData?.ItemList ?? new List<ResourceDataConfig.ResourceItem>();
+                for (int i = 0; i < metadataItems.Count; i++)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+                    if (!IsCurrentLoad(generation)) return;
+
+                    DetailItemList.Add(new DetailPageItem(metadataItems[i]));
+                    MetadataLoadingBar.SetProgressInstant(0.12 + 0.58 * (i + 1) / Math.Max(1, metadataItems.Count));
+                    await Task.Delay(16, cancellationToken);
+                }
+
+                MetadataLoadingBar.SetProgress(0.78, 180);
+                await CheckSubscribe(tableItem);
+                if (!IsCurrentLoad(generation)) return;
+
+                MetadataLoadingBar.SetProgress(0.9, 180);
+                var vote = await item.GetUserVote();
+                if (!IsCurrentLoad(generation)) return;
+
+                userVote = vote?.VotedUp == true ? true : vote?.VotedDown == true ? false : null;
+                UpdateFeedbackState();
+                MetadataLoadingBar.SetProgress(1, 120);
+                await Task.Delay(100, cancellationToken);
+                MetadataLoadingPanel.Visibility = Visibility.Collapsed;
+
+                await imageTask;
+                await authorTask;
+                if (!IsCurrentLoad(generation)) return;
             }
-            CheckSubscribe();
-            var vote = await item.GetUserVote();
-            userVote = vote?.VotedUp == true ? true : vote?.VotedDown == true ? false : null;
-            UpdateFeedbackState();
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"加载创意工坊详情失败: {ex.Message}");
+                if (IsCurrentLoad(generation))
+                {
+                    ImageLoadingPanel.Visibility = Visibility.Collapsed;
+                    MetadataLoadingPanel.Visibility = Visibility.Collapsed;
+                }
+            }
         }
 
         public void Close()
         {
+            _loadGeneration++;
+            _loadCancellation?.Cancel();
+            _loadCancellation?.Dispose();
+            _loadCancellation = null;
             tableItem = null;
             DetailItemList.Clear();
             BgImage.Source = null;
@@ -164,16 +214,63 @@ namespace PlayVoice.Pages.Workshop
             userVote = null;
             isFavorite = false;
             UpdateFeedbackState();
+            ImageLoadingPanel.Visibility = Visibility.Collapsed;
+            MetadataLoadingPanel.Visibility = Visibility.Collapsed;
         }
 
-        private async Task LoadAuthor(SteamId owner)
+        private async Task LoadAuthor(SteamId owner, int generation, CancellationToken cancellationToken)
         {
             var author = await WorkshopAuthorInfo.LoadAsync(owner);
-            if (tableItem == null || tableItem.Item.Value.Owner.Id != owner) return;
+            cancellationToken.ThrowIfCancellationRequested();
+            if (!IsCurrentLoad(generation) || tableItem.Item.Value.Owner.Id != owner) return;
 
             AuthorName.Text = author.Name;
             AuthorAvatar.Source = author.Avatar;
             AuthorPanel.Visibility = Visibility.Visible;
+        }
+
+        private bool IsCurrentLoad(int generation) =>
+            generation == _loadGeneration && tableItem?.Item.HasValue == true;
+
+        private async Task LoadImageAsync(Item item, int generation, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var imageTask = WorkshopPage.DownloadImageAsBitmapAsync(item, cancellationToken);
+                await SimulateProgressAsync(imageTask, ImageLoadingBar, 0.88, cancellationToken);
+                var image = await imageTask;
+                if (!IsCurrentLoad(generation)) return;
+
+                BgImage.Source = image;
+                ImageLoadingBar.SetProgress(1, 120);
+                await Task.Delay(100, cancellationToken);
+                if (IsCurrentLoad(generation))
+                    ImageLoadingPanel.Visibility = Visibility.Collapsed;
+            }
+            catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"加载创意工坊图片失败: {ex.Message}");
+                if (IsCurrentLoad(generation))
+                    ImageLoadingPanel.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private static async Task SimulateProgressAsync(
+            Task task,
+            CircularProgressBar progressBar,
+            double ceiling,
+            CancellationToken cancellationToken)
+        {
+            double progress = 0.08;
+            while (!task.IsCompleted)
+            {
+                await Task.Delay(120, cancellationToken);
+                progress += Math.Max(0.006, (ceiling - progress) * 0.12);
+                progressBar.SetProgress(Math.Min(progress, ceiling), 180);
+            }
         }
 
         private void AuthorName_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -216,15 +313,17 @@ namespace PlayVoice.Pages.Workshop
             icon.SetResourceReference(System.Windows.Shapes.Shape.FillProperty, active ? brushKey : "AccentColor");
         }
 
-        private async Task<bool> CheckSubscribe()
+        private async Task<bool> CheckSubscribe(TablePageItem expectedItem = null)
         {
-            if (tableItem == null)
+            expectedItem ??= tableItem;
+            if (expectedItem?.Item.HasValue != true)
             {
                 SubscribeButton.Visibility = Visibility.Collapsed;
                 UnSubscribeButton.Visibility = Visibility.Collapsed;
                 return false;
             }
-            var item = await SteamUGC.QueryFileAsync(tableItem.Item.Value.Id);
+            var item = await SteamUGC.QueryFileAsync(expectedItem.Item.Value.Id);
+            if (!ReferenceEquals(tableItem, expectedItem)) return false;
             if (item.HasValue)
             {
                 bool ret = item.Value.IsSubscribed;

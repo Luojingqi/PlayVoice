@@ -51,6 +51,11 @@
                     VerticalAlignment="Top"/>
             </Border>
 
+            <Border Grid.Column="0" Margin="36" Background="{DynamicResource BgMedium}" CornerRadius="50"
+                    x:Name="ImageLoadingPanel" Visibility="Collapsed" IsHitTestVisible="False">
+                <local:CircularProgressBar x:Name="ImageLoadingBar"/>
+            </Border>
+
             <Border Grid.Column="1">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -260,6 +265,13 @@
                     </Style>
                 </ListBox.ItemContainerStyle>
             </ListBox>
+
+            <Border Grid.Row="1" Background="{DynamicResource BgMedium}" Opacity="0.94"
+                    x:Name="MetadataLoadingPanel" Visibility="Collapsed" IsHitTestVisible="False">
+                <local:CircularProgressBar x:Name="MetadataLoadingBar"
+                                           Width="90" Height="90"
+                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
         </Grid>
     </Grid>
 </UserControl>
