@@ -12,7 +12,6 @@ namespace PlayVoice.Pages.Preset
 {
     public partial class AudioTrackGrid : Page
     {
-
         public AudioTrackGrid()
         {
             InitializeComponent();
@@ -425,32 +424,6 @@ namespace PlayVoice.Pages.Preset
             foreach (var item in presetData.AudioList)
             {
                 ShortcutList.Add(new AudioTrackItemViewModel(item));
-                item.AnimationPlayAction = () =>
-                {
-                    var listBoxItem = AudioListBox.ItemContainerGenerator.ContainerFromIndex(item.Index) as ListBoxItem;
-                    if (listBoxItem != null)
-                    {
-                        listBoxItem.ApplyTemplate();
-                        var trackItem = FindVisualChild<AudioTrackItem>(listBoxItem);
-                        if (trackItem != null)
-                        {
-                            trackItem.PlayClickAnimation();
-                        }
-                    }
-                };
-                item.AnimationStopAction = () =>
-                {
-                    var listBoxItem = AudioListBox.ItemContainerGenerator.ContainerFromIndex(item.Index) as ListBoxItem;
-                    if (listBoxItem != null)
-                    {
-                        listBoxItem.ApplyTemplate();
-                        var trackItem = FindVisualChild<AudioTrackItem>(listBoxItem);
-                        if (trackItem != null)
-                        {
-                            trackItem.ResetAnimation();
-                        }
-                    }
-                };
                 await Task.Delay(1);
             }
         }
@@ -465,37 +438,12 @@ namespace PlayVoice.Pages.Preset
 
         public void Leave()
         {
-            var presetData = GlobalData.Inst.ActiveAudioPreset;
-            if (presetData == null) return;
-            foreach (var item in presetData.AudioList)
-            {
-                item.AnimationPlayAction = null;
-                item.AnimationStopAction = null;
-            }
-            GlobalData.Inst.ActiveAudioPreset.Save();
+            GlobalData.Inst.ActiveAudioPreset?.Save();
         }
 
-        private void AudioTrackGrid_Unloaded(object sender, RoutedEventArgs e) => Leave();
-
-        private T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        private void AudioTrackGrid_Unloaded(object sender, RoutedEventArgs e)
         {
-            if (parent == null) return null;
-
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
-            {
-                var child = VisualTreeHelper.GetChild(parent, i);
-                if (child is T typedChild)
-                {
-                    return typedChild;
-                }
-
-                var result = FindVisualChild<T>(child);
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-            return null;
+            Leave();
         }
     }
 }

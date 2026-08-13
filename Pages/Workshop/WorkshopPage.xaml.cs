@@ -73,6 +73,7 @@ namespace PlayVoice.Pages.Workshop
             DetailPageFrame.Content = detailPage;
             localDetailPage = new ();
             LocalDetailPageFrame.Content = localDetailPage;
+            Unloaded += WorkshopPage_Unloaded;
 
             Application.Current.Dispatcher.InvokeAsync(() =>
             {
@@ -299,8 +300,16 @@ namespace PlayVoice.Pages.Workshop
         public void CloseLocalDetailPage()
         {
             if (_isLocalDetailPageOpen)
+            {
                 ToggleLocalDetailPage();
+                return;
+            }
+
+            localDetailPage?.Close();
         }
+
+        private void WorkshopPage_Unloaded(object sender, RoutedEventArgs e) =>
+            CloseLocalDetailPage();
 
         private bool _isLocalDetailPageOpen = false;
         public void ToggleLocalDetailPage()

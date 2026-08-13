@@ -18,6 +18,27 @@ public class AudioData
 
     public PlayModeEnum PlayMode { get; set; } = PlayModeEnum.不播放;
 
+    public bool IsPlaying =>
+        (PlayMode & PlayModeEnum.不播放) != PlayModeEnum.不播放;
+
+    public double PlaybackProgress
+    {
+        get
+        {
+            if (!IsPlaying)
+                return 0;
+
+            AudioFileReader audioTrack =
+                (PlayMode & PlayModeEnum.VL播放) == PlayModeEnum.VL播放
+                    ? AudioTrackArray[0]
+                    : AudioTrackArray[1];
+            if (audioTrack == null || audioTrack.Length <= 0)
+                return 0;
+
+            return Math.Clamp((double)audioTrack.Position / audioTrack.Length, 0, 1);
+        }
+    }
+
     public int Index { get; set; }
 
     public System.Timers.Timer PlayTimer { get; set; } = new System.Timers.Timer();
@@ -84,6 +105,8 @@ public class AudioData
 
     public Action AnimationPlayAction;
     public Action AnimationStopAction;
+    public event Action PlaybackStarted;
+    public event Action PlaybackStopped;
 
 
     public void Start()
@@ -137,6 +160,7 @@ public class AudioData
             audioProxy.AddAudio(this);
             PlayTimer.Start();
             AnimationPlayAction?.Invoke();
+            PlaybackStarted?.Invoke();
         }
     }
 
@@ -161,6 +185,7 @@ public class AudioData
                 audioProxy.AddAudio(this);
                 PlayTimer.Start();
                 AnimationPlayAction?.Invoke();
+                PlaybackStarted?.Invoke();
             }
             else
             {
@@ -185,6 +210,7 @@ public class AudioData
         VolumeProvider_ToPL = null;
         PlayMode = PlayModeEnum.不播放;
         AnimationStopAction?.Invoke();
+        PlaybackStopped?.Invoke();
     }
 
 
@@ -200,6 +226,7 @@ public class AudioData
         VolumeProvider_ToPL = null;
         PlayMode = PlayModeEnum.不播放;
         AnimationStopAction?.Invoke();
+        PlaybackStopped?.Invoke();
     }
 
     public void Dispose()
@@ -209,6 +236,8 @@ public class AudioData
             AudioTrackArray[i].Dispose();
         AnimationPlayAction = null;
         AnimationStopAction = null;
+        PlaybackStarted = null;
+        PlaybackStopped = null;
         VolumeProvider_ToVM = null;
         VolumeProvider_ToPL = null;
         PlayTimer.Stop();

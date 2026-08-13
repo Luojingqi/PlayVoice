@@ -1,5 +1,6 @@
 ﻿using PlayVoice.Hotkey;
 using System.Windows;
+using PlayVoice.Audio;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -11,11 +12,15 @@ namespace PlayVoice.Pages.Preset;
 public partial class AudioTrackItem : UserControl
 {
     public AudioTrackItemViewModel ViewModel => (AudioTrackItemViewModel)this.DataContext;
+    private AudioData subscribedAudioData;
 
     public AudioTrackItem()
     {
         InitializeComponent();
         CheckBoxListBox.SelectionChanged += CheckBoxListBox_SelectionChanged;
+        Loaded += AudioTrackItem_Loaded;
+        Unloaded += AudioTrackItem_Unloaded;
+        DataContextChanged += AudioTrackItem_DataContextChanged;
     }
 
     public override void OnApplyTemplate()
@@ -49,19 +54,101 @@ public partial class AudioTrackItem : UserControl
         ViewModel.Data.Start();
     }
 
-    public void PlayClickAnimation()
+    private void AudioTrackItem_Loaded(object sender, RoutedEventArgs e)
     {
-        DoubleAnimation scaleAnim = new DoubleAnimation
-        {
-            From = 0,
-            To = 1,
-            Duration = new Duration(((AudioTrackItemViewModel)this.DataContext).Duration)
-        };
-
-        BackgroundScale.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnim);
+        SubscribeToPlaybackState();
+        SynchronizePlaybackAnimation();
     }
 
-    public void ResetAnimation()
+    private void AudioTrackItem_Unloaded(object sender, RoutedEventArgs e)
+    {
+        UnsubscribeFromPlaybackState();
+        ResetPlaybackAnimation();
+    }
+
+    private void AudioTrackItem_DataContextChanged(
+        object sender,
+        DependencyPropertyChangedEventArgs e)
+    {
+        if (!IsLoaded) return;
+
+        SubscribeToPlaybackState();
+        SynchronizePlaybackAnimation();
+    }
+
+    private void SubscribeToPlaybackState()
+    {
+        var audioData = (DataContext as AudioTrackItemViewModel)?.Data;
+        if (ReferenceEquals(subscribedAudioData, audioData)) return;
+
+        UnsubscribeFromPlaybackState();
+        subscribedAudioData = audioData;
+        if (subscribedAudioData == null) return;
+
+        subscribedAudioData.PlaybackStarted += AudioData_PlaybackStarted;
+        subscribedAudioData.PlaybackStopped += AudioData_PlaybackStopped;
+    }
+
+    private void UnsubscribeFromPlaybackState()
+    {
+        if (subscribedAudioData == null) return;
+
+        subscribedAudioData.PlaybackStarted -= AudioData_PlaybackStarted;
+        subscribedAudioData.PlaybackStopped -= AudioData_PlaybackStopped;
+        subscribedAudioData = null;
+    }
+
+    private void AudioData_PlaybackStarted()
+    {
+        if (!Dispatcher.CheckAccess())
+        {
+            Dispatcher.BeginInvoke(SynchronizePlaybackAnimation);
+            return;
+        }
+
+        SynchronizePlaybackAnimation();
+    }
+
+    private void AudioData_PlaybackStopped()
+    {
+        if (!Dispatcher.CheckAccess())
+        {
+            Dispatcher.BeginInvoke(ResetPlaybackAnimation);
+            return;
+        }
+
+        ResetPlaybackAnimation();
+    }
+
+    private void SynchronizePlaybackAnimation()
+    {
+        if (!IsLoaded || DataContext is not AudioTrackItemViewModel viewModel)
+            return;
+
+        var audioData = viewModel.Data;
+        double progress = audioData.PlaybackProgress;
+        if (!audioData.IsPlaying || progress >= 1)
+        {
+            ResetPlaybackAnimation();
+            return;
+        }
+
+        double remainingMilliseconds =
+            viewModel.Duration.TotalMilliseconds * (1 - progress);
+        var animation = new DoubleAnimation
+        {
+            From = progress,
+            To = 1,
+            Duration = TimeSpan.FromMilliseconds(remainingMilliseconds),
+            FillBehavior = FillBehavior.HoldEnd
+        };
+        BackgroundScale.BeginAnimation(
+            ScaleTransform.ScaleXProperty,
+            animation,
+            HandoffBehavior.SnapshotAndReplace);
+    }
+
+    private void ResetPlaybackAnimation()
     {
         BackgroundScale.BeginAnimation(ScaleTransform.ScaleXProperty, null);
         BackgroundScale.ScaleX = 0;
@@ -69,8 +156,6 @@ public partial class AudioTrackItem : UserControl
 
     private void DragHandle_MouseDown(object sender, MouseButtonEventArgs e)
     {
-        this.ResetAnimation();
-
         int width = (int)this.ActualWidth;
         int height = (int)this.ActualHeight;
         if (width > 0 && height > 0)
