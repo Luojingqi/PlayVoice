@@ -1,6 +1,4 @@
 ﻿using PlayVoice.Resources.Themes;
-using System.IO;
-
 namespace PlayVoice;
 
 internal class Config
@@ -106,10 +104,15 @@ internal class Config
     public bool HasDetectedInitialSteamLanguage { get; set; } = false;
 
     /// <summary>
+    /// 用于验证版本 8 配置迁移的测试值。
+    /// </summary>
+    public int MigrationTestValue { get; set; } = 8;
+
+    /// <summary>
     /// 将当前配置保存到程序运行目录。
     /// </summary>
     public bool Save()
     {
-        return JsonTool.SaveJson(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json"), this);
+        return ConfigStorage.Save(this);
     }
 }

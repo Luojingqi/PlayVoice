@@ -1,0 +1,91 @@
+﻿language,Description,Title
+english,"Current version: v0.0.7
+
+1. Added a limit for simultaneous audio playback.
+2. Updated the first-launch notice.
+3. Added descriptions for local and remote Steam Workshop items.
+4. Added size information for local and remote Steam Workshop items.
+5. Updated upload metadata and added archiving for extended descriptions.
+6. Fixed Workshop download progress not staying in sync.
+7. Added tooltips explaining each option on the Settings screen.
+8. Added Steam language detection on first launch.","v0.0.7 Minor Patch (August 13, 2026)"
+german,"Aktuelle Version: v0.0.7
+
+1. Ein Limit für gleichzeitig wiedergegebene Audiodateien wurde hinzugefügt.
+2. Der Hinweis beim ersten Start wurde aktualisiert.
+3. Beschreibungen für lokale und entfernte Steam-Workshop-Inhalte wurden hinzugefügt.
+4. Größenangaben für lokale und entfernte Steam-Workshop-Inhalte wurden hinzugefügt.
+5. Die Metadaten beim Upload wurden überarbeitet und die Archivierung erweiterter Beschreibungen wurde hinzugefügt.
+6. Ein Problem wurde behoben, durch das der Downloadfortschritt im Workshop nicht synchron angezeigt wurde.
+7. Tooltips zu den einzelnen Funktionen im Einstellungsbildschirm wurden hinzugefügt.
+8. Die Erkennung der Steam-Sprache beim ersten Start wurde hinzugefügt.",v0.0.7 – Kleiner Patch (13. August 2026)
+korean,"현재 버전: v0.0.7
+
+1. 동시 오디오 재생 수 제한을 추가했습니다.
+2. 최초 실행 안내 문구를 업데이트했습니다.
+3. 창작마당 로컬 및 원격 항목의 설명 표시를 추가했습니다.
+4. 창작마당 로컬 및 원격 항목의 크기 표시를 추가했습니다.
+5. 업로드 메타데이터를 수정하고 확장 설명 보관 기능을 추가했습니다.
+6. 창작마당 다운로드 진행률이 동기화되지 않던 문제를 수정했습니다.
+7. 설정 화면의 각 기능에 설명 툴팁을 추가했습니다.
+8. 최초 실행 시 Steam 언어 감지 기능을 추가했습니다.",v0.0.7 소규모 패치 (2026년 8월 13일)
+spanish,"Versión actual: v0.0.7
+
+1. Se añadió un límite para la reproducción simultánea de audios.
+2. Se actualizó el aviso del primer inicio.
+3. Se añadieron descripciones para los elementos locales y remotos del Taller de Steam.
+4. Se añadió la visualización del tamaño de los elementos locales y remotos del Taller de Steam.
+5. Se actualizaron los metadatos de las subidas y se añadió el archivado de las descripciones ampliadas.
+6. Se corrigió un problema que impedía sincronizar el progreso de descarga del Taller.
+7. Se añadieron descripciones emergentes para cada función de la pantalla de Ajustes.
+8. Se añadió la detección del idioma de Steam en el primer inicio.",v0.0.7 – Parche menor (13 de agosto de 2026)
+schinese,"当前版本：v0.0.7
+
+1. 新增同时音频播放数量上限。
+2. 更新首次启动提示说明。
+3. 新增创意工坊本地资源与远程资源的简介显示。
+4. 新增创意工坊本地资源与远程资源的大小显示。
+5. 调整上传时的元数据，并新增扩展说明存档。
+6. 修复创意工坊下载进度不同步的问题。
+7. 为设置界面的各项功能新增工具提示说明。
+8. 新增首次启动时的 Steam 语言检测。",v0.0.7 小型补丁（2026-08-13）
+tchinese,"目前版本：v0.0.7
+
+1. 新增同時播放音訊的數量上限。
+2. 更新首次啟動提示說明。
+3. 新增工作坊本機與遠端資源的簡介顯示。
+4. 新增工作坊本機與遠端資源的大小顯示。
+5. 調整上傳時的中繼資料，並新增延伸說明封存。
+6. 修正工作坊下載進度不同步的問題。
+7. 為設定介面的各項功能新增工具提示說明。
+8. 新增首次啟動時的 Steam 語言偵測。",v0.0.7 小型更新（2026-08-13）
+russian,"Текущая версия: v0.0.7
+
+1. Добавлено ограничение на количество аудиозаписей, воспроизводимых одновременно.
+2. Обновлено уведомление при первом запуске.
+3. Добавлено отображение описаний локальных и удалённых элементов Мастерской Steam.
+4. Добавлено отображение размера локальных и удалённых элементов Мастерской Steam.
+5. Изменены метаданные при загрузке и добавлено архивирование расширенных описаний.
+6. Исправлена рассинхронизация индикатора прогресса при загрузке из Мастерской.
+7. Для каждой функции на экране настроек добавлены всплывающие подсказки.
+8. Добавлено определение языка Steam при первом запуске.",v0.0.7 — Небольшое обновление (13 августа 2026 г.)
+japanese,"現在のバージョン：v0.0.7
+
+1. 同時に再生できる音声数の上限を追加しました。
+2. 初回起動時の案内を更新しました。
+3. ワークショップのローカルおよびリモートアイテムに説明表示を追加しました。
+4. ワークショップのローカルおよびリモートアイテムにサイズ表示を追加しました。
+5. アップロード時のメタデータを変更し、拡張説明のアーカイブ機能を追加しました。
+6. ワークショップのダウンロード進捗が同期しない問題を修正しました。
+7. 設定画面の各機能に説明用ツールチップを追加しました。
+8. 初回起動時にSteamの言語を検出する機能を追加しました。",v0.0.7 小規模パッチ（2026年8月13日）
+brazilian,"Versão atual: v0.0.7
+
+1. Adicionado um limite para a reprodução simultânea de áudios.
+2. Atualizado o aviso da primeira inicialização.
+3. Adicionada a exibição de descrições para itens locais e remotos da Oficina Steam.
+4. Adicionada a exibição do tamanho de itens locais e remotos da Oficina Steam.
+5. Atualizados os metadados de envio e adicionado o arquivamento de descrições estendidas.
+6. Corrigida a falta de sincronização do progresso de download da Oficina.
+7. Adicionadas dicas de ferramenta com explicações para cada função da tela de Configurações.
+8. Adicionada a detecção do idioma do Steam na primeira inicialização.",v0.0.7 — Pequena atualização (13 de agosto de 2026)

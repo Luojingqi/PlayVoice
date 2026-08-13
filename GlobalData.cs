@@ -11,6 +11,17 @@ namespace PlayVoice;
 
 internal class GlobalData
 {
+    /// <summary>
+    /// 向用户展示的程序版本号。
+    /// </summary>
+    public static readonly string AppVersion =
+        $"v{typeof(GlobalData).Assembly.GetName().Version!.ToString(3)}";
+
+    /// <summary>
+    /// 用于持久化数据迁移的内部版本索引。
+    /// </summary>
+    public const int Version = 8;
+
     private static readonly Dictionary<string, string> SteamLanguageMap =
         new(StringComparer.OrdinalIgnoreCase)
         {
@@ -272,13 +283,7 @@ internal class GlobalData
     {
         Inst = this;
         PresetStorage.EnsureInitialized();
-        JsonTool.LoadJson(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json"), out config);
-
-        if (config == null)
-        {
-            config = new Config();
-            config.Save();
-        }
+        config = ConfigStorage.Load();
 
         TryDetectInitialSteamLanguage();
         ThemeManager.SwitchTheme(config.Theme);

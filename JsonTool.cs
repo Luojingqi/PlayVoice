@@ -59,6 +59,37 @@ public static class JsonTool
         }
     }
 
+    /// <summary>
+    /// 先完整写入同目录临时文件，再替换目标文件，避免写入中断损坏原文件。
+    /// </summary>
+    public static bool SaveJsonAtomically<T>(string path, T data)
+    {
+        string tempPath = $"{path}.tmp";
+
+        try
+        {
+            string jsonString = ToJson(data);
+            File.WriteAllText(tempPath, jsonString);
+            File.Move(tempPath, path, true);
+            return true;
+        }
+        catch
+        {
+            try
+            {
+                if (File.Exists(tempPath))
+                    File.Delete(tempPath);
+            }
+            catch
+            {
+                // 清理临时文件失败不应掩盖最初的保存失败。
+            }
+
+            Console.WriteLine("Json保存失败");
+            return false;
+        }
+    }
+
     public static string ToJson<T>(T data, bool writeIndented = true)
     {
         return JsonSerializer.Serialize(data, new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, WriteIndented = writeIndented });

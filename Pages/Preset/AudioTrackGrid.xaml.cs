@@ -6,7 +6,6 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 
 namespace PlayVoice.Pages.Preset
@@ -24,7 +23,7 @@ namespace PlayVoice.Pages.Preset
 
 
         public ObservableCollection<AudioTrackItemViewModel> ShortcutList { get; set; } = new();
-        private bool isImporting;
+        private bool isAddingAudio;
 
         private bool selectAll = false;
         private bool SelectAll
@@ -97,30 +96,18 @@ namespace PlayVoice.Pages.Preset
 
         private async Task PasteButton_Click()
         {
-            foreach (var path in GlobalData.Inst.CopyAudioPathList)
-            {
-                var audioData = await GlobalData.Inst.ActiveAudioPreset.AddAudio(path);
-                await Task.Delay(25);
-            }
-            GlobalData.Inst.ActiveAudioPreset.Save();
-            await InitLoadAudioPreset(GlobalData.Inst.ActiveAudioPreset.Config.Name);
+            string[] copiedFiles = GlobalData.Inst.CopyAudioPathList.ToArray();
+            await AddAudioFilesAsync(
+                copiedFiles,
+                LanguageManager.Inst.GetString("粘贴"));
         }
 
         private async Task StartImportAsync()
         {
-            if (isImporting) return;
+            if (isAddingAudio) return;
 
-            isImporting = true;
-            try
-            {
-                await Task.Delay(75);
-                await ImportButton_Click();
-            }
-            finally
-            {
-                HideImportProgress();
-                isImporting = false;
-            }
+            await Task.Delay(75);
+            await ImportButton_Click();
         }
 
         private async Task ImportButton_Click()
@@ -137,74 +124,56 @@ namespace PlayVoice.Pages.Preset
             if (result == true)
             {
                 string[] selectedFiles = openFileDialog.FileNames;
-                var targetPreset = GlobalData.Inst.ActiveAudioPreset;
-                if (selectedFiles.Length == 0 || targetPreset == null)
-                    return;
-
-                ShowImportProgress(selectedFiles.Length);
-                for (int i = 0; i < selectedFiles.Length; i++)
-                {
-                    string file = selectedFiles[i];
-                    SetImportProgress(
-                        (double)i / selectedFiles.Length,
-                        file,
-                        i + 1,
-                        selectedFiles.Length);
-
-                    await targetPreset.AddAudio(file);
-                    SetImportProgress(
-                        (double)(i + 1) / selectedFiles.Length,
-                        file,
-                        i + 1,
-                        selectedFiles.Length);
-                    await Task.Delay(25);
-                }
-                targetPreset.Save();
-
-                if (ReferenceEquals(GlobalData.Inst.ActiveAudioPreset, targetPreset))
-                    await InitLoadAudioPreset(targetPreset.Config.Name);
+                await AddAudioFilesAsync(
+                    selectedFiles,
+                    LanguageManager.Inst.GetString("导入"));
             }
         }
 
-        private void ShowImportProgress(int totalFiles)
+        private async Task AddAudioFilesAsync(
+            IReadOnlyList<string> filePaths,
+            string operationTitle)
         {
-            ImportProgressScale.BeginAnimation(ScaleTransform.ScaleXProperty, null);
-            ImportProgressScale.ScaleX = 0;
-            ImportFileNameText.Text = string.Empty;
-            ImportProgressText.Text = $"0/{totalFiles} · 0%";
-            ImportProgressOverlay.Visibility = Visibility.Visible;
+            if (isAddingAudio || filePaths.Count == 0)
+                return;
+
+            var targetPreset = GlobalData.Inst.ActiveAudioPreset;
+            if (targetPreset == null)
+                return;
+
+            isAddingAudio = true;
+            AudioFileProgressOverlay.Show(operationTitle, filePaths.Count);
             MainWindow.Inst.SetBodyInteractionBlocked(true);
-        }
-
-        private void SetImportProgress(
-            double progress,
-            string filePath,
-            int currentFile,
-            int totalFiles)
-        {
-            progress = Math.Clamp(progress, 0, 1);
-            var animation = new DoubleAnimation
+            try
             {
-                To = progress,
-                Duration = TimeSpan.FromMilliseconds(200),
-                EasingFunction = new QuadraticEase
+                for (int i = 0; i < filePaths.Count; i++)
                 {
-                    EasingMode = EasingMode.EaseOut
-                }
-            };
-            ImportProgressScale.BeginAnimation(
-                ScaleTransform.ScaleXProperty,
-                animation,
-                HandoffBehavior.SnapshotAndReplace);
-            ImportFileNameText.Text = Path.GetFileName(filePath);
-            ImportProgressText.Text =
-                $"{currentFile}/{totalFiles} · {(int)Math.Round(progress * 100)}%";
-        }
+                    string file = filePaths[i];
+                    AudioFileProgressOverlay.SetProgress(
+                        (double)i / filePaths.Count,
+                        file,
+                        i + 1,
+                        filePaths.Count);
 
-        private void HideImportProgress()
-        {
-            ImportProgressOverlay.Visibility = Visibility.Collapsed;
-            MainWindow.Inst.SetBodyInteractionBlocked(false);
+                    await targetPreset.AddAudio(file);
+                    AudioFileProgressOverlay.SetProgress(
+                        (double)(i + 1) / filePaths.Count,
+                        file,
+                        i + 1,
+                        filePaths.Count);
+                    await Task.Delay(25);
+                }
+
+                targetPreset.Save();
+                if (ReferenceEquals(GlobalData.Inst.ActiveAudioPreset, targetPreset))
+                    await InitLoadAudioPreset(targetPreset.Config.Name);
+            }
+            finally
+            {
+                AudioFileProgressOverlay.Hide();
+                MainWindow.Inst.SetBodyInteractionBlocked(false);
+                isAddingAudio = false;
+            }
         }
 
         private void UploadButton_Click()
