@@ -36,9 +36,27 @@ namespace PlayVoice.Pages.Workshop
             CheckBoxListBox.SelectedIndex = -1;
         }
 
+        private void CheckBoxListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ViewModel.Marked = !ViewModel.Marked;
+            CheckBoxListBox.SelectedIndex = -1;
+            e.Handled = true;
+        }
+
+        private void CheckBoxListBox_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            e.Handled = true;
+        }
+
         private void RowBorder_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             var originalSource = e.OriginalSource as DependencyObject;
+            if (originalSource != null
+                && (ReferenceEquals(originalSource, CheckBoxListBox)
+                    || CheckBoxListBox.IsAncestorOf(originalSource)))
+            {
+                return;
+            }
 
             ViewModel.Data.AnimationPlayAction = PlayClickAnimation;
             ViewModel.Data.AnimationStopAction = ResetAnimation;

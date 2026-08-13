@@ -75,7 +75,9 @@
 
                     <ListBox Grid.Column="0"
                             Style="{StaticResource HorizontalButtonGroupStyle}"
-                            x:Name="CheckBoxListBox">
+                            x:Name="CheckBoxListBox"
+                            PreviewMouseLeftButtonDown="CheckBoxListBox_PreviewMouseLeftButtonDown"
+                            PreviewMouseLeftButtonUp="CheckBoxListBox_PreviewMouseLeftButtonUp">
                         <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="5,0">
                             <Grid VerticalAlignment="Center" HorizontalAlignment="Center">
                                 <Ellipse Width="19" Height="19"
