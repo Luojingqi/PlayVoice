@@ -139,6 +139,8 @@
   <data name="教程3_标题" xml:space="preserve"><value>PlayVoice starten</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>Spiele &amp; Streaming</value></data>
   <data name="教程4_内容" xml:space="preserve"><value>· In Spielen oder Streaming-Apps das eingerichtete virtuelle Mikrofon auswählen.</value></data>
+  <data name="教程8_标题" xml:space="preserve"><value>Warum hört die andere Person keinen oder nur abgehackten Ton?</value></data>
+  <data name="教程8_内容" xml:space="preserve"><value>· Wenn die für den Sprachchat verwendete App eine Eingangsgeräuschunterdrückung besitzt, schalten Sie deren Geräuschunterdrückungsmodus aus oder aktivieren Sie den Musikmodus, bevor Sie PlayVoice verwenden. Die Geräuschunterdrückung verändert die Audiostruktur, um Sprache zu isolieren. Dadurch entsteht dieses Problem, das PlayVoice nicht beheben kann. Wenn Sie PlayVoice auf Steam gekauft haben, es aber nicht in der gewünschten Sprachchat-App verwenden können, können Sie eine Rückerstattung beantragen. Wir entschuldigen uns für die Unannehmlichkeiten (＞人＜；)</value></data>
   <data name="教程7_标题" xml:space="preserve"><value>Hilfe benötigt?</value></data>
   <data name="教程7_内容" xml:space="preserve"><value>· Kontaktdaten stehen auf der PlayVoice-Seite in Steam.</value></data>
   <data name="文件资源浏览器" xml:space="preserve"><value>Ordner öffnen</value></data>
@@ -163,7 +165,7 @@
   <data name="运行中禁止更改设备" xml:space="preserve"><value>PlayVoice vor Gerätewechsel stoppen</value></data>
   <data name="耳返_In" xml:space="preserve"><value>Mikrofon-Monitor</value></data>
   <data name="教程5_标题" xml:space="preserve"><value>Tasten reagieren nicht?</value></data>
-  <data name="教程5_内容" xml:space="preserve"><value>· Wird A vor der Wiedergabe gedrückt, hält Windows die Taste. Falls Eingaben ausfallen, A erneut drücken.</value></data>
+  <data name="教程5_内容" xml:space="preserve"><value>· Wird für A vor der Wiedergabe ein simuliertes Gedrückthalten eingestellt, hält Windows die Taste. Falls Eingaben ausfallen, A erneut drücken.</value></data>
   <data name="教程2_标题" xml:space="preserve"><value>Preset-Symbole</value></data>
   <data name="教程2_内容_选择" xml:space="preserve"><value>Auswählen</value></data>
   <data name="教程2_内容_复制" xml:space="preserve"><value>Kopieren</value></data>

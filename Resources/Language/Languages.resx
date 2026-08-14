@@ -495,6 +495,12 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="教程4_内容" xml:space="preserve">
     <value>· 自动启动后，在需要播放麦克风音频的程序内，将麦克风输入设置为上面绑定的虚拟麦克风</value>
   </data>
+  <data name="教程8_标题" xml:space="preserve">
+    <value>为什么对方听不到/听到很卡的音频</value>
+  </data>
+  <data name="教程8_内容" xml:space="preserve">
+    <value>·如果您用于连麦的程序自带输入降噪功能，请将它的降噪模式关闭或开启音乐模式后再使用此程序，因为降噪的本质是破坏音频结构后提取人声部分，所以会导致此现象，这不是本程序能解决的，如果您从steam购买后但是无法在需要连麦的程序中使用，您可以选择退款，对不起给您造成了不便 (＞人＜；)</value>
+  </data>
   <data name="教程7_标题" xml:space="preserve">
     <value>遇到了未知的问题</value>
   </data>
@@ -568,7 +574,7 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
     <value>为什么播放时电脑没卡但是其他按键全失灵了</value>
   </data>
   <data name="教程5_内容" xml:space="preserve">
-    <value>· 如果设置了播放前按下某个按键A，那么系统会认为这个按键一直没有抬起，其他应用程序可能会阻止输入导致看起来没反应了，此时重新按下这个按键A即可</value>
+    <value>· 如果设置了播放前模拟按下某个按键A，那么系统会认为这个按键一直没有抬起，其他应用程序可能会阻止输入导致看起来没反应了，此时重新按下这个按键A即可</value>
   </data>
   <data name="教程2_标题" xml:space="preserve">
     <value>预设界面图标说明</value>

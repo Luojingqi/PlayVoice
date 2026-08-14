@@ -139,6 +139,8 @@
   <data name="教程3_标题" xml:space="preserve"><value>PlayVoiceを開始</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>ゲームと配信</value></data>
   <data name="教程4_内容" xml:space="preserve"><value>· ゲームや配信アプリで、設定した仮想マイクを選択します。</value></data>
+  <data name="教程8_标题" xml:space="preserve"><value>相手に音声が聞こえない、または途切れて聞こえるのはなぜですか？</value></data>
+  <data name="教程8_内容" xml:space="preserve"><value>· 通話に使用するアプリに入力ノイズ抑制機能がある場合は、そのノイズ抑制モードを無効にするか音楽モードを有効にしてからPlayVoiceを使用してください。ノイズ抑制は音声構造を変えて人の声を抽出するため、この問題が発生します。これはPlayVoiceでは解決できません。SteamでPlayVoiceを購入したものの、必要な通話アプリで使用できない場合は返金を申請できます。ご不便をおかけして申し訳ございません (＞人＜；)</value></data>
   <data name="教程7_标题" xml:space="preserve"><value>お困りですか？</value></data>
   <data name="教程7_内容" xml:space="preserve"><value>· 連絡先はPlayVoiceのSteamページをご覧ください。</value></data>
   <data name="文件资源浏览器" xml:space="preserve"><value>フォルダーを開く</value></data>
@@ -163,7 +165,7 @@
   <data name="运行中禁止更改设备" xml:space="preserve"><value>デバイス変更前にPlayVoiceを停止してください</value></data>
   <data name="耳返_In" xml:space="preserve"><value>マイクモニター</value></data>
   <data name="教程5_标题" xml:space="preserve"><value>キーが反応しない？</value></data>
-  <data name="教程5_内容" xml:space="preserve"><value>· 再生前にAを押す設定では、Windowsがキーを押し続けます。入力が効かない場合はAをもう一度押してください。</value></data>
+  <data name="教程5_内容" xml:space="preserve"><value>· 再生前にAを押し続ける操作をシミュレートする設定では、Windowsがキーを押し続けます。入力が効かない場合はAをもう一度押してください。</value></data>
   <data name="教程2_标题" xml:space="preserve"><value>プリセットのアイコン</value></data>
   <data name="教程2_内容_选择" xml:space="preserve"><value>選択</value></data>
   <data name="教程2_内容_复制" xml:space="preserve"><value>コピー</value></data>

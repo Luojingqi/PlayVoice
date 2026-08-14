@@ -49,6 +49,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0">
                 <Button Background="Transparent"
@@ -264,12 +265,12 @@
                     Background="{DynamicResource Border}" 
                     Margin="20,3"/>
             <TextBlock Grid.Row="12" 
-                    Text="{L:Lan 教程5_标题}"
+                    Text="{L:Lan 教程8_标题}"
                     Style="{StaticResource TextBlockMedium}"
                     Margin="0,5,0,0"
                     FontSize="15"/>
             <TextBlock Grid.Row="13" 
-                    Text="{L:Lan 教程5_内容}"
+                    Text="{L:Lan 教程8_内容}"
                     TextWrapping="Wrap"
                     Style="{StaticResource TextBlockLight}"
                     Margin="10,5"
@@ -279,12 +280,12 @@
                     Background="{DynamicResource Border}" 
                     Margin="20,3"/>
             <TextBlock Grid.Row="15" 
-                    Text="{L:Lan 教程6_标题}"
+                    Text="{L:Lan 教程5_标题}"
                     Style="{StaticResource TextBlockMedium}"
                     Margin="0,5,0,0"
                     FontSize="15"/>
             <TextBlock Grid.Row="16" 
-                    Text="{L:Lan 教程6_内容}"
+                    Text="{L:Lan 教程5_内容}"
                     TextWrapping="Wrap"
                     Style="{StaticResource TextBlockLight}"
                     Margin="10,5"
@@ -294,18 +295,33 @@
                     Background="{DynamicResource Border}" 
                     Margin="20,3"/>
             <TextBlock Grid.Row="18" 
-                    Text="{L:Lan 教程7_标题}"
+                    Text="{L:Lan 教程6_标题}"
                     Style="{StaticResource TextBlockMedium}"
                     Margin="0,5,0,0"
                     FontSize="15"/>
             <TextBlock Grid.Row="19" 
+                    Text="{L:Lan 教程6_内容}"
+                    TextWrapping="Wrap"
+                    Style="{StaticResource TextBlockLight}"
+                    Margin="10,5"
+                    FontSize="13.5"/>
+            <Border Grid.Row="20"
+                    Height="1"
+                    Background="{DynamicResource Border}"
+                    Margin="20,3"/>
+            <TextBlock Grid.Row="21"
+                    Text="{L:Lan 教程7_标题}"
+                    Style="{StaticResource TextBlockMedium}"
+                    Margin="0,5,0,0"
+                    FontSize="15"/>
+            <TextBlock Grid.Row="22"
                    Text="{L:Lan 教程7_内容}"
                    TextWrapping="Wrap"
                    Style="{StaticResource TextBlockLight}"
                    Margin="10,5"
                    FontSize="13.5"/>
 
-            <Border Grid.Row="20" Margin="0,1.5,0,0"/>
+            <Border Grid.Row="23" Margin="0,1.5,0,0"/>
         </Grid>
     </HeaderedContentControl>
 </Page>

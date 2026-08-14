@@ -139,6 +139,8 @@
   <data name="教程3_标题" xml:space="preserve"><value>Iniciar PlayVoice</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>Jogos e streaming</value></data>
   <data name="教程4_内容" xml:space="preserve"><value>· Selecione o microfone virtual configurado no jogo ou app de streaming.</value></data>
+  <data name="教程8_标题" xml:space="preserve"><value>Por que a outra pessoa não ouve o áudio ou o ouve travando?</value></data>
+  <data name="教程8_内容" xml:space="preserve"><value>· Se o programa usado para conversa por voz tiver redução de ruído de entrada, desative o modo de redução de ruído dele ou ative o modo de música antes de usar o PlayVoice. A redução de ruído altera a estrutura do áudio para isolar a voz, causando esse problema, que o PlayVoice não consegue resolver. Se você comprou o PlayVoice na Steam, mas não consegue usá-lo no programa de conversa por voz necessário, pode solicitar um reembolso. Pedimos desculpas pelo inconveniente (＞人＜；)</value></data>
   <data name="教程7_标题" xml:space="preserve"><value>Precisa de ajuda?</value></data>
   <data name="教程7_内容" xml:space="preserve"><value>· Nossos contatos estão na página do PlayVoice na Steam.</value></data>
   <data name="文件资源浏览器" xml:space="preserve"><value>Abrir pasta</value></data>
@@ -163,7 +165,7 @@
   <data name="运行中禁止更改设备" xml:space="preserve"><value>Pare o PlayVoice para trocar dispositivos</value></data>
   <data name="耳返_In" xml:space="preserve"><value>Monitor do microfone</value></data>
   <data name="教程5_标题" xml:space="preserve"><value>As teclas não funcionam?</value></data>
-  <data name="教程5_内容" xml:space="preserve"><value>· Se A for pressionada antes da reprodução, o Windows a manterá pressionada. Se a entrada falhar, pressione A novamente.</value></data>
+  <data name="教程5_内容" xml:space="preserve"><value>· Se for configurada a simulação de manter A pressionada antes da reprodução, o Windows continuará segurando a tecla. Se a entrada falhar, pressione A novamente.</value></data>
   <data name="教程2_标题" xml:space="preserve"><value>Ícones de presets</value></data>
   <data name="教程2_内容_选择" xml:space="preserve"><value>Selecionar</value></data>
   <data name="教程2_内容_复制" xml:space="preserve"><value>Copiar</value></data>

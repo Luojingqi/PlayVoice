@@ -495,6 +495,12 @@ Do not leave this page.</value>
   <data name="教程4_内容" xml:space="preserve">
     <value>· In your game or streaming app, select the configured virtual mic as the input.</value>
   </data>
+  <data name="教程8_标题" xml:space="preserve">
+    <value>Why Can't Others Hear the Audio, or Why Is It Choppy?</value>
+  </data>
+  <data name="教程8_内容" xml:space="preserve">
+    <value>· If the app you use for voice chat has built-in input noise suppression, turn off its noise suppression mode or enable music mode before using PlayVoice. Noise suppression alters the audio structure to isolate speech, which causes this issue and cannot be fixed by PlayVoice. If you purchased PlayVoice on Steam but cannot use it in the app where you need voice chat, you may request a refund. We apologize for the inconvenience (＞人＜；)</value>
+  </data>
   <data name="教程7_标题" xml:space="preserve">
     <value>Need More Help?</value>
   </data>
@@ -571,7 +577,7 @@ O</value>
     <value>Keys Stop Working?</value>
   </data>
   <data name="教程5_内容" xml:space="preserve">
-    <value>· If key A is pressed before playback, Windows holds it down. Some apps may ignore input. Press A again to release it.</value>
+    <value>· If key A is set to be simulated as held down before playback, Windows keeps it held. Some apps may ignore input. Press A again to release it.</value>
   </data>
   <data name="教程2_标题" xml:space="preserve">
     <value>Preset Icons</value>

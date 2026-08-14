@@ -139,6 +139,8 @@
   <data name="教程3_标题" xml:space="preserve"><value>Запуск PlayVoice</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>Игры и трансляции</value></data>
   <data name="教程4_内容" xml:space="preserve"><value>· Выберите настроенный виртуальный микрофон в игре или приложении для трансляций.</value></data>
+  <data name="教程8_标题" xml:space="preserve"><value>Почему собеседник не слышит звук или слышит его с помехами?</value></data>
+  <data name="教程8_内容" xml:space="preserve"><value>· Если программа для голосового общения использует подавление входного шума, отключите в ней режим шумоподавления или включите музыкальный режим перед использованием PlayVoice. Шумоподавление изменяет структуру звука, чтобы выделить речь, из-за чего и возникает эта проблема. PlayVoice не может её устранить. Если вы купили PlayVoice в Steam, но не можете использовать его в нужной программе для голосового общения, можно запросить возврат средств. Приносим извинения за неудобства (＞人＜；)</value></data>
   <data name="教程7_标题" xml:space="preserve"><value>Нужна помощь?</value></data>
   <data name="教程7_内容" xml:space="preserve"><value>· Контакты указаны на странице PlayVoice в Steam.</value></data>
   <data name="文件资源浏览器" xml:space="preserve"><value>Открыть папку</value></data>
@@ -163,7 +165,7 @@
   <data name="运行中禁止更改设备" xml:space="preserve"><value>Остановите PlayVoice для смены устройств</value></data>
   <data name="耳返_In" xml:space="preserve"><value>Мониторинг микр.</value></data>
   <data name="教程5_标题" xml:space="preserve"><value>Клавиши не работают?</value></data>
-  <data name="教程5_内容" xml:space="preserve"><value>· Если A нажимается перед воспроизведением, Windows удерживает её. Некоторые приложения могут игнорировать ввод. Нажмите A ещё раз.</value></data>
+  <data name="教程5_内容" xml:space="preserve"><value>· Если настроено имитируемое удержание A перед воспроизведением, Windows удерживает клавишу. Некоторые приложения могут игнорировать ввод. Нажмите A ещё раз.</value></data>
   <data name="教程2_标题" xml:space="preserve"><value>Значки пресетов</value></data>
   <data name="教程2_内容_选择" xml:space="preserve"><value>Выбор</value></data>
   <data name="教程2_内容_复制" xml:space="preserve"><value>Копировать</value></data>

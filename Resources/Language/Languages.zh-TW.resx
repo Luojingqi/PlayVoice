@@ -139,6 +139,8 @@
   <data name="教程3_标题" xml:space="preserve"><value>啟動 PlayVoice</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>遊戲與直播</value></data>
   <data name="教程4_内容" xml:space="preserve"><value>· 請在遊戲或直播應用程式中選擇已設定的虛擬麥克風。</value></data>
+  <data name="教程8_标题" xml:space="preserve"><value>為什麼對方聽不到音訊，或聽到的音訊很卡頓？</value></data>
+  <data name="教程8_内容" xml:space="preserve"><value>·如果您用於連麥的程式自帶輸入降噪功能，請將它的降噪模式關閉或開啟音樂模式後再使用本程式。降噪會改變音訊結構以擷取人聲，因此會導致此現象，這不是本程式能解決的。如果您從 Steam 購買後仍無法在需要連麥的程式中使用，可以選擇退款。很抱歉為您帶來不便 (＞人＜；)</value></data>
   <data name="教程7_标题" xml:space="preserve"><value>需要協助？</value></data>
   <data name="教程7_内容" xml:space="preserve"><value>· 聯絡方式請見 PlayVoice 的 Steam 頁面。</value></data>
   <data name="文件资源浏览器" xml:space="preserve"><value>開啟資料夾</value></data>
@@ -163,7 +165,7 @@
   <data name="运行中禁止更改设备" xml:space="preserve"><value>請停止 PlayVoice 後再變更裝置</value></data>
   <data name="耳返_In" xml:space="preserve"><value>麥克風監聽</value></data>
   <data name="教程5_标题" xml:space="preserve"><value>按鍵無法使用？</value></data>
-  <data name="教程5_内容" xml:space="preserve"><value>· 若播放前按下按鍵 A，Windows 會持續按住該鍵，部分應用程式可能忽略輸入。請再按一次 A 以放開。</value></data>
+  <data name="教程5_内容" xml:space="preserve"><value>· 若設定了播放前模擬按下按鍵 A，Windows 會持續按住該鍵，部分應用程式可能忽略輸入。請再按一次 A 以放開。</value></data>
   <data name="教程2_标题" xml:space="preserve"><value>預設圖示</value></data>
   <data name="教程2_内容_选择" xml:space="preserve"><value>選擇</value></data>
   <data name="教程2_内容_复制" xml:space="preserve"><value>複製</value></data>

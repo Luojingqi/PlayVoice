@@ -139,6 +139,8 @@
   <data name="教程3_标题" xml:space="preserve"><value>Iniciar PlayVoice</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>Juegos y streaming</value></data>
   <data name="教程4_内容" xml:space="preserve"><value>· Elige el micrófono virtual configurado en el juego o la aplicación de streaming.</value></data>
+  <data name="教程8_标题" xml:space="preserve"><value>¿Por qué la otra persona no oye el audio o lo oye entrecortado?</value></data>
+  <data name="教程8_内容" xml:space="preserve"><value>· Si la aplicación que usas para el chat de voz incluye reducción de ruido de entrada, desactiva su modo de reducción de ruido o activa el modo música antes de usar PlayVoice. La reducción de ruido modifica la estructura del audio para aislar la voz, lo que provoca este problema y PlayVoice no puede solucionarlo. Si compraste PlayVoice en Steam pero no puedes usarlo en la aplicación de chat de voz que necesitas, puedes solicitar un reembolso. Lamentamos las molestias (＞人＜；)</value></data>
   <data name="教程7_标题" xml:space="preserve"><value>¿Necesitas ayuda?</value></data>
   <data name="教程7_内容" xml:space="preserve"><value>· Encontrarás nuestros datos de contacto en la página de PlayVoice en Steam.</value></data>
   <data name="文件资源浏览器" xml:space="preserve"><value>Abrir carpeta</value></data>
@@ -163,7 +165,7 @@
   <data name="运行中禁止更改设备" xml:space="preserve"><value>Detén PlayVoice para cambiar dispositivos</value></data>
   <data name="耳返_In" xml:space="preserve"><value>Monitor del micrófono</value></data>
   <data name="教程5_标题" xml:space="preserve"><value>¿No funcionan las teclas?</value></data>
-  <data name="教程5_内容" xml:space="preserve"><value>· Si se pulsa A antes de reproducir, Windows la mantiene pulsada y algunas aplicaciones ignoran la entrada. Pulsa A de nuevo para soltarla.</value></data>
+  <data name="教程5_内容" xml:space="preserve"><value>· Si se configura la pulsación simulada de A antes de reproducir, Windows la mantiene pulsada y algunas aplicaciones ignoran la entrada. Pulsa A de nuevo para soltarla.</value></data>
   <data name="教程2_标题" xml:space="preserve"><value>Iconos de preajustes</value></data>
   <data name="教程2_内容_选择" xml:space="preserve"><value>Seleccionar</value></data>
   <data name="教程2_内容_复制" xml:space="preserve"><value>Copiar</value></data>
