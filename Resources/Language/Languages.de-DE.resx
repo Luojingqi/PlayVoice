@@ -148,8 +148,8 @@
   <data name="Steam 初始化失败" xml:space="preserve"><value>Steam-Start fehlgeschlagen</value></data>
   <data name="麦克风输入音量" xml:space="preserve"><value>Mikrofonlautstärke</value></data>
   <data name="自动闭麦" xml:space="preserve"><value>Auto-Stummschaltung</value></data>
-  <data name="播放前" xml:space="preserve"><value>Simulation vor Wiedergabe</value></data>
-  <data name="播放后" xml:space="preserve"><value>Simulation nach Wiedergabe</value></data>
+  <data name="播放前" xml:space="preserve"><value>Vor Wiedergabe</value></data>
+  <data name="播放后" xml:space="preserve"><value>Nach Wiedergabe</value></data>
   <data name="停止所有音频" xml:space="preserve"><value>Alle Audios stoppen</value></data>
   <data name="停止所有音频_说明" xml:space="preserve"><value>Stoppt alle derzeit wiedergegebenen Audios.</value></data>
   <data name="停止" xml:space="preserve"><value>Stoppen</value></data>
