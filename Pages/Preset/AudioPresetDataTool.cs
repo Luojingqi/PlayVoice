@@ -9,16 +9,26 @@ public static class AudioPresetDataTool
     public const string ConfigFileName = "AudioPresetConfig.json";
     public static readonly string BasePath = PresetStorage.BasePath;
 
-    public static async Task<AudioPresetData> LoadAudioPresetData(string name)
+    public static async Task<AudioPresetData> LoadAudioPresetData(
+        string name,
+        CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         var config = FindAudioPresetConfig(name);
         return config == null
             ? null
-            : await LoadAudioPresetDataFromPath(BasePath, config.Name);
+            : await LoadAudioPresetDataFromPath(
+                BasePath,
+                config.Name,
+                cancellationToken);
     }
 
-    public static async Task<AudioPresetData> LoadAudioPresetDataFromPath(string folderPath, string folderName)
+    public static async Task<AudioPresetData> LoadAudioPresetDataFromPath(
+        string folderPath,
+        string folderName,
+        CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         string path = Path.Combine(folderPath, folderName);
         string configPath = Path.Combine(path, ConfigFileName);
 
@@ -28,29 +38,49 @@ public static class AudioPresetDataTool
 
         presetConfigData.AudioDataConfigList ??= new();
         var presetData = new AudioPresetData { Config = presetConfigData };
-        for (int i = 0; i < presetConfigData.AudioDataConfigList.Count; i++)
+        try
         {
-            var audioDataConfig = presetConfigData.AudioDataConfigList[i];
-            string audioPath = Path.Combine(path, audioDataConfig.Name);
-            if (File.Exists(audioPath))
+            for (int i = 0; i < presetConfigData.AudioDataConfigList.Count; i++)
             {
-                var audioData = new AudioData
+                cancellationToken.ThrowIfCancellationRequested();
+                var audioDataConfig = presetConfigData.AudioDataConfigList[i];
+                string audioPath = Path.Combine(path, audioDataConfig.Name);
+                if (File.Exists(audioPath))
                 {
-                    Index = i,
-                    AudioPreset = presetData
-                };
-                audioData.AudioTrackArray[0] = new AudioFileReader(audioPath);
-                audioData.AudioTrackArray[1] = new AudioFileReader(audioPath);
-                presetData.AudioList.Add(audioData);
+                    var audioData = new AudioData
+                    {
+                        Index = i,
+                        AudioPreset = presetData
+                    };
+                    try
+                    {
+                        audioData.AudioTrackArray[0] = new AudioFileReader(audioPath);
+                        audioData.AudioTrackArray[1] = new AudioFileReader(audioPath);
+                        cancellationToken.ThrowIfCancellationRequested();
+                        presetData.AudioList.Add(audioData);
+                    }
+                    catch
+                    {
+                        audioData.AudioTrackArray[0]?.Dispose();
+                        audioData.AudioTrackArray[1]?.Dispose();
+                        audioData.PlayTimer.Dispose();
+                        throw;
+                    }
+                }
+                else
+                {
+                    presetConfigData.AudioDataConfigList.RemoveAt(i);
+                    i--;
+                }
+                await Task.Delay(1, cancellationToken);
             }
-            else
-            {
-                presetConfigData.AudioDataConfigList.RemoveAt(i);
-                i--;
-            }
-            await Task.Delay(1);
+            return presetData;
         }
-        return presetData;
+        catch
+        {
+            presetData.Dispose();
+            throw;
+        }
     }
 
     public static bool CreateAudioPresetData(string name, out AudioPresetData presetData)

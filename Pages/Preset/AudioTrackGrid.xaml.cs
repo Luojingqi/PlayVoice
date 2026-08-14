@@ -27,6 +27,8 @@ namespace PlayVoice.Pages.Preset
         private bool isAddingAudio;
         private readonly AudioFileProgressOverlay audioFileProgressOverlay = new();
         private CancellationTokenSource addAudioCancellation;
+        private CancellationTokenSource audioPresetLoadCancellation;
+        private int audioTrackRefreshVersion;
 
         private bool selectAll = false;
         private bool SelectAll
@@ -429,13 +431,42 @@ namespace PlayVoice.Pages.Preset
 
         public async Task InitLoadAudioPreset(string name)
         {
-            var presetData = await AudioPresetDataTool.LoadAudioPresetData(name);
-            GlobalData.Inst.ActiveAudioPreset = presetData;
-            await RefreshCurrentAudioPreset();
+            if (!PresetPage.Inst.IsAudioPresetPageSelected(name))
+                return;
+
+            CancelPendingAudioPresetLoad(clearItems: true);
+            using var cancellationSource = new CancellationTokenSource();
+            audioPresetLoadCancellation = cancellationSource;
+            AudioPresetData presetData = null;
+            try
+            {
+                presetData = await AudioPresetDataTool.LoadAudioPresetData(
+                    name,
+                    cancellationSource.Token);
+                cancellationSource.Token.ThrowIfCancellationRequested();
+
+                if (!PresetPage.Inst.IsAudioPresetPageSelected(name))
+                    return;
+
+                GlobalData.Inst.ActiveAudioPreset = presetData;
+                presetData = null; // Ownership is now held by GlobalData.
+                await RefreshCurrentAudioPreset(cancellationSource.Token);
+            }
+            catch (OperationCanceledException) when (cancellationSource.IsCancellationRequested)
+            {
+            }
+            finally
+            {
+                presetData?.Dispose();
+                if (ReferenceEquals(audioPresetLoadCancellation, cancellationSource))
+                    audioPresetLoadCancellation = null;
+            }
         }
 
-        public async Task RefreshCurrentAudioPreset()
+        public async Task RefreshCurrentAudioPreset(
+            CancellationToken cancellationToken = default)
         {
+            int refreshVersion = ++audioTrackRefreshVersion;
             ShortcutList.Clear();
             TopButtonGroupListBox.SelectedIndex = -1;
             SelectAll = false;
@@ -444,9 +475,30 @@ namespace PlayVoice.Pages.Preset
 
             foreach (var item in presetData.AudioList)
             {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (refreshVersion != audioTrackRefreshVersion
+                    || !ReferenceEquals(presetData, GlobalData.Inst.ActiveAudioPreset)
+                    || !PresetPage.Inst.IsAudioPresetPageSelected(presetData.Config.Name))
+                    return;
+
                 ShortcutList.Add(new AudioTrackItemViewModel(item));
-                await Task.Delay(1);
+                await Task.Delay(1, cancellationToken);
             }
+        }
+
+        public void CancelPendingAudioPresetLoad(bool clearItems)
+        {
+            var cancellationSource = audioPresetLoadCancellation;
+            audioPresetLoadCancellation = null;
+            cancellationSource?.Cancel();
+            audioTrackRefreshVersion++;
+
+            if (!clearItems)
+                return;
+
+            ShortcutList.Clear();
+            TopButtonGroupListBox.SelectedIndex = -1;
+            SelectAll = false;
         }
 
         public void RefreshFunctionPresetValues()
@@ -465,6 +517,7 @@ namespace PlayVoice.Pages.Preset
         private void AudioTrackGrid_Unloaded(object sender, RoutedEventArgs e)
         {
             addAudioCancellation?.Cancel();
+            CancelPendingAudioPresetLoad(clearItems: false);
             Leave();
         }
     }

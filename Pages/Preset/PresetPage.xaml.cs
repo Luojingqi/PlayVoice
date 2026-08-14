@@ -23,7 +23,7 @@ public partial class PresetPage : Page
     private List<FunctionPresetData> functionPresets = new();
     private bool isSynchronizingAudioPresetSelection;
     private bool isSynchronizingFunctionPresetSelection;
-    private bool isLoadingAudioPresetFromPage;
+    private int audioPresetPageLoadCount;
 
     public PresetPage()
     {
@@ -66,6 +66,7 @@ public partial class PresetPage : Page
         if (isSynchronizingAudioPresetSelection) return;
 
         var selectedPage = TopButtonListBox.SelectedItem as PageData;
+        audioTrackGridPage.CancelPendingAudioPresetLoad(clearItems: true);
         if (selectedPage == null)
         {
             Frame0.Visibility = Visibility.Hidden;
@@ -92,14 +93,14 @@ public partial class PresetPage : Page
             Frame0.Visibility = Visibility.Visible;
             Frame1.Visibility = Visibility.Hidden;
             Frame2.Visibility = Visibility.Hidden;
-            isLoadingAudioPresetFromPage = true;
+            audioPresetPageLoadCount++;
             try
             {
                 await audioTrackGridPage.InitLoadAudioPreset(selectedPage.Name);
             }
             finally
             {
-                isLoadingAudioPresetFromPage = false;
+                audioPresetPageLoadCount--;
             }
         }
     }
@@ -166,7 +167,7 @@ public partial class PresetPage : Page
 
     private async void UpdateAudioPresetPage(AudioPresetData audioPreset)
     {
-        if (isLoadingAudioPresetFromPage) return;
+        if (audioPresetPageLoadCount > 0) return;
         if (!Dispatcher.CheckAccess())
         {
             Dispatcher.Invoke(() => UpdateAudioPresetPage(audioPreset));
@@ -277,6 +278,17 @@ public partial class PresetPage : Page
     public void SelectCreateManagementPage()
     {
         TopButtonListBox.SelectedIndex = pageList.FindIndex(page => page.IsAddPage);
+    }
+
+    public bool IsAudioPresetPageSelected(string name)
+    {
+        return TopButtonListBox.SelectedItem is PageData selectedPage
+            && !selectedPage.IsAddPage
+            && !selectedPage.IsDeletePage
+            && string.Equals(
+                selectedPage.Name,
+                name,
+                StringComparison.OrdinalIgnoreCase);
     }
 
     public void RemoveAudioPresetPage(string name)
