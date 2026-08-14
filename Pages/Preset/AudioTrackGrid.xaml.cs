@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using PlayVoice.Pages.Loading;
 using PlayVoice.Resources.Language;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -17,12 +18,15 @@ namespace PlayVoice.Pages.Preset
             InitializeComponent();
             this.DataContext = this;
             TopButtonGroupListBox.SelectionChanged += TopButtonGroupOnSelection;
+            audioFileProgressOverlay.StopRequested += AudioFileProgressOverlay_StopRequested;
             this.Unloaded += AudioTrackGrid_Unloaded;
         }
 
 
         public ObservableCollection<AudioTrackItemViewModel> ShortcutList { get; set; } = new();
         private bool isAddingAudio;
+        private readonly AudioFileProgressOverlay audioFileProgressOverlay = new();
+        private CancellationTokenSource addAudioCancellation;
 
         private bool selectAll = false;
         private bool SelectAll
@@ -140,39 +144,56 @@ namespace PlayVoice.Pages.Preset
             if (targetPreset == null)
                 return;
 
+            using var cancellationSource = new CancellationTokenSource();
+            addAudioCancellation = cancellationSource;
             isAddingAudio = true;
-            AudioFileProgressOverlay.Show(operationTitle, filePaths.Count);
-            MainWindow.Inst.SetBodyInteractionBlocked(true);
+            audioFileProgressOverlay.Show(operationTitle, filePaths.Count);
+            MainWindow.Inst.ShowBodyInteractionOverlay(audioFileProgressOverlay);
             try
             {
                 for (int i = 0; i < filePaths.Count; i++)
                 {
+                    cancellationSource.Token.ThrowIfCancellationRequested();
                     string file = filePaths[i];
-                    AudioFileProgressOverlay.SetProgress(
+                    audioFileProgressOverlay.SetProgress(
                         (double)i / filePaths.Count,
                         file,
                         i + 1,
                         filePaths.Count);
 
-                    await targetPreset.AddAudio(file);
-                    AudioFileProgressOverlay.SetProgress(
+                    await targetPreset.AddAudio(file, cancellationSource.Token);
+                    audioFileProgressOverlay.SetProgress(
                         (double)(i + 1) / filePaths.Count,
                         file,
                         i + 1,
                         filePaths.Count);
-                    await Task.Delay(25);
+                    await Task.Delay(25, cancellationSource.Token);
                 }
-
-                targetPreset.Save();
-                if (ReferenceEquals(GlobalData.Inst.ActiveAudioPreset, targetPreset))
-                    await InitLoadAudioPreset(targetPreset.Config.Name);
+            }
+            catch (OperationCanceledException) when (cancellationSource.IsCancellationRequested)
+            {
             }
             finally
             {
-                AudioFileProgressOverlay.Hide();
-                MainWindow.Inst.SetBodyInteractionBlocked(false);
-                isAddingAudio = false;
+                try
+                {
+                    targetPreset.Save();
+                    if (ReferenceEquals(GlobalData.Inst.ActiveAudioPreset, targetPreset))
+                        await InitLoadAudioPreset(targetPreset.Config.Name);
+                }
+                finally
+                {
+                    MainWindow.Inst.HideBodyInteractionOverlay(audioFileProgressOverlay);
+                    audioFileProgressOverlay.Hide();
+                    addAudioCancellation = null;
+                    isAddingAudio = false;
+                }
             }
+        }
+
+        private void AudioFileProgressOverlay_StopRequested(object sender, EventArgs e)
+        {
+            addAudioCancellation?.Cancel();
         }
 
         private void UploadButton_Click()
@@ -443,6 +464,7 @@ namespace PlayVoice.Pages.Preset
 
         private void AudioTrackGrid_Unloaded(object sender, RoutedEventArgs e)
         {
+            addAudioCancellation?.Cancel();
             Leave();
         }
     }

@@ -288,9 +288,12 @@ public class AudioData
         }
     }
 
-    public static async Task<double?> MeasureLufs(string filePath)
+    public static async Task<double?> MeasureLufs(
+        string filePath,
+        CancellationToken cancellationToken = default)
     {
-        var process = new Process
+        cancellationToken.ThrowIfCancellationRequested();
+        using var process = new Process
         {
             StartInfo = new ProcessStartInfo
             {
@@ -303,8 +306,39 @@ public class AudioData
         };
 
         process.Start();
-        string output = await process.StandardError.ReadToEndAsync();
-        await process.WaitForExitAsync();
+        Task<string> outputTask = process.StandardError.ReadToEndAsync();
+        try
+        {
+            await process.WaitForExitAsync(cancellationToken);
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            try
+            {
+                if (!process.HasExited)
+                    process.Kill(entireProcessTree: true);
+            }
+            catch (InvalidOperationException)
+            {
+            }
+            catch (System.ComponentModel.Win32Exception)
+            {
+            }
+
+            try
+            {
+                await process.WaitForExitAsync();
+                await outputTask;
+            }
+            catch
+            {
+            }
+
+            throw;
+        }
+
+        string output = await outputTask;
+        cancellationToken.ThrowIfCancellationRequested();
 
         var match = Regex.Match(output, @"I:\s+([-0-9.]+)\s+LUFS", RegexOptions.RightToLeft);
 

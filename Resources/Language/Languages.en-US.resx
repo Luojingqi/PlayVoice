@@ -765,4 +765,5 @@ O</value>
   <data name="必须选择 Cable 设备" xml:space="preserve"><value>A Cable device is required</value></data>
   <data name="设备重复" xml:space="preserve"><value>Same device selected twice</value></data>
   <data name="当前麦克风未完成响度测试" xml:space="preserve"><value>The current microphone has not completed the loudness test</value></data>
+  <data name="停止加载" xml:space="preserve"><value>Stop loading</value></data>
 </root>

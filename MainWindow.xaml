@@ -266,11 +266,15 @@
                 </Border>
             </Grid>
 
-            <Border x:Name="BodyInteractionBlocker"
-                    Grid.Row="1"
-                    Panel.ZIndex="1000"
-                    Background="Transparent"
-                    Visibility="Collapsed"/>
+            <Grid x:Name="BodyInteractionBlocker"
+                  Grid.Row="1"
+                  Panel.ZIndex="1000"
+                  Background="Transparent"
+                  Visibility="Collapsed">
+                <ContentPresenter x:Name="BodyInteractionOverlayHost"
+                                  HorizontalAlignment="Stretch"
+                                  VerticalAlignment="Stretch"/>
+            </Grid>
         </Grid>
     </Border>
 </Window>

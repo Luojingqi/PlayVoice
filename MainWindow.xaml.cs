@@ -31,6 +31,7 @@ namespace PlayVoice
         private readonly System.Drawing.Icon trayIconImage;
         private bool isSystemSessionEnding;
         private bool isSwitchingPreset;
+        private bool isBodyInteractionBlocked;
         private readonly Dictionary<string, StartupRequirementVisual> startupRequirementVisuals = new();
         private readonly HashSet<string> desiredStartupRequirementIds = new();
         private int startupChecklistRefreshVersion;
@@ -514,7 +515,29 @@ namespace PlayVoice
 
         public void SetBodyInteractionBlocked(bool isBlocked)
         {
-            BodyInteractionBlocker.Visibility = isBlocked
+            isBodyInteractionBlocked = isBlocked;
+            UpdateBodyInteractionBlockerVisibility();
+        }
+
+        public void ShowBodyInteractionOverlay(UIElement overlay)
+        {
+            BodyInteractionOverlayHost.Content = overlay;
+            UpdateBodyInteractionBlockerVisibility();
+        }
+
+        public void HideBodyInteractionOverlay(UIElement overlay)
+        {
+            if (!ReferenceEquals(BodyInteractionOverlayHost.Content, overlay))
+                return;
+
+            BodyInteractionOverlayHost.Content = null;
+            UpdateBodyInteractionBlockerVisibility();
+        }
+
+        private void UpdateBodyInteractionBlockerVisibility()
+        {
+            BodyInteractionBlocker.Visibility = isBodyInteractionBlocked
+                || BodyInteractionOverlayHost.Content != null
                 ? Visibility.Visible
                 : Visibility.Collapsed;
         }

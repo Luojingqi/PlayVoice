@@ -4,7 +4,6 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PlayVoice.Pages.Preset"
-      xmlns:Loading="clr-namespace:PlayVoice.Pages.Loading"
       xmlns:L="clr-namespace:PlayVoice.Resources.Language"
       mc:Ignorable="d">
 
@@ -152,9 +151,6 @@
                 <Border x:Name="InsertionLine" Height="3" Background="{DynamicResource AccentColor}" CornerRadius="1.5" Visibility="Collapsed"/>
             </Canvas>
 
-            <Loading:AudioFileProgressOverlay x:Name="AudioFileProgressOverlay"
-                                              Grid.RowSpan="2"
-                                              Panel.ZIndex="100"/>
         </Grid>
     </Border>
 </Page>

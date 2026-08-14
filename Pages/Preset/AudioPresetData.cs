@@ -27,8 +27,11 @@ public class AudioPresetData
             (Config.AudioDataConfigList[index1], Config.AudioDataConfigList[index0]);
     }
 
-    public async Task<AudioData> AddAudio(string completePath)
+    public async Task<AudioData> AddAudio(
+        string completePath,
+        CancellationToken cancellationToken = default)
     {
+        cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrEmpty(completePath) || !File.Exists(completePath))
         {
             Console.WriteLine("文件不存在。");
@@ -44,10 +47,11 @@ public class AudioPresetData
                 return null;
             }
 
-            double? actualLufs = await AudioData.MeasureLufs(completePath);
+            double? actualLufs = await AudioData.MeasureLufs(completePath, cancellationToken);
             if (!actualLufs.HasValue)
                 return null;
 
+            cancellationToken.ThrowIfCancellationRequested();
             string presetPath = Path.Combine(AudioPresetDataTool.BasePath, Config.Name);
             string destPath = Path.Combine(presetPath, Path.GetFileName(completePath));
             if (File.Exists(destPath))
@@ -56,6 +60,7 @@ public class AudioPresetData
                 return null;
             }
 
+            cancellationToken.ThrowIfCancellationRequested();
             File.Copy(completePath, destPath, false);
             var audioData = new AudioData
             {
@@ -76,6 +81,10 @@ public class AudioPresetData
             Console.WriteLine($"{audioDataConfig.Name} 实际LUFS: {actualLufs}");
             Config.AudioDataConfigList.Add(audioDataConfig);
             return audioData;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
         }
         catch
         {

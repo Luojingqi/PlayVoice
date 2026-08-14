@@ -8,6 +8,8 @@ namespace PlayVoice.Pages.Loading;
 
 public partial class AudioFileProgressOverlay : UserControl
 {
+    public event EventHandler StopRequested;
+
     public AudioFileProgressOverlay()
     {
         InitializeComponent();
@@ -20,6 +22,7 @@ public partial class AudioFileProgressOverlay : UserControl
         TitleText.Text = title;
         FileNameText.Text = string.Empty;
         ProgressText.Text = $"0/{totalFiles} · 0%";
+        StopButton.IsEnabled = true;
         Visibility = Visibility.Visible;
     }
 
@@ -51,5 +54,14 @@ public partial class AudioFileProgressOverlay : UserControl
     public void Hide()
     {
         Visibility = Visibility.Collapsed;
+    }
+
+    private void StopButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!StopButton.IsEnabled)
+            return;
+
+        StopButton.IsEnabled = false;
+        StopRequested?.Invoke(this, EventArgs.Empty);
     }
 }
