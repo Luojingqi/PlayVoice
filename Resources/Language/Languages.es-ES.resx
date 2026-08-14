@@ -150,8 +150,9 @@
   <data name="自动闭麦" xml:space="preserve"><value>Silencio automático</value></data>
   <data name="播放前" xml:space="preserve"><value>Simulación previa</value></data>
   <data name="播放后" xml:space="preserve"><value>Simulación posterior</value></data>
-  <data name="停止当前全部播放" xml:space="preserve"><value>Detener toda la reproducción</value></data>
-  <data name="停止当前全部播放_说明" xml:space="preserve"><value>Pulsa la tecla asignada para detener todos los audios en reproducción.</value></data>
+  <data name="停止所有音频" xml:space="preserve"><value>Detener todo el audio</value></data>
+  <data name="停止所有音频_说明" xml:space="preserve"><value>Detiene todo el audio que se está reproduciendo.</value></data>
+  <data name="停止" xml:space="preserve"><value>Detener</value></data>
   <data name="按下" xml:space="preserve"><value>Pulsar</value></data>
   <data name="抬起" xml:space="preserve"><value>Soltar</value></data>
   <data name="单击" xml:space="preserve"><value>Clic</value></data>

@@ -45,36 +45,241 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <ToggleSwitchButton:ToggleSwitchButton
-                     Grid.Row="0"
-                     x:Name="EarAudioToggle"
-                     Header="{L:Lan 耳返_Audio}"
-                     ToolTipText="{L:Lan 耳返_Audio_说明}"
-                     ButtonWidth="80"
-                     Margin="0,1.5"
-                     Padding="0,2.2"
-                     Height="42.5"/>
-            <ToggleSwitchButton:ToggleSwitchButton
-                     Grid.Row="1"
-                     x:Name="EarInToggle"
-                     Header="{L:Lan 耳返_In}"
-                     ToolTipText="{L:Lan 耳返_In_说明}"
-                     ButtonWidth="80"
-                     Margin="0,1.5"
-                     Padding="0,2.2"
-                     Height="42.5"/>
-            <ToggleSwitchButton:ToggleSwitchButton
-                     Grid.Row="2"
-                     x:Name="AutoMuteToggle"
-                     Header="{L:Lan 自动闭麦}"
-                     ToolTipText="{L:Lan 自动闭麦_说明}"
-                     ButtonWidth="80"
-                     Margin="0,1.5"
-                     Padding="0,2.2"
-                     Height="42.5"/>
-            <StackPanel Grid.Row="3">
+            <Grid Grid.Row="0" Margin="0,1.5" Height="42.5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ToggleSwitchButton:ToggleSwitchButton
+                         Grid.ColumnSpan="2"
+                         x:Name="EarAudioToggle"
+                         Header="{L:Lan 耳返_Audio}"
+                         ToolTipText="{L:Lan 耳返_Audio_说明}"
+                         HeaderMargin="30,0,0,0"
+                         ButtonWidth="80"
+                         Padding="0,2.2"/>
+                <ExpandArrow:ExpandArrow x:Name="EarAudioExpandArrow"
+                                         Grid.Column="0"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"/>
+            </Grid>
+            <Grid x:Name="EarAudioHotkeyPanel"
+                  Grid.Row="1"
+                  Height="0"
+                  Opacity="0"
+                  ClipToBounds="True"
+                  IsHitTestVisible="False">
+                <Grid.RenderTransform>
+                    <TranslateTransform Y="-6"/>
+                </Grid.RenderTransform>
+                <Grid Height="37.5" Margin="0,1.5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <HeaderToolTip:HeaderToolTip Grid.Column="1"
+                                                 Header="{L:Lan 快捷键}"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"/>
+                    <ListBox Grid.Column="2"
+                             Margin="10,0,0,0"
+                             Style="{StaticResource HorizontalButtonGroupStyle}"
+                             HorizontalAlignment="Right"
+                             Width="96">
+                        <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
+                            <TextBox x:Name="EarAudioHotkeyInputTextBox"
+                                     Tag="{L:Lan 输入按键}"
+                                     Style="{StaticResource GroupTextBoxStyle}"
+                                     GotFocus="EarAudioHotkeyInputTextBox_GotFocus"
+                                     LostFocus="SettingHotkeyInputTextBox_LostFocus"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                        </ListBoxItem>
+                    </ListBox>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="2" Margin="0,1.5" Height="42.5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ToggleSwitchButton:ToggleSwitchButton
+                         Grid.ColumnSpan="2"
+                         x:Name="EarInToggle"
+                         Header="{L:Lan 耳返_In}"
+                         ToolTipText="{L:Lan 耳返_In_说明}"
+                         HeaderMargin="30,0,0,0"
+                         ButtonWidth="80"
+                         Padding="0,2.2"/>
+                <ExpandArrow:ExpandArrow x:Name="EarInExpandArrow"
+                                         Grid.Column="0"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"/>
+            </Grid>
+            <Grid x:Name="EarInHotkeyPanel"
+                  Grid.Row="3"
+                  Height="0"
+                  Opacity="0"
+                  ClipToBounds="True"
+                  IsHitTestVisible="False">
+                <Grid.RenderTransform>
+                    <TranslateTransform Y="-6"/>
+                </Grid.RenderTransform>
+                <Grid Height="37.5" Margin="0,1.5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <HeaderToolTip:HeaderToolTip Grid.Column="1"
+                                                 Header="{L:Lan 快捷键}"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"/>
+                    <ListBox Grid.Column="2"
+                             Margin="10,0,0,0"
+                             Style="{StaticResource HorizontalButtonGroupStyle}"
+                             HorizontalAlignment="Right"
+                             Width="96">
+                        <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
+                            <TextBox x:Name="EarInHotkeyInputTextBox"
+                                     Tag="{L:Lan 输入按键}"
+                                     Style="{StaticResource GroupTextBoxStyle}"
+                                     GotFocus="EarInHotkeyInputTextBox_GotFocus"
+                                     LostFocus="SettingHotkeyInputTextBox_LostFocus"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                        </ListBoxItem>
+                    </ListBox>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="4" Margin="0,1.5" Height="42.5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ToggleSwitchButton:ToggleSwitchButton
+                         Grid.ColumnSpan="2"
+                         x:Name="AutoMuteToggle"
+                         Header="{L:Lan 自动闭麦}"
+                         ToolTipText="{L:Lan 自动闭麦_说明}"
+                         HeaderMargin="30,0,0,0"
+                         ButtonWidth="80"
+                         Padding="0,2.2"/>
+                <ExpandArrow:ExpandArrow x:Name="AutoMuteExpandArrow"
+                                         Grid.Column="0"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"/>
+            </Grid>
+            <Grid x:Name="AutoMuteHotkeyPanel"
+                  Grid.Row="5"
+                  Height="0"
+                  Opacity="0"
+                  ClipToBounds="True"
+                  IsHitTestVisible="False">
+                <Grid.RenderTransform>
+                    <TranslateTransform Y="-6"/>
+                </Grid.RenderTransform>
+                <Grid Height="37.5" Margin="0,1.5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <HeaderToolTip:HeaderToolTip Grid.Column="1"
+                                                 Header="{L:Lan 快捷键}"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"/>
+                    <ListBox Grid.Column="2"
+                             Margin="10,0,0,0"
+                             Style="{StaticResource HorizontalButtonGroupStyle}"
+                             HorizontalAlignment="Right"
+                             Width="96">
+                        <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
+                            <TextBox x:Name="AutoMuteHotkeyInputTextBox"
+                                     Tag="{L:Lan 输入按键}"
+                                     Style="{StaticResource GroupTextBoxStyle}"
+                                     GotFocus="AutoMuteHotkeyInputTextBox_GotFocus"
+                                     LostFocus="SettingHotkeyInputTextBox_LostFocus"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                        </ListBoxItem>
+                    </ListBox>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="6" Margin="0,1.5" Height="42.5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="30"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <ExpandArrow:ExpandArrow x:Name="StopAllAudioExpandArrow"
+                                         Grid.Column="0"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"/>
+                <HeaderToolTip:HeaderToolTip Grid.Column="1"
+                                             Header="{L:Lan 停止所有音频}"
+                                             ToolTipText="{L:Lan 停止所有音频_说明}"
+                                             VerticalAlignment="Center"
+                                             HorizontalAlignment="Left"/>
+                <ListBox Grid.Column="2"
+                         Margin="10,0,0,0"
+                         Style="{StaticResource HorizontalButtonGroupStyle}"
+                         x:Name="StopAllAudioButtonListBox"
+                         Tag="Uniform"
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Center"
+                         Width="130">
+                    <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
+                        <TextBlock Text="{L:Lan 停止}"
+                                   Style="{StaticResource TextBlockLight}"/>
+                    </ListBoxItem>
+                </ListBox>
+            </Grid>
+            <Grid x:Name="StopAllAudioHotkeyPanel"
+                  Grid.Row="7"
+                  Height="0"
+                  Opacity="0"
+                  ClipToBounds="True"
+                  IsHitTestVisible="False">
+                <Grid.RenderTransform>
+                    <TranslateTransform Y="-6"/>
+                </Grid.RenderTransform>
+                <Grid Height="37.5" Margin="0,1.5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <HeaderToolTip:HeaderToolTip Grid.Column="1"
+                                                 Header="{L:Lan 快捷键}"
+                                                 VerticalAlignment="Center"
+                                                 HorizontalAlignment="Left"/>
+                    <ListBox Grid.Column="2"
+                             Margin="10,0,0,0"
+                             Style="{StaticResource HorizontalButtonGroupStyle}"
+                             x:Name="KeyboardKeyListBox2"
+                             HorizontalAlignment="Right"
+                             Width="96">
+                        <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
+                            <TextBox Tag="{L:Lan 输入按键}"
+                                     x:Name="KeyboardKeyInputTextBox2"
+                                     Style="{StaticResource GroupTextBoxStyle}"
+                                     GotFocus="KeyboardKeyInputTextBox2_GotFocus"
+                                     LostFocus="KeyboardKeyInputTextBox2_LostFocus"
+                                     InputMethod.IsInputMethodEnabled="False"/>
+                        </ListBoxItem>
+                    </ListBox>
+                </Grid>
+            </Grid>
+
+            <StackPanel Grid.Row="8">
                 <DropDownList:DropDownList
                         x:Name="FunctionPresetComboBox"
                         Header="{L:Lan 游戏预设}"
@@ -92,7 +297,7 @@
                         Height="37.5"/>
             </StackPanel>
             <DropDownList:DropDownList
-                    Grid.Row="4"
+                    Grid.Row="9"
                     x:Name="LanguageComboBox"
                     Header="{L:Lan 语言}"
                     ToolTipText="{L:Lan 语言_说明}"
@@ -100,7 +305,7 @@
                     Margin="0,1.5"
                     Height="37.5"/>
             <HorizontalList:HorizontalList
-                    Grid.Row="5"
+                    Grid.Row="10"
                     x:Name="StyleListBox"
                     Header="{L:Lan 样式}"
                     ToolTipText="{L:Lan 样式_说明}"
@@ -108,14 +313,14 @@
                     Margin="0,1.5"
                     Height="37.5"/>
             <DropDownList:DropDownList
-                    Grid.Row="6"
+                    Grid.Row="11"
                     x:Name="CloseBehaviorComboBox"
                     Header="{L:Lan 关闭行为}"
                     ToolTipText="{L:Lan 关闭行为_说明}"
                     DropDownWidth="130"
                     Margin="0,1.5"
                     Height="37.5"/>
-            <Grid Grid.Row="7"
+            <Grid Grid.Row="12"
                   Margin="0,1.5"
                   Height="37.5">
                 <Grid.ColumnDefinitions>
@@ -147,7 +352,7 @@
             </Grid>
 
 
-            <Grid Grid.Row="8" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="13" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="37.5"/>
                     <ColumnDefinition Width="*"/>
@@ -206,7 +411,7 @@
                 </Grid>
             </Grid>
             <Grid x:Name="AudioEarVolumePanel"
-                  Grid.Row="9"
+                  Grid.Row="14"
                   Height="0"
                   Opacity="0"
                   ClipToBounds="True"
@@ -236,7 +441,7 @@
                 </Grid>
             </Grid>
 
-            <Grid Grid.Row="10" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="15" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -256,7 +461,7 @@
                             HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Row="11" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="16" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -276,7 +481,7 @@
                             HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Row="12" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="17" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -299,7 +504,7 @@
                             HorizontalAlignment="Right"/>
             </Grid>
 
-            <Grid Grid.Row="13" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="18" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -325,7 +530,7 @@
                     </ListBoxItem>
                 </ListBox>
             </Grid>
-            <Grid Grid.Row="14" Margin="0,1.5" Height="37.5">
+            <Grid Grid.Row="19" Margin="0,1.5" Height="37.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -352,36 +557,7 @@
                 </ListBox>
             </Grid>
 
-            <Grid Grid.Row="15" Margin="0,1.5" Height="37.5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <HeaderToolTip:HeaderToolTip
-                            Grid.Column="0"
-                            Header="{L:Lan 停止当前全部播放}"
-                            ToolTipText="{L:Lan 停止当前全部播放_说明}"
-                            Margin="13.5,0,0,0"
-                            VerticalAlignment="Center"
-                            HorizontalAlignment="Left"/>
-                <ListBox Grid.Column="1" Margin="10,0,0,0"
-                        Style="{StaticResource HorizontalButtonGroupStyle}"
-                        x:Name="KeyboardKeyListBox2"
-                        HorizontalAlignment="Right"
-                        Width="96">
-                    <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
-                        <TextBox Tag="{L:Lan 输入按键}"
-                                 x:Name="KeyboardKeyInputTextBox2"
-                                 Style="{StaticResource GroupTextBoxStyle}"
-                                 GotFocus="KeyboardKeyInputTextBox2_GotFocus"
-                                 LostFocus="KeyboardKeyInputTextBox2_LostFocus"
-                                 InputMethod.IsInputMethodEnabled="False"/>
-                    </ListBoxItem>
-                </ListBox>
-            </Grid>
-
-
-            <Border Grid.Row="16" Margin="0,1.5,0,0"/>
+            <Border Grid.Row="20" Margin="0,1.5,0,0"/>
         </Grid>
     </HeaderedContentControl>
 </Page>

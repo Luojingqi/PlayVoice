@@ -111,6 +111,8 @@ namespace PlayVoice.Pages.Setting
             }
             {
                 UpdateGoEarAudioAction(GlobalData.Inst.GetGoEar_Audio());
+                EarAudioHotkeyInputTextBox.Text =
+                    GlobalData.Inst.Config.EarAudioToggleHotkey.ToString();
                 EarAudioToggle.OnToggleChanged += (b) =>
                 {
                     if (b.Value == true)
@@ -126,9 +128,13 @@ namespace PlayVoice.Pages.Setting
 
                 };
                 GlobalData.Inst.GoEar_AudioStateChanged += UpdateGoEarAudioAction;
+                EarAudioExpandArrow.ExpandedChanged += (_, e) =>
+                    AnimateSettingHotkeyPanel(EarAudioHotkeyPanel, e.NewValue);
             }
             {
                 UpdateGoEarInAction(GlobalData.Inst.GetGoEar_In());
+                EarInHotkeyInputTextBox.Text =
+                    GlobalData.Inst.Config.EarInToggleHotkey.ToString();
                 EarInToggle.OnToggleChanged += (b) =>
                 {
                     if (b.Value == true)
@@ -144,6 +150,8 @@ namespace PlayVoice.Pages.Setting
 
                 };
                 GlobalData.Inst.GoEar_InStateChanged += UpdateGoEarInAction;
+                EarInExpandArrow.ExpandedChanged += (_, e) =>
+                    AnimateSettingHotkeyPanel(EarInHotkeyPanel, e.NewValue);
             }
 
             {
@@ -170,10 +178,15 @@ namespace PlayVoice.Pages.Setting
 
             {
                 UpdateAutoMuteAction(GlobalData.Inst.AutoMute);
+                AutoMuteHotkeyInputTextBox.Text =
+                    GlobalData.Inst.Config.AutoMuteToggleHotkey.ToString();
                 AutoMuteToggle.OnToggleChanged += (b) =>
                 {
                     GlobalData.Inst.AutoMute = b.Value;
                 };
+                GlobalData.Inst.AutoMuteStateChanged += UpdateAutoMuteAction;
+                AutoMuteExpandArrow.ExpandedChanged += (_, e) =>
+                    AnimateSettingHotkeyPanel(AutoMuteHotkeyPanel, e.NewValue);
             }
 
             {
@@ -226,6 +239,16 @@ namespace PlayVoice.Pages.Setting
 
             {
                 RefreshPlayingKeySettings();
+                StopAllAudioExpandArrow.ExpandedChanged += (_, e) =>
+                    AnimateSettingHotkeyPanel(StopAllAudioHotkeyPanel, e.NewValue);
+                StopAllAudioButtonListBox.SelectionChanged += (_, _) =>
+                {
+                    if (StopAllAudioButtonListBox.SelectedIndex != 0)
+                        return;
+
+                    StopAllAudioButtonListBox.SelectedIndex = -1;
+                    GlobalData.Inst.AudioProxy.StopClear();
+                };
 
                 BeforePlayingComboBox.OnSelectionChanged += (item0, item1) =>
                 {
@@ -451,6 +474,16 @@ namespace PlayVoice.Pages.Setting
             AnimateHeight(AudioEarVolumePanel, isExpanded ? 40.5 : 0);
         }
 
+        private static void AnimateSettingHotkeyPanel(
+            FrameworkElement panel,
+            bool isExpanded)
+        {
+            panel.IsHitTestVisible = isExpanded;
+            AnimateOpacity(panel, isExpanded ? 1 : 0);
+            AnimateTranslateY(panel, isExpanded ? 0 : -6);
+            AnimateHeight(panel, isExpanded ? 40.5 : 0);
+        }
+
         private static void AnimateOpacity(UIElement element, double to)
         {
             element.BeginAnimation(
@@ -521,6 +554,7 @@ namespace PlayVoice.Pages.Setting
             GlobalData.Inst.ActiveFunctionPresetChanged -= UpdateFunctionPresetSelection;
             GlobalData.Inst.GoEar_AudioStateChanged -= UpdateGoEarAudioAction;
             GlobalData.Inst.GoEar_InStateChanged -= UpdateGoEarInAction;
+            GlobalData.Inst.AutoMuteStateChanged -= UpdateAutoMuteAction;
         }
 
         private void SystemSettingsPage_Loaded(object sender, RoutedEventArgs e)
@@ -531,8 +565,17 @@ namespace PlayVoice.Pages.Setting
             GlobalData.Inst.ActiveAudioPresetChanged += UpdateAudioPresetSelection;
             GlobalData.Inst.ActiveFunctionPresetChanged -= UpdateFunctionPresetSelection;
             GlobalData.Inst.ActiveFunctionPresetChanged += UpdateFunctionPresetSelection;
+            GlobalData.Inst.GoEar_AudioStateChanged -= UpdateGoEarAudioAction;
+            GlobalData.Inst.GoEar_AudioStateChanged += UpdateGoEarAudioAction;
+            GlobalData.Inst.GoEar_InStateChanged -= UpdateGoEarInAction;
+            GlobalData.Inst.GoEar_InStateChanged += UpdateGoEarInAction;
+            GlobalData.Inst.AutoMuteStateChanged -= UpdateAutoMuteAction;
+            GlobalData.Inst.AutoMuteStateChanged += UpdateAutoMuteAction;
             UpdateAudioPresetSelection(GlobalData.Inst.ActiveAudioPreset);
             UpdateFunctionPresetSelection(GlobalData.Inst.ActiveFunctionPreset);
+            UpdateGoEarAudioAction(GlobalData.Inst.GetGoEar_Audio());
+            UpdateGoEarInAction(GlobalData.Inst.GetGoEar_In());
+            UpdateAutoMuteAction(GlobalData.Inst.AutoMute);
         }
 
         private ObservableCollection<string> audioPresetNames = new ObservableCollection<string>();
@@ -633,6 +676,97 @@ namespace PlayVoice.Pages.Setting
 
 
             RefreshPlayingKeySettings();
+        }
+
+        private enum SettingToggleHotkeyKind
+        {
+            EarAudio,
+            EarIn,
+            AutoMute
+        }
+
+        private void EarAudioHotkeyInputTextBox_GotFocus(
+            object sender,
+            RoutedEventArgs e)
+        {
+            StartSettingHotkeyRecording(SettingToggleHotkeyKind.EarAudio);
+        }
+
+        private void EarInHotkeyInputTextBox_GotFocus(
+            object sender,
+            RoutedEventArgs e)
+        {
+            StartSettingHotkeyRecording(SettingToggleHotkeyKind.EarIn);
+        }
+
+        private void AutoMuteHotkeyInputTextBox_GotFocus(
+            object sender,
+            RoutedEventArgs e)
+        {
+            StartSettingHotkeyRecording(SettingToggleHotkeyKind.AutoMute);
+        }
+
+        private void SettingHotkeyInputTextBox_LostFocus(
+            object sender,
+            RoutedEventArgs e)
+        {
+            HotkeyManager.Inst.StopRecording();
+        }
+
+        private void StartSettingHotkeyRecording(SettingToggleHotkeyKind kind)
+        {
+            HotkeyManager.Inst.StartRecording(
+                hotkey => OnSettingHotkeyRecorded(kind, hotkey));
+        }
+
+        private void OnSettingHotkeyRecorded(
+            SettingToggleHotkeyKind kind,
+            HotkeyData newHotkey)
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                HotkeyData hotkey = GetSettingToggleHotkey(kind);
+                if (newHotkey == null)
+                {
+                    hotkey.Clear();
+                }
+                else
+                {
+                    hotkey.Modifiers = newHotkey.Modifiers;
+                    hotkey.VkCode = newHotkey.VkCode;
+                    hotkey.IsMouse = newHotkey.IsMouse;
+                }
+
+                TextBox input = GetSettingToggleHotkeyInput(kind);
+                input.Text = hotkey.ToString();
+                input.SelectionStart = input.Text.Length;
+                Keyboard.Focus(null);
+                GlobalData.Inst.Config.Save();
+            });
+        }
+
+        private static HotkeyData GetSettingToggleHotkey(
+            SettingToggleHotkeyKind kind)
+        {
+            Config config = GlobalData.Inst.Config;
+            return kind switch
+            {
+                SettingToggleHotkeyKind.EarAudio => config.EarAudioToggleHotkey,
+                SettingToggleHotkeyKind.EarIn => config.EarInToggleHotkey,
+                SettingToggleHotkeyKind.AutoMute => config.AutoMuteToggleHotkey,
+                _ => throw new ArgumentOutOfRangeException(nameof(kind))
+            };
+        }
+
+        private TextBox GetSettingToggleHotkeyInput(SettingToggleHotkeyKind kind)
+        {
+            return kind switch
+            {
+                SettingToggleHotkeyKind.EarAudio => EarAudioHotkeyInputTextBox,
+                SettingToggleHotkeyKind.EarIn => EarInHotkeyInputTextBox,
+                SettingToggleHotkeyKind.AutoMute => AutoMuteHotkeyInputTextBox,
+                _ => throw new ArgumentOutOfRangeException(nameof(kind))
+            };
         }
 
         private void RefreshPlayingKeySettings()

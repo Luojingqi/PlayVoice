@@ -1,4 +1,6 @@
 ﻿using PlayVoice.Resources.Themes;
+using PlayVoice.Hotkey;
+
 namespace PlayVoice;
 
 internal class Config
@@ -17,6 +19,21 @@ internal class Config
     /// 播放预设音频时是否自动静音物理麦克风。
     /// </summary>
     public bool AutoMute { get; set; } = true;
+
+    /// <summary>
+    /// 切换音频耳返状态的全局快捷键。
+    /// </summary>
+    public HotkeyData EarAudioToggleHotkey { get; set; } = new();
+
+    /// <summary>
+    /// 切换输入耳返状态的全局快捷键。
+    /// </summary>
+    public HotkeyData EarInToggleHotkey { get; set; } = new();
+
+    /// <summary>
+    /// 切换自动闭麦状态的全局快捷键。
+    /// </summary>
+    public HotkeyData AutoMuteToggleHotkey { get; set; } = new();
 
     /// <summary>
     /// 同时播放的最大音频数量。

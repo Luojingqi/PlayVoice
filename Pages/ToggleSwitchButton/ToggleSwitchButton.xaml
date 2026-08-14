@@ -51,7 +51,7 @@
                                                  HeaderFontSize="{Binding TextBlockFontSize, ElementName=self}"
                                                  VerticalAlignment="Center"
                                                  HorizontalAlignment="Left"
-                                                 Margin="13.5,0,0,0"/>
+                                                 Margin="{Binding HeaderMargin, ElementName=self}"/>
 
                 <ToggleButton x:Name="toggleButton"
                     Style="{StaticResource ToggleSwitchStyle}"

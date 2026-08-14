@@ -33,9 +33,11 @@ public sealed class AudioHotkeyPresetFeatureHandler : IFunctionPresetFeatureHand
 
     public void Clear()
     {
-        HotkeyManager.Inst.ClearHotkeys();
         foreach (var hotkey in appliedHotkeys)
+        {
+            HotkeyManager.Inst.RemoveHotkey(hotkey);
             hotkey.Callback = null;
+        }
         appliedHotkeys.Clear();
     }
 }

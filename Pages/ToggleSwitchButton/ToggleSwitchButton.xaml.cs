@@ -61,6 +61,19 @@ namespace PlayVoice.Pages.ToggleSwitchButton
             set => SetValue(ButtonWidthProperty, value);
         }
 
+        public static readonly DependencyProperty HeaderMarginProperty =
+            DependencyProperty.Register(
+                nameof(HeaderMargin),
+                typeof(Thickness),
+                typeof(ToggleSwitchButton),
+                new PropertyMetadata(new Thickness(13.5, 0, 0, 0)));
+
+        public Thickness HeaderMargin
+        {
+            get => (Thickness)GetValue(HeaderMarginProperty);
+            set => SetValue(HeaderMarginProperty, value);
+        }
+
         public static readonly DependencyProperty IsCheckedProperty =
             DependencyProperty.Register("IsChecked", typeof(bool?), typeof(ToggleSwitchButton),
                 new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));

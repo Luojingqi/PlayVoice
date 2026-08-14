@@ -16,7 +16,8 @@ internal static class ConfigMigrator
     private static readonly IReadOnlyDictionary<int, Action<JsonObject>> Migrations =
         new Dictionary<int, Action<JsonObject>>
         {
-            [8] = MigrateToV8
+            [8] = MigrateToV8,
+            [9] = MigrateToV9
         };
 
     public static Config Migrate(int version, JsonObject data)
@@ -72,6 +73,26 @@ internal static class ConfigMigrator
 
         if (!data.ContainsKey(loudnessMapPropertyName))
             data[loudnessMapPropertyName] = loudnessByDeviceID;
+    }
+
+    private static void MigrateToV9(JsonObject data)
+    {
+        AddHotkeyIfMissing(nameof(Config.EarAudioToggleHotkey));
+        AddHotkeyIfMissing(nameof(Config.EarInToggleHotkey));
+        AddHotkeyIfMissing(nameof(Config.AutoMuteToggleHotkey));
+
+        void AddHotkeyIfMissing(string propertyName)
+        {
+            if (data[propertyName] != null)
+                return;
+
+            data[propertyName] = new JsonObject
+            {
+                [nameof(Hotkey.HotkeyData.Modifiers)] = 0,
+                [nameof(Hotkey.HotkeyData.VkCode)] = 0,
+                [nameof(Hotkey.HotkeyData.IsMouse)] = false
+            };
+        }
     }
 
     private static T Deserialize<T>(JsonNode data, int version)

@@ -22,7 +22,7 @@ internal class GlobalData
     /// <summary>
     /// 用于持久化数据迁移的内部版本索引。
     /// </summary>
-    public const int Version = 8;
+    public const int Version = 9;
 
     private static readonly Dictionary<string, string> SteamLanguageMap =
         new(StringComparer.OrdinalIgnoreCase)
@@ -506,8 +506,11 @@ internal class GlobalData
             autoMute = value;
             config.AutoMute = autoMute;
             config.Save();
+            AutoMuteStateChanged?.Invoke(autoMute);
         }
     }
+    public event Action<bool> AutoMuteStateChanged;
+
     public GlobalData()
     {
         Inst = this;
@@ -527,6 +530,7 @@ internal class GlobalData
         ThemeManager.SwitchTheme(config.Theme);
         LanguageManager.Inst.SetCulture(config.Language);
         autoMute = config.AutoMute;
+        InitializeSettingToggleHotkeys();
 
         activeFunctionPreset = FunctionPresetDataTool.EnsureCurrent(config.ActiveFunctionPresetName);
         config.ActiveFunctionPresetName = activeFunctionPreset?.Name;
@@ -536,6 +540,24 @@ internal class GlobalData
         audioProxy = new();
         audioProxy.Init();
         equipment.Init();
+    }
+
+    private void InitializeSettingToggleHotkeys()
+    {
+        config.EarAudioToggleHotkey ??= new();
+        config.EarInToggleHotkey ??= new();
+        config.AutoMuteToggleHotkey ??= new();
+
+        config.EarAudioToggleHotkey.Callback =
+            () => TryGoEar_Audio(!GetGoEar_Audio());
+        config.EarInToggleHotkey.Callback =
+            () => TryGoEar_In(!GetGoEar_In());
+        config.AutoMuteToggleHotkey.Callback =
+            () => AutoMute = !AutoMute;
+
+        HotkeyManager.Inst.AddHotkey(config.EarAudioToggleHotkey);
+        HotkeyManager.Inst.AddHotkey(config.EarInToggleHotkey);
+        HotkeyManager.Inst.AddHotkey(config.AutoMuteToggleHotkey);
     }
 
     private void NormalizeMicrophoneLoudnessConfig()

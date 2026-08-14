@@ -150,8 +150,9 @@
   <data name="自动闭麦" xml:space="preserve"><value>Auto-Stummschaltung</value></data>
   <data name="播放前" xml:space="preserve"><value>Simulation vor Wiedergabe</value></data>
   <data name="播放后" xml:space="preserve"><value>Simulation nach Wiedergabe</value></data>
-  <data name="停止当前全部播放" xml:space="preserve"><value>Gesamte Wiedergabe stoppen</value></data>
-  <data name="停止当前全部播放_说明" xml:space="preserve"><value>Drücken Sie die zugewiesene Taste, um alle aktuell wiedergegebenen Audiodateien zu stoppen.</value></data>
+  <data name="停止所有音频" xml:space="preserve"><value>Alle Audios stoppen</value></data>
+  <data name="停止所有音频_说明" xml:space="preserve"><value>Stoppt alle derzeit wiedergegebenen Audios.</value></data>
+  <data name="停止" xml:space="preserve"><value>Stoppen</value></data>
   <data name="按下" xml:space="preserve"><value>Drücken</value></data>
   <data name="抬起" xml:space="preserve"><value>Loslassen</value></data>
   <data name="单击" xml:space="preserve"><value>Klicken</value></data>
