@@ -59,6 +59,17 @@ internal class Config
     public double? MicrophoneLufs { get; set; }
 
     /// <summary>
+    /// 完成响度归一化测试时使用的物理麦克风设备 ID。
+    /// </summary>
+    public string MicrophoneLufsDeviceID { get; set; }
+
+    /// <summary>
+    /// 各物理麦克风设备 ID 对应的响度归一化测试结果，单位为 LUFS。
+    /// </summary>
+    public Dictionary<string, double> MicrophoneLufsByDeviceID { get; set; } =
+        new(StringComparer.Ordinal);
+
+    /// <summary>
     /// 所有输出的全局增益，单位为分贝。
     /// </summary>
     public double GlobalDecibel { get; set; } = 0;
@@ -103,10 +114,6 @@ internal class Config
     /// </summary>
     public bool HasDetectedInitialSteamLanguage { get; set; } = false;
 
-    /// <summary>
-    /// 用于验证版本 8 配置迁移的测试值。
-    /// </summary>
-    public int MigrationTestValue { get; set; } = 8;
 
     /// <summary>
     /// 将当前配置保存到程序运行目录。

@@ -1,5 +1,6 @@
 ﻿using PlayVoice.Audio;
 using PlayVoice.Hotkey;
+using NAudio.CoreAudioApi;
 using PlayVoice.Pages.FunctionPreset;
 using PlayVoice.Pages.Preset;
 using PlayVoice.Resources.Language;
@@ -8,6 +9,8 @@ using Steamworks;
 using System.IO;
 
 namespace PlayVoice;
+
+internal sealed record StartupRequirement(string Id, string Message);
 
 internal class GlobalData
 {
@@ -186,42 +189,268 @@ internal class GlobalData
     }
 
     public bool GetRun() => run;
+
+    private bool automaticRunEnabled;
+    private bool isStarting;
+    private bool resumeGoEarAudioAfterStart;
+    private bool resumeGoEarInAfterStart;
+    private string startupFailureRequirementKey;
+
+    public event Action StartupRequirementsChanged;
+
+    public IReadOnlyList<StartupRequirement> GetIncompleteStartupRequirements()
+    {
+        var requirements = new List<StartupRequirement>();
+        var language = LanguageManager.Inst;
+
+        if (!EquipmentLoder.IsVBCableInstalled())
+        {
+            requirements.Add(new(
+                "VirtualSoundCard",
+                $"{language.GetString("虚拟声卡")} · {language.GetString("未安装")}"));
+        }
+
+        AddEquipmentRequirement(
+            requirements,
+            "PhysicalMicrophone",
+            "物理麦克风",
+            equipment.PhysicalMicrophone,
+            false,
+            equipment.VirtualMicrophone,
+            "虚拟麦克风",
+            language);
+        AddEquipmentRequirement(
+            requirements,
+            "PhysicalLoudspeaker",
+            "物理扬声器",
+            equipment.PhysicalLoudspeaker,
+            false,
+            equipment.VirtualLoudspeaker,
+            "虚拟扬声器",
+            language);
+        AddEquipmentRequirement(
+            requirements,
+            "VirtualMicrophone",
+            "虚拟麦克风",
+            equipment.VirtualMicrophone,
+            true,
+            equipment.PhysicalMicrophone,
+            "物理麦克风",
+            language);
+        AddEquipmentRequirement(
+            requirements,
+            "VirtualLoudspeaker",
+            "虚拟扬声器",
+            equipment.VirtualLoudspeaker,
+            true,
+            equipment.PhysicalLoudspeaker,
+            "物理扬声器",
+            language);
+
+        if (equipment.PhysicalMicrophoneState && !IsMicrophoneLoudnessReady())
+        {
+            requirements.Add(new(
+                "MicrophoneLoudness",
+                language.GetString("当前麦克风未完成响度测试")));
+        }
+
+        if (!string.IsNullOrEmpty(startupFailureRequirementKey))
+        {
+            requirements.Add(new(
+                "AudioServiceFailure",
+                language.GetString(startupFailureRequirementKey)));
+        }
+
+        return requirements;
+    }
+
+    private static void AddEquipmentRequirement(
+        ICollection<StartupRequirement> requirements,
+        string id,
+        string equipmentNameKey,
+        MMDevice device,
+        bool requiresCable,
+        MMDevice conflictingDevice,
+        string conflictingEquipmentNameKey,
+        LanguageManager language)
+    {
+        string reason;
+        if (device == null)
+        {
+            reason = language.GetString("未绑定");
+        }
+        else if (requiresCable && !EquipmentLoder.IsCableEquipment(device))
+        {
+            reason = language.GetString("必须选择 Cable 设备");
+        }
+        else if (!requiresCable && EquipmentLoder.IsCableEquipment(device))
+        {
+            reason = language.GetString("不能选择 Cable 设备");
+        }
+        else if (conflictingDevice != null && device.ID == conflictingDevice.ID)
+        {
+            reason =
+                $"{language.GetString(conflictingEquipmentNameKey)} · {language.GetString("设备重复")}";
+        }
+        else return;
+
+        requirements.Add(new(
+            id,
+            $"{language.GetString(equipmentNameKey)} · {reason}"));
+    }
+
+    private bool IsMicrophoneLoudnessReady()
+    {
+        string microphoneID = equipment.PhysicalMicrophone?.ID;
+        return !string.IsNullOrEmpty(microphoneID)
+            && config.MicrophoneLufsByDeviceID != null
+            && config.MicrophoneLufsByDeviceID.TryGetValue(
+                microphoneID, out double microphoneLufs)
+            && config.MicrophoneLufs == microphoneLufs
+            && string.Equals(
+                config.MicrophoneLufsDeviceID, microphoneID, StringComparison.Ordinal);
+    }
+
+    private bool AreStartupRequirementsSatisfied()
+    {
+        return equipment.PhysicalLoudspeakerState
+            && EquipmentLoder.IsVBCableInstalled()
+            && equipment.PhysicalMicrophoneState
+            && equipment.VirtualLoudspeakerState
+            && equipment.VirtualMicrophoneState
+            && IsMicrophoneLoudnessReady();
+    }
+
+    public void EnableAutomaticRun()
+    {
+        if (automaticRunEnabled) return;
+        automaticRunEnabled = true;
+        NotifyStartupRequirementsChanged();
+    }
+
+    public void NotifyStartupRequirementsChanged()
+    {
+        startupFailureRequirementKey = null;
+        if (automaticRunEnabled && !run)
+            TryStartAudio();
+        StartupRequirementsChanged?.Invoke();
+    }
+
+    public void StopForEquipmentChange()
+    {
+        if (run)
+        {
+            resumeGoEarAudioAfterStart = goEar_Audio;
+            resumeGoEarInAfterStart = goEar_In;
+        }
+        TryRun(false);
+    }
+
     public bool TryRun(bool value)
     {
-        if (value == run) return true;
-        if (value == false)
+        if (value)
         {
-            run = false;
+            bool started = TryStartAudio();
+            StartupRequirementsChanged?.Invoke();
+            return started;
+        }
+
+        if (!run) return true;
+
+        run = false;
+        bool stoppedSuccessfully = true;
+        try
+        {
             TryGoEar_In(false);
+        }
+        catch (Exception exception)
+        {
+            stoppedSuccessfully = false;
+            Console.WriteLine($"[错误] 关闭麦克风耳返失败：{exception}");
+        }
+        try
+        {
             TryGoEar_Audio(false);
-            RunStateChanged?.Invoke(false);
+        }
+        catch (Exception exception)
+        {
+            stoppedSuccessfully = false;
+            Console.WriteLine($"[错误] 关闭音频耳返失败：{exception}");
+        }
+        try
+        {
             audioProxy.Stop();
+            RunStateChanged?.Invoke(false);
+            return stoppedSuccessfully;
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine($"[错误] 停止音频服务失败：{exception}");
+            RunStateChanged?.Invoke(false);
+            return false;
+        }
+    }
+
+    private bool TryStartAudio()
+    {
+        if (run) return true;
+        if (isStarting || !AreStartupRequirementsSatisfied()) return false;
+
+        isStarting = true;
+        try
+        {
+            audioProxy.Start();
+            run = true;
+
+            bool restoreGoEarAudio = resumeGoEarAudioAfterStart;
+            bool restoreGoEarIn = resumeGoEarInAfterStart;
+
+            if (restoreGoEarAudio)
+                TryGoEar_Audio(true);
+            if (restoreGoEarIn)
+                TryGoEar_In(true);
+
+            resumeGoEarAudioAfterStart = false;
+            resumeGoEarInAfterStart = false;
+            startupFailureRequirementKey = null;
+            RunStateChanged?.Invoke(true);
             return true;
         }
-        else
+        catch (Exception exception)
         {
-            if (config.MicrophoneLufs == null)
+            run = false;
+            startupFailureRequirementKey = "音频服务启动失败，请检查设备";
+            Console.WriteLine($"[错误] 启动音频服务失败：{exception}");
+            try
             {
-                MainWindow.Inst.AddNotification(
-                    () => $"{LanguageManager.Inst.GetString("通知")}",
-                    () => $"{LanguageManager.Inst.GetString("请先通过")} {LanguageManager.Inst.GetString("响度归一化测试")}",
-                    Pages.LabelStatus.Warning, 4);
-                return false;
+                TryGoEar_In(false);
             }
-
-            bool b = true;
-            b &= equipment.PhysicalLoudspeakerState
-                && equipment.PhysicalMicrophoneState
-                && equipment.VirtualLoudspeakerState
-                && equipment.VirtualMicrophoneState;
-            if (b == true)
+            catch (Exception earException)
             {
-                run = true;
-                audioProxy.Start();
-                RunStateChanged?.Invoke(true);
-                return true;
+                Console.WriteLine($"[错误] 重置麦克风耳返状态失败：{earException}");
             }
-            else return false;
+            try
+            {
+                TryGoEar_Audio(false);
+            }
+            catch (Exception earException)
+            {
+                Console.WriteLine($"[错误] 重置音频耳返状态失败：{earException}");
+            }
+            try
+            {
+                audioProxy.Stop();
+            }
+            catch (Exception stopException)
+            {
+                Console.WriteLine($"[错误] 清理启动失败的音频服务时出错：{stopException}");
+            }
+            RunStateChanged?.Invoke(false);
+            return false;
+        }
+        finally
+        {
+            isStarting = false;
         }
     }
     private bool run = false;
@@ -236,7 +465,7 @@ internal class GlobalData
         {
             MainWindow.Inst.AddNotification(
                 () => $"{LanguageManager.Inst.GetString("通知")}",
-                () => $"{LanguageManager.Inst.GetString("请先启动程序")}",
+                () => $"{LanguageManager.Inst.GetString("请先完成启动准备")}",
                 Pages.LabelStatus.Warning, 4);
             return false;
         }
@@ -255,7 +484,7 @@ internal class GlobalData
         {
             MainWindow.Inst.AddNotification(
                 () => $"{LanguageManager.Inst.GetString("通知")}",
-                () => $"{LanguageManager.Inst.GetString("请先启动程序")}",
+                () => $"{LanguageManager.Inst.GetString("请先完成启动准备")}",
                 Pages.LabelStatus.Warning, 4);
             return false;
         }
@@ -283,7 +512,16 @@ internal class GlobalData
     {
         Inst = this;
         PresetStorage.EnsureInitialized();
-        config = ConfigStorage.Load();
+        try
+        {
+            config = ConfigStorage.Load();
+        }
+        catch
+        {
+            Console.WriteLine("config加载失败");
+            config = new Config();
+        }
+        NormalizeMicrophoneLoudnessConfig();
 
         TryDetectInitialSteamLanguage();
         ThemeManager.SwitchTheme(config.Theme);
@@ -298,6 +536,34 @@ internal class GlobalData
         audioProxy = new();
         audioProxy.Init();
         equipment.Init();
+    }
+
+    private void NormalizeMicrophoneLoudnessConfig()
+    {
+        config.MicrophoneLufsByDeviceID ??= new(StringComparer.Ordinal);
+        if (!config.MicrophoneLufs.HasValue)
+            return;
+
+        string microphoneID = config.MicrophoneLufsDeviceID;
+        if (string.IsNullOrWhiteSpace(microphoneID))
+            microphoneID = config.PhysicalMicrophoneID;
+        if (string.IsNullOrWhiteSpace(microphoneID))
+            return;
+
+        bool changed = false;
+        if (!config.MicrophoneLufsByDeviceID.ContainsKey(microphoneID))
+        {
+            config.MicrophoneLufsByDeviceID[microphoneID] = config.MicrophoneLufs.Value;
+            changed = true;
+        }
+        if (!string.Equals(
+            config.MicrophoneLufsDeviceID, microphoneID, StringComparison.Ordinal))
+        {
+            config.MicrophoneLufsDeviceID = microphoneID;
+            changed = true;
+        }
+        if (changed)
+            config.Save();
     }
 
     private void TryDetectInitialSteamLanguage()

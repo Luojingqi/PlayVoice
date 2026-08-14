@@ -15,8 +15,8 @@
   <data name="系统设置" xml:space="preserve"><value>一般</value></data>
   <data name="运行" xml:space="preserve"><value>開始</value></data>
   <data name="运行_说明" xml:space="preserve"><value>物理マイクとPlayVoiceの音声をミックスして仮想マイクへ出力します。開始前に音量正規化テストを完了し、4つのデバイスをすべて接続してください。</value></data>
-  <data name="耳返_Audio_说明" xml:space="preserve"><value>PlayVoiceの音声を物理スピーカーにも出力します。先に「開始」を有効にしてください。このモニター音は相手が聞く音と必ずしも同じではありません。</value></data>
-  <data name="耳返_In_说明" xml:space="preserve"><value>自分のマイク音声をモニターします。先に「開始」を有効にしてください。マイクをスピーカーに近づけるとエコーやハウリングが発生する場合があります。</value></data>
+  <data name="耳返_Audio_说明" xml:space="preserve"><value>PlayVoiceの音声を物理スピーカーにも出力します。起動準備が完了すると音声サービスは自動的に開始します。このモニター音は相手が聞く音と必ずしも同じではありません。</value></data>
+  <data name="耳返_In_说明" xml:space="preserve"><value>自分のマイク音声をモニターします。起動準備が完了すると音声サービスは自動的に開始します。マイクをスピーカーに近づけるとエコーやハウリングが発生する場合があります。</value></data>
   <data name="自动闭麦_说明" xml:space="preserve"><value>プリセット音声の再生中はマイク入力を停止し、すべての音声が終了すると元に戻します。</value></data>
   <data name="游戏预设_说明" xml:space="preserve"><value>使用するゲームプリセットを選択します。各音声のホットキー、音量、再生前後のキー操作を保存します。</value></data>
   <data name="音频预设_说明" xml:space="preserve"><value>使用する音声プリセットを選択し、再生可能な音声一覧を切り替えます。</value></data>
@@ -133,7 +133,7 @@
   <data name="教程1_内容" xml:space="preserve"><value>· 設定から仮想オーディオをインストールします。&#xA;· Windowsのサウンド設定で仮想デバイスを確認します。</value></data>
   <data name="教程1_标题" xml:space="preserve"><value>初回起動</value></data>
   <data name="点击观看视频演示" xml:space="preserve"><value>クリックして動画デモを見る</value></data>
-  <data name="教程3_内容" xml:space="preserve"><value>· 4つのデバイスを設定して「開始」をオンにします。&#xA;· マイクとアプリの音声が仮想マイクへ出力されます。</value></data>
+  <data name="教程3_内容" xml:space="preserve"><value>· 4つのデバイスを設定し、現在のマイクの音量テストを完了します。&#xA;· チェックリストが完了するとPlayVoiceが自動的に起動し、マイクとアプリの音声が仮想マイクへ出力されます。</value></data>
   <data name="教程3_标题" xml:space="preserve"><value>PlayVoiceを開始</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>ゲームと配信</value></data>
   <data name="教程4_内容" xml:space="preserve"><value>· ゲームや配信アプリで、設定した仮想マイクを選択します。</value></data>
@@ -222,4 +222,13 @@
   <data name="游戏预设已存在" xml:space="preserve"><value>ゲームプリセットは既にあります</value></data>
   <data name="最大同时播放" xml:space="preserve"><value>最大同時再生数</value></data>
   <data name="最大同时播放_说明" xml:space="preserve"><value>同時に再生できる音声の最大数を設定します。上限を超えると、最初に再生を開始した音声を停止します。</value></data>
+  <data name="启动准备" xml:space="preserve"><value>起動準備</value></data>
+  <data name="未就绪" xml:space="preserve"><value>未準備</value></data>
+  <data name="未完成" xml:space="preserve"><value>未完了</value></data>
+  <data name="音频服务启动失败，请检查设备" xml:space="preserve"><value>オーディオサービスを起動できません。デバイスを確認してください。</value></data>
+  <data name="请先完成启动准备" xml:space="preserve"><value>先に起動準備を完了してください。</value></data>
+  <data name="不能选择 Cable 设备" xml:space="preserve"><value>Cable デバイスは選択できません</value></data>
+  <data name="必须选择 Cable 设备" xml:space="preserve"><value>Cable デバイスを選択する必要があります</value></data>
+  <data name="设备重复" xml:space="preserve"><value>同じデバイスが重複して選択されています</value></data>
+  <data name="当前麦克风未完成响度测试" xml:space="preserve"><value>現在のマイクではラウドネステストが完了していません</value></data>
 </root>

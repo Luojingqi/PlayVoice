@@ -183,7 +183,26 @@ internal class AudioProxy
     private void StopPLEquipment()
     {
         StopPLEquipmentClear();
-        physicalLoudspeakerOutput?.Stop();
+        var output = physicalLoudspeakerOutput;
+        physicalLoudspeakerOutput = null;
+        if (output == null) return;
+
+        try
+        {
+            output.Stop();
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine($"[错误] 停止物理扬声器输出失败：{exception}");
+        }
+        try
+        {
+            output.Dispose();
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine($"[错误] 释放物理扬声器输出失败：{exception}");
+        }
     }
 
     private MixingSampleProvider audioMixToVL;
@@ -226,8 +245,6 @@ internal class AudioProxy
             if (GlobalData.Inst.GetGoEar_In())
                 physicalMicrophoneBufferArray[1].AddSamples(e.Buffer, 0, e.BytesRecorded);
         };
-        physicalMicrophoneCapture.StartRecording();
-
         audioMixToVL = new MixingSampleProvider(physicalMicrophoneWaveFormat) { ReadFully = true };
         audioVolumeToVL = new VolumeSampleProvider(audioMixToVL);
         audioVolumeToVL.Volume = (float)AudioData.DecibelToVolume(audioOutDecibel);
@@ -262,6 +279,7 @@ internal class AudioProxy
 
         virtualLoudspeakerOutput.Init(virtualLoudspeakerMetering);
         virtualLoudspeakerOutput.Play();
+        physicalMicrophoneCapture.StartRecording();
     }
 
     private List<AudioData> AllAudioList = new();
@@ -346,12 +364,50 @@ internal class AudioProxy
     public void Stop()
     {
         StopClear();
-        
-        physicalMicrophoneCapture?.StopRecording();
-        virtualLoudspeakerOutput?.Stop();
 
-        physicalMicrophoneCapture?.Dispose();
-        virtualLoudspeakerOutput?.Dispose();
+        var capture = physicalMicrophoneCapture;
+        physicalMicrophoneCapture = null;
+        if (capture != null)
+        {
+            try
+            {
+                capture.StopRecording();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"[错误] 停止物理麦克风采集失败：{exception}");
+            }
+            try
+            {
+                capture.Dispose();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"[错误] 释放物理麦克风采集失败：{exception}");
+            }
+        }
+
+        var output = virtualLoudspeakerOutput;
+        virtualLoudspeakerOutput = null;
+        if (output != null)
+        {
+            try
+            {
+                output.Stop();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"[错误] 停止虚拟扬声器输出失败：{exception}");
+            }
+            try
+            {
+                output.Dispose();
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"[错误] 释放虚拟扬声器输出失败：{exception}");
+            }
+        }
 
         Vol(MainWindow.Inst.IL, MainWindow.Inst.IR, 0, 0);
         Vol(MainWindow.Inst.OL, MainWindow.Inst.OR, 0, 0);

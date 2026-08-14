@@ -7,8 +7,12 @@ using Steamworks;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace PlayVoice
 {
@@ -27,6 +31,16 @@ namespace PlayVoice
         private readonly System.Drawing.Icon trayIconImage;
         private bool isSystemSessionEnding;
         private bool isSwitchingPreset;
+        private readonly Dictionary<string, StartupRequirementVisual> startupRequirementVisuals = new();
+        private readonly HashSet<string> desiredStartupRequirementIds = new();
+        private int startupChecklistRefreshVersion;
+
+        private sealed class StartupRequirementVisual
+        {
+            public Border Container { get; init; }
+            public TextBlock Text { get; init; }
+            public bool IsExiting { get; set; }
+        }
 
         public MainWindow()
         {
@@ -38,6 +52,8 @@ namespace PlayVoice
             new GlobalData();
 
             InitializeComponent();
+            GlobalData.Inst.StartupRequirementsChanged += RefreshStartupRequirements;
+            RefreshStartupRequirements();
             NavigateToPage(viewModel.SelectedMenu);
             // 监听选择菜单变更，导航到相应页面
             viewModel.PropertyChanged += (s, e) =>
@@ -72,7 +88,11 @@ namespace PlayVoice
             presetTrayMenuItem.DropDownOpening += (s, e) => RefreshTrayPresetMenu();
             exitTrayMenuItem.Click += (s, e) => Dispatcher.Invoke(ExitApplication);
             UpdateTrayLanguage();
-            LanguageManager.Inst.CultureChanged += (culture, language) => UpdateTrayLanguage();
+            LanguageManager.Inst.CultureChanged += (culture, language) =>
+            {
+                UpdateTrayLanguage();
+                RefreshStartupRequirements();
+            };
             Loaded += MainWindow_OnLoaded;
         }
 
@@ -80,19 +100,21 @@ namespace PlayVoice
         {
             Loaded -= MainWindow_OnLoaded;
 
-            if (GlobalData.Inst.Config.HasAcknowledgedTutorialPrompt)
-                return;
-
-            var tutorialPromptWindow = new TutorialPromptWindow
+            if (!GlobalData.Inst.Config.HasAcknowledgedTutorialPrompt)
             {
-                Owner = this
-            };
+                var tutorialPromptWindow = new TutorialPromptWindow
+                {
+                    Owner = this
+                };
 
-            if (tutorialPromptWindow.ShowDialog() != true)
-                return;
+                if (tutorialPromptWindow.ShowDialog() == true)
+                {
+                    GlobalData.Inst.Config.HasAcknowledgedTutorialPrompt = true;
+                    GlobalData.Inst.Config.Save();
+                }
+            }
 
-            GlobalData.Inst.Config.HasAcknowledgedTutorialPrompt = true;
-            GlobalData.Inst.Config.Save();
+            GlobalData.Inst.EnableAutomaticRun();
         }
 
         private void ContentFrame_Navigating(object sender, NavigatingCancelEventArgs e)
@@ -221,6 +243,204 @@ namespace PlayVoice
             showTrayMenuItem.Text = LanguageManager.Inst.GetString("显示主窗口");
             presetTrayMenuItem.Text = LanguageManager.Inst.GetString("音频预设");
             exitTrayMenuItem.Text = LanguageManager.Inst.GetString("退出");
+        }
+
+        private void RefreshStartupRequirements()
+        {
+            if (!Dispatcher.CheckAccess())
+            {
+                Dispatcher.BeginInvoke(RefreshStartupRequirements);
+                return;
+            }
+
+            IReadOnlyList<StartupRequirement> requirements =
+                GlobalData.Inst.GetIncompleteStartupRequirements();
+            int refreshVersion = ++startupChecklistRefreshVersion;
+
+            desiredStartupRequirementIds.Clear();
+            foreach (StartupRequirement requirement in requirements)
+                desiredStartupRequirementIds.Add(requirement.Id);
+
+            if (requirements.Count > 0)
+                AnimateStartupChecklistIn();
+
+            for (int index = 0; index < requirements.Count; index++)
+            {
+                StartupRequirement requirement = requirements[index];
+                if (startupRequirementVisuals.TryGetValue(
+                    requirement.Id, out StartupRequirementVisual visual))
+                {
+                    visual.Text.Text = requirement.Message;
+                    if (visual.IsExiting)
+                    {
+                        visual.IsExiting = false;
+                        AnimateRequirementIn(visual);
+                    }
+                    continue;
+                }
+
+                visual = CreateStartupRequirementVisual(requirement);
+                startupRequirementVisuals.Add(requirement.Id, visual);
+                StartupRequirementsPanel.Children.Insert(
+                    Math.Min(index, StartupRequirementsPanel.Children.Count),
+                    visual.Container);
+                AnimateRequirementIn(visual);
+            }
+
+            foreach (var item in startupRequirementVisuals.ToArray())
+            {
+                if (desiredStartupRequirementIds.Contains(item.Key)
+                    || item.Value.IsExiting)
+                    continue;
+
+                item.Value.IsExiting = true;
+                AnimateRequirementOut(item.Key, item.Value);
+            }
+
+            if (requirements.Count == 0)
+                _ = HideStartupChecklistAfterItemsAsync(refreshVersion);
+        }
+
+        private StartupRequirementVisual CreateStartupRequirementVisual(
+            StartupRequirement requirement)
+        {
+            var container = new Border
+            {
+                Margin = new Thickness(0, 3, 0, 3),
+                Opacity = 0,
+                RenderTransform = new TranslateTransform(24, 0)
+            };
+            var grid = new Grid();
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(10) });
+            grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+
+            var marker = new Ellipse
+            {
+                Width = 5,
+                Height = 5,
+                VerticalAlignment = VerticalAlignment.Center,
+                HorizontalAlignment = HorizontalAlignment.Left
+            };
+            marker.SetResourceReference(Shape.FillProperty, "AccentColor");
+
+            var text = new TextBlock
+            {
+                Text = requirement.Message,
+                FontSize = 11,
+                TextWrapping = TextWrapping.Wrap
+            };
+            text.SetResourceReference(TextBlock.ForegroundProperty, "TextPrimary");
+            text.SetResourceReference(TextBlock.FontFamilyProperty, "FontLight");
+
+            Grid.SetColumn(marker, 0);
+            Grid.SetColumn(text, 1);
+            grid.Children.Add(marker);
+            grid.Children.Add(text);
+            container.Child = grid;
+
+            return new StartupRequirementVisual
+            {
+                Container = container,
+                Text = text
+            };
+        }
+
+        private static void AnimateRequirementIn(StartupRequirementVisual visual)
+        {
+            AnimateSlide(
+                visual.Container,
+                (TranslateTransform)visual.Container.RenderTransform,
+                1,
+                0,
+                null);
+        }
+
+        private void AnimateRequirementOut(
+            string id,
+            StartupRequirementVisual visual)
+        {
+            AnimateSlide(
+                visual.Container,
+                (TranslateTransform)visual.Container.RenderTransform,
+                0,
+                24,
+                () =>
+                {
+                    if (desiredStartupRequirementIds.Contains(id)) return;
+                    StartupRequirementsPanel.Children.Remove(visual.Container);
+                    startupRequirementVisuals.Remove(id);
+                });
+        }
+
+        private void AnimateStartupChecklistIn()
+        {
+            var transform = (TranslateTransform)StartupChecklistBorder.RenderTransform;
+            if (StartupChecklistBorder.Visibility != Visibility.Visible)
+            {
+                StartupChecklistBorder.Opacity = 0;
+                transform.X = 24;
+                StartupChecklistBorder.Visibility = Visibility.Visible;
+            }
+            AnimateSlide(StartupChecklistBorder, transform, 1, 0, null, 260);
+        }
+
+        private async Task HideStartupChecklistAfterItemsAsync(int refreshVersion)
+        {
+            await Task.Delay(230);
+            if (refreshVersion != startupChecklistRefreshVersion
+                || desiredStartupRequirementIds.Count > 0)
+                return;
+
+            var transform = (TranslateTransform)StartupChecklistBorder.RenderTransform;
+            AnimateSlide(
+                StartupChecklistBorder,
+                transform,
+                0,
+                24,
+                () =>
+                {
+                    if (desiredStartupRequirementIds.Count == 0)
+                        StartupChecklistBorder.Visibility = Visibility.Collapsed;
+                },
+                260);
+        }
+
+        private static void AnimateSlide(
+            UIElement element,
+            TranslateTransform transform,
+            double targetOpacity,
+            double targetX,
+            Action completed,
+            int durationMilliseconds = 220)
+        {
+            var duration = TimeSpan.FromMilliseconds(durationMilliseconds);
+            var easing = new CubicEase { EasingMode = EasingMode.EaseOut };
+            var opacityAnimation = new DoubleAnimation
+            {
+                From = element.Opacity,
+                To = targetOpacity,
+                Duration = duration,
+                EasingFunction = easing,
+                FillBehavior = FillBehavior.HoldEnd
+            };
+            var translateAnimation = new DoubleAnimation
+            {
+                From = transform.X,
+                To = targetX,
+                Duration = duration,
+                EasingFunction = easing,
+                FillBehavior = FillBehavior.HoldEnd
+            };
+            opacityAnimation.Completed += (sender, args) =>
+            {
+                element.BeginAnimation(OpacityProperty, null);
+                transform.BeginAnimation(TranslateTransform.XProperty, null);
+                element.Opacity = targetOpacity;
+                transform.X = targetX;
+                completed?.Invoke();
+            };
+            element.BeginAnimation(OpacityProperty, opacityAnimation);
+            transform.BeginAnimation(TranslateTransform.XProperty, translateAnimation);
         }
 
         private void RefreshTrayPresetMenu()

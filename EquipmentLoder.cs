@@ -30,6 +30,8 @@ internal class EquipmentLoder
 
     private Dictionary<string, string> newMicrophoneDic = new();
 
+    private bool? isVBCableInstalled;
+
     public int UpdateTimeInterval { get; set; } = 500;
 
     private void Update()
@@ -74,6 +76,15 @@ internal class EquipmentLoder
         foreach (var kv in newMicrophoneDic)
             equipment.MicrophoneDic.Add(kv.Key, kv.Value);
 
+        bool currentVBCableInstalled = ContainsCableDevice(
+            equipment.LoudspeakerDic, equipment.MicrophoneDic);
+        if (isVBCableInstalled.HasValue
+            && isVBCableInstalled.Value != currentVBCableInstalled)
+        {
+            OnVBCableInstallationChanged?.Invoke(currentVBCableInstalled);
+        }
+        isVBCableInstalled = currentVBCableInstalled;
+
         newLoudspeakerDic.Clear();
         newMicrophoneDic.Clear();
     }
@@ -82,6 +93,7 @@ internal class EquipmentLoder
     public event Action<string, string> OnLoudspeakerAdd;
     public event Action<string, string> OnMicrophoneRemove;
     public event Action<string, string> OnMicrophoneAdd;
+    public event Action<bool> OnVBCableInstallationChanged;
 
 
     public static bool IsCableEquipment(MMDevice device)
@@ -159,12 +171,17 @@ internal class EquipmentLoder
     public static bool IsVBCableInstalled()
     {
         var equipment = GlobalData.Inst.Equipment;
-        foreach (var device in equipment.LoudspeakerDic)
-            if (device.Value.ToLower().Contains("cable"))
-                return true;
-        foreach (var device in equipment.MicrophoneDic)
-            if (device.Value.ToLower().Contains("cable"))
-                return true;
-        return false;
+        return ContainsCableDevice(
+            equipment.LoudspeakerDic, equipment.MicrophoneDic);
+    }
+
+    private static bool ContainsCableDevice(
+        IEnumerable<KeyValuePair<string, string>> loudspeakers,
+        IEnumerable<KeyValuePair<string, string>> microphones)
+    {
+        return loudspeakers.Any(device =>
+                device.Value.Contains("cable", StringComparison.OrdinalIgnoreCase))
+            || microphones.Any(device =>
+                device.Value.Contains("cable", StringComparison.OrdinalIgnoreCase));
     }
 }

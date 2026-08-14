@@ -102,117 +102,148 @@
                 <Border Grid.Column="0"
                         Background="{DynamicResource BgMedium}"
                         CornerRadius="0,0,0,12">
-                    <Sidebar:SidebarControl x:Name="Sidebar"
-                        ItemsSource="{Binding MenuItems}"
-                        SelectedItem="{Binding SelectedMenu, Mode=TwoWay}"
-                        ItemTemplate="{StaticResource SidebarItemTemplate}"/>
-                </Border>
-
-                <Border Grid.Column="0" VerticalAlignment="Bottom" 
-                        Margin="0,0,0,0"
-                        BorderBrush="{DynamicResource AccentColor}"
-                        BorderThickness="1"
-                        CornerRadius="2"
-                        Padding="0,3">
-                    <Grid >
+                    <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="*"/>
                         </Grid.RowDefinitions>
 
-                        <Border Grid.Row="0"
-                                Height="40">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0"
-                                       Style="{StaticResource TextBlockLight}"
-                                       Text="{L:Lan 音频}"
-                                       Foreground="{DynamicResource AccentColor}"
-                                       FontSize="13"
-                                       TextWrapping="Wrap" 
-                                       TextAlignment="Center"
-                                       Width="15"
-                                       Margin="3,0"/>
-                                <Grid Grid.Column="1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <LevelBar:LevelBar Grid.Row="0" Margin="2,2" x:Name="AL"/>
-                                    <LevelBar:LevelBar Grid.Row="1" Margin="2,2" x:Name="AR"/>
-                                </Grid>
-                            </Grid>
-                        </Border>
+                        <Sidebar:SidebarControl Grid.Row="0"
+                            x:Name="Sidebar"
+                            ItemsSource="{Binding MenuItems}"
+                            SelectedItem="{Binding SelectedMenu, Mode=TwoWay}"
+                            ItemTemplate="{StaticResource SidebarItemTemplate}"/>
 
                         <Border Grid.Row="1"
-                                BorderBrush="{DynamicResource AccentColor}" 
+                                x:Name="StartupChecklistBorder"
+                                Margin="8,0,8,8"
+                                Padding="10"
+                                BorderBrush="{DynamicResource AccentColor}"
                                 BorderThickness="1"
-                                Height="1"
-                                Margin="0,3.5,55,3.5"/>
-                        
-                        <Border Grid.Row="2"
-                                Height="40">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0"
-                                       Style="{StaticResource TextBlockLight}"
-                                       Text="{L:Lan 输入}"
-                                       Foreground="{DynamicResource AccentColor}"
-                                       FontSize="13"
-                                       TextWrapping="Wrap" 
-                                       TextAlignment="Center"
-                                       Width="15"
-                                       Margin="3,0"/>
-                                <Grid Grid.Column="1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <LevelBar:LevelBar Grid.Row="0" Margin="2,2" x:Name="IL"/>
-                                    <LevelBar:LevelBar Grid.Row="1" Margin="2,2" x:Name="IR"/>
-                                </Grid>
-                            </Grid>
+                                CornerRadius="8"
+                                Background="{DynamicResource AccentSurfaceSubtle}"
+                                Visibility="Collapsed">
+                            <Border.RenderTransform>
+                                <TranslateTransform X="24"/>
+                            </Border.RenderTransform>
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Top"
+                                           Margin="0,0,0,7"
+                                           Text="{L:Lan 启动准备}"
+                                           Foreground="{DynamicResource AccentColor}"
+                                           FontFamily="{StaticResource FontMedium}"
+                                           FontSize="13"/>
+                                <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                              HorizontalScrollBarVisibility="Disabled">
+                                    <StackPanel x:Name="StartupRequirementsPanel"/>
+                                </ScrollViewer>
+                            </DockPanel>
                         </Border>
 
-                        <Border Grid.Row="3"
-                                BorderBrush="{DynamicResource AccentColor}" 
+                        <Border Grid.Row="2"
+                                BorderBrush="{DynamicResource AccentColor}"
                                 BorderThickness="1"
-                                Height="1"
-                                Margin="0,3.5,55,3.5"/>
-
-                        <Border Grid.Row="4"
-                                Height="40">
+                                CornerRadius="2"
+                                Padding="0,3">
                             <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0"
-                                   Style="{StaticResource TextBlockLight}"
-                                   Text="{L:Lan 输出}"
-                                   Foreground="{DynamicResource AccentColor}"
-                                   FontSize="13"
-                                   TextWrapping="Wrap" 
-                                   TextAlignment="Center"
-                                   Width="15"
-                                   Margin="3,0"/>
-                                <Grid Grid.Column="1">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="*"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <LevelBar:LevelBar Grid.Row="0" Margin="2,2" x:Name="OL"/>
-                                    <LevelBar:LevelBar Grid.Row="1" Margin="2,2" x:Name="OR"/>
-                                </Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <Border Grid.Row="0" Height="40">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0"
+                                               Style="{StaticResource TextBlockLight}"
+                                               Text="{L:Lan 音频}"
+                                               Foreground="{DynamicResource AccentColor}"
+                                               FontSize="13"
+                                               TextWrapping="Wrap"
+                                               TextAlignment="Center"
+                                               Width="15"
+                                               Margin="3,0"/>
+                                        <Grid Grid.Column="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <LevelBar:LevelBar Grid.Row="0" Margin="2,2" x:Name="AL"/>
+                                            <LevelBar:LevelBar Grid.Row="1" Margin="2,2" x:Name="AR"/>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+
+                                <Border Grid.Row="1"
+                                        BorderBrush="{DynamicResource AccentColor}"
+                                        BorderThickness="1"
+                                        Height="1"
+                                        Margin="0,3.5,55,3.5"/>
+
+                                <Border Grid.Row="2" Height="40">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0"
+                                               Style="{StaticResource TextBlockLight}"
+                                               Text="{L:Lan 输入}"
+                                               Foreground="{DynamicResource AccentColor}"
+                                               FontSize="13"
+                                               TextWrapping="Wrap"
+                                               TextAlignment="Center"
+                                               Width="15"
+                                               Margin="3,0"/>
+                                        <Grid Grid.Column="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <LevelBar:LevelBar Grid.Row="0" Margin="2,2" x:Name="IL"/>
+                                            <LevelBar:LevelBar Grid.Row="1" Margin="2,2" x:Name="IR"/>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+
+                                <Border Grid.Row="3"
+                                        BorderBrush="{DynamicResource AccentColor}"
+                                        BorderThickness="1"
+                                        Height="1"
+                                        Margin="0,3.5,55,3.5"/>
+
+                                <Border Grid.Row="4" Height="40">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0"
+                                           Style="{StaticResource TextBlockLight}"
+                                           Text="{L:Lan 输出}"
+                                           Foreground="{DynamicResource AccentColor}"
+                                           FontSize="13"
+                                           TextWrapping="Wrap"
+                                           TextAlignment="Center"
+                                           Width="15"
+                                           Margin="3,0"/>
+                                        <Grid Grid.Column="1">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <LevelBar:LevelBar Grid.Row="0" Margin="2,2" x:Name="OL"/>
+                                            <LevelBar:LevelBar Grid.Row="1" Margin="2,2" x:Name="OR"/>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
                             </Grid>
                         </Border>
                     </Grid>

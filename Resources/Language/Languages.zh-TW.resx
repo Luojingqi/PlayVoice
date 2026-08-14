@@ -15,8 +15,8 @@
   <data name="系统设置" xml:space="preserve"><value>一般</value></data>
   <data name="运行" xml:space="preserve"><value>啟動</value></data>
   <data name="运行_说明" xml:space="preserve"><value>開啟後，將實體麥克風與 PlayVoice 播放的音訊混合輸出至虛擬麥克風。啟動前需完成音量正規化測試，並確認四個音訊裝置均已成功綁定。</value></data>
-  <data name="耳返_Audio_说明" xml:space="preserve"><value>將 PlayVoice 播放的音訊同時送至實體揚聲器。必須先開啟「啟動」。此監聽效果不一定代表對方最終聽到的效果。</value></data>
-  <data name="耳返_In_说明" xml:space="preserve"><value>監聽您的麥克風聲音。必須先開啟「啟動」。麥克風靠近揚聲器時可能產生回音或嘯叫。</value></data>
+  <data name="耳返_Audio_说明" xml:space="preserve"><value>將 PlayVoice 播放的音訊同時送至實體揚聲器。完成啟動準備後，音訊服務會自動啟動。此監聽效果不一定代表對方最終聽到的效果。</value></data>
+  <data name="耳返_In_说明" xml:space="preserve"><value>監聽您的麥克風聲音。完成啟動準備後，音訊服務會自動啟動。麥克風靠近揚聲器時可能產生回音或嘯叫。</value></data>
   <data name="自动闭麦_说明" xml:space="preserve"><value>播放任何預設音訊期間暫停麥克風輸入，所有音訊結束後恢復麥克風。</value></data>
   <data name="游戏预设_说明" xml:space="preserve"><value>選擇目前遊戲預設。遊戲預設保存各音訊的快速鍵、音量，以及播放前後的模擬按鍵設定。</value></data>
   <data name="音频预设_说明" xml:space="preserve"><value>選擇目前音訊預設。此預設決定可播放的音訊清單。</value></data>
@@ -133,7 +133,7 @@
   <data name="教程1_内容" xml:space="preserve"><value>· 請在設定中安裝虛擬音訊裝置。&#xA;· 接著在 Windows 音效設定中確認虛擬裝置。</value></data>
   <data name="教程1_标题" xml:space="preserve"><value>首次啟動</value></data>
   <data name="点击观看视频演示" xml:space="preserve"><value>點擊觀看影片示範</value></data>
-  <data name="教程3_内容" xml:space="preserve"><value>· 設定四個裝置後開啟「啟動」。&#xA;· 麥克風和應用程式音訊將輸出至虛擬麥克風。</value></data>
+  <data name="教程3_内容" xml:space="preserve"><value>· 設定四個裝置，並完成目前麥克風的音量測試。&#xA;· 清單全部完成後 PlayVoice 會自動啟動，並將麥克風和應用程式音訊輸出至虛擬麥克風。</value></data>
   <data name="教程3_标题" xml:space="preserve"><value>啟動 PlayVoice</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>遊戲與直播</value></data>
   <data name="教程4_内容" xml:space="preserve"><value>· 請在遊戲或直播應用程式中選擇已設定的虛擬麥克風。</value></data>
@@ -222,4 +222,13 @@
   <data name="游戏预设已存在" xml:space="preserve"><value>遊戲預設已存在</value></data>
   <data name="最大同时播放" xml:space="preserve"><value>最大同時播放</value></data>
   <data name="最大同时播放_说明" xml:space="preserve"><value>設定允許同時播放的最大音訊數量。超過上限時停止最早開始播放的音訊。</value></data>
+  <data name="启动准备" xml:space="preserve"><value>啟動準備</value></data>
+  <data name="未就绪" xml:space="preserve"><value>尚未就緒</value></data>
+  <data name="未完成" xml:space="preserve"><value>未完成</value></data>
+  <data name="音频服务启动失败，请检查设备" xml:space="preserve"><value>音訊服務啟動失敗，請檢查裝置</value></data>
+  <data name="请先完成启动准备" xml:space="preserve"><value>請先完成啟動準備</value></data>
+  <data name="不能选择 Cable 设备" xml:space="preserve"><value>不可選擇 Cable 裝置</value></data>
+  <data name="必须选择 Cable 设备" xml:space="preserve"><value>必須選擇 Cable 裝置</value></data>
+  <data name="设备重复" xml:space="preserve"><value>裝置重複</value></data>
+  <data name="当前麦克风未完成响度测试" xml:space="preserve"><value>目前麥克風尚未完成響度測試</value></data>
 </root>

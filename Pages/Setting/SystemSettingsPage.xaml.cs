@@ -72,35 +72,6 @@ namespace PlayVoice.Pages.Setting
             }
 
             {
-                UpdateRunAction(GlobalData.Inst.GetRun());
-                RunToggle.OnToggleChanged += (b) =>
-                {
-                    if (b.Value == true)
-                        if (GlobalData.Inst.TryRun(b.Value) == false)
-                        {
-                            RunToggle.IsSyncing = true;
-                            RunToggle.IsChecked = false;
-                            RunToggle.IsSyncing = false;
-                            MainWindow.Inst.AddNotification(
-                               () => LanguageManager.Inst.GetString("通知"),
-                               () => $"{LanguageManager.Inst.GetString("软件名称")} {LanguageManager.Inst.GetString("失败")}\n{LanguageManager.Inst.GetString("请查看教程说明重新配置")}",
-                               LabelStatus.Error, 3);
-                        }
-                        else
-                        {
-                            MainWindow.Inst.AddNotification(
-                               () => LanguageManager.Inst.GetString("通知"),
-                               () => $"{LanguageManager.Inst.GetString("软件名称")} {LanguageManager.Inst.GetString("启动")}",
-                               LabelStatus.Success, 3);
-                        }
-                    else GlobalData.Inst.TryRun(false);
-
-                };
-                GlobalData.Inst.RunStateChanged += UpdateRunAction;
-            }
-
-
-            {
                 RefreshFunctionPresetOptions();
                 FunctionPresetComboBox.OnSelectionChanged += (previous, current) =>
                 {
@@ -287,6 +258,7 @@ namespace PlayVoice.Pages.Setting
             try
             {
                 var equipment = GlobalData.Inst.Equipment;
+                string testedMicrophoneID = equipment.PhysicalMicrophone.ID;
                 WaveFormat targetFormat =
                     equipment.PhysicalMicrophone.AudioClient.MixFormat;
                 var microphoneWaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(
@@ -351,14 +323,38 @@ namespace PlayVoice.Pages.Setting
                 double? microphoneLufs = await AudioData.MeasureLufs(testPath);
                 if (microphoneLufs.HasValue)
                 {
-                    double? previousMicrophoneLufs =
-                        GlobalData.Inst.Config.MicrophoneLufs;
-                    GlobalData.Inst.Config.MicrophoneLufs = microphoneLufs.Value;
-                    analysisSucceeded = GlobalData.Inst.Config.Save();
+                    var config = GlobalData.Inst.Config;
+                    double? previousMicrophoneLufs = config.MicrophoneLufs;
+                    string previousMicrophoneLufsDeviceID = config.MicrophoneLufsDeviceID;
+                    config.MicrophoneLufsByDeviceID ??= new(StringComparer.Ordinal);
+                    bool hadPreviousDeviceResult =
+                        config.MicrophoneLufsByDeviceID.TryGetValue(
+                            testedMicrophoneID, out double previousDeviceResult);
+                    config.MicrophoneLufsByDeviceID[testedMicrophoneID] = microphoneLufs.Value;
+
+                    bool testedMicrophoneIsStillSelected = string.Equals(
+                        equipment.PhysicalMicrophone?.ID,
+                        testedMicrophoneID,
+                        StringComparison.Ordinal);
+                    if (testedMicrophoneIsStillSelected)
+                    {
+                        config.MicrophoneLufs = microphoneLufs.Value;
+                        config.MicrophoneLufsDeviceID = testedMicrophoneID;
+                    }
+                    analysisSucceeded = config.Save();
                     if (!analysisSucceeded)
                     {
-                        GlobalData.Inst.Config.MicrophoneLufs =
-                            previousMicrophoneLufs;
+                        if (hadPreviousDeviceResult)
+                        {
+                            config.MicrophoneLufsByDeviceID[testedMicrophoneID] =
+                                previousDeviceResult;
+                        }
+                        else
+                        {
+                            config.MicrophoneLufsByDeviceID.Remove(testedMicrophoneID);
+                        }
+                        config.MicrophoneLufs = previousMicrophoneLufs;
+                        config.MicrophoneLufsDeviceID = previousMicrophoneLufsDeviceID;
                     }
                 }
             }
@@ -417,6 +413,7 @@ namespace PlayVoice.Pages.Setting
 
             if (analysisSucceeded)
             {
+                GlobalData.Inst.NotifyStartupRequirementsChanged();
                 MainWindow.Inst.AddNotification(
                     () => $"{LanguageManager.Inst.GetString("通知")}",
                     () => $"{LanguageManager.Inst.GetString("分析结束")}",
@@ -522,8 +519,8 @@ namespace PlayVoice.Pages.Setting
             ThemeManager.ThemeChanged -= UpdateThemeAction;
             GlobalData.Inst.ActiveAudioPresetChanged -= UpdateAudioPresetSelection;
             GlobalData.Inst.ActiveFunctionPresetChanged -= UpdateFunctionPresetSelection;
-            GlobalData.Inst.RunStateChanged -= UpdateRunAction;
             GlobalData.Inst.GoEar_AudioStateChanged -= UpdateGoEarAudioAction;
+            GlobalData.Inst.GoEar_InStateChanged -= UpdateGoEarInAction;
         }
 
         private void SystemSettingsPage_Loaded(object sender, RoutedEventArgs e)
@@ -680,17 +677,6 @@ namespace PlayVoice.Pages.Setting
             StyleListBox.IsSyncing = true;
             StyleListBox.SelectedIndex = themeInfo.Index;
             StyleListBox.IsSyncing = false;
-        }
-
-        private void UpdateRunAction(bool b)
-        {
-            RunToggle.IsSyncing = true;
-            RunToggle.IsChecked = b;
-            RunToggle.IsSyncing = false;
-            if (b)
-                RunToggle.LabelStatus = LabelStatus.Success;
-            else
-                RunToggle.LabelStatus = LabelStatus.None;
         }
 
         private void UpdateGoEarAudioAction(bool b)

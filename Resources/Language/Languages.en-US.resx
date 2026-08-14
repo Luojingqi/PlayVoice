@@ -151,9 +151,9 @@
     <value>Mixes the physical microphone with audio played by PlayVoice and sends the result to the virtual microphone.
 Complete the loudness normalization test and bind all four audio devices before running.</value>
   </data>
-  <data name="耳返_Audio_说明" xml:space="preserve"><value>Sends audio played by PlayVoice to your physical speakers as well. Run must be enabled first.
+  <data name="耳返_Audio_说明" xml:space="preserve"><value>Sends audio played by PlayVoice to your physical speakers as well. Audio starts automatically when the startup checklist is complete.
 This monitoring signal does not necessarily match what others hear.</value></data>
-  <data name="耳返_In_说明" xml:space="preserve"><value>Lets you monitor your microphone. Run must be enabled first.
+  <data name="耳返_In_说明" xml:space="preserve"><value>Lets you monitor your microphone. Audio starts automatically when the startup checklist is complete.
 Keeping the microphone near speakers may cause echo or feedback.</value></data>
   <data name="自动闭麦_说明" xml:space="preserve"><value>Pauses microphone input while any preset audio is playing, then restores it when all audio finishes.</value></data>
   <data name="游戏预设_说明" xml:space="preserve"><value>Selects the active game preset. It stores each track's hotkey and volume, plus simulated key actions before and after playback.</value></data>
@@ -477,8 +477,8 @@ Do not leave this page.</value>
     <value>Click to watch the video demo</value>
   </data>
   <data name="教程3_内容" xml:space="preserve">
-    <value>· Configure all four devices, then enable “Run.”
-· Microphone input and app audio will go to the virtual mic.</value>
+    <value>· Configure all four devices and complete the loudness test for the current microphone.
+· PlayVoice starts automatically when the checklist is complete, sending microphone input and app audio to the virtual mic.</value>
   </data>
   <data name="教程3_标题" xml:space="preserve">
     <value>Start PlayVoice</value>
@@ -744,4 +744,13 @@ O</value>
   <data name="最大同时播放_说明" xml:space="preserve">
     <value>Sets the maximum number of audio tracks that can play simultaneously. When the limit is exceeded, the earliest track is stopped.</value>
   </data>
+  <data name="启动准备" xml:space="preserve"><value>Startup checklist</value></data>
+  <data name="未就绪" xml:space="preserve"><value>Not ready</value></data>
+  <data name="未完成" xml:space="preserve"><value>Incomplete</value></data>
+  <data name="音频服务启动失败，请检查设备" xml:space="preserve"><value>Audio service failed to start. Check your devices.</value></data>
+  <data name="请先完成启动准备" xml:space="preserve"><value>Complete the startup checklist first.</value></data>
+  <data name="不能选择 Cable 设备" xml:space="preserve"><value>Cannot use a Cable device</value></data>
+  <data name="必须选择 Cable 设备" xml:space="preserve"><value>A Cable device is required</value></data>
+  <data name="设备重复" xml:space="preserve"><value>Same device selected twice</value></data>
+  <data name="当前麦克风未完成响度测试" xml:space="preserve"><value>The current microphone has not completed the loudness test</value></data>
 </root>

@@ -47,9 +47,31 @@ internal static class ConfigMigrator
 
     private static void MigrateToV8(JsonObject data)
     {
-        const string propertyName = nameof(Config.MigrationTestValue);
-        if (!data.ContainsKey(propertyName))
-            data[propertyName] = 8;
+        const string microphoneIDPropertyName = nameof(Config.MicrophoneLufsDeviceID);
+        const string loudnessMapPropertyName = nameof(Config.MicrophoneLufsByDeviceID);
+
+        bool hasLoudnessResult = data[nameof(Config.MicrophoneLufs)] != null;
+        if (!data.ContainsKey(microphoneIDPropertyName))
+        {
+            data[microphoneIDPropertyName] = hasLoudnessResult
+                ? data[nameof(Config.PhysicalMicrophoneID)]?.DeepClone()
+                : null;
+        }
+
+        var loudnessByDeviceID = new JsonObject();
+        JsonNode microphoneIDNode = data[nameof(Config.MicrophoneLufsDeviceID)];
+        JsonNode microphoneLufsNode = data[nameof(Config.MicrophoneLufs)];
+        string microphoneID = microphoneIDNode?.GetValue<string>();
+        if (string.IsNullOrWhiteSpace(microphoneID))
+            microphoneID = data[nameof(Config.PhysicalMicrophoneID)]?.GetValue<string>();
+
+        if (!string.IsNullOrWhiteSpace(microphoneID) && microphoneLufsNode != null)
+        {
+            loudnessByDeviceID[microphoneID] = microphoneLufsNode.DeepClone();
+        }
+
+        if (!data.ContainsKey(loudnessMapPropertyName))
+            data[loudnessMapPropertyName] = loudnessByDeviceID;
     }
 
     private static T Deserialize<T>(JsonNode data, int version)

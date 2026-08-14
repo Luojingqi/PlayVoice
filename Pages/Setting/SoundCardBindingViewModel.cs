@@ -129,27 +129,7 @@ public partial class SoundCardBindingPageViewModel : ObservableObject
         {
             var addeItem = (ComboBoxItemModel)arg2;
             if (addeItem == null) return;
-            if (GlobalData.Inst.GetRun() == true)
-            {
-                MainWindow.Inst.AddNotification(
-                    () => $"{LanguageManager.Inst.GetString("通知")}",
-                    () => $"{LanguageManager.Inst.GetString("运行中禁止更改设备")}",
-                    LabelStatus.Error);
-                DropDownList.IsSyncing = true;
-                var oldItem = ((ComboBoxItemModel)arg1);
-                var nowItemsSource = ItemSource.GetNowItemsSource();
-                int i = 0;
-                foreach (var kv in nowItemsSource)
-                    if (kv.Value == oldItem)
-                    {
-                        DropDownList.SelectedIndex = i;
-                        break;
-                    }
-                    else i++;
-
-                DropDownList.IsSyncing = false;
-            }
-            else if (!string.IsNullOrEmpty(addeItem.ID))
+            if (!string.IsNullOrEmpty(addeItem.ID))
             {
                 setDeviceAction.Invoke(getDeviceAction(addeItem.ID));
             }

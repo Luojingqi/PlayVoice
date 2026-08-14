@@ -12,10 +12,26 @@ internal class Equipment
     public Equipment()
     {
         equipmentLoder = new(this);
-        equipmentLoder.OnLoudspeakerRemove += (id, name) => OnLoudspeakerRemove?.Invoke(id, name);
+        equipmentLoder.OnLoudspeakerRemove += (id, name) =>
+        {
+            if (physicalLoudspeaker?.ID == id)
+                PhysicalLoudspeaker = null;
+            if (virtualLoudspeaker?.ID == id)
+                VirtualLoudspeaker = null;
+            OnLoudspeakerRemove?.Invoke(id, name);
+        };
         equipmentLoder.OnLoudspeakerAdd += (id, name) => OnLoudspeakerAdd?.Invoke(id, name);
-        equipmentLoder.OnMicrophoneRemove += (id, name) => OnMicrophoneRemove?.Invoke(id, name);
+        equipmentLoder.OnMicrophoneRemove += (id, name) =>
+        {
+            if (physicalMicrophone?.ID == id)
+                PhysicalMicrophone = null;
+            if (virtualMicrophone?.ID == id)
+                VirtualMicrophone = null;
+            OnMicrophoneRemove?.Invoke(id, name);
+        };
         equipmentLoder.OnMicrophoneAdd += (id, name) => OnMicrophoneAdd?.Invoke(id, name);
+        equipmentLoder.OnVBCableInstallationChanged += isInstalled =>
+            GlobalData.Inst.NotifyStartupRequirementsChanged();
     }
 
     public void Init()
@@ -40,19 +56,22 @@ internal class Equipment
         get => physicalLoudspeaker;
         set
         {
-            GlobalData.Inst.TryRun(false);
             var lastDevice = physicalLoudspeaker;
-            if (value != null && lastDevice != null && value.ID == lastDevice.ID)
+            if ((value == null && lastDevice == null)
+                || (value != null && lastDevice != null && value.ID == lastDevice.ID))
             {
-                value.Dispose();
+                if (!ReferenceEquals(value, lastDevice))
+                    value?.Dispose();
                 return;
             }
+            GlobalData.Inst.StopForEquipmentChange();
             physicalLoudspeaker = value;
             GlobalData.Inst.Config.PhysicalLoudspeakerID = physicalLoudspeaker?.ID;
             GlobalData.Inst.Config.Save();
             CheckAllEquipmentState();
             PhysicalLoudspeakerOnChanged?.Invoke(lastDevice, physicalLoudspeaker);
-            physicalLoudspeaker?.Dispose();
+            lastDevice?.Dispose();
+            GlobalData.Inst.NotifyStartupRequirementsChanged();
         }
     }
     private MMDevice physicalLoudspeaker;
@@ -63,9 +82,9 @@ internal class Equipment
         get => physicalLoudspeakerState;
         private set
         {
-            if (value != physicalLoudspeakerState)
-                PhysicalLoudspeakerStateChange?.Invoke(value);
+            if (value == physicalLoudspeakerState) return;
             physicalLoudspeakerState = value;
+            PhysicalLoudspeakerStateChange?.Invoke(value);
         }
     }
     public event Action<bool> PhysicalLoudspeakerStateChange;
@@ -84,19 +103,22 @@ internal class Equipment
         get => virtualLoudspeaker;
         set
         {
-            GlobalData.Inst.TryRun(false);
             var lastDevice = virtualLoudspeaker;
-            if (value != null && lastDevice != null && value.ID == lastDevice.ID)
+            if ((value == null && lastDevice == null)
+                || (value != null && lastDevice != null && value.ID == lastDevice.ID))
             {
-                value.Dispose();
+                if (!ReferenceEquals(value, lastDevice))
+                    value?.Dispose();
                 return;
             }
+            GlobalData.Inst.StopForEquipmentChange();
             virtualLoudspeaker = value;
             GlobalData.Inst.Config.VirtualLoudspeakerID = virtualLoudspeaker?.ID;
             GlobalData.Inst.Config.Save();
             CheckAllEquipmentState();
             VirtualLoudspeakerOnChanged?.Invoke(lastDevice, virtualLoudspeaker);
-            virtualLoudspeaker?.Dispose();
+            lastDevice?.Dispose();
+            GlobalData.Inst.NotifyStartupRequirementsChanged();
         }
     }
     private MMDevice virtualLoudspeaker;
@@ -107,9 +129,9 @@ internal class Equipment
         get => virtualLoudspeakerState;
         private set
         {
-            if (value != virtualLoudspeakerState)
-                VirtualLoudspeakerStateChange?.Invoke(value);
+            if (value == virtualLoudspeakerState) return;
             virtualLoudspeakerState = value;
+            VirtualLoudspeakerStateChange?.Invoke(value);
         }
     }
     public event Action<bool> VirtualLoudspeakerStateChange;
@@ -128,19 +150,37 @@ internal class Equipment
         get => physicalMicrophone;
         set
         {
-            GlobalData.Inst.TryRun(false);
             var lastDevice = physicalMicrophone;
-            if (value != null && lastDevice != null && value.ID == lastDevice.ID)
+            if ((value == null && lastDevice == null)
+                || (value != null && lastDevice != null && value.ID == lastDevice.ID))
             {
-                value.Dispose();
+                if (!ReferenceEquals(value, lastDevice))
+                    value?.Dispose();
                 return;
             }
+            GlobalData.Inst.StopForEquipmentChange();
             physicalMicrophone = value;
-            GlobalData.Inst.Config.PhysicalMicrophoneID = physicalMicrophone?.ID;
-            GlobalData.Inst.Config.Save();
+            var config = GlobalData.Inst.Config;
+            string microphoneID = physicalMicrophone?.ID;
+            config.PhysicalMicrophoneID = microphoneID;
+            config.MicrophoneLufsByDeviceID ??= new(StringComparer.Ordinal);
+            if (!string.IsNullOrEmpty(microphoneID)
+                && config.MicrophoneLufsByDeviceID.TryGetValue(
+                    microphoneID, out double microphoneLufs))
+            {
+                config.MicrophoneLufs = microphoneLufs;
+                config.MicrophoneLufsDeviceID = microphoneID;
+            }
+            else
+            {
+                config.MicrophoneLufs = null;
+                config.MicrophoneLufsDeviceID = null;
+            }
+            config.Save();
             CheckAllEquipmentState();
             PhysicalMicrophoneOnChanged?.Invoke(lastDevice, physicalMicrophone);
-            physicalMicrophone?.Dispose();
+            lastDevice?.Dispose();
+            GlobalData.Inst.NotifyStartupRequirementsChanged();
         }
     }
     private MMDevice physicalMicrophone;
@@ -151,9 +191,9 @@ internal class Equipment
         get => physicalMicrophoneState;
         private set
         {
-            if (value != physicalMicrophoneState)
-                PhysicalMicrophoneStateChange?.Invoke(value);
+            if (value == physicalMicrophoneState) return;
             physicalMicrophoneState = value;
+            PhysicalMicrophoneStateChange?.Invoke(value);
         }
     }
     public event Action<bool> PhysicalMicrophoneStateChange;
@@ -172,19 +212,22 @@ internal class Equipment
         get => virtualMicrophone;
         set
         {
-            GlobalData.Inst.TryRun(false);
             var lastDevice = virtualMicrophone;
-            if (value != null && lastDevice != null && value.ID == lastDevice.ID)
+            if ((value == null && lastDevice == null)
+                || (value != null && lastDevice != null && value.ID == lastDevice.ID))
             {
-                value.Dispose();
+                if (!ReferenceEquals(value, lastDevice))
+                    value?.Dispose();
                 return;
             }
+            GlobalData.Inst.StopForEquipmentChange();
             virtualMicrophone = value;
             GlobalData.Inst.Config.VirtualMicrophoneID = virtualMicrophone?.ID;
             GlobalData.Inst.Config.Save();
             CheckAllEquipmentState();
             VirtualMicrophoneOnChanged?.Invoke(lastDevice, virtualMicrophone);
-            virtualMicrophone?.Dispose();
+            lastDevice?.Dispose();
+            GlobalData.Inst.NotifyStartupRequirementsChanged();
         }
     }
     private MMDevice virtualMicrophone;
@@ -195,9 +238,9 @@ internal class Equipment
         get => virtualMicrophoneState;
         private set
         {
-            if (value != virtualMicrophoneState)
-                VirtualMicrophoneStateChange?.Invoke(value);
+            if (value == virtualMicrophoneState) return;
             virtualMicrophoneState = value;
+            VirtualMicrophoneStateChange?.Invoke(value);
         }
     }
     public event Action<bool> VirtualMicrophoneStateChange;

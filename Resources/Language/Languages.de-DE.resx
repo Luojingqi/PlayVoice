@@ -15,8 +15,8 @@
   <data name="系统设置" xml:space="preserve"><value>Allgemein</value></data>
   <data name="运行" xml:space="preserve"><value>Start</value></data>
   <data name="运行_说明" xml:space="preserve"><value>Mischt das physische Mikrofon mit der von PlayVoice abgespielten Audioausgabe und sendet das Ergebnis an das virtuelle Mikrofon. Führen Sie zuerst den Lautstärketest durch und verbinden Sie alle vier Audiogeräte.</value></data>
-  <data name="耳返_Audio_说明" xml:space="preserve"><value>Gibt von PlayVoice abgespieltes Audio zusätzlich über die physischen Lautsprecher aus. „Start“ muss aktiviert sein. Das Monitorsignal entspricht nicht zwingend dem Signal, das andere hören.</value></data>
-  <data name="耳返_In_说明" xml:space="preserve"><value>Ermöglicht das Mithören des Mikrofons. „Start“ muss aktiviert sein. Ein Mikrofon nahe an Lautsprechern kann Echo oder Rückkopplung verursachen.</value></data>
+  <data name="耳返_Audio_说明" xml:space="preserve"><value>Gibt von PlayVoice abgespieltes Audio zusätzlich über die physischen Lautsprecher aus. Der Audiodienst startet nach Abschluss der Vorbereitung automatisch. Das Monitorsignal entspricht nicht zwingend dem Signal, das andere hören.</value></data>
+  <data name="耳返_In_说明" xml:space="preserve"><value>Ermöglicht das Mithören des Mikrofons. Der Audiodienst startet nach Abschluss der Vorbereitung automatisch. Ein Mikrofon nahe an Lautsprechern kann Echo oder Rückkopplung verursachen.</value></data>
   <data name="自动闭麦_说明" xml:space="preserve"><value>Pausiert den Mikrofoneingang, solange Preset-Audio abgespielt wird, und stellt ihn danach wieder her.</value></data>
   <data name="游戏预设_说明" xml:space="preserve"><value>Wählt das aktive Spiele-Preset mit Hotkeys, Lautstärken und simulierten Tastenaktionen vor und nach der Wiedergabe.</value></data>
   <data name="音频预设_说明" xml:space="preserve"><value>Wählt das aktive Audio-Preset und damit die Liste der verfügbaren Audiospuren.</value></data>
@@ -133,7 +133,7 @@
   <data name="教程1_内容" xml:space="preserve"><value>· Virtuelles Audiogerät in den Einstellungen installieren.&#xA;· Danach in den Windows-Soundeinstellungen prüfen.</value></data>
   <data name="教程1_标题" xml:space="preserve"><value>Erster Start</value></data>
   <data name="点击观看视频演示" xml:space="preserve"><value>Klicken, um die Videodemo anzusehen</value></data>
-  <data name="教程3_内容" xml:space="preserve"><value>· Alle vier Geräte einrichten und „Start“ aktivieren.&#xA;· Mikrofon und App-Audio werden ans virtuelle Mikrofon gesendet.</value></data>
+  <data name="教程3_内容" xml:space="preserve"><value>· Alle vier Geräte einrichten und den Lautstärketest für das aktuelle Mikrofon abschließen.&#xA;· Nach Abschluss der Liste startet PlayVoice automatisch und sendet Mikrofon und App-Audio ans virtuelle Mikrofon.</value></data>
   <data name="教程3_标题" xml:space="preserve"><value>PlayVoice starten</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>Spiele &amp; Streaming</value></data>
   <data name="教程4_内容" xml:space="preserve"><value>· In Spielen oder Streaming-Apps das eingerichtete virtuelle Mikrofon auswählen.</value></data>
@@ -222,4 +222,13 @@
   <data name="游戏预设已存在" xml:space="preserve"><value>Spiele-Preset ist bereits vorhanden</value></data>
   <data name="最大同时播放" xml:space="preserve"><value>Maximale gleichzeitige Wiedergabe</value></data>
   <data name="最大同时播放_说明" xml:space="preserve"><value>Legt die maximale Anzahl gleichzeitig wiedergegebener Audiodateien fest. Beim Überschreiten des Limits wird die zuerst gestartete Wiedergabe beendet.</value></data>
+  <data name="启动准备" xml:space="preserve"><value>Startvorbereitung</value></data>
+  <data name="未就绪" xml:space="preserve"><value>Nicht bereit</value></data>
+  <data name="未完成" xml:space="preserve"><value>Nicht abgeschlossen</value></data>
+  <data name="音频服务启动失败，请检查设备" xml:space="preserve"><value>Der Audiodienst konnte nicht gestartet werden. Bitte Geräte überprüfen.</value></data>
+  <data name="请先完成启动准备" xml:space="preserve"><value>Schließen Sie zuerst die Startvorbereitung ab.</value></data>
+  <data name="不能选择 Cable 设备" xml:space="preserve"><value>Ein Cable-Gerät kann nicht ausgewählt werden</value></data>
+  <data name="必须选择 Cable 设备" xml:space="preserve"><value>Ein Cable-Gerät muss ausgewählt werden</value></data>
+  <data name="设备重复" xml:space="preserve"><value>Dasselbe Gerät wurde doppelt ausgewählt</value></data>
+  <data name="当前麦克风未完成响度测试" xml:space="preserve"><value>Für das aktuelle Mikrofon wurde der Lautheitstest nicht abgeschlossen</value></data>
 </root>

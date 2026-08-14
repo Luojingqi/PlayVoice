@@ -15,8 +15,8 @@
   <data name="系统设置" xml:space="preserve"><value>Основные</value></data>
   <data name="运行" xml:space="preserve"><value>Запуск</value></data>
   <data name="运行_说明" xml:space="preserve"><value>Смешивает физический микрофон со звуком PlayVoice и выводит результат на виртуальный микрофон. Перед запуском выполните тест нормализации и подключите все четыре устройства.</value></data>
-  <data name="耳返_Audio_说明" xml:space="preserve"><value>Дополнительно выводит звук PlayVoice на физические динамики. Сначала включите «Запуск». Этот мониторинг не обязательно совпадает с тем, что слышат другие.</value></data>
-  <data name="耳返_In_说明" xml:space="preserve"><value>Позволяет слышать свой микрофон. Сначала включите «Запуск». Микрофон рядом с динамиками может вызвать эхо или обратную связь.</value></data>
+  <data name="耳返_Audio_说明" xml:space="preserve"><value>Дополнительно выводит звук PlayVoice на физические динамики. Аудиосервис запускается автоматически после завершения подготовки. Этот мониторинг не обязательно совпадает с тем, что слышат другие.</value></data>
+  <data name="耳返_In_说明" xml:space="preserve"><value>Позволяет слышать свой микрофон. Аудиосервис запускается автоматически после завершения подготовки. Микрофон рядом с динамиками может вызвать эхо или обратную связь.</value></data>
   <data name="自动闭麦_说明" xml:space="preserve"><value>Приостанавливает микрофон, пока воспроизводится звук пресета, и восстанавливает его после завершения всего звука.</value></data>
   <data name="游戏预设_说明" xml:space="preserve"><value>Выбирает активный игровой пресет с горячими клавишами, громкостью и действиями клавиш до и после воспроизведения.</value></data>
   <data name="音频预设_说明" xml:space="preserve"><value>Выбирает активный аудиопресет и определяет список доступных дорожек.</value></data>
@@ -133,7 +133,7 @@
   <data name="教程1_内容" xml:space="preserve"><value>· Установите виртуальную аудиокарту в настройках.&#xA;· Затем проверьте виртуальные устройства в параметрах звука Windows.</value></data>
   <data name="教程1_标题" xml:space="preserve"><value>Первый запуск</value></data>
   <data name="点击观看视频演示" xml:space="preserve"><value>Посмотреть видеодемонстрацию</value></data>
-  <data name="教程3_内容" xml:space="preserve"><value>· Настройте четыре устройства и включите «Запуск».&#xA;· Микрофон и аудио приложения пойдут на виртуальный микрофон.</value></data>
+  <data name="教程3_内容" xml:space="preserve"><value>· Настройте четыре устройства и выполните тест громкости текущего микрофона.&#xA;· После завершения списка PlayVoice запустится автоматически и направит микрофон и звук приложения на виртуальный микрофон.</value></data>
   <data name="教程3_标题" xml:space="preserve"><value>Запуск PlayVoice</value></data>
   <data name="教程4_标题" xml:space="preserve"><value>Игры и трансляции</value></data>
   <data name="教程4_内容" xml:space="preserve"><value>· Выберите настроенный виртуальный микрофон в игре или приложении для трансляций.</value></data>
@@ -222,4 +222,13 @@
   <data name="游戏预设已存在" xml:space="preserve"><value>Игровой пресет уже существует</value></data>
   <data name="最大同时播放" xml:space="preserve"><value>Максимум одновременно</value></data>
   <data name="最大同时播放_说明" xml:space="preserve"><value>Задаёт максимальное число одновременно воспроизводимых аудиозаписей. При превышении лимита останавливается запись, запущенная раньше всех.</value></data>
+  <data name="启动准备" xml:space="preserve"><value>Подготовка к запуску</value></data>
+  <data name="未就绪" xml:space="preserve"><value>Не готово</value></data>
+  <data name="未完成" xml:space="preserve"><value>Не выполнено</value></data>
+  <data name="音频服务启动失败，请检查设备" xml:space="preserve"><value>Не удалось запустить аудиослужбу. Проверьте устройства.</value></data>
+  <data name="请先完成启动准备" xml:space="preserve"><value>Сначала завершите подготовку к запуску.</value></data>
+  <data name="不能选择 Cable 设备" xml:space="preserve"><value>Нельзя выбирать устройство Cable</value></data>
+  <data name="必须选择 Cable 设备" xml:space="preserve"><value>Необходимо выбрать устройство Cable</value></data>
+  <data name="设备重复" xml:space="preserve"><value>Одно устройство выбрано дважды</value></data>
+  <data name="当前麦克风未完成响度测试" xml:space="preserve"><value>Для текущего микрофона не выполнен тест громкости</value></data>
 </root>
