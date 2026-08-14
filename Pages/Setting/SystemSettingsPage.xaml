@@ -44,6 +44,7 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <ToggleSwitchButton:ToggleSwitchButton
@@ -351,9 +352,36 @@
                 </ListBox>
             </Grid>
 
+            <Grid Grid.Row="15" Margin="0,1.5" Height="37.5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <HeaderToolTip:HeaderToolTip
+                            Grid.Column="0"
+                            Header="{L:Lan 停止当前全部播放}"
+                            ToolTipText="{L:Lan 停止当前全部播放_说明}"
+                            Margin="13.5,0,0,0"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left"/>
+                <ListBox Grid.Column="1" Margin="10,0,0,0"
+                        Style="{StaticResource HorizontalButtonGroupStyle}"
+                        x:Name="KeyboardKeyListBox2"
+                        HorizontalAlignment="Right"
+                        Width="96">
+                    <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
+                        <TextBox Tag="{L:Lan 输入按键}"
+                                 x:Name="KeyboardKeyInputTextBox2"
+                                 Style="{StaticResource GroupTextBoxStyle}"
+                                 GotFocus="KeyboardKeyInputTextBox2_GotFocus"
+                                 LostFocus="KeyboardKeyInputTextBox2_LostFocus"
+                                 InputMethod.IsInputMethodEnabled="False"/>
+                    </ListBoxItem>
+                </ListBox>
+            </Grid>
 
 
-            <Border Grid.Row="15" Margin="0,1.5,0,0"/>
+            <Border Grid.Row="16" Margin="0,1.5,0,0"/>
         </Grid>
     </HeaderedContentControl>
 </Page>

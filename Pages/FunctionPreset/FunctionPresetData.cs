@@ -20,6 +20,7 @@ public class FunctionPresetData
     {
         Action = PlayAudioKeyData.KeyAction.抬起
     };
+    public HotkeyData StopAllPlayingHotkey { get; set; } = new();
 
     [JsonIgnore]
     public string DisplayName => IsDefault

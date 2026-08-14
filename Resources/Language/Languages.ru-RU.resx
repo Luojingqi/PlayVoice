@@ -148,8 +148,10 @@
   <data name="Steam 初始化失败" xml:space="preserve"><value>Не удалось инициализировать Steam</value></data>
   <data name="麦克风输入音量" xml:space="preserve"><value>Громкость микрофона</value></data>
   <data name="自动闭麦" xml:space="preserve"><value>Автовыключение</value></data>
-  <data name="播放前" xml:space="preserve"><value>До</value></data>
-  <data name="播放后" xml:space="preserve"><value>После</value></data>
+  <data name="播放前" xml:space="preserve"><value>Имитация до воспроизведения</value></data>
+  <data name="播放后" xml:space="preserve"><value>Имитация после воспроизведения</value></data>
+  <data name="停止当前全部播放" xml:space="preserve"><value>Остановить всё воспроизведение</value></data>
+  <data name="停止当前全部播放_说明" xml:space="preserve"><value>Нажмите назначенную клавишу, чтобы остановить все воспроизводимые аудиозаписи.</value></data>
   <data name="按下" xml:space="preserve"><value>Нажать</value></data>
   <data name="抬起" xml:space="preserve"><value>Отпустить</value></data>
   <data name="单击" xml:space="preserve"><value>Щелчок</value></data>

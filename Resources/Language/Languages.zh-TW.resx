@@ -148,8 +148,10 @@
   <data name="Steam 初始化失败" xml:space="preserve"><value>Steam 初始化失敗</value></data>
   <data name="麦克风输入音量" xml:space="preserve"><value>麥克風音量</value></data>
   <data name="自动闭麦" xml:space="preserve"><value>自動靜音</value></data>
-  <data name="播放前" xml:space="preserve"><value>之前</value></data>
-  <data name="播放后" xml:space="preserve"><value>之後</value></data>
+  <data name="播放前" xml:space="preserve"><value>播放前模擬</value></data>
+  <data name="播放后" xml:space="preserve"><value>播放後模擬</value></data>
+  <data name="停止当前全部播放" xml:space="preserve"><value>停止目前所有播放</value></data>
+  <data name="停止当前全部播放_说明" xml:space="preserve"><value>按下指定按鍵後，會停止所有正在播放的音訊。</value></data>
   <data name="按下" xml:space="preserve"><value>按下</value></data>
   <data name="抬起" xml:space="preserve"><value>放開</value></data>
   <data name="单击" xml:space="preserve"><value>點擊</value></data>

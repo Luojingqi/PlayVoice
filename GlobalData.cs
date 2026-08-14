@@ -53,6 +53,7 @@ internal class GlobalData
     private readonly List<IFunctionPresetFeatureHandler> functionPresetFeatures =
         new()
         {
+            new StopAllPlayingPresetFeatureHandler(),
             new AudioHotkeyPresetFeatureHandler(),
             new AudioVolumePresetFeatureHandler()
         };

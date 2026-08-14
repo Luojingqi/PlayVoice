@@ -148,8 +148,10 @@
   <data name="Steam 初始化失败" xml:space="preserve"><value>Steamの初期化失敗</value></data>
   <data name="麦克风输入音量" xml:space="preserve"><value>マイク音量</value></data>
   <data name="自动闭麦" xml:space="preserve"><value>自動ミュート</value></data>
-  <data name="播放前" xml:space="preserve"><value>前</value></data>
-  <data name="播放后" xml:space="preserve"><value>後</value></data>
+  <data name="播放前" xml:space="preserve"><value>再生前シミュレーション</value></data>
+  <data name="播放后" xml:space="preserve"><value>再生後シミュレーション</value></data>
+  <data name="停止当前全部播放" xml:space="preserve"><value>すべての再生を停止</value></data>
+  <data name="停止当前全部播放_说明" xml:space="preserve"><value>割り当てたキーを押すと、再生中の音声をすべて停止します。</value></data>
   <data name="按下" xml:space="preserve"><value>押す</value></data>
   <data name="抬起" xml:space="preserve"><value>離す</value></data>
   <data name="单击" xml:space="preserve"><value>クリック</value></data>

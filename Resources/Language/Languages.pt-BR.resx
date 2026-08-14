@@ -148,8 +148,10 @@
   <data name="Steam 初始化失败" xml:space="preserve"><value>Falha ao iniciar a Steam</value></data>
   <data name="麦克风输入音量" xml:space="preserve"><value>Volume do microfone</value></data>
   <data name="自动闭麦" xml:space="preserve"><value>Mudo automático</value></data>
-  <data name="播放前" xml:space="preserve"><value>Antes</value></data>
-  <data name="播放后" xml:space="preserve"><value>Depois</value></data>
+  <data name="播放前" xml:space="preserve"><value>Simulação antes</value></data>
+  <data name="播放后" xml:space="preserve"><value>Simulação depois</value></data>
+  <data name="停止当前全部播放" xml:space="preserve"><value>Parar toda a reprodução</value></data>
+  <data name="停止当前全部播放_说明" xml:space="preserve"><value>Pressione a tecla atribuída para parar todos os áudios em reprodução.</value></data>
   <data name="按下" xml:space="preserve"><value>Pressionar</value></data>
   <data name="抬起" xml:space="preserve"><value>Soltar</value></data>
   <data name="单击" xml:space="preserve"><value>Clique</value></data>

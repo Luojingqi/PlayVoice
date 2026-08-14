@@ -523,10 +523,16 @@ Do not leave this page.</value>
     <value>Auto-mute</value>
   </data>
   <data name="播放前" xml:space="preserve">
-    <value>Before</value>
+    <value>Pre-play simulation</value>
   </data>
   <data name="播放后" xml:space="preserve">
-    <value>After</value>
+    <value>Post-play simulation</value>
+  </data>
+  <data name="停止当前全部播放" xml:space="preserve">
+    <value>Stop all current playback</value>
+  </data>
+  <data name="停止当前全部播放_说明" xml:space="preserve">
+    <value>Press the assigned key to stop all currently playing audio.</value>
   </data>
   <data name="按下" xml:space="preserve">
     <value>Press</value>
