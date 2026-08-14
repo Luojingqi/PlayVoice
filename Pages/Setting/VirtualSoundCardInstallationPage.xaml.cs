@@ -53,8 +53,11 @@ namespace PlayVoice.Pages.Setting
                     {
                         MainWindow.Inst.AddNotification(
                             () => LanguageManager.Inst.GetString("通知"),
-                            () => $"VB-CABLE {LanguageManager.Inst.GetString("正在安装")}\n{LanguageManager.Inst.GetString("请勿重复点击")}",
-                            LabelStatus.Warning);
+                            () => $"VB-CABLE {LanguageManager.Inst.GetString("正在安装")}\n" +
+                                  $"{LanguageManager.Inst.GetString("请勿重复点击")}\n" +
+                                  $"{LanguageManager.Inst.GetString("请耐心等待下一提示...")}\n" +
+                                  $"{LanguageManager.Inst.GetString("请勿切换界面....")}",
+                            LabelStatus.Warning, 15);
                         _isProcessing = true;
                         int code = await EquipmentLoder.InstallSilentAsync();
                         _isProcessing = false;
@@ -80,8 +83,11 @@ namespace PlayVoice.Pages.Setting
                     {
                         MainWindow.Inst.AddNotification(
                             () => LanguageManager.Inst.GetString("通知"),
-                            () => $"VB-CABLE {LanguageManager.Inst.GetString("正在卸载")}\n{LanguageManager.Inst.GetString("请勿重复点击")}",
-                            LabelStatus.Warning);
+                            () => $"VB-CABLE {LanguageManager.Inst.GetString("正在卸载")}\n" +
+                                  $"{LanguageManager.Inst.GetString("请勿重复点击")}\n" +
+                                  $"{LanguageManager.Inst.GetString("请耐心等待下一提示...")}\n" +
+                                  $"{LanguageManager.Inst.GetString("请勿切换界面....")}",
+                            LabelStatus.Warning, 15);
                         _isProcessing = true;
                         int code = await EquipmentLoder.UninstallSilentAsync();
                         _isProcessing = false;

@@ -1,12 +1,11 @@
-﻿using PlayVoice.Audio;
+﻿using NAudio.CoreAudioApi;
+using PlayVoice.Audio;
 using PlayVoice.Hotkey;
-using NAudio.CoreAudioApi;
 using PlayVoice.Pages.FunctionPreset;
 using PlayVoice.Pages.Preset;
 using PlayVoice.Resources.Language;
 using PlayVoice.Resources.Themes;
 using Steamworks;
-using System.IO;
 
 namespace PlayVoice;
 

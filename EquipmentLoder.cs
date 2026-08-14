@@ -107,29 +107,38 @@ internal class EquipmentLoder
     private static string VbcableCert_Win10_x64_Path = "VBCABLE_Driver_Pack45/vbaudio_cable64_win10.cat";
     public static async Task<int> InstallSilentAsync()
     {
+        DefaultAudioEndpointSnapshot defaultAudioEndpoints =
+            DefaultAudioEndpointSnapshot.Capture();
         string baseDir = AppDomain.CurrentDomain.BaseDirectory;
 
-        int exitCode = -1;
-        exitCode = await RunProcessAsync("certutil.exe", $"-addstore \"TrustedPublisher\" \"{Path.Combine(baseDir, VbcableCert_Win10_x64_Path)}\"");
-        if (exitCode == -1) return exitCode;
-        exitCode = await RunProcessAsync(Path.Combine(baseDir, VbcablePath), "-i -h");
-        GlobalData.Inst.Equipment.PhysicalLoudspeaker = null;
-        GlobalData.Inst.Equipment.PhysicalMicrophone = null;
-        GlobalData.Inst.Equipment.VirtualLoudspeaker = null;
-        GlobalData.Inst.Equipment.VirtualMicrophone = null;
-        if (exitCode == -1) return exitCode;
-        await RestartAudioServicesAsync();
-        return exitCode;
+        try
+        {
+            int exitCode = -1;
+            exitCode = await RunProcessAsync("certutil.exe", $"-addstore \"TrustedPublisher\" \"{Path.Combine(baseDir, VbcableCert_Win10_x64_Path)}\"");
+            if (exitCode == -1) return exitCode;
+            exitCode = await RunProcessAsync(Path.Combine(baseDir, VbcablePath), "-i -h");
+            GlobalData.Inst.Equipment.PhysicalLoudspeaker = null;
+            GlobalData.Inst.Equipment.PhysicalMicrophone = null;
+            GlobalData.Inst.Equipment.VirtualLoudspeaker = null;
+            GlobalData.Inst.Equipment.VirtualMicrophone = null;
+            if (exitCode == -1) return exitCode;
+            await RestartAudioServicesAsync();
+            return exitCode;
+        }
+        finally
+        {
+            await defaultAudioEndpoints.RestoreAsync();
+        }
     }
 
     public static async Task<int> UninstallSilentAsync()
     {
-        int exitCode = await RunProcessAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, VbcablePath), "-u -h");
-        if (exitCode == -1) return exitCode;
         GlobalData.Inst.Equipment.PhysicalLoudspeaker = null;
         GlobalData.Inst.Equipment.PhysicalMicrophone = null;
         GlobalData.Inst.Equipment.VirtualLoudspeaker = null;
         GlobalData.Inst.Equipment.VirtualMicrophone = null;
+        int exitCode = await RunProcessAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, VbcablePath), "-u -h");
+        if (exitCode == -1) return exitCode;
         await RestartAudioServicesAsync();
         return exitCode;
     }

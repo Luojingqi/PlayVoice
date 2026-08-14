@@ -293,6 +293,12 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="请勿重复点击" xml:space="preserve">
     <value>请勿重复点击</value>
   </data>
+  <data name="请耐心等待下一提示..." xml:space="preserve">
+    <value>请耐心等待下一提示...</value>
+  </data>
+  <data name="请勿切换界面...." xml:space="preserve">
+    <value>请勿切换界面....</value>
+  </data>
   <data name="未绑定声卡" xml:space="preserve">
     <value>未绑定声卡</value>
   </data>

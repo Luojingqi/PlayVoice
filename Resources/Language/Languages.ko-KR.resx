@@ -74,6 +74,8 @@
   <data name="失败" xml:space="preserve"><value>오류</value></data>
   <data name="请查看教程说明重新配置" xml:space="preserve"><value>도움말과 설정을 확인하세요</value></data>
   <data name="请勿重复点击" xml:space="preserve"><value>잠시 기다리세요</value></data>
+  <data name="请耐心等待下一提示..." xml:space="preserve"><value>다음 알림이 표시될 때까지 기다려 주세요...</value></data>
+  <data name="请勿切换界面...." xml:space="preserve"><value>화면을 전환하지 마세요....</value></data>
   <data name="未绑定声卡" xml:space="preserve"><value>오디오 장치가 설정되지 않음</value></data>
   <data name="耳返_Audio" xml:space="preserve"><value>오디오 모니터링</value></data>
   <data name="请先启动程序" xml:space="preserve"><value>PlayVoice를 실행하세요</value></data>

@@ -74,6 +74,8 @@
   <data name="失败" xml:space="preserve"><value>— erro</value></data>
   <data name="请查看教程说明重新配置" xml:space="preserve"><value>Verifique o guia e as configurações</value></data>
   <data name="请勿重复点击" xml:space="preserve"><value>Aguarde</value></data>
+  <data name="请耐心等待下一提示..." xml:space="preserve"><value>Aguarde o próximo aviso...</value></data>
+  <data name="请勿切换界面...." xml:space="preserve"><value>Não mude de página....</value></data>
   <data name="未绑定声卡" xml:space="preserve"><value>Dispositivos de áudio não configurados</value></data>
   <data name="耳返_Audio" xml:space="preserve"><value>Monitor de áudio</value></data>
   <data name="请先启动程序" xml:space="preserve"><value>Inicie o PlayVoice</value></data>

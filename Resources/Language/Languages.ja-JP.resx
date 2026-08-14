@@ -74,6 +74,8 @@
   <data name="失败" xml:space="preserve"><value>エラー</value></data>
   <data name="请查看教程说明重新配置" xml:space="preserve"><value>ガイドと設定を確認してください</value></data>
   <data name="请勿重复点击" xml:space="preserve"><value>お待ちください</value></data>
+  <data name="请耐心等待下一提示..." xml:space="preserve"><value>次の通知が表示されるまでお待ちください...</value></data>
+  <data name="请勿切换界面...." xml:space="preserve"><value>画面を切り替えないでください....</value></data>
   <data name="未绑定声卡" xml:space="preserve"><value>オーディオデバイス未設定</value></data>
   <data name="耳返_Audio" xml:space="preserve"><value>音声モニター</value></data>
   <data name="请先启动程序" xml:space="preserve"><value>PlayVoiceを開始してください</value></data>
