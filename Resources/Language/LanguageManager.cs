@@ -60,6 +60,11 @@ public sealed class LanguageManager : INotifyPropertyChanged
         return ResourceManager.GetString(key, _currentCulture) ?? key;
     }
 
+    public static string GetBootstrapString(string key)
+    {
+        return ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? key;
+    }
+
     public string SpliceString(string input, IEnumerable<string> replacements)
     {
         var sb = new StringBuilder();

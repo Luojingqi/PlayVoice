@@ -1,5 +1,6 @@
 ﻿using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using PlayVoice.Diagnostics;
 using PlayVoice.Pages.Preset;
 using PlayVoice.Resources.Language;
 using System.Diagnostics;
@@ -318,11 +319,19 @@ public class AudioData
                 if (!process.HasExited)
                     process.Kill(entireProcessTree: true);
             }
-            catch (InvalidOperationException)
+            catch (InvalidOperationException exception)
             {
+                AppLog.Warning(
+                    exception,
+                    "取消响度检测时 FFmpeg 进程状态已改变。",
+                    "AudioData.Loudness");
             }
-            catch (System.ComponentModel.Win32Exception)
+            catch (System.ComponentModel.Win32Exception exception)
             {
+                AppLog.Warning(
+                    exception,
+                    "取消响度检测时无法终止 FFmpeg。",
+                    "AudioData.Loudness");
             }
 
             try
@@ -330,8 +339,12 @@ public class AudioData
                 await process.WaitForExitAsync();
                 await outputTask;
             }
-            catch
+            catch (Exception exception)
             {
+                AppLog.Warning(
+                    exception,
+                    "取消响度检测时读取 FFmpeg 输出失败。",
+                    "AudioData.Loudness");
             }
 
             throw;
@@ -346,7 +359,9 @@ public class AudioData
         {
             return lufs;
         }
-        Console.WriteLine($"[警告] 未能解析 {filePath} 的 LUFS。FFmpeg 输出:\n{output}");
+        AppLog.Warning(
+            $"未能解析 {filePath} 的 LUFS。FFmpeg 输出：{output}",
+            "AudioData.Loudness");
         return null;
     }
 }

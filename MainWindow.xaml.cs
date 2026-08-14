@@ -1,11 +1,11 @@
 ﻿using PlayVoice.Pages.Sidebar;
+using PlayVoice.Diagnostics;
 using PlayVoice.Pages.Setting;
 using PlayVoice.Resources.Language;
 using PlayVoice.Pages.Preset;
 using PlayVoice.Resources.Themes;
 using Steamworks;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -203,7 +203,7 @@ namespace PlayVoice
 
             if (!isSystemSessionEnding)
             {
-                Process.GetCurrentProcess().Kill();
+                TerminationCoordinator.ForceExit("MainWindowClosing");
                 return;
             }
 
@@ -231,7 +231,7 @@ namespace PlayVoice
 
         private void ExitApplication()
         {
-            Process.GetCurrentProcess().Kill();
+            TerminationCoordinator.ForceExit("TrayExit");
         }
 
         internal void PrepareForExit()
@@ -299,7 +299,8 @@ namespace PlayVoice
             }
 
             if (requirements.Count == 0)
-                _ = HideStartupChecklistAfterItemsAsync(refreshVersion);
+                HideStartupChecklistAfterItemsAsync(refreshVersion)
+                    .Forget("MainWindow.StartupChecklist");
         }
 
         private StartupRequirementVisual CreateStartupRequirementVisual(
@@ -469,9 +470,12 @@ namespace PlayVoice
                     presetTrayMenuItem.DropDownItems.Add(presetItem);
                 }
             }
-            catch (System.IO.DirectoryNotFoundException)
+            catch (System.IO.DirectoryNotFoundException exception)
             {
                 // 音频预设目录尚未创建时仅显示“无”。
+                AppLog.Debug(
+                    $"音频预设目录尚未创建：{exception.Message}",
+                    "MainWindow.TrayPreset");
             }
         }
 
@@ -581,6 +585,7 @@ namespace PlayVoice
             }
             catch (Exception ex)
             {
+                AppLog.Error(ex, "Steam 初始化失败。", "MainWindow.Steam");
                 if (debug)
                     AddNotification(
                         () => $"{LanguageManager.Inst.GetString("通知")}",

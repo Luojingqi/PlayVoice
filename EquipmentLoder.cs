@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using NAudio.CoreAudioApi;
+using PlayVoice.Diagnostics;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
@@ -169,7 +170,10 @@ internal class EquipmentLoder
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error running process {fileName}: {ex.Message}");
+            AppLog.Error(
+                ex,
+                $"运行外部进程失败：{fileName}",
+                "EquipmentLoader.Process");
             return -1;
         }
     }

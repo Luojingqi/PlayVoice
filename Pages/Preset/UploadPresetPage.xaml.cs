@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using PlayVoice.Pages.Loading;
+using PlayVoice.Diagnostics;
 using PlayVoice.Pages.Workshop;
 using PlayVoice.Resources.Language;
 using Steamworks;
@@ -253,6 +254,10 @@ namespace PlayVoice.Pages.Preset
                     }
                     catch (Exception ex)
                     {
+                        AppLog.Error(
+                            ex,
+                            "创意工坊上传成功后归档扩展说明失败。",
+                            "Workshop.Upload");
                         MainWindow.Inst.AddNotification(
                             () => LanguageManager.Inst.GetString("通知"),
                             () => $"{LanguageManager.Inst.GetString("扩展说明归档失败")} : {ex.Message}",
@@ -269,6 +274,7 @@ namespace PlayVoice.Pages.Preset
             }
             catch (Exception ex)
             {
+                AppLog.Error(ex, "上传 Steam 创意工坊失败。", "Workshop.Upload");
                 MainWindow.Inst.AddNotification(
                     () => LanguageManager.Inst.GetString("通知"),
                     () => $"{LanguageManager.Inst.GetString("上传Steam失败")} : {ex.Message}",
@@ -285,7 +291,10 @@ namespace PlayVoice.Pages.Preset
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine($"清理创意工坊上传临时目录失败: {ex.Message}");
+                        AppLog.Warning(
+                            ex,
+                            $"清理创意工坊上传临时目录失败：{tempPresetPath}",
+                            "Workshop.UploadCleanup");
                     }
                 }
                 loadingPage.Visibility = Visibility.Hidden;

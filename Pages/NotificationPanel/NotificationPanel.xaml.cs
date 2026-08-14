@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using PlayVoice.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -22,6 +23,7 @@ public partial class NotificationPanel : UserControl
 
     public void AddNotification(string title, string message, LabelStatus status = LabelStatus.None, float autoDismissSeconds = 5)
     {
+        AppLog.Notification(title, message, status);
         var item = new NotificationItem(title, message, status, autoDismissSeconds)
         {
             Owner = this
@@ -34,6 +36,7 @@ public partial class NotificationPanel : UserControl
         {
             Owner = this
         };
+        AppLog.Notification(item.Title, item.Message, status);
         NotificationItems.Add(item);
     }
 

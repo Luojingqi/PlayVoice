@@ -1,5 +1,6 @@
 using NAudio.Wave;
 using PlayVoice.Audio;
+using PlayVoice.Diagnostics;
 using System.IO;
 
 namespace PlayVoice.Pages.Preset;
@@ -59,7 +60,7 @@ public static class AudioPresetDataTool
                         cancellationToken.ThrowIfCancellationRequested();
                         presetData.AudioList.Add(audioData);
                     }
-                    catch
+                    catch (Exception)
                     {
                         audioData.AudioTrackArray[0]?.Dispose();
                         audioData.AudioTrackArray[1]?.Dispose();
@@ -76,9 +77,18 @@ public static class AudioPresetDataTool
             }
             return presetData;
         }
-        catch
+        catch (OperationCanceledException)
         {
             presetData.Dispose();
+            throw;
+        }
+        catch (Exception exception)
+        {
+            presetData.Dispose();
+            AppLog.Error(
+                exception,
+                $"加载音频预设失败：{folderName}",
+                "AudioPreset.Load");
             throw;
         }
     }

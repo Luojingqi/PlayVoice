@@ -1,4 +1,5 @@
 ﻿using System;
+using PlayVoice.Diagnostics;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -28,11 +29,13 @@ namespace PlayVoice.Pages.Workshop
                 switch (LeftListBox.SelectedIndex)
                 {
                     case 0:
-                        WorkshopPage.Inst.TablePage.SwitchPage(WorkshopPage.Inst.NowPageType, 1);
+                        WorkshopPage.Inst.TablePage.SwitchPage(WorkshopPage.Inst.NowPageType, 1)
+                            .Forget("Workshop.PageSelection");
                         break;
                     case 1:
                         if (Check(nowPage - 1, maxPage))
-                            WorkshopPage.Inst.TablePage.SwitchPage(WorkshopPage.Inst.NowPageType, nowPage - 1);
+                            WorkshopPage.Inst.TablePage.SwitchPage(WorkshopPage.Inst.NowPageType, nowPage - 1)
+                                .Forget("Workshop.PageSelection");
                         break;
                 }
                 LeftListBox.SelectedIndex = -1;
@@ -44,10 +47,12 @@ namespace PlayVoice.Pages.Workshop
                 {
                     case 0:
                         if (Check(nowPage + 1, maxPage))
-                            WorkshopPage.Inst.TablePage.SwitchPage(WorkshopPage.Inst.NowPageType, nowPage + 1);
+                            WorkshopPage.Inst.TablePage.SwitchPage(WorkshopPage.Inst.NowPageType, nowPage + 1)
+                                .Forget("Workshop.PageSelection");
                         break;
                     case 1:
-                        WorkshopPage.Inst.TablePage.SwitchPage(WorkshopPage.Inst.NowPageType, maxPage);
+                        WorkshopPage.Inst.TablePage.SwitchPage(WorkshopPage.Inst.NowPageType, maxPage)
+                            .Forget("Workshop.PageSelection");
                         break;
                 }
                 RightListBox.SelectedIndex = -1;
@@ -74,7 +79,8 @@ namespace PlayVoice.Pages.Workshop
             if (int.TryParse(PageNumberTextBox.Text, out int result) && Check(result, maxPage))
             {
                 if (result != nowPage)
-                    WorkshopPage.Inst.TablePage.SwitchPage(WorkshopPage.Inst.NowPageType, result);
+                    WorkshopPage.Inst.TablePage.SwitchPage(WorkshopPage.Inst.NowPageType, result)
+                        .Forget("Workshop.PageSelection");
             }
             else
             {

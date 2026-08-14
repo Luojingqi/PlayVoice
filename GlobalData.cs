@@ -1,5 +1,6 @@
 ﻿using NAudio.CoreAudioApi;
 using PlayVoice.Audio;
+using PlayVoice.Diagnostics;
 using PlayVoice.Hotkey;
 using PlayVoice.Pages.FunctionPreset;
 using PlayVoice.Pages.Preset;
@@ -366,7 +367,7 @@ internal class GlobalData
         catch (Exception exception)
         {
             stoppedSuccessfully = false;
-            Console.WriteLine($"[错误] 关闭麦克风耳返失败：{exception}");
+            AppLog.Error(exception, "关闭麦克风耳返失败。", "GlobalData.Audio");
         }
         try
         {
@@ -375,7 +376,7 @@ internal class GlobalData
         catch (Exception exception)
         {
             stoppedSuccessfully = false;
-            Console.WriteLine($"[错误] 关闭音频耳返失败：{exception}");
+            AppLog.Error(exception, "关闭音频耳返失败。", "GlobalData.Audio");
         }
         try
         {
@@ -385,7 +386,7 @@ internal class GlobalData
         }
         catch (Exception exception)
         {
-            Console.WriteLine($"[错误] 停止音频服务失败：{exception}");
+            AppLog.Error(exception, "停止音频服务失败。", "GlobalData.Audio");
             RunStateChanged?.Invoke(false);
             return false;
         }
@@ -420,14 +421,17 @@ internal class GlobalData
         {
             run = false;
             startupFailureRequirementKey = "音频服务启动失败，请检查设备";
-            Console.WriteLine($"[错误] 启动音频服务失败：{exception}");
+            AppLog.Error(exception, "启动音频服务失败。", "GlobalData.Audio");
             try
             {
                 TryGoEar_In(false);
             }
             catch (Exception earException)
             {
-                Console.WriteLine($"[错误] 重置麦克风耳返状态失败：{earException}");
+                AppLog.Error(
+                    earException,
+                    "重置麦克风耳返状态失败。",
+                    "GlobalData.Audio");
             }
             try
             {
@@ -435,7 +439,10 @@ internal class GlobalData
             }
             catch (Exception earException)
             {
-                Console.WriteLine($"[错误] 重置音频耳返状态失败：{earException}");
+                AppLog.Error(
+                    earException,
+                    "重置音频耳返状态失败。",
+                    "GlobalData.Audio");
             }
             try
             {
@@ -443,7 +450,10 @@ internal class GlobalData
             }
             catch (Exception stopException)
             {
-                Console.WriteLine($"[错误] 清理启动失败的音频服务时出错：{stopException}");
+                AppLog.Error(
+                    stopException,
+                    "清理启动失败的音频服务时出错。",
+                    "GlobalData.Audio");
             }
             RunStateChanged?.Invoke(false);
             return false;
@@ -519,9 +529,9 @@ internal class GlobalData
         {
             config = ConfigStorage.Load();
         }
-        catch
+        catch (Exception exception)
         {
-            Console.WriteLine("config加载失败");
+            AppLog.Error(exception, "配置加载失败，将使用默认配置。", "GlobalData.Config");
             config = new Config();
         }
         NormalizeMicrophoneLoudnessConfig();
@@ -608,9 +618,13 @@ internal class GlobalData
             config.HasDetectedInitialSteamLanguage = true;
             config.Save();
         }
-        catch
+        catch (Exception exception)
         {
             // 首次 Steam 语言检测失败时静默保留原配置，下次启动继续尝试。
+            AppLog.Warning(
+                exception,
+                "首次 Steam 语言检测失败，将在下次启动重试。",
+                "GlobalData.SteamLanguage");
         }
     }
 

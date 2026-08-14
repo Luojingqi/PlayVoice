@@ -1,5 +1,6 @@
 ﻿using PlayVoice.Resources.Language;
 using PlayVoice.Audio;
+using PlayVoice.Diagnostics;
 using Steamworks;
 using Steamworks.Ugc;
 using System.Collections.ObjectModel;
@@ -58,7 +59,7 @@ namespace PlayVoice.Pages.Workshop
                         () => $"{LanguageManager.Inst.GetString("订阅失败")} : {item.Title}",
                         LabelStatus.Warning, 3.5f);
                 }
-                CheckSubscribe();
+                await CheckSubscribe();
                 SubscribeButton.SelectedIndex = -1;
             };
             UnSubscribeButton.SelectionChanged += async (s, e) =>
@@ -75,7 +76,7 @@ namespace PlayVoice.Pages.Workshop
                         () => $"{LanguageManager.Inst.GetString("通知")}",
                         () => $"{LanguageManager.Inst.GetString("已退订")} : {item.Title}",
                         LabelStatus.Warning, 3.5f);
-                    WorkshopPage.Inst.TablePage.ReLoadItem(tableItem);
+                    await WorkshopPage.Inst.TablePage.ReLoadItem(tableItem);
                 }
                 else
                 {
@@ -84,7 +85,7 @@ namespace PlayVoice.Pages.Workshop
                         () => $"{LanguageManager.Inst.GetString("退订失败")} : {item.Title}",
                         LabelStatus.Warning, 3.5f);
                 }
-                CheckSubscribe();
+                await CheckSubscribe();
                 UnSubscribeButton.SelectedIndex = -1;
             };
 
@@ -200,10 +201,11 @@ namespace PlayVoice.Pages.Workshop
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
+                AppLog.Debug("创意工坊详情加载已取消。", "Workshop.Detail");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"加载创意工坊详情失败: {ex.Message}");
+                AppLog.Error(ex, "加载创意工坊详情失败。", "Workshop.Detail");
                 if (IsCurrentLoad(generation))
                 {
                     ImageLoadingPanel.Visibility = Visibility.Collapsed;
@@ -270,10 +272,11 @@ namespace PlayVoice.Pages.Workshop
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
+                AppLog.Debug("创意工坊图片加载已取消。", "Workshop.DetailImage");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"加载创意工坊图片失败: {ex.Message}");
+                AppLog.Error(ex, "加载创意工坊图片失败。", "Workshop.DetailImage");
                 if (IsCurrentLoad(generation))
                     ImageLoadingPanel.Visibility = Visibility.Collapsed;
             }

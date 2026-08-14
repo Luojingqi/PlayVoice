@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using PlayVoice.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 
@@ -13,9 +14,9 @@ public static class JsonTool
         {
             return JsonSerializer.Deserialize<T>(jsonString);
         }
-        catch
+        catch (Exception exception)
         {
-            Console.WriteLine("Json转换失败");
+            AppLog.Error(exception, "JSON 转换失败。", "JsonTool.Deserialize");
             return default(T);
         }
     }
@@ -31,15 +32,18 @@ public static class JsonTool
                 data = JsonSerializer.Deserialize<T>(jsonString);
                 return true;
             }
-            catch
+            catch (Exception exception)
             {
-                Console.WriteLine("Json加载失败");
+                AppLog.Error(
+                    exception,
+                    $"JSON 加载失败：{path}",
+                    "JsonTool.Load");
                 return false;
             }
         }
         else
         {
-            Console.WriteLine("Json文件不存在");
+            AppLog.Warning($"JSON 文件不存在：{path}", "JsonTool.Load");
             return false;
         }
     }
@@ -52,9 +56,12 @@ public static class JsonTool
             File.WriteAllText(path, jsonString);
             return true;
         }
-        catch
+        catch (Exception exception)
         {
-            Console.WriteLine("Json保存失败");
+            AppLog.Error(
+                exception,
+                $"JSON 保存失败：{path}",
+                "JsonTool.Save");
             return false;
         }
     }
@@ -73,19 +80,26 @@ public static class JsonTool
             File.Move(tempPath, path, true);
             return true;
         }
-        catch
+        catch (Exception exception)
         {
             try
             {
                 if (File.Exists(tempPath))
                     File.Delete(tempPath);
             }
-            catch
+            catch (Exception cleanupException)
             {
                 // 清理临时文件失败不应掩盖最初的保存失败。
+                AppLog.Warning(
+                    cleanupException,
+                    $"清理 JSON 临时文件失败：{tempPath}",
+                    "JsonTool.SaveAtomic");
             }
 
-            Console.WriteLine("Json保存失败");
+            AppLog.Error(
+                exception,
+                $"原子保存 JSON 失败：{path}",
+                "JsonTool.SaveAtomic");
             return false;
         }
     }

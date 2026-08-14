@@ -239,4 +239,6 @@
   <data name="设备重复" xml:space="preserve"><value>같은 장치가 중복 선택되었습니다</value></data>
   <data name="当前麦克风未完成响度测试" xml:space="preserve"><value>현재 마이크의 음량 테스트가 완료되지 않았습니다</value></data>
   <data name="停止加载" xml:space="preserve"><value>불러오기 중지</value></data>
+  <data name="程序已经在运行" xml:space="preserve"><value>PlayVoice가 이미 실행 중입니다.</value></data>
+  <data name="日志初始化失败" xml:space="preserve"><value>로그 파일을 만들 수 없어 PlayVoice를 계속 시작할 수 없습니다.</value></data>
 </root>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using PlayVoice.Resources.Language;
+using PlayVoice.Diagnostics;
 using System.Windows;
 namespace PlayVoice.Resources.Themes;
 
@@ -84,8 +85,12 @@ public static class ThemeManager
             var value = (int)Registry.GetValue(registryKey, registryValue, 1);
             return value == 0 ? ThemeEnum.Dark : ThemeEnum.Light;
         }
-        catch
+        catch (Exception exception)
         {
+            AppLog.Warning(
+                exception,
+                "读取 Windows 系统主题失败，将使用浅色主题。",
+                "ThemeManager.SystemTheme");
             return ThemeEnum.Light;
         }
     }

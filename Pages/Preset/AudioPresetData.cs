@@ -1,5 +1,6 @@
 using NAudio.Wave;
 using PlayVoice.Audio;
+using PlayVoice.Diagnostics;
 using System.IO;
 
 namespace PlayVoice.Pages.Preset;
@@ -34,7 +35,7 @@ public class AudioPresetData
         cancellationToken.ThrowIfCancellationRequested();
         if (string.IsNullOrEmpty(completePath) || !File.Exists(completePath))
         {
-            Console.WriteLine("文件不存在。");
+            AppLog.Warning($"导入的音频文件不存在：{completePath}", "AudioPreset.Import");
             return null;
         }
 
@@ -43,7 +44,9 @@ public class AudioPresetData
             using var sourceReader = new AudioFileReader(completePath);
             if (sourceReader.Length <= 0 || sourceReader.TotalTime.TotalMilliseconds <= 0)
             {
-                Console.WriteLine("音频文件长度或时长异常。");
+                AppLog.Warning(
+                    $"音频文件长度或时长异常：{completePath}",
+                    "AudioPreset.Import");
                 return null;
             }
 
@@ -56,7 +59,9 @@ public class AudioPresetData
             string destPath = Path.Combine(presetPath, Path.GetFileName(completePath));
             if (File.Exists(destPath))
             {
-                Console.WriteLine("音频文件已存在。");
+                AppLog.Warning(
+                    $"音频预设中已存在同名文件：{destPath}",
+                    "AudioPreset.Import");
                 return null;
             }
 
@@ -78,7 +83,9 @@ public class AudioPresetData
                 Lufs = actualLufs.Value,
                 Size = new FileInfo(destPath).Length
             };
-            Console.WriteLine($"{audioDataConfig.Name} 实际LUFS: {actualLufs}");
+            AppLog.Information(
+                $"音频导入完成。Name={audioDataConfig.Name} | LUFS={actualLufs}",
+                "AudioPreset.Import");
             Config.AudioDataConfigList.Add(audioDataConfig);
             return audioData;
         }
@@ -86,9 +93,12 @@ public class AudioPresetData
         {
             throw;
         }
-        catch
+        catch (Exception exception)
         {
-            Console.WriteLine("无法读取音频文件。");
+            AppLog.Error(
+                exception,
+                $"无法读取音频文件：{completePath}",
+                "AudioPreset.Import");
             return null;
         }
     }
@@ -97,7 +107,9 @@ public class AudioPresetData
     {
         if (index < 0 || index >= AudioList.Count)
         {
-            Console.WriteLine("索引超出范围。");
+            AppLog.Warning(
+                $"删除音频时索引超出范围：{index}",
+                "AudioPreset.Remove");
             return false;
         }
 

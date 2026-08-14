@@ -2,6 +2,7 @@
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using PlayVoice.Audio;
+using PlayVoice.Diagnostics;
 using PlayVoice.Hotkey;
 using PlayVoice.Pages.FunctionPreset;
 using PlayVoice.Pages.Preset;
@@ -15,7 +16,6 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using static CommunityToolkit.Mvvm.ComponentModel.__Internals.__TaskExtensions.TaskAwaitableWithoutEndValidation;
 using static PlayVoice.Audio.AudioProxy;
 
 namespace PlayVoice.Pages.Setting
@@ -383,7 +383,7 @@ namespace PlayVoice.Pages.Setting
             }
             catch (Exception exception)
             {
-                Console.WriteLine($"[错误] 响度测试失败：{exception}");
+                AppLog.Error(exception, "响度测试失败。", "SystemSettings.LoudnessTest");
             }
             finally
             {
@@ -397,7 +397,7 @@ namespace PlayVoice.Pages.Setting
                         }
                         catch (Exception exception)
                         {
-                            Console.WriteLine($"[错误] 停止录音失败：{exception}");
+                            AppLog.Error(exception, "停止响度测试录音失败。", "SystemSettings.LoudnessTest");
                         }
                     }
 
@@ -407,7 +407,7 @@ namespace PlayVoice.Pages.Setting
                     }
                     catch (Exception exception)
                     {
-                        Console.WriteLine($"[错误] 释放录音设备失败：{exception}");
+                        AppLog.Error(exception, "释放响度测试录音设备失败。", "SystemSettings.LoudnessTest");
                     }
                 }
 
@@ -417,7 +417,7 @@ namespace PlayVoice.Pages.Setting
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine($"[错误] 释放录音文件失败：{exception}");
+                    AppLog.Error(exception, "释放响度测试录音文件失败。", "SystemSettings.LoudnessTest");
                 }
 
                 try
@@ -426,7 +426,7 @@ namespace PlayVoice.Pages.Setting
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine($"[错误] 重置录音电平失败：{exception}");
+                    AppLog.Error(exception, "重置响度测试录音电平失败。", "SystemSettings.LoudnessTest");
                 }
 
                 isVolumeTestRunning = false;

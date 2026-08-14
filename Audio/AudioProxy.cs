@@ -1,6 +1,7 @@
 ﻿using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
+using PlayVoice.Diagnostics;
 using PlayVoice.Hotkey;
 using PlayVoice.Pages.LevelBar;
 using PlayVoice.Pages.Workshop;
@@ -193,7 +194,7 @@ internal class AudioProxy
         }
         catch (Exception exception)
         {
-            Console.WriteLine($"[错误] 停止物理扬声器输出失败：{exception}");
+            AppLog.Error(exception, "停止物理扬声器输出失败。", "AudioProxy.Stop");
         }
         try
         {
@@ -201,7 +202,7 @@ internal class AudioProxy
         }
         catch (Exception exception)
         {
-            Console.WriteLine($"[错误] 释放物理扬声器输出失败：{exception}");
+            AppLog.Error(exception, "释放物理扬声器输出失败。", "AudioProxy.Dispose");
         }
     }
 
@@ -375,7 +376,7 @@ internal class AudioProxy
             }
             catch (Exception exception)
             {
-                Console.WriteLine($"[错误] 停止物理麦克风采集失败：{exception}");
+                AppLog.Error(exception, "停止物理麦克风采集失败。", "AudioProxy.Stop");
             }
             try
             {
@@ -383,7 +384,7 @@ internal class AudioProxy
             }
             catch (Exception exception)
             {
-                Console.WriteLine($"[错误] 释放物理麦克风采集失败：{exception}");
+                AppLog.Error(exception, "释放物理麦克风采集失败。", "AudioProxy.Dispose");
             }
         }
 
@@ -397,7 +398,7 @@ internal class AudioProxy
             }
             catch (Exception exception)
             {
-                Console.WriteLine($"[错误] 停止虚拟扬声器输出失败：{exception}");
+                AppLog.Error(exception, "停止虚拟扬声器输出失败。", "AudioProxy.Stop");
             }
             try
             {
@@ -405,7 +406,7 @@ internal class AudioProxy
             }
             catch (Exception exception)
             {
-                Console.WriteLine($"[错误] 释放虚拟扬声器输出失败：{exception}");
+                AppLog.Error(exception, "释放虚拟扬声器输出失败。", "AudioProxy.Dispose");
             }
         }
 

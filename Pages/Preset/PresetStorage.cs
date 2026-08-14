@@ -1,3 +1,4 @@
+using PlayVoice.Diagnostics;
 using System.IO;
 
 namespace PlayVoice.Pages.Preset;
@@ -87,10 +88,24 @@ internal static class PresetStorage
         {
             Directory.CreateDirectory(ExtendedExplanationPath);
         }
-        catch
+        catch (Exception exception)
         {
-            if (!Directory.Exists(ExtendedExplanationPath) && Directory.Exists(archivePath))
-                Directory.Move(archivePath, ExtendedExplanationPath);
+            try
+            {
+                if (!Directory.Exists(ExtendedExplanationPath) && Directory.Exists(archivePath))
+                    Directory.Move(archivePath, ExtendedExplanationPath);
+            }
+            catch (Exception rollbackException)
+            {
+                AppLog.Error(
+                    rollbackException,
+                    "恢复扩展说明目录失败。",
+                    "PresetStorage.Archive");
+            }
+            AppLog.Error(
+                exception,
+                "创建新的扩展说明目录失败。",
+                "PresetStorage.Archive");
             throw;
         }
 

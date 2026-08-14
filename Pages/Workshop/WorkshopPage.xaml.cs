@@ -1,5 +1,6 @@
 ﻿using PlayVoice.Pages.Loading;
 using PlayVoice.Resources.Language;
+using PlayVoice.Diagnostics;
 using Steamworks;
 using Steamworks.Ugc;
 using System.IO;
@@ -161,11 +162,12 @@ namespace PlayVoice.Pages.Workshop
             }
             catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
             {
+                AppLog.Debug("创意工坊图片下载已取消。", "Workshop.ImageDownload");
                 return null;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"图片下载失败: {ex.Message}");
+                AppLog.Error(ex, "创意工坊图片下载失败。", "Workshop.ImageDownload");
                 return null;
             }
         }
@@ -236,7 +238,8 @@ namespace PlayVoice.Pages.Workshop
             nowSelectedItem = tableItem;
             nowSelectedItem.IsSelected = true;
 
-            detailPage.SetTableItem(tableItem);
+            detailPage.SetTableItem(tableItem)
+                .Forget("Workshop.Detail.Open");
         }
 
         public void CloseDetailPage()
@@ -294,7 +297,8 @@ namespace PlayVoice.Pages.Workshop
             nowSelectedItem = tableItem;
             nowSelectedItem.IsSelected = true;
 
-            localDetailPage.SetTableItem(tableItem);
+            localDetailPage.SetTableItem(tableItem)
+                .Forget("Workshop.LocalDetail.Open");
         }
 
         public void CloseLocalDetailPage()

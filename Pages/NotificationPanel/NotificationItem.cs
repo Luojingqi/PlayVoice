@@ -62,7 +62,6 @@ public class NotificationItem : INotifyPropertyChanged
     {
         Title = getTitle();
         Message = getMessage();
-        Console.WriteLine(Message);
     }
 
     private Func<string> getTitle;

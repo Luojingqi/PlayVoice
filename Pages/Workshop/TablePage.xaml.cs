@@ -1,5 +1,6 @@
 ﻿using Steamworks;
 using Steamworks.Data;
+using PlayVoice.Diagnostics;
 using Steamworks.Ugc;
 using System.Collections.ObjectModel;
 using System.Windows;
@@ -58,7 +59,8 @@ public partial class TablePage : UserControl
 
             var itemId = tableItem.Item.Value.Id;
             if (_refreshingItemIds.Add(itemId))
-                _ = RefreshCompletedItemAsync(tableItem, itemId);
+                RefreshCompletedItemAsync(tableItem, itemId)
+                    .Forget("Workshop.Table.DownloadComplete");
         }
     }
 
@@ -70,7 +72,7 @@ public partial class TablePage : UserControl
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"刷新创意工坊物品失败: {ex.Message}");
+            AppLog.Error(ex, "刷新创意工坊物品失败。", "Workshop.Table");
         }
         finally
         {

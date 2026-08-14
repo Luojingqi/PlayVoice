@@ -1,4 +1,5 @@
 using NAudio.CoreAudioApi;
+using PlayVoice.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace PlayVoice;
@@ -47,8 +48,10 @@ internal sealed class DefaultAudioEndpointSnapshot
                 }
                 catch (Exception exception)
                 {
-                    Console.WriteLine(
-                        $"[警告] 无法记录默认音频设备（{dataFlow}/{role}）：{exception.Message}");
+                    AppLog.Warning(
+                        exception,
+                        $"无法记录默认音频设备（{dataFlow}/{role}）。",
+                        "AudioEndpoint.Snapshot");
                 }
             }
         }
@@ -71,7 +74,9 @@ internal sealed class DefaultAudioEndpointSnapshot
                 await Task.Delay(RestoreRetryDelayMilliseconds);
         }
 
-        Console.WriteLine($"[错误] 恢复 Windows 默认音频设备失败：{lastError}");
+        AppLog.Error(
+            $"恢复 Windows 默认音频设备失败：{lastError}",
+            "AudioEndpoint.Restore");
     }
 
     private bool TryRestore(out string error)
@@ -96,6 +101,10 @@ internal sealed class DefaultAudioEndpointSnapshot
         catch (Exception exception)
         {
             error = exception.Message;
+            AppLog.Warning(
+                exception,
+                "恢复 Windows 默认音频设备的尝试失败。",
+                "AudioEndpoint.Restore");
             return false;
         }
         finally
