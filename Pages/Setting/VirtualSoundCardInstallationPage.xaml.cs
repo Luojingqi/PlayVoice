@@ -28,7 +28,7 @@ namespace PlayVoice.Pages.Setting
         }
         private readonly Stopwatch _clickStopwatch = new Stopwatch();
         private const int ThrottleMilliseconds = 500;
-        private bool _isProcessing = false;
+        private static bool _isProcessing = false;
         private async void ButtonGroupListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (ButtonGroupListBox.SelectedIndex == -1) return;

@@ -137,10 +137,7 @@ internal class EquipmentLoder
         GlobalData.Inst.Equipment.PhysicalMicrophone = null;
         GlobalData.Inst.Equipment.VirtualLoudspeaker = null;
         GlobalData.Inst.Equipment.VirtualMicrophone = null;
-        int exitCode = await RunProcessAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, VbcablePath), "-u -h");
-        if (exitCode == -1) return exitCode;
-        await RestartAudioServicesAsync();
-        return exitCode;
+        return await RunProcessAsync(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, VbcablePath), "-u -h");
     }
 
     private static async Task RestartAudioServicesAsync()

@@ -206,7 +206,7 @@
   <data name="默认" xml:space="preserve"><value>預設</value></data>
   <data name="教程提示" xml:space="preserve"><value>教學提示</value></data>
   <data name="教程提示_内容" xml:space="preserve"><value>可在左側的「設定」頁面查看教學。</value></data>
-  <data name="教程提示_抢先体验内容" xml:space="preserve"><value>本產品目前為搶先體驗版，如果遇到未知的 bug，請及時聯絡我們。&#xA;我們的最佳聯絡方式均可在 Steam 商店頁面查看。&#xA;很抱歉為您帶來不便。&#xA;及時提供 bug 的使用者將獲得額外的免費 CKD。</value></data>
+  <data name="教程提示_抢先体验内容" xml:space="preserve"><value>本產品目前為搶先體驗版，如果遇到未知的 bug，請及時聯絡我們。&#xA;我們的最佳聯絡方式均可在 Steam 商店頁面查看。&#xA;很抱歉為您帶來不便。&#xA;及時提供 bug 的使用者將獲得額外的免費 CDK。</value></data>
   <data name="确定" xml:space="preserve"><value>確定</value></data>
   <data name="等待下载" xml:space="preserve"><value>等待下載</value></data>
   <data name="音频预设" xml:space="preserve"><value>音訊預設</value></data>

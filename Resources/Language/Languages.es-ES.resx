@@ -206,7 +206,7 @@
   <data name="默认" xml:space="preserve"><value>Predeterminado</value></data>
   <data name="教程提示" xml:space="preserve"><value>Guía</value></data>
   <data name="教程提示_内容" xml:space="preserve"><value>Puedes consultar la guía en «Ajustes» en la barra lateral.</value></data>
-  <data name="教程提示_抢先体验内容" xml:space="preserve"><value>Este producto se encuentra actualmente en acceso anticipado. Si encuentras un error desconocido, ponte en contacto con nosotros cuanto antes.&#xA;Nuestros métodos de contacto preferidos aparecen en la página de la tienda de Steam.&#xA;Lamentamos las molestias ocasionadas.&#xA;Los usuarios que informen de errores a tiempo recibirán CKD adicional gratis.</value></data>
+  <data name="教程提示_抢先体验内容" xml:space="preserve"><value>Este producto se encuentra actualmente en acceso anticipado. Si encuentras un error desconocido, ponte en contacto con nosotros cuanto antes.&#xA;Nuestros métodos de contacto preferidos aparecen en la página de la tienda de Steam.&#xA;Lamentamos las molestias ocasionadas.&#xA;Los usuarios que informen de errores a tiempo recibirán CDK adicional gratis.</value></data>
   <data name="确定" xml:space="preserve"><value>Aceptar</value></data>
   <data name="等待下载" xml:space="preserve"><value>En espera de descarga</value></data>
   <data name="音频预设" xml:space="preserve"><value>Preajustes de audio</value></data>
