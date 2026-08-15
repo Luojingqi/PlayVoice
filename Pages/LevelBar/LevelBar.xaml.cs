@@ -17,9 +17,9 @@ namespace PlayVoice.Pages.LevelBar
         public static readonly DependencyProperty DecaySpeedProperty = DependencyProperty.Register("DecaySpeed", typeof(float), typeof(LevelBar), new FrameworkPropertyMetadata(0.03f));
         public static readonly DependencyProperty PeakHoldFramesProperty = DependencyProperty.Register("PeakHoldFrames", typeof(int), typeof(LevelBar), new FrameworkPropertyMetadata(30));
         public static readonly DependencyProperty PeakFalloffRateProperty = DependencyProperty.Register("PeakFalloffRate", typeof(float), typeof(LevelBar), new FrameworkPropertyMetadata(0.008f));
-        public static readonly DependencyProperty MinColorProperty = DependencyProperty.Register("MinColor", typeof(Color), typeof(LevelBar), new FrameworkPropertyMetadata(Color.FromRgb(0, 255, 0), FrameworkPropertyMetadataOptions.AffectsRender, OnLayoutPropertyChanged));
-        public static readonly DependencyProperty MidColorProperty = DependencyProperty.Register("MidColor", typeof(Color), typeof(LevelBar), new FrameworkPropertyMetadata(Color.FromRgb(255, 234, 0), FrameworkPropertyMetadataOptions.AffectsRender, OnLayoutPropertyChanged));
-        public static readonly DependencyProperty MaxColorProperty = DependencyProperty.Register("MaxColor", typeof(Color), typeof(LevelBar), new FrameworkPropertyMetadata(Color.FromRgb(255, 0, 51), FrameworkPropertyMetadataOptions.AffectsRender, OnLayoutPropertyChanged));
+        public static readonly DependencyProperty MinColorProperty = DependencyProperty.Register("MinColor", typeof(Color), typeof(LevelBar), new FrameworkPropertyMetadata(Color.FromRgb(0, 200, 80), FrameworkPropertyMetadataOptions.AffectsRender, OnLayoutPropertyChanged));
+        public static readonly DependencyProperty MidColorProperty = DependencyProperty.Register("MidColor", typeof(Color), typeof(LevelBar), new FrameworkPropertyMetadata(Color.FromRgb(200, 200, 0), FrameworkPropertyMetadataOptions.AffectsRender, OnLayoutPropertyChanged));
+        public static readonly DependencyProperty MaxColorProperty = DependencyProperty.Register("MaxColor", typeof(Color), typeof(LevelBar), new FrameworkPropertyMetadata(Color.FromRgb(250, 0, 146), FrameworkPropertyMetadataOptions.AffectsRender, OnLayoutPropertyChanged));
 
         public int LedCount { get => (int)GetValue(LedCountProperty); set => SetValue(LedCountProperty, value); }
         public double LedWidth { get => (double)GetValue(LedWidthProperty); set => SetValue(LedWidthProperty, value); }
@@ -54,9 +54,9 @@ namespace PlayVoice.Pages.LevelBar
         {
             InitializeComponent();
 
-            _peakBrush = new SolidColorBrush(Colors.White);
+            _peakBrush = new SolidColorBrush(Color.FromRgb(184, 184, 184));
             _peakBrush.Freeze();
-            _peakGlowBrush = new SolidColorBrush(Color.FromArgb(80, 255, 255, 255));
+            _peakGlowBrush = new SolidColorBrush(Color.FromArgb(80, 184, 184, 184));
             _peakGlowBrush.Freeze();
 
             CompositionTarget.Rendering += OnRendering;
@@ -189,13 +189,19 @@ namespace PlayVoice.Pages.LevelBar
             }
         }
 
-        private SolidColorBrush GetCachedBrush(Color baseColor, float brightness, byte alpha = 255)
+        private SolidColorBrush GetCachedBrush(Color baseColor, float brightness, bool fadeToWhite, byte alpha = 255)
         {
             brightness = (float)Math.Round(brightness * 64f) / 64f;
 
-            byte r = (byte)(baseColor.R * brightness);
-            byte g = (byte)(baseColor.G * brightness);
-            byte b = (byte)(baseColor.B * brightness);
+            byte r = fadeToWhite
+                ? (byte)(255 - (255 - baseColor.R) * brightness)
+                : (byte)(baseColor.R * brightness);
+            byte g = fadeToWhite
+                ? (byte)(255 - (255 - baseColor.G) * brightness)
+                : (byte)(baseColor.G * brightness);
+            byte b = fadeToWhite
+                ? (byte)(255 - (255 - baseColor.B) * brightness)
+                : (byte)(baseColor.B * brightness);
 
             uint key = (uint)((alpha << 24) | (r << 16) | (g << 8) | b);
 
@@ -207,6 +213,16 @@ namespace PlayVoice.Pages.LevelBar
             BrushCache[key] = newBrush;
 
             return newBrush;
+        }
+
+        private bool ShouldFadeToWhite()
+        {
+            if (TryFindResource("BgLight") is not SolidColorBrush backgroundBrush)
+                return false;
+
+            Color color = backgroundBrush.Color;
+            double luminance = color.R * 0.2126 + color.G * 0.7152 + color.B * 0.0722;
+            return luminance >= 128;
         }
 
         protected override void OnRender(DrawingContext dc)
@@ -227,6 +243,7 @@ namespace PlayVoice.Pages.LevelBar
             double glow = GlowRadius;
             double ledHeight = Math.Max(0, h - 4);
             double y = 2;
+            bool fadeToWhite = ShouldFadeToWhite();
 
             for (int i = 0; i < ledCount; i++)
             {
@@ -236,8 +253,8 @@ namespace PlayVoice.Pages.LevelBar
                 double x = i * step;
                 Color baseColor = _baseLedColors[i];
 
-                Brush ledBrush = GetCachedBrush(baseColor, brightness, 255);
-                Brush glowBrush = GetCachedBrush(baseColor, brightness, 40);
+                Brush ledBrush = GetCachedBrush(baseColor, brightness, fadeToWhite, 255);
+                Brush glowBrush = GetCachedBrush(baseColor, brightness, fadeToWhite, 40);
 
                 Rect ledRect = new Rect(x, y, ledWidth, ledHeight);
                 Rect glowRect = new Rect(x - glow, y - glow, ledWidth + glow * 2, ledHeight + glow * 2);
