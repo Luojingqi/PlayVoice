@@ -365,3 +365,6 @@ FodyWeavers.xsd
 
 # Legal documents distributed separately through Steam
 EULA/
+
+# Steam release announcements managed outside Git
+PatchNotes/
