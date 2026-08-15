@@ -3,6 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
+using PlayVoice.Pages;
 
 namespace PlayVoice.Pages.Workshop
 {
@@ -58,9 +59,15 @@ namespace PlayVoice.Pages.Workshop
                 return;
             }
 
+            ClickRippleEffect.Start(RippleCanvas, e.GetPosition(RippleCanvas));
             ViewModel.Data.AnimationPlayAction = PlayClickAnimation;
             ViewModel.Data.AnimationStopAction = ResetAnimation;
             ViewModel.Data.Start_创意工坊播放();
+        }
+
+        private void RippleCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ClickRippleEffect.UpdateClip(RippleCanvas, e.NewSize);
         }
 
 

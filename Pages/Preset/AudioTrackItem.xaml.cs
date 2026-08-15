@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
+using PlayVoice.Pages;
 
 namespace PlayVoice.Pages.Preset;
 
@@ -51,7 +52,13 @@ public partial class AudioTrackItem : UserControl
         if (IsChildOf(DragHandle, originalSource)) return;
         if (IsChildOf(KeyboardKeyListBox, originalSource)) return;
 
+        ClickRippleEffect.Start(RippleCanvas, e.GetPosition(RippleCanvas));
         ViewModel.Data.Start();
+    }
+
+    private void RippleCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        ClickRippleEffect.UpdateClip(RippleCanvas, e.NewSize);
     }
 
     private void AudioTrackItem_Loaded(object sender, RoutedEventArgs e)

@@ -67,6 +67,11 @@
                 </Rectangle.RenderTransform>
             </Rectangle>
 
+            <Canvas x:Name="RippleCanvas"
+                    ClipToBounds="True"
+                    IsHitTestVisible="False"
+                    SizeChanged="RippleCanvas_SizeChanged"/>
+
             <Border>
                 <Grid>
                     <Grid.ColumnDefinitions>
