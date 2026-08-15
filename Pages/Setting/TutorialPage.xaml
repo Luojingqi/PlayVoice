@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:PlayVoice.Pages.Setting"
       xmlns:L="clr-namespace:PlayVoice.Resources.Language"
       xmlns:Hyperlink="clr-namespace:PlayVoice.Pages.Hyperlink"
+      xmlns:ExpandArrow="clr-namespace:PlayVoice.Pages.ExpandArrow"
       mc:Ignorable="d" >
 
     <Page.Resources>
@@ -94,24 +95,53 @@
                     Height="1" 
                     Background="{DynamicResource Border}" 
                     Margin="20,3"/>
-            <TextBlock Grid.Row="3" 
-                    Text="{L:Lan 教程2_标题}"
-                    Style="{StaticResource TextBlockMedium}"
-                    Margin="0,5,0,0"
-                    FontSize="15"/>
-            
-            <Grid Grid.Row="4" Margin="0,5,0,0">
+            <Grid Grid.Row="3"
+                  Background="Transparent"
+                  Cursor="Hand"
+                  HorizontalAlignment="Left"
+                  MouseLeftButtonUp="PresetIconsHeader_MouseLeftButtonUp">
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Setter Property="Margin" Value="0,1.5"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsExpanded, ElementName=PresetIconsExpandArrow}"
+                                         Value="False">
+                                <Setter Property="Margin" Value="0,10"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="24"/>
                 </Grid.ColumnDefinitions>
-                <Grid Grid.Column="0"
-                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                <ExpandArrow:ExpandArrow x:Name="PresetIconsExpandArrow"
+                                         Grid.Column="1"
+                                         IsExpanded="False"
+                                         ExpandedChanged="PresetIconsExpandArrow_ExpandedChanged"
+                                         HorizontalAlignment="Center"
+                                         VerticalAlignment="Center"/>
+                <TextBlock Grid.Column="0"
+                           Text="{L:Lan 教程2_标题}"
+                           Style="{StaticResource TextBlockMedium}"
+                           VerticalAlignment="Center"
+                           FontSize="15"/>
+            </Grid>
+
+            <Grid x:Name="PresetIconsPanel"
+                  Grid.Row="4"
+                  Height="0"
+                  Opacity="0"
+                  ClipToBounds="True"
+                  IsHitTestVisible="False">
+                <Grid.RenderTransform>
+                    <TranslateTransform Y="-6"/>
+                </Grid.RenderTransform>
+                <WrapPanel x:Name="PresetIconsContent"
+                           Margin="0,5,0,0"
+                           HorizontalAlignment="Center"
+                           ItemWidth="105">
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="32.5"/>
                         <RowDefinition Height="Auto"/>
@@ -126,13 +156,14 @@
                             HorizontalAlignment="Center"/>
                     <TextBlock Grid.Row="1" 
                             Text="{L:Lan 教程2_内容_选择}"
-                            TextWrapping="Wrap"
+                            TextWrapping="WrapWithOverflow"
+                            TextAlignment="Center"
+                            HorizontalAlignment="Stretch"
                             Style="{StaticResource TextBlockLight}"
-                            Margin="10,5"
+                            Margin="4,5"
                             FontSize="13.5"/>
                 </Grid>
-                <Grid Grid.Column="1" 
-                      VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="32.5"/>
                         <RowDefinition Height="Auto"/>
@@ -142,13 +173,14 @@
                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="1" 
                         Text="{L:Lan 教程2_内容_复制}"
-                        TextWrapping="Wrap"
+                        TextWrapping="WrapWithOverflow"
+                        TextAlignment="Center"
+                        HorizontalAlignment="Stretch"
                         Style="{StaticResource TextBlockLight}"
-                        Margin="10,5"
+                        Margin="4,5"
                         FontSize="13.5"/>
                 </Grid>
-                <Grid Grid.Column="2" 
-                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="32.5"/>
                         <RowDefinition Height="Auto"/>
@@ -158,13 +190,14 @@
                         HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="1" 
                                 Text="{L:Lan 教程2_内容_粘贴}"
-                                TextWrapping="Wrap"
+                                TextWrapping="WrapWithOverflow"
+                                TextAlignment="Center"
+                                HorizontalAlignment="Stretch"
                                 Style="{StaticResource TextBlockLight}"
-                                Margin="10,5"
+                                Margin="4,5"
                                 FontSize="13.5"/>
                 </Grid>
-                <Grid Grid.Column="3" 
-                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="32.5"/>
                         <RowDefinition Height="Auto"/>
@@ -174,13 +207,14 @@
                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="1" 
                             Text="{L:Lan 教程2_内容_导入}"
-                            TextWrapping="Wrap"
+                            TextWrapping="WrapWithOverflow"
+                            TextAlignment="Center"
+                            HorizontalAlignment="Stretch"
                             Style="{StaticResource TextBlockLight}"
-                            Margin="10,5"
+                            Margin="4,5"
                             FontSize="13.5"/>
                 </Grid>
-                <Grid Grid.Column="4" 
-                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="32.5"/>
                         <RowDefinition Height="Auto"/>
@@ -190,13 +224,14 @@
                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="1" 
                             Text="{L:Lan 教程2_内容_上传}"
-                            TextWrapping="Wrap"
+                            TextWrapping="WrapWithOverflow"
+                            TextAlignment="Center"
+                            HorizontalAlignment="Stretch"
                             Style="{StaticResource TextBlockLight}"
-                            Margin="10,5"
+                            Margin="4,5"
                             FontSize="13.5"/>
                 </Grid>
-                <Grid Grid.Column="5" 
-                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="32.5"/>
                         <RowDefinition Height="Auto"/>
@@ -206,13 +241,14 @@
                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="1" 
                             Text="{L:Lan 教程2_内容_删除}"
-                            TextWrapping="Wrap"
+                            TextWrapping="WrapWithOverflow"
+                            TextAlignment="Center"
+                            HorizontalAlignment="Stretch"
                             Style="{StaticResource TextBlockLight}"
-                            Margin="10,5"
+                            Margin="4,5"
                             FontSize="13.5"/>
                 </Grid>
-                <Grid Grid.Column="6" 
-                        VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="32.5"/>
                         <RowDefinition Height="Auto"/>
@@ -222,11 +258,14 @@
                             HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <TextBlock Grid.Row="1" 
                             Text="{L:Lan 教程2_内容_文件}"
-                            TextWrapping="Wrap"
+                            TextWrapping="WrapWithOverflow"
+                            TextAlignment="Center"
+                            HorizontalAlignment="Stretch"
                             Style="{StaticResource TextBlockLight}"
-                            Margin="10,5"
+                            Margin="4,5"
                             FontSize="13.5"/>
                 </Grid>
+                </WrapPanel>
             </Grid>
 
             <Border Grid.Row="5" 

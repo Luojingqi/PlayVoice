@@ -760,7 +760,7 @@ O</value>
     <value>OK</value>
   </data>
   <data name="最大同时播放" xml:space="preserve">
-    <value>Maximum Simultaneous Playback</value>
+    <value>Playback Limit</value>
   </data>
   <data name="最大同时播放_说明" xml:space="preserve">
     <value>Sets the maximum number of audio tracks that can play simultaneously. When the limit is exceeded, the earliest track is stopped.</value>

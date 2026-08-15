@@ -227,7 +227,7 @@
   <data name="输入游戏预设名称" xml:space="preserve"><value>Name des Spiele-Presets...</value></data>
   <data name="删除游戏预设" xml:space="preserve"><value>Spiele-Preset löschen</value></data>
   <data name="游戏预设已存在" xml:space="preserve"><value>Spiele-Preset ist bereits vorhanden</value></data>
-  <data name="最大同时播放" xml:space="preserve"><value>Maximale gleichzeitige Wiedergabe</value></data>
+  <data name="最大同时播放" xml:space="preserve"><value>Wiedergabelimit</value></data>
   <data name="最大同时播放_说明" xml:space="preserve"><value>Legt die maximale Anzahl gleichzeitig wiedergegebener Audiodateien fest. Beim Überschreiten des Limits wird die zuerst gestartete Wiedergabe beendet.</value></data>
   <data name="启动准备" xml:space="preserve"><value>Startvorbereitung</value></data>
   <data name="未就绪" xml:space="preserve"><value>Nicht bereit</value></data>
