@@ -7,6 +7,7 @@ using PlayVoice.Pages.Preset;
 using PlayVoice.Resources.Language;
 using PlayVoice.Resources.Themes;
 using Steamworks;
+using System.Windows;
 
 namespace PlayVoice;
 
@@ -334,7 +335,7 @@ internal class GlobalData
         startupFailureRequirementKey = null;
         if (automaticRunEnabled && !run)
             TryStartAudio();
-        StartupRequirementsChanged?.Invoke();
+        RaiseStartupRequirementsChanged();
     }
 
     public void StopForEquipmentChange()
@@ -352,7 +353,7 @@ internal class GlobalData
         if (value)
         {
             bool started = TryStartAudio();
-            StartupRequirementsChanged?.Invoke();
+            RaiseStartupRequirementsChanged();
             return started;
         }
 
@@ -381,25 +382,95 @@ internal class GlobalData
         try
         {
             audioProxy.Stop();
-            RunStateChanged?.Invoke(false);
+            RaiseBooleanStateChanged(
+                RunStateChanged,
+                false,
+                "GlobalData.RunState");
             return stoppedSuccessfully;
         }
         catch (Exception exception)
         {
             AppLog.Error(exception, "停止音频服务失败。", "GlobalData.Audio");
-            RunStateChanged?.Invoke(false);
+            RaiseBooleanStateChanged(
+                RunStateChanged,
+                false,
+                "GlobalData.RunState");
             return false;
+        }
+    }
+
+    internal void HandleAudioRuntimeFailure(Exception exception, string source)
+    {
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher != null && !dispatcher.CheckAccess())
+        {
+            if (!dispatcher.HasShutdownStarted)
+            {
+                dispatcher.BeginInvoke(
+                    () => HandleAudioRuntimeFailure(exception, source));
+            }
+            return;
+        }
+
+        AppLog.Error(
+            exception,
+            "音频设备在运行期间失效，音频服务已停止。",
+            source);
+
+        bool wasRunning = run;
+        if (wasRunning)
+        {
+            TryRun(false);
+        }
+        else
+        {
+            try
+            {
+                audioProxy.Stop();
+            }
+            catch (Exception stopException)
+            {
+                AppLog.Error(
+                    stopException,
+                    "清理失效的音频设备时出错。",
+                    "GlobalData.AudioRuntimeFailure");
+            }
+        }
+
+        startupFailureRequirementKey = "音频服务启动失败，请检查设备";
+        RaiseStartupRequirementsChanged();
+
+        if (MainWindow.Inst?.IsInitialized == true)
+        {
+            try
+            {
+                MainWindow.Inst.AddNotification(
+                    () => LanguageManager.Inst.GetString("通知"),
+                    () => LanguageManager.Inst.GetString(
+                        "音频服务启动失败，请检查设备"),
+                    Pages.LabelStatus.Error,
+                    5);
+            }
+            catch (Exception notificationException)
+            {
+                AppLog.Error(
+                    notificationException,
+                    "显示音频设备失效通知失败。",
+                    "GlobalData.AudioRuntimeFailure");
+            }
         }
     }
 
     private bool TryStartAudio()
     {
         if (run) return true;
-        if (isStarting || !AreStartupRequirementsSatisfied()) return false;
+        if (isStarting) return false;
 
         isStarting = true;
         try
         {
+            if (!AreStartupRequirementsSatisfied()) return false;
+
             audioProxy.Start();
             run = true;
 
@@ -414,7 +485,10 @@ internal class GlobalData
             resumeGoEarAudioAfterStart = false;
             resumeGoEarInAfterStart = false;
             startupFailureRequirementKey = null;
-            RunStateChanged?.Invoke(true);
+            RaiseBooleanStateChanged(
+                RunStateChanged,
+                true,
+                "GlobalData.RunState");
             return true;
         }
         catch (Exception exception)
@@ -455,12 +529,53 @@ internal class GlobalData
                     "清理启动失败的音频服务时出错。",
                     "GlobalData.Audio");
             }
-            RunStateChanged?.Invoke(false);
+            RaiseBooleanStateChanged(
+                RunStateChanged,
+                false,
+                "GlobalData.RunState");
             return false;
         }
         finally
         {
             isStarting = false;
+        }
+    }
+
+    private void RaiseStartupRequirementsChanged()
+    {
+        if (StartupRequirementsChanged == null) return;
+        foreach (Action handler in StartupRequirementsChanged.GetInvocationList())
+        {
+            try
+            {
+                handler();
+            }
+            catch (Exception exception)
+            {
+                AppLog.Error(
+                    exception,
+                    "刷新音频启动要求失败。",
+                    "GlobalData.StartupRequirements");
+            }
+        }
+    }
+
+    private static void RaiseBooleanStateChanged(
+        Action<bool> handlers,
+        bool state,
+        string source)
+    {
+        if (handlers == null) return;
+        foreach (Action<bool> handler in handlers.GetInvocationList())
+        {
+            try
+            {
+                handler(state);
+            }
+            catch (Exception exception)
+            {
+                AppLog.Error(exception, "处理音频状态事件失败。", source);
+            }
         }
     }
     private bool run = false;
@@ -480,7 +595,10 @@ internal class GlobalData
             return false;
         }
         goEar_Audio = value;
-        GoEar_AudioStateChanged?.Invoke(goEar_Audio);
+        RaiseBooleanStateChanged(
+            GoEar_AudioStateChanged,
+            goEar_Audio,
+            "GlobalData.GoEarAudioState");
         return true;
     }
     public event Action<bool> GoEar_AudioStateChanged;
@@ -499,7 +617,10 @@ internal class GlobalData
             return false;
         }
         goEar_In = value;
-        GoEar_InStateChanged?.Invoke(goEar_In);
+        RaiseBooleanStateChanged(
+            GoEar_InStateChanged,
+            goEar_In,
+            "GlobalData.GoEarInputState");
         return true;
     }
     public event Action<bool> GoEar_InStateChanged;

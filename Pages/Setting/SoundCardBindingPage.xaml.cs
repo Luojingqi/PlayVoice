@@ -29,105 +29,61 @@ public partial class SoundCardBindingPage : Page
         LanguageManager.Inst.CultureChanged += SetNullItemName;
         var equipment = GlobalData.Inst.Equipment;
         PhysicalLoudspeakerModel = new(this, PhysicalLoudspeakerComboBox, equipment.LoudspeakerDic, nullItem,
-            (item) =>
-            {
-                GlobalData.Inst.Equipment.PhysicalLoudspeaker = item;
-            },
-            equipment.GetLoudspeaker);
+            equipment.TrySetPhysicalLoudspeaker,
+            equipment.GetLoudspeaker,
+            () => equipment.PhysicalLoudspeaker);
         equipment.PhysicalLoudspeakerOnChanged += PhysicalLoudspeakerModel.OnDeviceChanged;
         equipment.OnLoudspeakerAdd += PhysicalLoudspeakerModel.OnDeviceAdd;
         equipment.OnLoudspeakerRemove += PhysicalLoudspeakerModel.OnDeviceRemove;
         equipment.PhysicalLoudspeakerStateChange += PhysicalLoudspeakerModel.SetState;
         PhysicalLoudspeakerModel.SetState(equipment.PhysicalLoudspeakerState);
         LanguageManager.Inst.CultureChanged += PhysicalLoudspeakerModel.UpdateLanguage;
-        if (equipment.PhysicalLoudspeaker != null)
-        {
-            int index = 1;
-            foreach (var device in equipment.LoudspeakerDic)
-                if (device.Key == equipment.PhysicalLoudspeaker.ID)
-                {
-                    PhysicalLoudspeakerModel.DropDownList.IsSyncing = true;
-                    PhysicalLoudspeakerModel.DropDownList.SelectedIndex = index;
-                    PhysicalLoudspeakerModel.DropDownList.IsSyncing = false;
-                }
-                else index++;
-        }
+        PhysicalLoudspeakerModel.OnDeviceChanged(
+            null,
+            equipment.PhysicalLoudspeaker);
 
         VirtualLoudspeakerModel = new(this, VirtualLoudspeakerComboBox, equipment.LoudspeakerDic, nullItem,
-            (item) =>
-            {
-                GlobalData.Inst.Equipment.VirtualLoudspeaker = item;
-            },
-            equipment.GetLoudspeaker);
+            equipment.TrySetVirtualLoudspeaker,
+            equipment.GetLoudspeaker,
+            () => equipment.VirtualLoudspeaker);
         equipment.VirtualLoudspeakerOnChanged += VirtualLoudspeakerModel.OnDeviceChanged;
         equipment.OnLoudspeakerAdd += VirtualLoudspeakerModel.OnDeviceAdd;
         equipment.OnLoudspeakerRemove += VirtualLoudspeakerModel.OnDeviceRemove;
         equipment.VirtualLoudspeakerStateChange += VirtualLoudspeakerModel.SetState;
         VirtualLoudspeakerModel.SetState(equipment.VirtualLoudspeakerState);
         LanguageManager.Inst.CultureChanged += VirtualLoudspeakerModel.UpdateLanguage;
-        if (equipment.VirtualLoudspeaker != null)
-        {
-            int index = 1;
-            foreach (var device in equipment.LoudspeakerDic)
-                if (device.Key == equipment.VirtualLoudspeaker.ID)
-                {
-                    VirtualLoudspeakerModel.DropDownList.IsSyncing = true;
-                    VirtualLoudspeakerModel.DropDownList.SelectedIndex = index;
-                    VirtualLoudspeakerModel.DropDownList.IsSyncing = false;
-                }
-                else index++;
-        }
+        VirtualLoudspeakerModel.OnDeviceChanged(
+            null,
+            equipment.VirtualLoudspeaker);
 
         PhysicalMicrophoneModel = new(this, PhysicalMicrophoneComboBox, equipment.MicrophoneDic, nullItem,
-            (item) =>
-            {
-                GlobalData.Inst.Equipment.PhysicalMicrophone = item;
-            },
-            equipment.GetMicrophone);
+            equipment.TrySetPhysicalMicrophone,
+            equipment.GetMicrophone,
+            () => equipment.PhysicalMicrophone);
         equipment.PhysicalMicrophoneOnChanged += PhysicalMicrophoneModel.OnDeviceChanged;
         equipment.OnMicrophoneAdd += PhysicalMicrophoneModel.OnDeviceAdd;
         equipment.OnMicrophoneRemove += PhysicalMicrophoneModel.OnDeviceRemove;
         equipment.PhysicalMicrophoneStateChange += PhysicalMicrophoneModel.SetState;
         PhysicalMicrophoneModel.SetState(equipment.PhysicalMicrophoneState);
         LanguageManager.Inst.CultureChanged += PhysicalMicrophoneModel.UpdateLanguage;
-        if (equipment.PhysicalMicrophone != null)
-        {
-            int index = 1;
-            foreach (var device in equipment.MicrophoneDic)
-                if (device.Key == equipment.PhysicalMicrophone.ID)
-                {
-                    PhysicalMicrophoneModel.DropDownList.IsSyncing = true;
-                    PhysicalMicrophoneModel.DropDownList.SelectedIndex = index;
-                    PhysicalMicrophoneModel.DropDownList.IsSyncing = false;
-                }
-                else index++;
-        }
+        PhysicalMicrophoneModel.OnDeviceChanged(
+            null,
+            equipment.PhysicalMicrophone);
 
 
         VirtualMicrophoneModel = new(this, VirtualMicrophoneComboBox, equipment.MicrophoneDic, nullItem,
-            (item) =>
-            {
-                GlobalData.Inst.Equipment.VirtualMicrophone = item;
-            },
-            equipment.GetMicrophone);
+            equipment.TrySetVirtualMicrophone,
+            equipment.GetMicrophone,
+            () => equipment.VirtualMicrophone);
         equipment.VirtualMicrophoneOnChanged += VirtualMicrophoneModel.OnDeviceChanged;
         equipment.OnMicrophoneAdd += VirtualMicrophoneModel.OnDeviceAdd;
         equipment.OnMicrophoneRemove += VirtualMicrophoneModel.OnDeviceRemove;
         equipment.VirtualMicrophoneStateChange += VirtualMicrophoneModel.SetState;
         VirtualMicrophoneModel.SetState(equipment.VirtualMicrophoneState);
         LanguageManager.Inst.CultureChanged += VirtualMicrophoneModel.UpdateLanguage;
-        if (equipment.VirtualMicrophone != null)
-        {
-            int index = 1;
-            foreach (var device in equipment.MicrophoneDic)
-                if (device.Key == equipment.VirtualMicrophone.ID)
-                {
-                    VirtualMicrophoneModel.DropDownList.IsSyncing = true;
-                    VirtualMicrophoneModel.DropDownList.SelectedIndex = index;
-                    VirtualMicrophoneModel.DropDownList.IsSyncing = false;
-                }
-                else index++;
-        }
+        VirtualMicrophoneModel.OnDeviceChanged(
+            null,
+            equipment.VirtualMicrophone);
     }
 
     private void SetNullItemName(System.Globalization.CultureInfo culture, LanguageManager.LanguageInfo languageInfo)

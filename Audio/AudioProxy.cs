@@ -119,11 +119,6 @@ internal class AudioProxy
 
     public void Init()
     {
-        GlobalData.Inst.Equipment.PhysicalLoudspeakerOnChanged += (device0, device1) =>
-        {
-            if (device0 != null) StopPLEquipment();
-            if (device1 != null) StartPLEquipment();
-        };
         GlobalData.Inst.GoEar_InStateChanged += (value) =>
         {
             if (value)
@@ -154,24 +149,76 @@ internal class AudioProxy
     }
 
 
-    private void StartPLEquipment()
+    public bool TrySwitchPhysicalLoudspeaker(
+        MMDevice device,
+        out Exception exception)
     {
-        MMDevice device = GlobalData.Inst.Equipment.PhysicalLoudspeaker;
-        WaveFormat targetFormat = device.AudioClient.MixFormat;
-        physicalLoudspeakerWaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(targetFormat.SampleRate, targetFormat.Channels);
-        physicalLoudspeakerMixer = new MixingSampleProvider(physicalLoudspeakerWaveFormat) { ReadFully = true };
-        physicalLoudspeakerOutput = new WasapiOut(device, AudioClientShareMode.Shared, false, 100);
-        physicalLoudspeakerVolume = new VolumeSampleProvider(physicalLoudspeakerMixer);
-        physicalLoudspeakerVolume.Volume = (float)AudioData.DecibelToVolume(globalDecibel);
-        audioMixToPL = new MixingSampleProvider(physicalLoudspeakerWaveFormat) { ReadFully = true };
-        audioVolumeToPL = new VolumeSampleProvider(audioMixToPL);
-        audioVolumeToPL.Volume = (float)AudioData.DecibelToVolume(audioEarDecibel);
-        audioToPLMetering = new MeteringSampleProvider(audioVolumeToPL);
-        SetStreamVolume(audioToPLMetering, SampleEnum.AutioToPL);
-        physicalLoudspeakerMixer.AddMixerInput(audioToPLMetering);
+        exception = null;
+        if (device == null)
+        {
+            StopPLEquipment();
+            return true;
+        }
 
-        physicalLoudspeakerOutput.Init(physicalLoudspeakerVolume);
-        physicalLoudspeakerOutput.Play();
+        WasapiOut preparedOutput = null;
+        try
+        {
+            WaveFormat targetFormat = device.AudioClient.MixFormat;
+            WaveFormat preparedWaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(
+                targetFormat.SampleRate,
+                targetFormat.Channels);
+            var preparedMixer = new MixingSampleProvider(preparedWaveFormat)
+            {
+                ReadFully = true
+            };
+            var preparedPhysicalVolume = new VolumeSampleProvider(preparedMixer)
+            {
+                Volume = (float)AudioData.DecibelToVolume(globalDecibel)
+            };
+            var preparedAudioMixer = new MixingSampleProvider(preparedWaveFormat)
+            {
+                ReadFully = true
+            };
+            var preparedAudioVolume = new VolumeSampleProvider(preparedAudioMixer)
+            {
+                Volume = (float)AudioData.DecibelToVolume(audioEarDecibel)
+            };
+            var preparedMetering = new MeteringSampleProvider(preparedAudioVolume);
+            SetStreamVolume(preparedMetering, SampleEnum.AutioToPL);
+            preparedMixer.AddMixerInput(preparedMetering);
+
+            preparedOutput = new WasapiOut(
+                device,
+                AudioClientShareMode.Shared,
+                false,
+                100);
+            preparedOutput.PlaybackStopped += PhysicalLoudspeakerOutput_PlaybackStopped;
+            preparedOutput.Init(preparedPhysicalVolume);
+            preparedOutput.Play();
+
+            StopPLEquipment();
+            physicalLoudspeakerWaveFormat = preparedWaveFormat;
+            physicalLoudspeakerMixer = preparedMixer;
+            physicalLoudspeakerVolume = preparedPhysicalVolume;
+            audioMixToPL = preparedAudioMixer;
+            audioVolumeToPL = preparedAudioVolume;
+            audioToPLMetering = preparedMetering;
+            physicalLoudspeakerOutput = preparedOutput;
+            preparedOutput = null;
+            return true;
+        }
+        catch (Exception startException)
+        {
+            exception = startException;
+            return false;
+        }
+        finally
+        {
+            DisposeOutputSafely(
+                preparedOutput,
+                "清理初始化失败的物理扬声器输出时出错。",
+                "AudioProxy.PhysicalLoudspeaker.Prepare");
+        }
     }
 
     private void StopPLEquipmentClear()
@@ -186,15 +233,27 @@ internal class AudioProxy
         StopPLEquipmentClear();
         var output = physicalLoudspeakerOutput;
         physicalLoudspeakerOutput = null;
-        if (output == null) return;
+        if (output != null)
+            output.PlaybackStopped -= PhysicalLoudspeakerOutput_PlaybackStopped;
+        DisposeOutputSafely(
+            output,
+            "停止或释放物理扬声器输出失败。",
+            "AudioProxy.PhysicalLoudspeaker.Stop");
+    }
 
+    private static void DisposeOutputSafely(
+        WasapiOut output,
+        string message,
+        string source)
+    {
+        if (output == null) return;
         try
         {
             output.Stop();
         }
         catch (Exception exception)
         {
-            AppLog.Error(exception, "停止物理扬声器输出失败。", "AudioProxy.Stop");
+            AppLog.Error(exception, message, source);
         }
         try
         {
@@ -202,7 +261,7 @@ internal class AudioProxy
         }
         catch (Exception exception)
         {
-            AppLog.Error(exception, "释放物理扬声器输出失败。", "AudioProxy.Dispose");
+            AppLog.Error(exception, message, source);
         }
     }
 
@@ -235,6 +294,7 @@ internal class AudioProxy
         // 初始化麦克风采集
         WaveFormat targetFormat = equipment.PhysicalMicrophone.AudioClient.MixFormat;
         physicalMicrophoneCapture = new WasapiCapture(equipment.PhysicalMicrophone);
+        physicalMicrophoneCapture.RecordingStopped += PhysicalMicrophoneCapture_RecordingStopped;
         physicalMicrophoneWaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(targetFormat.SampleRate, targetFormat.Channels);
         physicalMicrophoneCapture.WaveFormat = physicalMicrophoneWaveFormat;
         physicalMicrophoneCapture.DataAvailable += (sender, e) =>
@@ -277,6 +337,7 @@ internal class AudioProxy
 
 
         virtualLoudspeakerOutput = new WasapiOut(equipment.VirtualLoudspeaker, AudioClientShareMode.Shared, false, 100);
+        virtualLoudspeakerOutput.PlaybackStopped += VirtualLoudspeakerOutput_PlaybackStopped;
 
         virtualLoudspeakerOutput.Init(virtualLoudspeakerMetering);
         virtualLoudspeakerOutput.Play();
@@ -370,6 +431,7 @@ internal class AudioProxy
         physicalMicrophoneCapture = null;
         if (capture != null)
         {
+            capture.RecordingStopped -= PhysicalMicrophoneCapture_RecordingStopped;
             try
             {
                 capture.StopRecording();
@@ -392,6 +454,7 @@ internal class AudioProxy
         virtualLoudspeakerOutput = null;
         if (output != null)
         {
+            output.PlaybackStopped -= VirtualLoudspeakerOutput_PlaybackStopped;
             try
             {
                 output.Stop();
@@ -412,6 +475,84 @@ internal class AudioProxy
 
         Vol(MainWindow.Inst.IL, MainWindow.Inst.IR, 0, 0);
         Vol(MainWindow.Inst.OL, MainWindow.Inst.OR, 0, 0);
+    }
+
+    private void PhysicalLoudspeakerOutput_PlaybackStopped(
+        object sender,
+        StoppedEventArgs eventArgs)
+    {
+        if (eventArgs.Exception == null) return;
+        DispatchRuntimeFailure(
+            () => ReferenceEquals(sender, physicalLoudspeakerOutput),
+            eventArgs.Exception,
+            "AudioProxy.PhysicalLoudspeaker.Runtime",
+            () => GlobalData.Inst.Equipment.PhysicalLoudspeaker = null);
+    }
+
+    private void VirtualLoudspeakerOutput_PlaybackStopped(
+        object sender,
+        StoppedEventArgs eventArgs)
+    {
+        if (eventArgs.Exception == null) return;
+        DispatchRuntimeFailure(
+            () => ReferenceEquals(sender, virtualLoudspeakerOutput),
+            eventArgs.Exception,
+            "AudioProxy.VirtualLoudspeaker.Runtime");
+    }
+
+    private void PhysicalMicrophoneCapture_RecordingStopped(
+        object sender,
+        StoppedEventArgs eventArgs)
+    {
+        if (eventArgs.Exception == null) return;
+        DispatchRuntimeFailure(
+            () => ReferenceEquals(sender, physicalMicrophoneCapture),
+            eventArgs.Exception,
+            "AudioProxy.PhysicalMicrophone.Runtime");
+    }
+
+    private static void DispatchRuntimeFailure(
+        Func<bool> isCurrentDevice,
+        Exception exception,
+        string source,
+        Action afterFailure = null)
+    {
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher == null || dispatcher.HasShutdownStarted)
+        {
+            AppLog.Error(
+                exception,
+                "音频设备在运行期间失效。",
+                source);
+            return;
+        }
+
+        try
+        {
+            dispatcher.BeginInvoke(() =>
+            {
+                try
+                {
+                    if (!isCurrentDevice()) return;
+                    GlobalData.Inst.HandleAudioRuntimeFailure(exception, source);
+                    afterFailure?.Invoke();
+                }
+                catch (Exception handlingException)
+                {
+                    AppLog.Error(
+                        handlingException,
+                        "处理运行期音频设备失效事件失败。",
+                        source);
+                }
+            });
+        }
+        catch (Exception dispatchException)
+        {
+            AppLog.Error(
+                dispatchException,
+                "调度运行期音频设备失效事件失败。",
+                source);
+        }
     }
 
 

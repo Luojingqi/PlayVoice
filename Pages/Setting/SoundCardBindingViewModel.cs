@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using NAudio.CoreAudioApi;
+using PlayVoice.Diagnostics;
 using PlayVoice.Pages.DropDownList;
 using PlayVoice.Resources.Language;
 using System.Globalization;
@@ -51,22 +52,25 @@ public partial class SoundCardBindingPageViewModel : ObservableObject
         public DropDownList.DropDownList DropDownList;
 
         private SoundCardBindingPage soundCardBinding;
-        private Action<MMDevice> setDeviceAction;
+        private Func<MMDevice, bool> setDeviceAction;
         private Func<string, MMDevice> getDeviceAction;
+        private Func<MMDevice> getCurrentDeviceAction;
 
         public DropDownListModel(
             SoundCardBindingPage soundCardBinding,
             DropDownList.DropDownList dropDownList,
             Dictionary<string, string> initDeviceDic,
             ComboBoxItemModel nullItem,
-            Action<MMDevice> setDeviceAction,
-            Func<string, MMDevice> getDeviceAction)
+            Func<MMDevice, bool> setDeviceAction,
+            Func<string, MMDevice> getDeviceAction,
+            Func<MMDevice> getCurrentDeviceAction)
         {
             this.soundCardBinding = soundCardBinding;
             DropDownList = dropDownList;
             ItemSource = new();
             this.setDeviceAction = setDeviceAction;
             this.getDeviceAction = getDeviceAction;
+            this.getCurrentDeviceAction = getCurrentDeviceAction;
             var equipment = GlobalData.Inst.Equipment;
             DropDownList.DisplayMemberPath = "Name";
             var itemsSource = ItemSource.GetNowItemsSource();
@@ -83,9 +87,10 @@ public partial class SoundCardBindingPageViewModel : ObservableObject
             var nowItemsSource = ItemSource.GetNowItemsSource();
             if (nowItemsSource.TryGetValue(id, out var removeItem))
             {
-                var selectedItem = (ComboBoxItemModel)DropDownList.SelectedItem;
+                var selectedItem = DropDownList.SelectedItem as ComboBoxItemModel;
                 nowItemsSource.Remove(id);
                 var nextItemsSource = ItemSource.GetNextItemsSource();
+                nextItemsSource.Clear();
 
                 bool success = false;
                 int index = 0;
@@ -93,7 +98,7 @@ public partial class SoundCardBindingPageViewModel : ObservableObject
                 {
                     if (success == false)
                     {
-                        if (kv.Value.ID == selectedItem.ID)
+                        if (selectedItem != null && kv.Value.ID == selectedItem.ID)
                             success = true;
                         else index++;
                     }
@@ -103,8 +108,8 @@ public partial class SoundCardBindingPageViewModel : ObservableObject
                     index = 0;
                 DropDownList.IsSyncing = true;
                 DropDownList.ItemsSource = nextItemsSource.Values;
-                DropDownList.IsSyncing = false;
                 DropDownList.SelectedIndex = index;
+                DropDownList.IsSyncing = false;
                 nowItemsSource.Clear();
             }
         }
@@ -112,6 +117,7 @@ public partial class SoundCardBindingPageViewModel : ObservableObject
         {
             var nowItemsSource = ItemSource.GetNowItemsSource();
             var nextItemsSource = ItemSource.GetNextItemsSource();
+            nextItemsSource.Clear();
             foreach (var kv in nowItemsSource)
                 nextItemsSource.Add(kv.Key, kv.Value);
             nextItemsSource.Add(id, new() { ID = id, Name = name });
@@ -129,14 +135,70 @@ public partial class SoundCardBindingPageViewModel : ObservableObject
         {
             var addeItem = (ComboBoxItemModel)arg2;
             if (addeItem == null) return;
-            if (!string.IsNullOrEmpty(addeItem.ID))
+
+            MMDevice device = null;
+            try
             {
-                setDeviceAction.Invoke(getDeviceAction(addeItem.ID));
+                if (!string.IsNullOrEmpty(addeItem.ID))
+                {
+                    device = getDeviceAction(addeItem.ID)
+                        ?? throw new InvalidOperationException(
+                            $"设备在绑定前已不可用：{addeItem.ID}");
+                }
+
+                bool accepted = setDeviceAction(device);
+                device = null;
+                if (!accepted)
+                {
+                    RestoreCurrentSelection();
+                    ShowBindingFailureNotification();
+                }
             }
-            else
+            catch (Exception exception)
             {
-                setDeviceAction.Invoke(null);
+                try
+                {
+                    device?.Dispose();
+                }
+                catch (Exception disposeException)
+                {
+                    AppLog.Warning(
+                        disposeException,
+                        "释放绑定失败的候选设备时出错。",
+                        "SoundCardBinding.Selection");
+                }
+
+                AppLog.Error(
+                    exception,
+                    "选择音频设备失败，已恢复原绑定。",
+                    "SoundCardBinding.Selection");
+                RestoreCurrentSelection();
+                ShowBindingFailureNotification();
             }
+        }
+
+        private void RestoreCurrentSelection()
+        {
+            try
+            {
+                OnDeviceChanged(null, getCurrentDeviceAction());
+            }
+            catch (Exception exception)
+            {
+                AppLog.Error(
+                    exception,
+                    "恢复音频设备下拉框选择失败。",
+                    "SoundCardBinding.Selection");
+            }
+        }
+
+        private static void ShowBindingFailureNotification()
+        {
+            MainWindow.Inst.AddNotification(
+                () => LanguageManager.Inst.GetString("通知"),
+                () => LanguageManager.Inst.GetString("音频服务启动失败，请检查设备"),
+                LabelStatus.Error,
+                5);
         }
         /// <summary>
         /// Data=>ui
@@ -144,35 +206,51 @@ public partial class SoundCardBindingPageViewModel : ObservableObject
         public void OnDeviceChanged(MMDevice removeItem, MMDevice addItem)
         {
             DropDownList.IsSyncing = true;
-            if (addItem == null)
-                DropDownList.SelectedIndex = 0;
-            else
+            try
             {
-                var nowItemsSource = ItemSource.GetNowItemsSource();
+                if (addItem == null)
+                {
+                    DropDownList.SelectedIndex = 0;
+                    return;
+                }
 
-                if (nowItemsSource.ContainsKey(addItem.ID))
+                string deviceID = addItem.ID;
+                var nowItemsSource = ItemSource.GetNowItemsSource();
+                if (nowItemsSource.ContainsKey(deviceID))
                 {
-                    int index = 0;
-                    foreach (var kv in nowItemsSource)
-                        if (kv.Value.ID == addItem.ID)
-                        {
-                            DropDownList.SelectedIndex = index;
-                            break;
-                        }
-                        else index++;
+                    DropDownList.SelectedIndex = nowItemsSource.Values
+                        .TakeWhile(item => item.ID != deviceID)
+                        .Count();
+                    return;
                 }
-                else
-                {
-                    var nextItemSource = ItemSource.GetNextItemsSource();
-                    foreach (var kv in nowItemsSource)
-                        nextItemSource.Add(kv.Key, kv.Value);
-                    nextItemSource.Add(addItem.ID, new ComboBoxItemModel { Name = addItem.FriendlyName, ID = addItem.ID });
-                    DropDownList.ItemsSource = nextItemSource.Values;
-                    DropDownList.SelectedIndex = nextItemSource.Count - 1;
-                    nowItemsSource.Clear();
-                }
+
+                var nextItemSource = ItemSource.GetNextItemsSource();
+                nextItemSource.Clear();
+                foreach (var kv in nowItemsSource)
+                    nextItemSource.Add(kv.Key, kv.Value);
+                nextItemSource.Add(
+                    deviceID,
+                    new ComboBoxItemModel
+                    {
+                        Name = addItem.FriendlyName,
+                        ID = deviceID
+                    });
+                DropDownList.ItemsSource = nextItemSource.Values;
+                DropDownList.SelectedIndex = nextItemSource.Count - 1;
+                nowItemsSource.Clear();
             }
-            DropDownList.IsSyncing = false;
+            catch (Exception exception)
+            {
+                AppLog.Error(
+                    exception,
+                    "同步音频设备下拉框失败。",
+                    "SoundCardBinding.DeviceChanged");
+                DropDownList.SelectedIndex = 0;
+            }
+            finally
+            {
+                DropDownList.IsSyncing = false;
+            }
         }
 
         public void UpdateLanguage(CultureInfo culture, LanguageManager.LanguageInfo languageInfo)
@@ -184,6 +262,7 @@ public partial class SoundCardBindingPageViewModel : ObservableObject
         {
             var nowItemsSource = ItemSource.GetNowItemsSource();
             var nextItemsSource = ItemSource.GetNextItemsSource();
+            nextItemsSource.Clear();
             foreach (var kv in nowItemsSource)
                 nextItemsSource.Add(kv.Key, kv.Value);
             int selectedIndex = DropDownList.SelectedIndex;

@@ -16,58 +16,141 @@ internal class EquipmentLoder
     public EquipmentLoder(Equipment equipment)
     {
         this.equipment = equipment;
-        Update();
+        UpdateSafely();
         Thread thread = new(() =>
         {
             while (true)
             {
                 Thread.Sleep(UpdateTimeInterval);
-                Application.Current?.Dispatcher.Invoke(Update);
+                var dispatcher = Application.Current?.Dispatcher;
+                if (dispatcher == null || dispatcher.HasShutdownStarted)
+                    return;
+
+                try
+                {
+                    dispatcher.Invoke(UpdateSafely);
+                }
+                catch (TaskCanceledException)
+                {
+                    return;
+                }
+                catch (InvalidOperationException) when (dispatcher.HasShutdownStarted)
+                {
+                    return;
+                }
+                catch (Exception exception)
+                {
+                    AppLog.Error(
+                        exception,
+                        "调度音频设备轮询失败，将在下次轮询重试。",
+                        "EquipmentLoader.Polling");
+                }
             }
-        });
+        })
+        {
+            IsBackground = true,
+            Name = "PlayVoice.AudioDevicePolling"
+        };
         thread.Start();
     }
-    private Dictionary<string, string> newLoudspeakerDic = new();
-
-    private Dictionary<string, string> newMicrophoneDic = new();
 
     private bool? isVBCableInstalled;
 
     public int UpdateTimeInterval { get; set; } = 500;
 
+    private void UpdateSafely()
+    {
+        try
+        {
+            Update();
+        }
+        catch (Exception exception)
+        {
+            AppLog.Error(
+                exception,
+                "音频设备轮询失败，将在下次轮询重试。",
+                "EquipmentLoader.Update");
+        }
+    }
+
     private void Update()
     {
+        var newLoudspeakerDic = new Dictionary<string, string>();
+        var newMicrophoneDic = new Dictionary<string, string>();
+        bool snapshotComplete = true;
         var devices = enumerator.EnumerateAudioEndPoints(DataFlow.All, DeviceState.Active);
         foreach (var device in devices)
         {
-            switch (device.DataFlow)
+            try
             {
-                case DataFlow.Render:
-                    newLoudspeakerDic.Add(device.ID, device.FriendlyName);
-                    break;
-                case DataFlow.Capture:
-                    newMicrophoneDic.Add(device.ID, device.FriendlyName);
-                    break;
+                switch (device.DataFlow)
+                {
+                    case DataFlow.Render:
+                        newLoudspeakerDic[device.ID] = device.FriendlyName;
+                        break;
+                    case DataFlow.Capture:
+                        newMicrophoneDic[device.ID] = device.FriendlyName;
+                        break;
+                }
             }
-            device.Dispose();
+            catch (Exception exception)
+            {
+                snapshotComplete = false;
+                AppLog.Warning(
+                    exception,
+                    "读取音频设备信息失败，本轮不会应用设备变化。",
+                    "EquipmentLoader.Enumerate");
+            }
+            finally
+            {
+                try
+                {
+                    device.Dispose();
+                }
+                catch (Exception exception)
+                {
+                    AppLog.Warning(
+                        exception,
+                        "释放枚举到的音频设备失败。",
+                        "EquipmentLoader.Enumerate");
+                }
+            }
         }
+        if (!snapshotComplete) return;
+
         foreach (var kv in equipment.LoudspeakerDic)
             if (!newLoudspeakerDic.ContainsKey(kv.Key))
-                OnLoudspeakerRemove?.Invoke(kv.Key, kv.Value);
+                InvokeDeviceEventSafely(
+                    OnLoudspeakerRemove,
+                    kv.Key,
+                    kv.Value,
+                    "EquipmentLoader.LoudspeakerRemoved");
 
 
         foreach (var kv in equipment.MicrophoneDic)
             if (!newMicrophoneDic.ContainsKey(kv.Key))
-                OnMicrophoneRemove?.Invoke(kv.Key, kv.Value);
+                InvokeDeviceEventSafely(
+                    OnMicrophoneRemove,
+                    kv.Key,
+                    kv.Value,
+                    "EquipmentLoader.MicrophoneRemoved");
 
 
         foreach (var kv in newLoudspeakerDic)
             if (!equipment.LoudspeakerDic.ContainsKey(kv.Key))
-                OnLoudspeakerAdd?.Invoke(kv.Key, kv.Value);
+                InvokeDeviceEventSafely(
+                    OnLoudspeakerAdd,
+                    kv.Key,
+                    kv.Value,
+                    "EquipmentLoader.LoudspeakerAdded");
 
         foreach (var kv in newMicrophoneDic)
             if (!equipment.MicrophoneDic.ContainsKey(kv.Key))
-                OnMicrophoneAdd?.Invoke(kv.Key, kv.Value);
+                InvokeDeviceEventSafely(
+                    OnMicrophoneAdd,
+                    kv.Key,
+                    kv.Value,
+                    "EquipmentLoader.MicrophoneAdded");
 
         equipment.LoudspeakerDic.Clear();
         foreach (var kv in newLoudspeakerDic)
@@ -82,12 +165,48 @@ internal class EquipmentLoder
         if (isVBCableInstalled.HasValue
             && isVBCableInstalled.Value != currentVBCableInstalled)
         {
-            OnVBCableInstallationChanged?.Invoke(currentVBCableInstalled);
+            InvokeInstallationChangedSafely(currentVBCableInstalled);
         }
         isVBCableInstalled = currentVBCableInstalled;
+    }
 
-        newLoudspeakerDic.Clear();
-        newMicrophoneDic.Clear();
+    private static void InvokeDeviceEventSafely(
+        Action<string, string> handlers,
+        string id,
+        string name,
+        string source)
+    {
+        if (handlers == null) return;
+        foreach (Action<string, string> handler in handlers.GetInvocationList())
+        {
+            try
+            {
+                handler(id, name);
+            }
+            catch (Exception exception)
+            {
+                AppLog.Error(exception, "处理音频设备枚举事件失败。", source);
+            }
+        }
+    }
+
+    private void InvokeInstallationChangedSafely(bool isInstalled)
+    {
+        if (OnVBCableInstallationChanged == null) return;
+        foreach (Action<bool> handler in OnVBCableInstallationChanged.GetInvocationList())
+        {
+            try
+            {
+                handler(isInstalled);
+            }
+            catch (Exception exception)
+            {
+                AppLog.Error(
+                    exception,
+                    "处理虚拟声卡安装状态事件失败。",
+                    "EquipmentLoader.VBCableState");
+            }
+        }
     }
 
     public event Action<string, string> OnLoudspeakerRemove;
@@ -99,9 +218,28 @@ internal class EquipmentLoder
 
     public static bool IsCableEquipment(MMDevice device)
     {
-        if (device.DeviceFriendlyName.ToLower().Contains("cable") == true)
+        return TryIsCableEquipment(device, out bool isCable) && isCable;
+    }
+
+    public static bool TryIsCableEquipment(MMDevice device, out bool isCable)
+    {
+        isCable = false;
+        if (device == null) return false;
+        try
+        {
+            isCable = device.DeviceFriendlyName.Contains(
+                "cable",
+                StringComparison.OrdinalIgnoreCase);
             return true;
-        return false;
+        }
+        catch (Exception exception)
+        {
+            AppLog.Warning(
+                exception,
+                "读取音频设备名称失败，将按非 Cable 设备处理。",
+                "EquipmentLoader.DeviceRole");
+            return false;
+        }
     }
 
     private static string VbcablePath = "VBCABLE_Driver_Pack45/VBCABLE_Setup_x64.exe";
