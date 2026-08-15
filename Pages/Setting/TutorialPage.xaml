@@ -6,7 +6,6 @@
       xmlns:local="clr-namespace:PlayVoice.Pages.Setting"
       xmlns:L="clr-namespace:PlayVoice.Resources.Language"
       xmlns:Hyperlink="clr-namespace:PlayVoice.Pages.Hyperlink"
-      xmlns:ExpandArrow="clr-namespace:PlayVoice.Pages.ExpandArrow"
       mc:Ignorable="d" >
 
     <Page.Resources>
@@ -25,34 +24,8 @@
 
     <HeaderedContentControl Style="{StaticResource PageBoxStyle}"
                         Header="{L:Lan 教程}">
-        <Grid Margin="4,2.5,3,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0">
+        <StackPanel Margin="4,2.5,3,0">
+            <StackPanel>
                 <Button Background="Transparent"
                         BorderThickness="0"
                         Cursor="Hand"
@@ -80,67 +53,26 @@
                 <Border Height="1"
                         Background="{DynamicResource Border}"
                         Margin="20,8,20,3"/>
-                <TextBlock Text="{L:Lan 教程1_标题}"
-                           Style="{StaticResource TextBlockMedium}"
-                           Margin="0,5,0,0"
-                           FontSize="15"/>
             </StackPanel>
-            <TextBlock Grid.Row="1" 
-                    Text="{L:Lan 教程1_内容}"
-                    TextWrapping="Wrap"
-                    Style="{StaticResource TextBlockLight}"
-                    Margin="10,5"
-                    FontSize="13.5"/>
-            <Border Grid.Row="2" 
-                    Height="1" 
-                    Background="{DynamicResource Border}" 
-                    Margin="20,3"/>
-            <Grid Grid.Row="3"
-                  Background="Transparent"
-                  Cursor="Hand"
-                  HorizontalAlignment="Left"
-                  MouseLeftButtonUp="PresetIconsHeader_MouseLeftButtonUp">
-                <Grid.Style>
-                    <Style TargetType="Grid">
-                        <Setter Property="Margin" Value="0,1.5"/>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsExpanded, ElementName=PresetIconsExpandArrow}"
-                                         Value="False">
-                                <Setter Property="Margin" Value="0,10"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Grid.Style>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="24"/>
-                </Grid.ColumnDefinitions>
-                <ExpandArrow:ExpandArrow x:Name="PresetIconsExpandArrow"
-                                         Grid.Column="1"
-                                         IsExpanded="False"
-                                         ExpandedChanged="PresetIconsExpandArrow_ExpandedChanged"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"/>
-                <TextBlock Grid.Column="0"
-                           Text="{L:Lan 教程2_标题}"
-                           Style="{StaticResource TextBlockMedium}"
-                           VerticalAlignment="Center"
-                           FontSize="15"/>
-            </Grid>
 
-            <Grid x:Name="PresetIconsPanel"
-                  Grid.Row="4"
-                  Height="0"
-                  Opacity="0"
-                  ClipToBounds="True"
-                  IsHitTestVisible="False">
-                <Grid.RenderTransform>
-                    <TranslateTransform Y="-6"/>
-                </Grid.RenderTransform>
-                <WrapPanel x:Name="PresetIconsContent"
-                           Margin="0,5,0,0"
-                           HorizontalAlignment="Center"
-                           ItemWidth="105">
+            <local:TutorialSection Header="{L:Lan 教程1_标题}">
+                <local:TutorialSection.SectionContent>
+                    <TextBlock Text="{L:Lan 教程1_内容}"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="10,5"
+                               FontSize="13.5"/>
+                </local:TutorialSection.SectionContent>
+            </local:TutorialSection>
+
+            <Border Height="1"
+                    Background="{DynamicResource Border}"
+                    Margin="20,3"/>
+            <local:TutorialSection Header="{L:Lan 教程2_标题}">
+                <local:TutorialSection.SectionContent>
+                    <WrapPanel Margin="0,5,0,0"
+                               HorizontalAlignment="Center"
+                               ItemWidth="105">
                 <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="32.5"/>
@@ -265,102 +197,95 @@
                             Margin="4,5"
                             FontSize="13.5"/>
                 </Grid>
-                </WrapPanel>
-            </Grid>
+                    </WrapPanel>
+                </local:TutorialSection.SectionContent>
+            </local:TutorialSection>
 
-            <Border Grid.Row="5" 
-                    Height="1" 
-                    Background="{DynamicResource Border}" 
-                    Margin="20,3"/>
-
-            <TextBlock Grid.Row="6" 
-                    Text="{L:Lan 教程3_标题}"
-                    Style="{StaticResource TextBlockMedium}"
-                    Margin="0,5,0,0"
-                    FontSize="15"/>
-            <TextBlock Grid.Row="7" 
-                    Text="{L:Lan 教程3_内容}"
-                    TextWrapping="Wrap"
-                    Style="{StaticResource TextBlockLight}"
-                    Margin="10,5"
-                    FontSize="13.5"/>
-            <Border Grid.Row="8" 
-                    Height="1" 
-                    Background="{DynamicResource Border}" 
-                    Margin="20,3"/>
-            <TextBlock Grid.Row="9" 
-                    Text="{L:Lan 教程4_标题}"
-                    Style="{StaticResource TextBlockMedium}"
-                    Margin="0,5,0,0"
-                    FontSize="15"/>
-            <TextBlock Grid.Row="10" 
-                    Text="{L:Lan 教程4_内容}"
-                    TextWrapping="Wrap"
-                    Style="{StaticResource TextBlockLight}"
-                    Margin="10,5"
-                    FontSize="13.5"/>
-            <Border Grid.Row="11" 
-                    Height="1" 
-                    Background="{DynamicResource Border}" 
-                    Margin="20,3"/>
-            <TextBlock Grid.Row="12" 
-                    Text="{L:Lan 教程8_标题}"
-                    Style="{StaticResource TextBlockMedium}"
-                    Margin="0,5,0,0"
-                    FontSize="15"/>
-            <TextBlock Grid.Row="13" 
-                    Text="{L:Lan 教程8_内容}"
-                    TextWrapping="Wrap"
-                    Style="{StaticResource TextBlockLight}"
-                    Margin="10,5"
-                    FontSize="13.5"/>
-            <Border Grid.Row="14" 
-                    Height="1" 
-                    Background="{DynamicResource Border}" 
-                    Margin="20,3"/>
-            <TextBlock Grid.Row="15" 
-                    Text="{L:Lan 教程5_标题}"
-                    Style="{StaticResource TextBlockMedium}"
-                    Margin="0,5,0,0"
-                    FontSize="15"/>
-            <TextBlock Grid.Row="16" 
-                    Text="{L:Lan 教程5_内容}"
-                    TextWrapping="Wrap"
-                    Style="{StaticResource TextBlockLight}"
-                    Margin="10,5"
-                    FontSize="13.5"/>
-            <Border Grid.Row="17" 
-                    Height="1" 
-                    Background="{DynamicResource Border}" 
-                    Margin="20,3"/>
-            <TextBlock Grid.Row="18" 
-                    Text="{L:Lan 教程6_标题}"
-                    Style="{StaticResource TextBlockMedium}"
-                    Margin="0,5,0,0"
-                    FontSize="15"/>
-            <TextBlock Grid.Row="19" 
-                    Text="{L:Lan 教程6_内容}"
-                    TextWrapping="Wrap"
-                    Style="{StaticResource TextBlockLight}"
-                    Margin="10,5"
-                    FontSize="13.5"/>
-            <Border Grid.Row="20"
-                    Height="1"
+            <Border Height="1"
                     Background="{DynamicResource Border}"
                     Margin="20,3"/>
-            <TextBlock Grid.Row="21"
-                    Text="{L:Lan 教程7_标题}"
-                    Style="{StaticResource TextBlockMedium}"
-                    Margin="0,5,0,0"
-                    FontSize="15"/>
-            <TextBlock Grid.Row="22"
-                   Text="{L:Lan 教程7_内容}"
-                   TextWrapping="Wrap"
-                   Style="{StaticResource TextBlockLight}"
-                   Margin="10,5"
-                   FontSize="13.5"/>
 
-            <Border Grid.Row="23" Margin="0,1.5,0,0"/>
-        </Grid>
+            <local:TutorialSection Header="{L:Lan 教程3_标题}">
+                <local:TutorialSection.SectionContent>
+                    <TextBlock Text="{L:Lan 教程3_内容}"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="10,5"
+                               FontSize="13.5"/>
+                </local:TutorialSection.SectionContent>
+            </local:TutorialSection>
+
+            <Border Height="1"
+                    Background="{DynamicResource Border}"
+                    Margin="20,3"/>
+
+            <local:TutorialSection Header="{L:Lan 教程4_标题}">
+                <local:TutorialSection.SectionContent>
+                    <TextBlock Text="{L:Lan 教程4_内容}"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="10,5"
+                               FontSize="13.5"/>
+                </local:TutorialSection.SectionContent>
+            </local:TutorialSection>
+
+            <Border Height="1"
+                    Background="{DynamicResource Border}"
+                    Margin="20,3"/>
+
+            <local:TutorialSection Header="{L:Lan 教程8_标题}">
+                <local:TutorialSection.SectionContent>
+                    <TextBlock Text="{L:Lan 教程8_内容}"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="10,5"
+                               FontSize="13.5"/>
+                </local:TutorialSection.SectionContent>
+            </local:TutorialSection>
+
+            <Border Height="1"
+                    Background="{DynamicResource Border}"
+                    Margin="20,3"/>
+
+            <local:TutorialSection Header="{L:Lan 教程5_标题}">
+                <local:TutorialSection.SectionContent>
+                    <TextBlock Text="{L:Lan 教程5_内容}"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="10,5"
+                               FontSize="13.5"/>
+                </local:TutorialSection.SectionContent>
+            </local:TutorialSection>
+
+            <Border Height="1"
+                    Background="{DynamicResource Border}"
+                    Margin="20,3"/>
+
+            <local:TutorialSection Header="{L:Lan 教程6_标题}">
+                <local:TutorialSection.SectionContent>
+                    <TextBlock Text="{L:Lan 教程6_内容}"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="10,5"
+                               FontSize="13.5"/>
+                </local:TutorialSection.SectionContent>
+            </local:TutorialSection>
+
+            <Border Height="1"
+                    Background="{DynamicResource Border}"
+                    Margin="20,3"/>
+
+            <local:TutorialSection Header="{L:Lan 教程7_标题}">
+                <local:TutorialSection.SectionContent>
+                    <TextBlock Text="{L:Lan 教程7_内容}"
+                               TextWrapping="Wrap"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="10,5"
+                               FontSize="13.5"/>
+                </local:TutorialSection.SectionContent>
+            </local:TutorialSection>
+
+            <Border Margin="0,1.5,0,0"/>
+        </StackPanel>
     </HeaderedContentControl>
 </Page>

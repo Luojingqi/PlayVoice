@@ -1,0 +1,49 @@
+<UserControl x:Class="PlayVoice.Pages.Setting.TutorialSection"
+             x:Name="RootControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ExpandArrow="clr-namespace:PlayVoice.Pages.ExpandArrow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="HeaderPanel"
+              Grid.Row="0"
+              Margin="0,10"
+              Background="Transparent"
+              Cursor="Hand"
+              HorizontalAlignment="Left"
+              MouseLeftButtonUp="HeaderPanel_MouseLeftButtonUp">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="24"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Column="0"
+                       Text="{Binding Header, ElementName=RootControl}"
+                       Style="{StaticResource TextBlockMedium}"
+                       VerticalAlignment="Center"
+                       FontSize="15"/>
+            <ExpandArrow:ExpandArrow x:Name="SectionExpandArrow"
+                                     Grid.Column="1"
+                                     IsExpanded="{Binding IsExpanded, ElementName=RootControl, Mode=TwoWay}"
+                                     ExpandedChanged="SectionExpandArrow_ExpandedChanged"
+                                     HorizontalAlignment="Center"
+                                     VerticalAlignment="Center"/>
+        </Grid>
+
+        <Grid x:Name="ContentPanel"
+              Grid.Row="1"
+              Height="0"
+              Opacity="0"
+              ClipToBounds="True"
+              IsHitTestVisible="False">
+            <Grid.RenderTransform>
+                <TranslateTransform Y="-6"/>
+            </Grid.RenderTransform>
+            <ContentPresenter x:Name="SectionContentPresenter"
+                              Content="{Binding SectionContent, ElementName=RootControl}"/>
+        </Grid>
+    </Grid>
+</UserControl>
