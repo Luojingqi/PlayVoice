@@ -51,9 +51,9 @@ internal class Config
     public bool HasSelectedCloseBehavior { get; set; } = false;
 
     /// <summary>
-    /// 是否已经确认过首次启动教程提示。
+    /// 是否为第一次启动。
     /// </summary>
-    public bool HasAcknowledgedTutorialPrompt { get; set; } = false;
+    public bool IsFirstLaunch { get; set; } = true;
 
     /// <summary>
     /// 输出到虚拟麦克风的音频增益，单位为分贝。

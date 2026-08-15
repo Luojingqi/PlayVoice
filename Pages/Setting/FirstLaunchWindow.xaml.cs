@@ -3,9 +3,9 @@ using System.Windows.Input;
 
 namespace PlayVoice.Pages.Setting;
 
-public partial class TutorialPromptWindow : Window
+public partial class FirstLaunchWindow : Window
 {
-    public TutorialPromptWindow()
+    public FirstLaunchWindow()
     {
         InitializeComponent();
     }

@@ -20,8 +20,8 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Border Background="{DynamicResource BgDark}"
-            BorderBrush="{DynamicResource BgLight}"
+    <Border Background="{DynamicResource BgMedium}"
+            BorderBrush="{DynamicResource AccentColor}"
             BorderThickness="1"
             CornerRadius="10">
         <Grid>

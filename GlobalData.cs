@@ -531,10 +531,13 @@ internal class GlobalData
         }
         catch (Exception exception)
         {
-            AppLog.Error(exception, "配置加载失败，将使用默认配置。", "GlobalData.Config");
+            AppLog.Error(exception, "配置加载失败，将重新生成配置。", "GlobalData.Config");
             config = new Config();
         }
         NormalizeMicrophoneLoudnessConfig();
+
+        if (config.IsFirstLaunch)
+            config.ActiveAudioPresetName = "Demo";
 
         TryDetectInitialSteamLanguage();
         ThemeManager.SwitchTheme(config.Theme);

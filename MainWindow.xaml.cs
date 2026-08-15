@@ -101,16 +101,16 @@ namespace PlayVoice
         {
             Loaded -= MainWindow_OnLoaded;
 
-            if (!GlobalData.Inst.Config.HasAcknowledgedTutorialPrompt)
+            if (GlobalData.Inst.Config.IsFirstLaunch)
             {
-                var tutorialPromptWindow = new TutorialPromptWindow
+                var firstLaunchWindow = new FirstLaunchWindow
                 {
                     Owner = this
                 };
 
-                if (tutorialPromptWindow.ShowDialog() == true)
+                if (firstLaunchWindow.ShowDialog() == true)
                 {
-                    GlobalData.Inst.Config.HasAcknowledgedTutorialPrompt = true;
+                    GlobalData.Inst.Config.IsFirstLaunch = false;
                     GlobalData.Inst.Config.Save();
                 }
             }

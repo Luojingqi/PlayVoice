@@ -26,7 +26,7 @@ internal class config_v8
 
     public bool HasSelectedCloseBehavior { get; set; } = false;
 
-    public bool HasAcknowledgedTutorialPrompt { get; set; } = false;
+    public bool IsFirstLaunch { get; set; } = true;
 
     public double AudioOutDecibel { get; set; } = 0;
 
