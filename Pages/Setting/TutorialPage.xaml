@@ -57,7 +57,24 @@
 
             <local:TutorialSection Header="{L:Lan 教程1_标题}">
                 <local:TutorialSection.SectionContent>
-                    <TextBlock Text="{L:Lan 教程1_内容}"
+                    <TextBlock TextWrapping="Wrap"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="10,5"
+                               FontSize="13.5">
+                        <Run Text="{L:Lan 教程1_内容}"/>
+                        <LineBreak/>
+                        <LineBreak/>
+                        <Run Text="{L:Lan 教程3_内容}"/>
+                    </TextBlock>
+                </local:TutorialSection.SectionContent>
+            </local:TutorialSection>
+
+            <Border Height="1"
+                    Background="{DynamicResource Border}"
+                    Margin="20,3"/>
+            <local:TutorialSection Header="{L:Lan 教程4_标题}">
+                <local:TutorialSection.SectionContent>
+                    <TextBlock Text="{L:Lan 教程4_内容}"
                                TextWrapping="Wrap"
                                Style="{StaticResource TextBlockLight}"
                                Margin="10,5"
@@ -68,6 +85,7 @@
             <Border Height="1"
                     Background="{DynamicResource Border}"
                     Margin="20,3"/>
+
             <local:TutorialSection Header="{L:Lan 教程2_标题}">
                 <local:TutorialSection.SectionContent>
                     <WrapPanel Margin="0,5,0,0"
@@ -198,34 +216,6 @@
                             FontSize="13.5"/>
                 </Grid>
                     </WrapPanel>
-                </local:TutorialSection.SectionContent>
-            </local:TutorialSection>
-
-            <Border Height="1"
-                    Background="{DynamicResource Border}"
-                    Margin="20,3"/>
-
-            <local:TutorialSection Header="{L:Lan 教程3_标题}">
-                <local:TutorialSection.SectionContent>
-                    <TextBlock Text="{L:Lan 教程3_内容}"
-                               TextWrapping="Wrap"
-                               Style="{StaticResource TextBlockLight}"
-                               Margin="10,5"
-                               FontSize="13.5"/>
-                </local:TutorialSection.SectionContent>
-            </local:TutorialSection>
-
-            <Border Height="1"
-                    Background="{DynamicResource Border}"
-                    Margin="20,3"/>
-
-            <local:TutorialSection Header="{L:Lan 教程4_标题}">
-                <local:TutorialSection.SectionContent>
-                    <TextBlock Text="{L:Lan 教程4_内容}"
-                               TextWrapping="Wrap"
-                               Style="{StaticResource TextBlockLight}"
-                               Margin="10,5"
-                               FontSize="13.5"/>
                 </local:TutorialSection.SectionContent>
             </local:TutorialSection>
 

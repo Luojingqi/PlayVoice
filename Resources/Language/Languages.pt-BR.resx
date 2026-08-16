@@ -135,7 +135,7 @@
   <data name="已复制" xml:space="preserve"><value>Copiado: </value></data>
   <data name="删除预设" xml:space="preserve"><value>Excluir preset</value></data>
   <data name="教程1_内容" xml:space="preserve"><value>· Instale o dispositivo de áudio virtual nas configurações.&#xA;· Depois, verifique-o nas configurações de som do Windows.</value></data>
-  <data name="教程1_标题" xml:space="preserve"><value>Primeira execução</value></data>
+  <data name="教程1_标题" xml:space="preserve"><value>Primeira execução / Iniciar PlayVoice</value></data>
   <data name="点击观看视频演示" xml:space="preserve"><value>Clique para assistir à demonstração em vídeo</value></data>
   <data name="教程3_内容" xml:space="preserve"><value>· Configure os quatro dispositivos e conclua o teste de volume do microfone atual.&#xA;· Ao concluir a lista, o PlayVoice inicia automaticamente e envia o microfone e o áudio do app ao microfone virtual.</value></data>
   <data name="教程3_标题" xml:space="preserve"><value>Iniciar PlayVoice</value></data>

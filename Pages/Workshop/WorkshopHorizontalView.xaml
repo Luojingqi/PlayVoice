@@ -126,6 +126,7 @@
                    x:Name="HorizontalScrollBar"
                    Style="{StaticResource WorkshopHorizontalScrollBarStyle}"
                    Visibility="Collapsed"
+                   PreviewMouseWheel="HorizontalScrollBar_PreviewMouseWheel"
                    Scroll="HorizontalScrollBar_Scroll"/>
     </Grid>
 </UserControl>

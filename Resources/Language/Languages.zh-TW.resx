@@ -135,7 +135,7 @@
   <data name="已复制" xml:space="preserve"><value>已複製：</value></data>
   <data name="删除预设" xml:space="preserve"><value>刪除預設</value></data>
   <data name="教程1_内容" xml:space="preserve"><value>· 請在設定中安裝虛擬音訊裝置。&#xA;· 接著在 Windows 音效設定中確認虛擬裝置。</value></data>
-  <data name="教程1_标题" xml:space="preserve"><value>首次啟動</value></data>
+  <data name="教程1_标题" xml:space="preserve"><value>首次啟動 / 啟動 PlayVoice</value></data>
   <data name="点击观看视频演示" xml:space="preserve"><value>點擊觀看影片示範</value></data>
   <data name="教程3_内容" xml:space="preserve"><value>· 設定四個裝置，並完成目前麥克風的音量測試。&#xA;· 清單全部完成後 PlayVoice 會自動啟動，並將麥克風和應用程式音訊輸出至虛擬麥克風。</value></data>
   <data name="教程3_标题" xml:space="preserve"><value>啟動 PlayVoice</value></data>

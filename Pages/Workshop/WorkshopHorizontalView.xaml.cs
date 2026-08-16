@@ -148,6 +148,14 @@ public partial class WorkshopHorizontalView : UserControl
         if (OriginatesInScrollableNestedViewer(e.OriginalSource as DependencyObject))
             return;
 
+        HandleHorizontalMouseWheel(e);
+    }
+
+    private void HorizontalScrollBar_PreviewMouseWheel(object sender, MouseWheelEventArgs e) =>
+        HandleHorizontalMouseWheel(e);
+
+    private void HandleHorizontalMouseWheel(MouseWheelEventArgs e)
+    {
         e.Handled = true;
         if (_scrollViewer == null || e.Delta == 0) return;
 

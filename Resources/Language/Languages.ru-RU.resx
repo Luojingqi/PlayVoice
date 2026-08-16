@@ -135,7 +135,7 @@
   <data name="已复制" xml:space="preserve"><value>Скопировано: </value></data>
   <data name="删除预设" xml:space="preserve"><value>Удалить пресет</value></data>
   <data name="教程1_内容" xml:space="preserve"><value>· Установите виртуальную аудиокарту в настройках.&#xA;· Затем проверьте виртуальные устройства в параметрах звука Windows.</value></data>
-  <data name="教程1_标题" xml:space="preserve"><value>Первый запуск</value></data>
+  <data name="教程1_标题" xml:space="preserve"><value>Первый запуск / Запуск PlayVoice</value></data>
   <data name="点击观看视频演示" xml:space="preserve"><value>Посмотреть видеодемонстрацию</value></data>
   <data name="教程3_内容" xml:space="preserve"><value>· Настройте четыре устройства и выполните тест громкости текущего микрофона.&#xA;· После завершения списка PlayVoice запустится автоматически и направит микрофон и звук приложения на виртуальный микрофон.</value></data>
   <data name="教程3_标题" xml:space="preserve"><value>Запуск PlayVoice</value></data>

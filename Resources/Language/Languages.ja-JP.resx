@@ -135,7 +135,7 @@
   <data name="已复制" xml:space="preserve"><value>コピーしました：</value></data>
   <data name="删除预设" xml:space="preserve"><value>プリセットを削除</value></data>
   <data name="教程1_内容" xml:space="preserve"><value>· 設定から仮想オーディオをインストールします。&#xA;· Windowsのサウンド設定で仮想デバイスを確認します。</value></data>
-  <data name="教程1_标题" xml:space="preserve"><value>初回起動</value></data>
+  <data name="教程1_标题" xml:space="preserve"><value>初回起動 / PlayVoiceを開始</value></data>
   <data name="点击观看视频演示" xml:space="preserve"><value>クリックして動画デモを見る</value></data>
   <data name="教程3_内容" xml:space="preserve"><value>· 4つのデバイスを設定し、現在のマイクの音量テストを完了します。&#xA;· チェックリストが完了するとPlayVoiceが自動的に起動し、マイクとアプリの音声が仮想マイクへ出力されます。</value></data>
   <data name="教程3_标题" xml:space="preserve"><value>PlayVoiceを開始</value></data>
