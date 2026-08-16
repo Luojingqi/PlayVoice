@@ -21,6 +21,7 @@ public partial class TablePage : UserControl
     private ObservableCollection<TablePageItem> TableItemList = new();
     private readonly DispatcherTimer _downloadProgressTimer;
     private readonly HashSet<PublishedFileId> _refreshingItemIds = new();
+    private readonly WorkshopInternalPagination _workshopPagination = new();
     private int _loadGeneration;
     private WorkshopPage _owner;
 
@@ -49,6 +50,7 @@ public partial class TablePage : UserControl
         _loadGeneration++;
         _refreshingItemIds.Clear();
         TableItemList.Clear();
+        _workshopPagination.Clear();
     }
 
     private void DownloadProgressTimer_Tick(object sender, EventArgs e)
@@ -192,13 +194,22 @@ public partial class TablePage : UserControl
                     if (selectedLanguages.Length == 0)
                         return;
 
-                    string searchText = _owner.SearchText?.Trim();
+                    string? searchText = _owner.SearchText?.Trim();
                     string[] queryLanguages = string.IsNullOrEmpty(searchText)
                         ? new[] { GetPreferredDisplayLanguage(selectedLanguages) }
                         : selectedLanguages;
+                    string queryIdentity = CreateWorkshopQueryIdentity(
+                        queryLanguages,
+                        searchText);
+                    _workshopPagination.BeginQuery(queryIdentity);
+
+                    if (TryShowWorkshopInternalPage(nowPage))
+                        break;
+
+                    int steamPageNumber = _workshopPagination.GetSteamPageNumber(nowPage);
                     var pageTasks = queryLanguages
                         .Select(language => CreateWorkshopQuery(language, searchText)
-                            .GetPageAsync(nowPage))
+                            .GetPageAsync(steamPageNumber))
                         .ToArray();
                     ResultPage?[] results = await Task.WhenAll(pageTasks);
                     if (!IsCurrentLoad(generation)) return;
@@ -207,14 +218,17 @@ public partial class TablePage : UserControl
                         .Where(page => page.HasValue)
                         .Select(page => page.GetValueOrDefault())
                         .ToArray();
-                    var entries = MergeWorkshopEntries(pages, 50);
-                    if (entries.Count > 0)
-                    {
-                        int totalPages = pages.Max(page =>
-                            (int)Math.Ceiling((double)page.TotalCount / 50));
-                        _owner.PageNumberSelection.Open(nowPage, totalPages);
-                        _owner.SetWorkshopHorizontalItems(entries);
-                    }
+                    var entries = MergeWorkshopEntries(
+                        pages,
+                        WorkshopInternalPagination.ItemsPerSteamPage);
+                    int totalItems = pages.Length == 0
+                        ? 0
+                        : pages.Max(page => page.TotalCount);
+                    _workshopPagination.StoreSteamPage(
+                        steamPageNumber,
+                        entries,
+                        totalItems);
+                    TryShowWorkshopInternalPage(nowPage);
                 }
                 break;
         }
@@ -229,7 +243,38 @@ public partial class TablePage : UserControl
             : selectedLanguages[0];
     }
 
-    private Query CreateWorkshopQuery(string language, string searchText)
+    private string CreateWorkshopQueryIdentity(
+        IReadOnlyList<string> queryLanguages,
+        string? searchText)
+    {
+        string tags = string.Join(
+            ",",
+            _owner.BottomButtonListBox.SelectedItems
+                .Cast<WorkshopPage.TabItem<WorkshopPage.TabType>>()
+                .Select(item => WorkshopPage.TabTypeToSteam(item.Type)));
+        return string.Join(
+            "\u001f",
+            string.Join(",", queryLanguages),
+            searchText ?? string.Empty,
+            _owner.RankedComboBox.SelectedIndex.ToString(),
+            tags);
+    }
+
+    private bool TryShowWorkshopInternalPage(int internalPageNumber)
+    {
+        if (!_workshopPagination.TryGetInternalPage(
+                internalPageNumber,
+                out IReadOnlyList<Item> items,
+                out int totalInternalPages))
+            return false;
+
+        if (totalInternalPages > 0)
+            _owner.PageNumberSelection.Open(internalPageNumber, totalInternalPages);
+        _owner.SetWorkshopHorizontalItems(items);
+        return true;
+    }
+
+    private Query CreateWorkshopQuery(string language, string? searchText)
     {
         var query = Query.All
             .AllowCachedResponse(10)
@@ -349,5 +394,6 @@ public partial class TablePage : UserControl
         _loadGeneration++;
         TableItemList.Clear();
         _refreshingItemIds.Clear();
+        _workshopPagination.Clear();
     }
 }
