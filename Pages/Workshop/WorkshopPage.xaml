@@ -49,10 +49,10 @@
                     x:Name="ItemGroupListBox">
                 <ListBoxItem Style="{StaticResource GroupInputItemStyle}"
                              Width="125">
-                    <TextBox Tag="{L:Lan 关键词}"
-                        Text="{Binding SearchText}"
+                    <TextBox x:Name="SearchTextBox"
+                        Tag="{L:Lan 关键词}"
                         Style="{StaticResource GroupTextBoxStyle}"
-                        InputMethod.IsInputMethodEnabled="False"/>
+                        KeyDown="SearchTextBox_KeyDown"/>
                 </ListBoxItem>
                 <ListBoxItem Style="{StaticResource GroupButtonItemStyle}"
                              Width="50">

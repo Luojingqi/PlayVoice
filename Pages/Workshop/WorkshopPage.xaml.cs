@@ -7,6 +7,7 @@ using System.IO;
 using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
@@ -92,7 +93,15 @@ namespace PlayVoice.Pages.Workshop
 
 
         }
-        public string SearchText { get; set; }
+        public string SearchText => SearchTextBox.Text;
+
+        private void SearchTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter) return;
+
+            e.Handled = true;
+            ChangedPage(null, null);
+        }
 
         private bool isLoading = false;
         private async void ChangedPage(object sender, SelectionChangedEventArgs e)

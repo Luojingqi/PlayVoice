@@ -20,6 +20,20 @@ namespace PlayVoice.Pages.Preset
     /// </summary>
     public partial class UploadPresetPage : Page, IProgress<float>
     {
+        private static readonly Dictionary<string, string> SteamLanguageByClientCulture =
+            new(StringComparer.OrdinalIgnoreCase)
+            {
+                ["zh-CN"] = "schinese",
+                ["zh-TW"] = "tchinese",
+                ["en-US"] = "english",
+                ["ru-RU"] = "russian",
+                ["es-ES"] = "spanish",
+                ["pt-BR"] = "brazilian",
+                ["ja-JP"] = "japanese",
+                ["ko-KR"] = "koreana",
+                ["de-DE"] = "german"
+            };
+
         private ObservableCollection<string> presetNameArray = new ObservableCollection<string>();
 
         private CircularProgressBar loadingPage;
@@ -195,6 +209,15 @@ namespace PlayVoice.Pages.Preset
                 metaData.ExtendedExplanationTotalSize = extendedExplanationTotalSize;
                 File.Delete(Path.Combine(tempPresetPath, AudioPresetDataTool.ConfigFileName));
 
+                var workshopDescription = new WorkshopDescriptionModel
+                {
+                    UserDescription = resourceDescription,
+                    AudioNames = metaData.ItemList.Select(item => item.FileName).ToArray()
+                };
+                string workshopDescriptionJson = JsonTool.ToJson(
+                    workshopDescription,
+                    writeIndented: false);
+
                 if (string.IsNullOrEmpty(imagePath) || !File.Exists(imagePath))
                     imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Thumbnail.png");
 
@@ -217,7 +240,8 @@ namespace PlayVoice.Pages.Preset
 
                 var editor = Editor.NewCommunityFile
                     .WithTitle(resourceName)
-                    .WithDescription(resourceDescription);
+                    .WithDescription(workshopDescriptionJson)
+                    .InLanguage(GetWorkshopUploadLanguage());
                 foreach (var tab in tabSelectionSet)
                     editor = editor.WithTag(WorkshopPage.TabTypeToSteam(tab.Type));
                 editor = editor.WithContent(tempPresetPath);
@@ -303,6 +327,18 @@ namespace PlayVoice.Pages.Preset
             }
         end:
             ConfirmButton.SelectedIndex = -1;
+        }
+
+        private static string GetWorkshopUploadLanguage()
+        {
+            string steamLanguage = SteamApps.GameLanguage;
+            if (!string.IsNullOrWhiteSpace(steamLanguage))
+                return steamLanguage;
+
+            string clientCulture = LanguageManager.Inst.CurrentCulture.Name;
+            return SteamLanguageByClientCulture.TryGetValue(clientCulture, out string language)
+                ? language
+                : "english";
         }
 
         private void ImageCloseButton_Click(object sender, RoutedEventArgs e)

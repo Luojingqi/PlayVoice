@@ -4,6 +4,7 @@ using PlayVoice.Diagnostics;
 using Steamworks;
 using Steamworks.Ugc;
 using System.Collections.ObjectModel;
+using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -188,9 +189,10 @@ namespace PlayVoice.Pages.Workshop
                 UpdateFeedbackState();
                 MetadataLoadingBar.SetProgress(1, 120);
                 await Task.Delay(100, cancellationToken);
-                if (!string.IsNullOrWhiteSpace(item.Description))
+                string userDescription = GetUserDescription(item.Description);
+                if (!string.IsNullOrWhiteSpace(userDescription))
                 {
-                    ResourceDescriptionText.Text = item.Description;
+                    ResourceDescriptionText.Text = userDescription;
                     ResourceDescriptionPanel.Visibility = Visibility.Visible;
                 }
                 MetadataLoadingPanel.Visibility = Visibility.Collapsed;
@@ -212,6 +214,25 @@ namespace PlayVoice.Pages.Workshop
                     MetadataLoadingPanel.Visibility = Visibility.Collapsed;
                 }
             }
+        }
+
+        private static string GetUserDescription(string description)
+        {
+            if (string.IsNullOrWhiteSpace(description))
+                return string.Empty;
+
+            try
+            {
+                var model = JsonSerializer.Deserialize<WorkshopDescriptionModel>(description);
+                if (model?.UserDescription != null && model.AudioNames != null)
+                    return model.UserDescription;
+            }
+            catch (JsonException)
+            {
+                // 兼容使用纯文本描述的旧创意工坊物品。
+            }
+
+            return description;
         }
 
         public void Close()

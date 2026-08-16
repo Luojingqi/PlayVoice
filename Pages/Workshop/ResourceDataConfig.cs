@@ -1,7 +1,6 @@
 ﻿using PlayVoice.Pages.Preset;
 using System.IO;
 using System.Text.Json.Serialization;
-using static PlayVoice.Pages.Workshop.ResourceDataConfig;
 
 namespace PlayVoice.Pages.Workshop;
 
