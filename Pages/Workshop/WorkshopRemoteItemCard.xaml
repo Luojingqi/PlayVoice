@@ -1,0 +1,365 @@
+<UserControl x:Class="PlayVoice.Pages.Workshop.WorkshopRemoteItemCard"
+             x:Name="self"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:PlayVoice.Pages.Workshop"
+             xmlns:L="clr-namespace:PlayVoice.Resources.Language"
+             mc:Ignorable="d"
+             Width="170"
+             MinWidth="170"
+             MaxWidth="170">
+
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Resources/Style/WorkshopFeedback.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+
+            <Style x:Key="ThumbnailActionButtonStyle"
+                   TargetType="Button"
+                   BasedOn="{StaticResource WorkshopStandaloneButtonStyle}">
+                <Setter Property="Width" Value="34"/>
+                <Setter Property="Height" Value="30"/>
+                <Setter Property="Margin" Value="3"/>
+                <Setter Property="Background" Value="#CC20222B"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+            </Style>
+
+            <Style x:Key="ThumbnailSubscribeButtonStyle" TargetType="Button">
+                <Setter Property="Height" Value="27"/>
+                <Setter Property="MinWidth" Value="50"/>
+                <Setter Property="MaxWidth" Value="112"/>
+                <Setter Property="Padding" Value="8,2"/>
+                <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                <Setter Property="Background" Value="{DynamicResource AccentSurface}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="ButtonBorder"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="4"
+                                    Padding="{TemplateBinding Padding}">
+                                <ContentPresenter HorizontalAlignment="Center"
+                                                  VerticalAlignment="Center"/>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="ButtonBorder"
+                                            Property="Background"
+                                            Value="{DynamicResource AccentColor}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.65"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="ButtonBorder" Property="Opacity" Value="0.55"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
+
+    <Border Margin="0,1"
+            Padding="6"
+            Background="{DynamicResource BgMedium}"
+            BorderBrush="{DynamicResource AccentColor}"
+            BorderThickness="1"
+            CornerRadius="6">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0"
+                  x:Name="ThumbnailRoot"
+                  Width="146"
+                  Height="146"
+                  HorizontalAlignment="Center"
+                  Background="{DynamicResource BgLight}">
+                <Grid.Triggers>
+                    <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="ThumbnailActionOverlay"
+                                                 Storyboard.TargetProperty="Opacity"
+                                                 To="1"
+                                                 Duration="0:0:0.16"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="ThumbnailActionOverlay"
+                                                 Storyboard.TargetProperty="Opacity"
+                                                 To="0"
+                                                 Duration="0:0:0.18"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Grid.Triggers>
+
+                <Border CornerRadius="4" ClipToBounds="True">
+                    <Image x:Name="BgImage" Stretch="Uniform"/>
+                </Border>
+
+                <Border x:Name="ThumbnailActionOverlay"
+                        Opacity="0"
+                        Background="#A6000000"
+                        CornerRadius="4">
+                    <UniformGrid Rows="2"
+                                 Columns="3"
+                                 HorizontalAlignment="Center"
+                                 VerticalAlignment="Center"
+                                 Margin="12,14,12,36">
+                        <Button Style="{StaticResource ThumbnailActionButtonStyle}"
+                                ToolTip="{L:Lan Steam详情}"
+                                Click="OpenWorkshopPage_Click">
+                            <Viewbox Width="15" Height="15">
+                                <Path Data="{StaticResource WorkshopOpenIcon}"
+                                      Stroke="{DynamicResource AccentColor}"
+                                      StrokeThickness="1.7"/>
+                            </Viewbox>
+                        </Button>
+                        <Button Style="{StaticResource ThumbnailActionButtonStyle}"
+                                ToolTip="{L:Lan 复制链接}"
+                                Click="CopyWorkshopUrl_Click">
+                            <Viewbox Width="15" Height="15">
+                                <Path Data="{StaticResource WorkshopCopyLinkIcon}"
+                                      Stroke="{DynamicResource AccentColor}"
+                                      StrokeThickness="1.7"/>
+                            </Viewbox>
+                        </Button>
+                        <Button Style="{StaticResource ThumbnailActionButtonStyle}"
+                                ToolTip="{L:Lan 举报}"
+                                Click="ReportWorkshopItem_Click">
+                            <Viewbox Width="15" Height="15">
+                                <Path Data="{StaticResource WorkshopReportIcon}"
+                                      Stroke="{DynamicResource Error}"
+                                      StrokeThickness="1.7"/>
+                            </Viewbox>
+                        </Button>
+                        <Button Style="{StaticResource ThumbnailActionButtonStyle}"
+                                ToolTip="{L:Lan 好评}"
+                                Tag="Upvote"
+                                Click="FeedbackButton_Click">
+                            <Viewbox Width="15" Height="15">
+                                <Path x:Name="UpvoteIcon"
+                                      Data="{StaticResource WorkshopUpvoteIcon}"
+                                      Fill="{DynamicResource AccentColor}"/>
+                            </Viewbox>
+                        </Button>
+                        <Button Style="{StaticResource ThumbnailActionButtonStyle}"
+                                ToolTip="{L:Lan 喜欢}"
+                                Tag="Favorite"
+                                Click="FeedbackButton_Click">
+                            <Viewbox Width="15" Height="15">
+                                <Path x:Name="FavoriteIcon"
+                                      Data="{StaticResource WorkshopFavoriteIcon}"
+                                      Fill="{DynamicResource AccentColor}"/>
+                            </Viewbox>
+                        </Button>
+                        <Button Style="{StaticResource ThumbnailActionButtonStyle}"
+                                ToolTip="{L:Lan 差评}"
+                                Tag="Downvote"
+                                Click="FeedbackButton_Click">
+                            <Viewbox Width="15" Height="15">
+                                <Path x:Name="DownvoteIcon"
+                                      Data="{StaticResource WorkshopDownvoteIcon}"
+                                      Fill="{DynamicResource AccentColor}"/>
+                            </Viewbox>
+                        </Button>
+                    </UniformGrid>
+                </Border>
+
+                <Border HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        Margin="5"
+                        Padding="5,2"
+                        Background="#CC20222B"
+                        BorderBrush="{DynamicResource Warning}"
+                        BorderThickness="1"
+                        CornerRadius="4"
+                        IsHitTestVisible="False">
+                    <TextBlock x:Name="SteamScoreText"
+                               Text="★ --"
+                               Style="{StaticResource TextBlockMedium}"
+                               Foreground="{DynamicResource Warning}"
+                               FontSize="11"/>
+                </Border>
+
+                <Button x:Name="SubscribeButton"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Margin="5"
+                        Style="{StaticResource ThumbnailSubscribeButtonStyle}"
+                        Click="SubscribeButton_Click">
+                    <TextBlock Text="{L:Lan 订阅按钮}"
+                               Style="{StaticResource TextBlockMedium}"
+                               FontSize="11"
+                               TextTrimming="CharacterEllipsis"/>
+                </Button>
+                <Button x:Name="UnsubscribeButton"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        Margin="5"
+                        Style="{StaticResource ThumbnailSubscribeButtonStyle}"
+                        Click="UnsubscribeButton_Click">
+                    <TextBlock Text="{L:Lan 取消订阅按钮}"
+                               Style="{StaticResource TextBlockMedium}"
+                               FontSize="11"
+                               TextTrimming="CharacterEllipsis"/>
+                </Button>
+
+                <Border x:Name="ImageLoadingPanel"
+                        Margin="38"
+                        Background="{DynamicResource BgMedium}"
+                        CornerRadius="40"
+                        IsHitTestVisible="False">
+                    <local:CircularProgressBar x:Name="ImageLoadingBar"/>
+                </Border>
+            </Grid>
+
+            <TextBlock Grid.Row="1"
+                       x:Name="ItemTitle"
+                       Margin="2,5,2,0"
+                       MaxHeight="36"
+                       Style="{StaticResource TextBlockMedium}"
+                       FontSize="13"
+                       TextAlignment="Center"
+                       TextWrapping="Wrap"
+                       TextTrimming="CharacterEllipsis"/>
+
+            <Grid Grid.Row="2"
+                  x:Name="AuthorPanel"
+                  Margin="2,6,4,3"
+                  HorizontalAlignment="Center"
+                  Visibility="Hidden">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0"
+                        Width="20"
+                        Height="20"
+                        Margin="0,0,5,0"
+                        Background="{DynamicResource BgLight}"
+                        CornerRadius="10"
+                        ClipToBounds="True">
+                    <Image x:Name="AuthorAvatar" Stretch="UniformToFill"/>
+                </Border>
+                <TextBlock Grid.Column="1"
+                           x:Name="AuthorName"
+                           MaxWidth="122"
+                           Style="{StaticResource TextBlockLight}"
+                           Foreground="{DynamicResource AccentColor}"
+                           FontSize="10.5"
+                           VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis"
+                           Cursor="Hand"
+                           MouseLeftButtonUp="AuthorName_MouseLeftButtonUp"/>
+            </Grid>
+
+            <Grid Grid.Row="3" Margin="4,0,4,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0"
+                           x:Name="AudioCountText"
+                           Style="{StaticResource TextBlockMedium}"
+                           Foreground="{DynamicResource TextSecondary}"
+                           FontSize="10"
+                           HorizontalAlignment="Left"/>
+                <TextBlock Grid.Column="1"
+                           x:Name="ResourceSizeText"
+                           Style="{StaticResource TextBlockMedium}"
+                           Foreground="{DynamicResource TextSecondary}"
+                           FontSize="10"
+                           HorizontalAlignment="Right"/>
+            </Grid>
+
+            <ScrollViewer Grid.Row="4"
+                          x:Name="DescriptionScrollViewer"
+                          Margin="2,0,2,4"
+                          MaxHeight="58"
+                          VerticalScrollBarVisibility="Auto"
+                          HorizontalScrollBarVisibility="Disabled"
+                          PreviewMouseWheel="NestedScrollViewer_PreviewMouseWheel"
+                          Visibility="Collapsed">
+                <TextBlock x:Name="ResourceDescriptionText"
+                           Style="{StaticResource TextBlockLight}"
+                           Foreground="{DynamicResource TextSecondary}"
+                           FontSize="10.5"
+                           LineHeight="16"
+                           TextWrapping="Wrap"/>
+            </ScrollViewer>
+
+            <Border Grid.Row="5"
+                    BorderBrush="{DynamicResource Border}"
+                    BorderThickness="0,1,0,0"
+                    MinHeight="90">
+                <ScrollViewer x:Name="AudioScrollViewer"
+                              VerticalScrollBarVisibility="Auto"
+                              HorizontalScrollBarVisibility="Disabled"
+                              PreviewMouseWheel="NestedScrollViewer_PreviewMouseWheel">
+                    <ItemsControl x:Name="AudioItemsControl">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="{DynamicResource Border}"
+                                        BorderThickness="0,0,0,1"
+                                        Padding="3,5">
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="{Binding Title}"
+                                                   ToolTip="{Binding Title}"
+                                                   Style="{StaticResource TextBlockLight}"
+                                                   FontSize="11"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                        <Grid Grid.Row="1"
+                                              Margin="0,2,0,0"
+                                              Visibility="{Binding HasDetails, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding Duration}"
+                                                       Style="{StaticResource TextBlockMedium}"
+                                                       Foreground="{DynamicResource TextSecondary}"
+                                                       FontSize="9.5"/>
+                                            <TextBlock Grid.Column="1"
+                                                       Text="{Binding Size}"
+                                                       Style="{StaticResource TextBlockMedium}"
+                                                       Foreground="{DynamicResource TextSecondary}"
+                                                       FontSize="9.5"/>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Border>
+</UserControl>

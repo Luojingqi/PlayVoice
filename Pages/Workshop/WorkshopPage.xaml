@@ -86,6 +86,9 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <local:TablePage x:Name="TablePage" Grid.Column="0"/>
+                <local:WorkshopHorizontalView x:Name="WorkshopHorizontalView"
+                                              Grid.Column="0"
+                                              Visibility="Collapsed"/>
                 <Border Grid.Column="1"
                         x:Name="DetailPageBorder"
                         Width="0" 

@@ -177,6 +177,7 @@ namespace PlayVoice.Pages.Workshop
             isLoading = true;
             CloseDetailPage();
             CloseLocalDetailPage();
+            SetContentView(NowPageType);
             if (TopButtonListBox.SelectedIndex != (int)PageType.创意工坊)
             {
                 BottomButtonListBox.Visibility = Visibility.Collapsed;
@@ -198,6 +199,27 @@ namespace PlayVoice.Pages.Workshop
             this.IsEnabled = true;
             loadingPage.Visibility = Visibility.Hidden;
         }
+
+        /// <summary>
+        /// 只有公共“创意工坊”选项卡使用横向详情卡片；
+        /// 订阅、创作和好友页面继续沿用原来的方块列表与侧边详情。
+        /// </summary>
+        private void SetContentView(PageType pageType)
+        {
+            bool useHorizontalView = pageType == PageType.创意工坊;
+            TablePage.Visibility = useHorizontalView
+                ? Visibility.Collapsed
+                : Visibility.Visible;
+            WorkshopHorizontalView.Visibility = useHorizontalView
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+
+            if (!useHorizontalView)
+                WorkshopHorizontalView.Clear();
+        }
+
+        internal void SetWorkshopHorizontalItems(IEnumerable<Item> items) =>
+            WorkshopHorizontalView.SetItems(items);
 
         public enum PageType
         {
@@ -402,8 +424,11 @@ namespace PlayVoice.Pages.Workshop
             localDetailPage?.Close();
         }
 
-        private void WorkshopPage_Unloaded(object sender, RoutedEventArgs e) =>
+        private void WorkshopPage_Unloaded(object sender, RoutedEventArgs e)
+        {
             CloseLocalDetailPage();
+            WorkshopHorizontalView.Clear();
+        }
 
         private bool _isLocalDetailPageOpen = false;
         public void ToggleLocalDetailPage()

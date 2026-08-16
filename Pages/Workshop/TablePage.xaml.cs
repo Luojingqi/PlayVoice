@@ -108,6 +108,8 @@ public partial class TablePage : UserControl
         int generation = ++_loadGeneration;
         TableItemList.Clear();
         _refreshingItemIds.Clear();
+        if (pageType == WorkshopPage.PageType.创意工坊)
+            _owner.SetWorkshopHorizontalItems(Array.Empty<Item>());
         _owner.PageNumberSelection.Close();
         switch (pageType)
         {
@@ -211,11 +213,7 @@ public partial class TablePage : UserControl
                         int totalPages = pages.Max(page =>
                             (int)Math.Ceiling((double)page.TotalCount / 50));
                         _owner.PageNumberSelection.Open(nowPage, totalPages);
-                        foreach (Item item in entries)
-                        {
-                            var tableItem = AddItem(item, null);
-                            tableItem.OnClick += _owner.OnClickTableItem_OpenDetailPage;
-                        }
+                        _owner.SetWorkshopHorizontalItems(entries);
                     }
                 }
                 break;
