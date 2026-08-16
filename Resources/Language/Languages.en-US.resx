@@ -178,6 +178,12 @@ PlayVoice's final mix is output through this device.</value></data>
   <data name="语言" xml:space="preserve">
     <value>Language</value>
   </data>
+  <data name="搜索语言" xml:space="preserve">
+    <value>Search language</value>
+  </data>
+  <data name="全部语言" xml:space="preserve">
+    <value>All languages</value>
+  </data>
   <data name="样式" xml:space="preserve">
     <value>Theme</value>
   </data>

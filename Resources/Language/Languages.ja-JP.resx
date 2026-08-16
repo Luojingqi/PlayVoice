@@ -36,6 +36,8 @@
   <data name="虚拟麦克风_说明" xml:space="preserve"><value>ゲーム、通話、配信ソフトのマイク入力としてVB-CABLEの録音側を選択します。PlayVoiceの最終ミックスはここから出力されます。</value></data>
   <data name="虚拟扬声器_说明" xml:space="preserve"><value>物理マイクとプリセット音声のミックスを受け取るVB-CABLEの再生側を選択します。</value></data>
   <data name="语言" xml:space="preserve"><value>言語</value></data>
+  <data name="搜索语言" xml:space="preserve"><value>検索言語</value></data>
+  <data name="全部语言" xml:space="preserve"><value>すべての言語</value></data>
   <data name="样式" xml:space="preserve"><value>テーマ</value></data>
   <data name="去Steam" xml:space="preserve"><value>Steamで応援</value></data>
   <data name="去Github" xml:space="preserve"><value>GitHubで応援</value></data>

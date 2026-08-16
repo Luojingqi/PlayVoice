@@ -36,6 +36,8 @@
   <data name="虚拟麦克风_说明" xml:space="preserve"><value>Выберите записывающий конец VB-CABLE как микрофон в играх, голосовых или стриминговых приложениях. Итоговый микс PlayVoice выводится сюда.</value></data>
   <data name="虚拟扬声器_说明" xml:space="preserve"><value>Выберите воспроизводящий конец VB-CABLE, принимающий смешанный физический микрофон и звук пресетов.</value></data>
   <data name="语言" xml:space="preserve"><value>Язык</value></data>
+  <data name="搜索语言" xml:space="preserve"><value>Язык поиска</value></data>
+  <data name="全部语言" xml:space="preserve"><value>Все языки</value></data>
   <data name="样式" xml:space="preserve"><value>Тема</value></data>
   <data name="去Steam" xml:space="preserve"><value>Поддержать нас в Steam</value></data>
   <data name="去Github" xml:space="preserve"><value>Поддержать нас на GitHub</value></data>

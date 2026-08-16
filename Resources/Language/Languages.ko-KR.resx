@@ -36,6 +36,8 @@
   <data name="虚拟麦克风_说明" xml:space="preserve"><value>게임, 음성 또는 방송 앱의 마이크 입력으로 VB-CABLE 녹음 쪽을 선택합니다. PlayVoice 최종 믹스가 이 장치로 출력됩니다.</value></data>
   <data name="虚拟扬声器_说明" xml:space="preserve"><value>믹스된 물리 마이크와 프리셋 오디오를 받는 VB-CABLE 재생 쪽을 선택합니다.</value></data>
   <data name="语言" xml:space="preserve"><value>언어</value></data>
+  <data name="搜索语言" xml:space="preserve"><value>검색 언어</value></data>
+  <data name="全部语言" xml:space="preserve"><value>모든 언어</value></data>
   <data name="样式" xml:space="preserve"><value>테마</value></data>
   <data name="去Steam" xml:space="preserve"><value>Steam에서 응원하기</value></data>
   <data name="去Github" xml:space="preserve"><value>GitHub에서 응원하기</value></data>

@@ -36,6 +36,8 @@
   <data name="虚拟麦克风_说明" xml:space="preserve"><value>Selecione a ponta de gravação do VB-CABLE como entrada de microfone em jogos, voz ou streaming. A mixagem final do PlayVoice sai por este dispositivo.</value></data>
   <data name="虚拟扬声器_说明" xml:space="preserve"><value>Selecione a ponta de reprodução do VB-CABLE que recebe o microfone físico e o áudio dos presets já misturados.</value></data>
   <data name="语言" xml:space="preserve"><value>Idioma</value></data>
+  <data name="搜索语言" xml:space="preserve"><value>Idioma da pesquisa</value></data>
+  <data name="全部语言" xml:space="preserve"><value>Todos os idiomas</value></data>
   <data name="样式" xml:space="preserve"><value>Tema</value></data>
   <data name="去Steam" xml:space="preserve"><value>Apoie-nos na Steam</value></data>
   <data name="去Github" xml:space="preserve"><value>Apoie-nos no GitHub</value></data>

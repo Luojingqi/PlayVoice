@@ -186,44 +186,32 @@ public partial class TablePage : UserControl
                 {
                     if (SteamClient.IsValid == false && MainWindow.Inst.SteamInit() == false)
                         return;
-                    var query = Query.All.AllowCachedResponse(10);
-                    if (_owner.SearchText != null && !string.IsNullOrEmpty(_owner.SearchText.Trim()))
-                    {
-                        query = query.WhereSearchText(_owner.SearchText.Trim())
-                            .RankedByTextSearch();
-                    }
-                    else
-                    {
-                        switch ((WorkshopPage.RankedType)_owner.RankedComboBox.SelectedIndex)
-                        {
-                            case WorkshopPage.RankedType.热度:
-                                query = query.RankedByTrend();
-                                break;
-                            case WorkshopPage.RankedType.评分:
-                                query = query.RankedByVote();
-                                break;
-                            case WorkshopPage.RankedType.最新:
-                                query = query.RankedByPublicationDate();
-                                break;
-                            case WorkshopPage.RankedType.订阅:
-                                query = query.RankedByTotalUniqueSubscriptions();
-                                break;
-                        }
-                    }
+                    string[] selectedLanguages = _owner.SearchLanguages;
+                    if (selectedLanguages.Length == 0)
+                        return;
 
-                    foreach (var item in _owner.BottomButtonListBox.SelectedItems)
-                        query = query.WithTag(WorkshopPage.TabTypeToSteam(((WorkshopPage.TabItem<WorkshopPage.TabType>)item).Type));
-                    query = query.MatchAnyTag();
-                    query = query.WithMetadata(true);
-
-                    var page = await query.GetPageAsync(nowPage);
+                    string searchText = _owner.SearchText?.Trim();
+                    string[] queryLanguages = string.IsNullOrEmpty(searchText)
+                        ? new[] { GetPreferredDisplayLanguage(selectedLanguages) }
+                        : selectedLanguages;
+                    var pageTasks = queryLanguages
+                        .Select(language => CreateWorkshopQuery(language, searchText)
+                            .GetPageAsync(nowPage))
+                        .ToArray();
+                    ResultPage?[] results = await Task.WhenAll(pageTasks);
                     if (!IsCurrentLoad(generation)) return;
-                    if (page.HasValue && page.Value.ResultCount > 0)
+
+                    var pages = results
+                        .Where(page => page.HasValue)
+                        .Select(page => page.GetValueOrDefault())
+                        .ToArray();
+                    var entries = MergeWorkshopEntries(pages, 50);
+                    if (entries.Count > 0)
                     {
-                        int totalItems = page.Value.TotalCount;
-                        int totalPages = (int)Math.Ceiling((double)totalItems / 50);
+                        int totalPages = pages.Max(page =>
+                            (int)Math.Ceiling((double)page.TotalCount / 50));
                         _owner.PageNumberSelection.Open(nowPage, totalPages);
-                        foreach (Item item in page.Value.Entries)
+                        foreach (Item item in entries)
                         {
                             var tableItem = AddItem(item, null);
                             tableItem.OnClick += _owner.OnClickTableItem_OpenDetailPage;
@@ -232,6 +220,87 @@ public partial class TablePage : UserControl
                 }
                 break;
         }
+    }
+
+    private string GetPreferredDisplayLanguage(string[] selectedLanguages)
+    {
+        string clientLanguage = SteamWorkshopLanguage.FromClientCulture(
+            PlayVoice.Resources.Language.LanguageManager.Inst.CurrentCulture.Name);
+        return selectedLanguages.Contains(clientLanguage, StringComparer.OrdinalIgnoreCase)
+            ? clientLanguage
+            : selectedLanguages[0];
+    }
+
+    private Query CreateWorkshopQuery(string language, string searchText)
+    {
+        var query = Query.All
+            .AllowCachedResponse(10)
+            .InLanguage(language);
+        if (!string.IsNullOrEmpty(searchText))
+        {
+            query = query.WhereSearchText(searchText)
+                .RankedByTextSearch();
+        }
+        else
+        {
+            switch ((WorkshopPage.RankedType)_owner.RankedComboBox.SelectedIndex)
+            {
+                case WorkshopPage.RankedType.热度:
+                    query = query.RankedByTrend();
+                    break;
+                case WorkshopPage.RankedType.评分:
+                    query = query.RankedByVote();
+                    break;
+                case WorkshopPage.RankedType.最新:
+                    query = query.RankedByPublicationDate();
+                    break;
+                case WorkshopPage.RankedType.订阅:
+                    query = query.RankedByTotalUniqueSubscriptions();
+                    break;
+            }
+        }
+
+        foreach (var item in _owner.BottomButtonListBox.SelectedItems)
+        {
+            query = query.WithTag(WorkshopPage.TabTypeToSteam(
+                ((WorkshopPage.TabItem<WorkshopPage.TabType>)item).Type));
+        }
+
+        return query
+            .MatchAnyTag()
+            .WithMetadata(true);
+    }
+
+    private static List<Item> MergeWorkshopEntries(
+        IReadOnlyList<ResultPage> pages,
+        int maxItems)
+    {
+        var entriesByLanguage = pages
+            .Select(page => page.Entries.ToList())
+            .ToArray();
+        var mergedEntries = new List<Item>(maxItems);
+        var seenItemIds = new HashSet<PublishedFileId>();
+
+        for (int index = 0; mergedEntries.Count < maxItems; index++)
+        {
+            bool foundEntry = false;
+            foreach (var entries in entriesByLanguage)
+            {
+                if (index >= entries.Count) continue;
+
+                foundEntry = true;
+                Item item = entries[index];
+                if (seenItemIds.Add(item.Id))
+                    mergedEntries.Add(item);
+                if (mergedEntries.Count == maxItems)
+                    break;
+            }
+
+            if (!foundEntry)
+                break;
+        }
+
+        return mergedEntries;
     }
 
     private bool IsCurrentLoad(int generation) =>

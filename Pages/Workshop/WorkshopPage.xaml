@@ -131,9 +131,163 @@
             </ListBox>
         </Border>
 
-        <Frame Grid.Row="2" Margin="0,6.5,11,5"
-                x:Name="PageNumberSelectionFrame" 
-                HorizontalAlignment="Right"
-                VerticalAlignment="Center"/>
+        <Grid Grid.Row="2"
+              Margin="0,6.5,11,5"
+              HorizontalAlignment="Right"
+              VerticalAlignment="Center">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0"
+                  x:Name="SearchLanguageInputField"
+                  Margin="0,0,15,0"
+                  Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           Text="{L:Lan 搜索语言}"
+                           Style="{StaticResource TextBlockLight}"
+                           FontSize="16"
+                           TextAlignment="Center"
+                           VerticalAlignment="Center"/>
+                <Grid Grid.Column="1"
+                      Width="150"
+                      Height="35"
+                      Margin="10,0,0,0">
+                    <ToggleButton x:Name="SearchLanguageDropDownButton"
+                                  Background="{DynamicResource BgMedium}"
+                                  BorderBrush="{DynamicResource AccentColor}"
+                                  BorderThickness="1"
+                                  ClickMode="Press"
+                                  Focusable="False">
+                        <ToggleButton.Template>
+                            <ControlTemplate TargetType="ToggleButton">
+                                <Border x:Name="MainBorder"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="3">
+                                    <TextBlock Text="{TemplateBinding Content}"
+                                               Margin="4,1,7,1"
+                                               VerticalAlignment="Center"
+                                               Foreground="{DynamicResource TextPrimary}"
+                                               FontFamily="{DynamicResource FontLight}"
+                                               FontSize="15"
+                                               TextTrimming="CharacterEllipsis"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="MainBorder"
+                                                Property="BorderBrush"
+                                                Value="{DynamicResource AccentColorSecondary}"/>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="MainBorder"
+                                                Property="BorderBrush"
+                                                Value="{DynamicResource AccentColorSecondary}"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </ToggleButton.Template>
+                    </ToggleButton>
+
+                    <Popup IsOpen="{Binding IsChecked, ElementName=SearchLanguageDropDownButton, Mode=TwoWay}"
+                           PlacementTarget="{Binding ElementName=SearchLanguageDropDownButton}"
+                           Placement="Top"
+                           StaysOpen="False"
+                           AllowsTransparency="True"
+                           PopupAnimation="Slide"
+                           Closed="SearchLanguagePopup_Closed">
+                        <Border Background="{DynamicResource BgMedium}"
+                                BorderBrush="{DynamicResource AccentColor}"
+                                BorderThickness="1"
+                                CornerRadius="3"
+                                Margin="0,0,0,2"
+                                Width="150">
+                            <ListBox x:Name="SearchLanguageListBox"
+                                     SelectionMode="Multiple"
+                                     MaxHeight="300"
+                                     Background="Transparent"
+                                     BorderThickness="0"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     SelectionChanged="SearchLanguageListBox_SelectionChanged">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                        <Setter Property="FontFamily" Value="{DynamicResource FontLight}"/>
+                                        <Setter Property="Height" Value="30"/>
+                                        <Setter Property="Padding" Value="8,4"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="ListBoxItem">
+                                                    <Border x:Name="ItemBorder"
+                                                            Background="{TemplateBinding Background}"
+                                                            Padding="{TemplateBinding Padding}">
+                                                        <Grid>
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="18"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <Border Grid.Column="0"
+                                                                    Width="13"
+                                                                    Height="13"
+                                                                    HorizontalAlignment="Left"
+                                                                    VerticalAlignment="Center"
+                                                                    BorderBrush="{DynamicResource AccentColor}"
+                                                                    BorderThickness="1"
+                                                                    CornerRadius="2">
+                                                                <TextBlock x:Name="CheckMark"
+                                                                           Text="✓"
+                                                                           FontSize="11"
+                                                                           HorizontalAlignment="Center"
+                                                                           VerticalAlignment="Center"
+                                                                           Foreground="{DynamicResource AccentColor}"
+                                                                           Visibility="Collapsed"/>
+                                                            </Border>
+                                                            <TextBlock Grid.Column="1"
+                                                                       Text="{Binding Name}"
+                                                                       Foreground="{TemplateBinding Foreground}"
+                                                                       FontFamily="{TemplateBinding FontFamily}"
+                                                                       VerticalAlignment="Center"
+                                                                       TextTrimming="CharacterEllipsis"/>
+                                                        </Grid>
+                                                    </Border>
+                                                    <ControlTemplate.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter TargetName="ItemBorder"
+                                                                    Property="Background"
+                                                                    Value="{DynamicResource AccentSurface}"/>
+                                                        </Trigger>
+                                                        <Trigger Property="IsSelected" Value="True">
+                                                            <Setter TargetName="ItemBorder"
+                                                                    Property="Background"
+                                                                    Value="{DynamicResource BgDark}"/>
+                                                            <Setter TargetName="CheckMark"
+                                                                    Property="Visibility"
+                                                                    Value="Visible"/>
+                                                        </Trigger>
+                                                    </ControlTemplate.Triggers>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                        </Border>
+                    </Popup>
+                </Grid>
+            </Grid>
+
+            <Frame Grid.Column="1"
+                   x:Name="PageNumberSelectionFrame"/>
+        </Grid>
     </Grid>
 </Page>

@@ -3,6 +3,7 @@ using PlayVoice.Resources.Language;
 using PlayVoice.Diagnostics;
 using Steamworks;
 using Steamworks.Ugc;
+using System.Globalization;
 using System.IO;
 using System.Net.Http;
 using System.Windows;
@@ -61,6 +62,14 @@ namespace PlayVoice.Pages.Workshop
                 };
             RankedComboBox.DisplayMemberPath = "Name";
 
+            var searchLanguageItems = CreateSearchLanguageItems();
+            SearchLanguageListBox.ItemsSource = searchLanguageItems;
+            isUpdatingSearchLanguageSelection = true;
+            foreach (var item in searchLanguageItems)
+                SearchLanguageListBox.SelectedItems.Add(item);
+            UpdateSearchLanguageSelectionText();
+            isUpdatingSearchLanguageSelection = false;
+
 
             ItemGroupListBox.SelectionChanged += (sender, e) =>
             {
@@ -94,6 +103,64 @@ namespace PlayVoice.Pages.Workshop
 
         }
         public string SearchText => SearchTextBox.Text;
+        public string[] SearchLanguages => SearchLanguageListBox.SelectedItems
+            .Cast<SearchLanguageItem>()
+            .Where(item => !string.IsNullOrWhiteSpace(item.SteamLanguage))
+            .Select(item => item.SteamLanguage)
+            .ToArray();
+
+        private static List<SearchLanguageItem> CreateSearchLanguageItems()
+        {
+            var items = new List<SearchLanguageItem>();
+
+            foreach (var language in SteamWorkshopLanguage.SupportedLanguages)
+            {
+                string displayName = CultureInfo
+                    .GetCultureInfo(language.CultureName)
+                    .DisplayName;
+                items.Add(new SearchLanguageItem(displayName, language.SteamLanguage));
+            }
+
+            return items;
+        }
+
+        private bool isUpdatingSearchLanguageSelection;
+        private bool hasSearchLanguageSelectionChanged;
+        private void SearchLanguageListBox_SelectionChanged(
+            object sender,
+            SelectionChangedEventArgs e)
+        {
+            if (isUpdatingSearchLanguageSelection) return;
+
+            isUpdatingSearchLanguageSelection = true;
+            UpdateSearchLanguageSelectionText();
+            isUpdatingSearchLanguageSelection = false;
+            hasSearchLanguageSelectionChanged = true;
+        }
+
+        private void SearchLanguagePopup_Closed(object sender, EventArgs e)
+        {
+            if (!hasSearchLanguageSelectionChanged) return;
+
+            hasSearchLanguageSelectionChanged = false;
+            ChangedPage(null, null);
+        }
+
+        private void UpdateSearchLanguageSelectionText()
+        {
+            var selectedItems = SearchLanguageListBox.SelectedItems
+                .Cast<SearchLanguageItem>()
+                .ToArray();
+            string text = selectedItems.Length switch
+            {
+                0 => LanguageManager.Inst.GetString("无"),
+                var count when count == SearchLanguageListBox.Items.Count =>
+                    LanguageManager.Inst.GetString("全部语言"),
+                _ => string.Join(", ", selectedItems.Select(item => item.Name))
+            };
+            SearchLanguageDropDownButton.Content = text;
+            SearchLanguageDropDownButton.ToolTip = text;
+        }
 
         private void SearchTextBox_KeyDown(object sender, KeyEventArgs e)
         {
@@ -114,6 +181,7 @@ namespace PlayVoice.Pages.Workshop
             {
                 BottomButtonListBox.Visibility = Visibility.Collapsed;
                 UpperRightInputField.Visibility = Visibility.Collapsed;
+                SearchLanguageInputField.Visibility = Visibility.Collapsed;
             }
             loadingPage.Visibility = Visibility.Visible;
             this.IsEnabled = false;
@@ -123,6 +191,7 @@ namespace PlayVoice.Pages.Workshop
             {
                 BottomButtonListBox.Visibility = Visibility.Visible;
                 UpperRightInputField.Visibility = Visibility.Visible;
+                SearchLanguageInputField.Visibility = Visibility.Visible;
             }
 
             isLoading = false;
@@ -227,6 +296,18 @@ namespace PlayVoice.Pages.Workshop
             评分,
             最新,
             订阅
+        }
+
+        public class SearchLanguageItem
+        {
+            public string Name { get; }
+            public string SteamLanguage { get; }
+
+            public SearchLanguageItem(string name, string steamLanguage)
+            {
+                Name = name;
+                SteamLanguage = steamLanguage;
+            }
         }
 
 

@@ -20,20 +20,6 @@ namespace PlayVoice.Pages.Preset
     /// </summary>
     public partial class UploadPresetPage : Page, IProgress<float>
     {
-        private static readonly Dictionary<string, string> SteamLanguageByClientCulture =
-            new(StringComparer.OrdinalIgnoreCase)
-            {
-                ["zh-CN"] = "schinese",
-                ["zh-TW"] = "tchinese",
-                ["en-US"] = "english",
-                ["ru-RU"] = "russian",
-                ["es-ES"] = "spanish",
-                ["pt-BR"] = "brazilian",
-                ["ja-JP"] = "japanese",
-                ["ko-KR"] = "koreana",
-                ["de-DE"] = "german"
-            };
-
         private ObservableCollection<string> presetNameArray = new ObservableCollection<string>();
 
         private CircularProgressBar loadingPage;
@@ -336,9 +322,7 @@ namespace PlayVoice.Pages.Preset
                 return steamLanguage;
 
             string clientCulture = LanguageManager.Inst.CurrentCulture.Name;
-            return SteamLanguageByClientCulture.TryGetValue(clientCulture, out string language)
-                ? language
-                : "english";
+            return SteamWorkshopLanguage.FromClientCulture(clientCulture);
         }
 
         private void ImageCloseButton_Click(object sender, RoutedEventArgs e)

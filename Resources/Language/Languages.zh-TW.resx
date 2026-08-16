@@ -36,6 +36,8 @@
   <data name="虚拟麦克风_说明" xml:space="preserve"><value>選擇 VB-CABLE 的錄音端，作為遊戲、語音或直播軟體的麥克風輸入。PlayVoice 的最終混音會從此裝置輸出。</value></data>
   <data name="虚拟扬声器_说明" xml:space="preserve"><value>選擇 VB-CABLE 的播放端，用於接收混合後的實體麥克風與預設音訊。</value></data>
   <data name="语言" xml:space="preserve"><value>語言</value></data>
+  <data name="搜索语言" xml:space="preserve"><value>搜尋語言</value></data>
+  <data name="全部语言" xml:space="preserve"><value>所有語言</value></data>
   <data name="样式" xml:space="preserve"><value>主題</value></data>
   <data name="去Steam" xml:space="preserve"><value>前往 Steam 支持我們</value></data>
   <data name="去Github" xml:space="preserve"><value>前往 GitHub 支持我們</value></data>

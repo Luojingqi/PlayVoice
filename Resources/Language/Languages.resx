@@ -178,6 +178,12 @@ PlayVoice 的最终混音会从此设备输出。</value></data>
   <data name="语言" xml:space="preserve">
     <value>语言</value>
   </data>
+  <data name="搜索语言" xml:space="preserve">
+    <value>搜索语言</value>
+  </data>
+  <data name="全部语言" xml:space="preserve">
+    <value>全部语言</value>
+  </data>
   <data name="样式" xml:space="preserve">
     <value>样式</value>
   </data>
