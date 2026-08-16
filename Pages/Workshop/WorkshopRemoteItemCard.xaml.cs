@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
 namespace PlayVoice.Pages.Workshop;
@@ -17,6 +18,10 @@ namespace PlayVoice.Pages.Workshop;
 /// </summary>
 public partial class WorkshopRemoteItemCard : UserControl
 {
+    internal const double CollapsedWidth = 170;
+    internal const double ExpandedWidth = CollapsedWidth * 2;
+    private const int ExpansionDurationMilliseconds = 240;
+
     private readonly ObservableCollection<WorkshopRemoteAudioItem> _audioItems = new();
     private CancellationTokenSource? _loadCancellation;
     private int _loadGeneration;
@@ -25,6 +30,23 @@ public partial class WorkshopRemoteItemCard : UserControl
     private bool _isSubscribed;
     private bool? _userVote;
     private bool _isFavorite;
+    private int _thumbnailHoverGeneration;
+    private int _expansionAnimationGeneration;
+
+    public bool IsExpanded { get; private set; }
+
+    public static readonly RoutedEvent ExpansionStateChangedEvent =
+        EventManager.RegisterRoutedEvent(
+            nameof(ExpansionStateChanged),
+            RoutingStrategy.Bubble,
+            typeof(RoutedEventHandler),
+            typeof(WorkshopRemoteItemCard));
+
+    public event RoutedEventHandler ExpansionStateChanged
+    {
+        add => AddHandler(ExpansionStateChangedEvent, value);
+        remove => RemoveHandler(ExpansionStateChangedEvent, value);
+    }
 
     public WorkshopRemoteItemCard()
     {
@@ -71,8 +93,78 @@ public partial class WorkshopRemoteItemCard : UserControl
             LoadItemAsync().Forget("Workshop.HorizontalCard.Load");
     }
 
-    private void WorkshopRemoteItemCard_Unloaded(object sender, RoutedEventArgs e) =>
+    private void WorkshopRemoteItemCard_Unloaded(object sender, RoutedEventArgs e)
+    {
         CancelCurrentLoad();
+        Collapse(animate: false);
+    }
+
+    internal void Collapse(bool animate = true)
+    {
+        if (!IsExpanded && Math.Abs(ActualWidth - CollapsedWidth) <= 0.5)
+            return;
+
+        SetExpanded(expanded: false, animate);
+    }
+
+    private void ExpandButton_Click(object sender, RoutedEventArgs e) =>
+        SetExpanded(!IsExpanded, animate: true);
+
+    private void SetExpanded(bool expanded, bool animate)
+    {
+        double targetWidth = expanded ? ExpandedWidth : CollapsedWidth;
+        double currentWidth = ActualWidth > 0 ? ActualWidth : Width;
+        IsExpanded = expanded;
+        RaiseEvent(new RoutedEventArgs(ExpansionStateChangedEvent, this));
+
+        _expansionAnimationGeneration++;
+        BeginAnimation(WidthProperty, null);
+        SetCurrentValue(WidthProperty, currentWidth);
+        if (!animate || Math.Abs(targetWidth - currentWidth) <= 0.5)
+        {
+            SetCurrentValue(WidthProperty, targetWidth);
+            return;
+        }
+
+        int generation = _expansionAnimationGeneration;
+        var animation = new DoubleAnimation
+        {
+            From = currentWidth,
+            To = targetWidth,
+            Duration = TimeSpan.FromMilliseconds(ExpansionDurationMilliseconds),
+            EasingFunction = new CubicEase { EasingMode = EasingMode.EaseInOut },
+            FillBehavior = FillBehavior.HoldEnd
+        };
+        animation.Completed += (_, _) =>
+        {
+            if (generation != _expansionAnimationGeneration) return;
+
+            BeginAnimation(WidthProperty, null);
+            SetCurrentValue(WidthProperty, targetWidth);
+        };
+        BeginAnimation(WidthProperty, animation, HandoffBehavior.SnapshotAndReplace);
+    }
+
+    private void ThumbnailRoot_MouseEnter(object sender, MouseEventArgs e)
+    {
+        _thumbnailHoverGeneration++;
+        ExpandButton.Visibility = Visibility.Visible;
+        ExpandButton.BeginAnimation(
+            OpacityProperty,
+            new DoubleAnimation(1, TimeSpan.FromMilliseconds(140)));
+    }
+
+    private void ThumbnailRoot_MouseLeave(object sender, MouseEventArgs e)
+    {
+        int generation = ++_thumbnailHoverGeneration;
+        var animation = new DoubleAnimation(0, TimeSpan.FromMilliseconds(150));
+        animation.Completed += (_, _) =>
+        {
+            if (generation == _thumbnailHoverGeneration && !ThumbnailRoot.IsMouseOver)
+                ExpandButton.Visibility = Visibility.Collapsed;
+        };
+        ExpandButton.BeginAnimation(OpacityProperty, animation);
+    }
 
     private async Task LoadItemAsync()
     {

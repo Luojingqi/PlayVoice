@@ -9,7 +9,7 @@
              mc:Ignorable="d"
              Width="170"
              MinWidth="170"
-             MaxWidth="170">
+             MaxWidth="340">
 
     <UserControl.Resources>
         <ResourceDictionary>
@@ -32,7 +32,7 @@
             <Style x:Key="ThumbnailSubscribeButtonStyle" TargetType="Button">
                 <Setter Property="Height" Value="27"/>
                 <Setter Property="MinWidth" Value="50"/>
-                <Setter Property="MaxWidth" Value="112"/>
+                <Setter Property="MaxWidth" Value="105"/>
                 <Setter Property="Padding" Value="8,2"/>
                 <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
                 <Setter Property="Background" Value="{DynamicResource AccentSurface}"/>
@@ -68,6 +68,16 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+
+            <Style x:Key="ThumbnailExpandButtonStyle"
+                   TargetType="Button"
+                   BasedOn="{StaticResource ThumbnailSubscribeButtonStyle}">
+                <Setter Property="Width" Value="27"/>
+                <Setter Property="MinWidth" Value="27"/>
+                <Setter Property="MaxWidth" Value="27"/>
+                <Setter Property="Padding" Value="0"/>
+                <Setter Property="FontSize" Value="14"/>
+            </Style>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -92,7 +102,9 @@
                   Width="146"
                   Height="146"
                   HorizontalAlignment="Center"
-                  Background="{DynamicResource BgLight}">
+                  Background="{DynamicResource BgLight}"
+                  MouseEnter="ThumbnailRoot_MouseEnter"
+                  MouseLeave="ThumbnailRoot_MouseLeave">
                 <Grid.Triggers>
                     <EventTrigger RoutedEvent="Mouse.MouseEnter">
                         <BeginStoryboard>
@@ -188,6 +200,16 @@
                         </Button>
                     </UniformGrid>
                 </Border>
+
+                <Button x:Name="ExpandButton"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Bottom"
+                        Margin="5"
+                        Style="{StaticResource ThumbnailExpandButtonStyle}"
+                        Content="↔"
+                        Opacity="0"
+                        Visibility="Collapsed"
+                        Click="ExpandButton_Click"/>
 
                 <Border HorizontalAlignment="Left"
                         VerticalAlignment="Top"

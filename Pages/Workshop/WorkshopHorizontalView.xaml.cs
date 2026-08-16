@@ -16,7 +16,7 @@ namespace PlayVoice.Pages.Workshop;
 /// </summary>
 public partial class WorkshopHorizontalView : UserControl
 {
-    private const double CardWidth = 170;
+    private const double CardWidth = WorkshopRemoteItemCard.CollapsedWidth;
     private const double CardHorizontalMargin = 6;
     private const double CardStep = CardWidth + CardHorizontalMargin;
     private const double BoundaryTolerance = 0.5;
@@ -26,11 +26,15 @@ public partial class WorkshopHorizontalView : UserControl
     private bool _isAnimating;
     private double _targetOffset;
     private int _animationGeneration;
+    private WorkshopRemoteItemCard? _expandedCard;
 
     public WorkshopHorizontalView()
     {
         InitializeComponent();
         ItemListBox.ItemsSource = _items;
+        AddHandler(
+            WorkshopRemoteItemCard.ExpansionStateChangedEvent,
+            new RoutedEventHandler(WorkshopRemoteItemCard_ExpansionStateChanged));
         Loaded += WorkshopHorizontalView_Loaded;
         Unloaded += WorkshopHorizontalView_Unloaded;
         SizeChanged += WorkshopHorizontalView_SizeChanged;
@@ -38,6 +42,7 @@ public partial class WorkshopHorizontalView : UserControl
 
     public void SetItems(IEnumerable<Item> items)
     {
+        CollapseExpandedCard(animate: false);
         CancelOffsetAnimation();
         _items.Clear();
         foreach (Item item in items)
@@ -50,6 +55,7 @@ public partial class WorkshopHorizontalView : UserControl
 
     public void Clear()
     {
+        CollapseExpandedCard(animate: false);
         CancelOffsetAnimation();
         _items.Clear();
         ResetToBeginning();
@@ -104,6 +110,9 @@ public partial class WorkshopHorizontalView : UserControl
 
     private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
     {
+        if (Math.Abs(e.HorizontalChange) > BoundaryTolerance)
+            CollapseExpandedCard();
+
         if (!_isAnimating)
             _targetOffset = _scrollViewer.HorizontalOffset;
         UpdateScrollMetrics();
@@ -142,6 +151,7 @@ public partial class WorkshopHorizontalView : UserControl
         e.Handled = true;
         if (_scrollViewer == null || e.Delta == 0) return;
 
+        CollapseExpandedCard();
         ScrollOneCard(e.Delta < 0 ? 1 : -1);
     }
 
@@ -190,6 +200,7 @@ public partial class WorkshopHorizontalView : UserControl
         if (_scrollViewer == null) return;
 
         e.Handled = true;
+        CollapseExpandedCard();
         switch (e.ScrollEventType)
         {
             case ScrollEventType.ThumbTrack:
@@ -304,6 +315,34 @@ public partial class WorkshopHorizontalView : UserControl
 
     private double GetMaximumOffset() =>
         Math.Max(0, _scrollViewer?.ScrollableWidth ?? 0);
+
+    private void WorkshopRemoteItemCard_ExpansionStateChanged(
+        object sender,
+        RoutedEventArgs e)
+    {
+        if (e.OriginalSource is not WorkshopRemoteItemCard card) return;
+
+        if (card.IsExpanded)
+        {
+            WorkshopRemoteItemCard? previousCard = _expandedCard;
+            _expandedCard = card;
+            if (previousCard != null && !ReferenceEquals(previousCard, card))
+                previousCard.Collapse();
+        }
+        else if (ReferenceEquals(_expandedCard, card))
+        {
+            _expandedCard = null;
+        }
+
+        e.Handled = true;
+    }
+
+    private void CollapseExpandedCard(bool animate = true)
+    {
+        WorkshopRemoteItemCard? card = _expandedCard;
+        _expandedCard = null;
+        card?.Collapse(animate);
+    }
 
     private void WorkshopHorizontalView_SizeChanged(object sender, SizeChangedEventArgs e)
     {
