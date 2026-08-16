@@ -24,7 +24,7 @@ internal class GlobalData
     /// <summary>
     /// 用于持久化数据迁移的内部版本索引。
     /// </summary>
-    public const int Version = 8;
+    public const int Version = 9;
 
     private static readonly Dictionary<string, string> SteamLanguageMap =
         new(StringComparer.OrdinalIgnoreCase)
