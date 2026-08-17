@@ -12,7 +12,7 @@ namespace PlayVoice.Pages.Workshop;
 
 /// <summary>
 /// 创意工坊公共浏览页专用的横向卡片容器。
-/// 负责固定宽度布局、滚轮动画、卡片吸附、边界限制和显式底部滚动条。
+/// 负责固定宽度布局、鼠标拖动、滚轮动画、卡片吸附、边界限制和显式底部滚动条。
 /// </summary>
 public partial class WorkshopHorizontalView : UserControl
 {
@@ -27,6 +27,10 @@ public partial class WorkshopHorizontalView : UserControl
     private double _targetOffset;
     private int _animationGeneration;
     private WorkshopRemoteItemCard? _expandedCard;
+    private bool _isPointerDragPending;
+    private bool _isPointerDragging;
+    private Point _pointerDragStart;
+    private double _pointerDragStartOffset;
 
     public WorkshopHorizontalView()
     {
@@ -42,6 +46,7 @@ public partial class WorkshopHorizontalView : UserControl
 
     public void SetItems(IEnumerable<Item> items)
     {
+        EndPointerDrag(snapToCard: false);
         CollapseExpandedCard(animate: false);
         CancelOffsetAnimation();
         _items.Clear();
@@ -55,6 +60,7 @@ public partial class WorkshopHorizontalView : UserControl
 
     public void Clear()
     {
+        EndPointerDrag(snapToCard: false);
         CollapseExpandedCard(animate: false);
         CancelOffsetAnimation();
         _items.Clear();
@@ -70,6 +76,7 @@ public partial class WorkshopHorizontalView : UserControl
 
     private void WorkshopHorizontalView_Unloaded(object sender, RoutedEventArgs e)
     {
+        EndPointerDrag(snapToCard: false);
         CancelOffsetAnimation();
         DetachScrollViewer();
     }
@@ -149,6 +156,109 @@ public partial class WorkshopHorizontalView : UserControl
             return;
 
         HandleHorizontalMouseWheel(e);
+    }
+
+    private void ItemListBox_PreviewMouseLeftButtonDown(
+        object sender,
+        MouseButtonEventArgs e)
+    {
+        if (_scrollViewer == null || GetMaximumOffset() <= BoundaryTolerance)
+            return;
+
+        CancelOffsetAnimation();
+        _pointerDragStart = e.GetPosition(ItemListBox);
+        _pointerDragStartOffset = _scrollViewer.HorizontalOffset;
+        _isPointerDragPending = true;
+        _isPointerDragging = false;
+    }
+
+    private void ItemListBox_PreviewMouseMove(object sender, MouseEventArgs e)
+    {
+        if (!_isPointerDragPending || _scrollViewer == null)
+            return;
+
+        if (e.LeftButton != MouseButtonState.Pressed)
+        {
+            EndPointerDrag(snapToCard: false);
+            return;
+        }
+
+        Point currentPosition = e.GetPosition(ItemListBox);
+        Vector displacement = currentPosition - _pointerDragStart;
+        if (!_isPointerDragging)
+        {
+            bool passedHorizontalThreshold =
+                Math.Abs(displacement.X) >= SystemParameters.MinimumHorizontalDragDistance;
+            bool passedVerticalThreshold =
+                Math.Abs(displacement.Y) >= SystemParameters.MinimumVerticalDragDistance;
+            if (!passedHorizontalThreshold && !passedVerticalThreshold)
+                return;
+
+            // 明显的纵向手势留给卡片内部的描述或音频列表。
+            if (Math.Abs(displacement.Y) >= Math.Abs(displacement.X))
+            {
+                EndPointerDrag(snapToCard: false);
+                return;
+            }
+
+            CollapseExpandedCard();
+            if (!Mouse.Capture(ItemListBox, CaptureMode.Element))
+            {
+                EndPointerDrag(snapToCard: false);
+                return;
+            }
+
+            _isPointerDragging = true;
+            ItemListBox.Cursor = Cursors.ScrollWE;
+        }
+
+        double requestedOffset = _pointerDragStartOffset - displacement.X;
+        ScrollDuringPointerDrag(requestedOffset);
+        e.Handled = true;
+    }
+
+    private void ItemListBox_PreviewMouseLeftButtonUp(
+        object sender,
+        MouseButtonEventArgs e)
+    {
+        if (!_isPointerDragPending)
+            return;
+
+        bool handled = _isPointerDragging;
+        EndPointerDrag(snapToCard: handled);
+        if (handled)
+            e.Handled = true;
+    }
+
+    private void ItemListBox_LostMouseCapture(object sender, MouseEventArgs e)
+    {
+        if (_isPointerDragging)
+            EndPointerDrag(snapToCard: true);
+    }
+
+    private void ScrollDuringPointerDrag(double requestedOffset)
+    {
+        if (_scrollViewer == null) return;
+
+        double offset = Math.Clamp(requestedOffset, 0, GetMaximumOffset());
+        _targetOffset = offset;
+        SetCurrentValue(AnimatedHorizontalOffsetProperty, offset);
+        _scrollViewer.ScrollToHorizontalOffset(offset);
+        UpdateScrollMetrics();
+    }
+
+    private void EndPointerDrag(bool snapToCard)
+    {
+        bool wasDragging = _isPointerDragging;
+        _isPointerDragPending = false;
+        _isPointerDragging = false;
+        ItemListBox.ClearValue(CursorProperty);
+
+        if (ReferenceEquals(Mouse.Captured, ItemListBox))
+            Mouse.Capture(null);
+
+        if (snapToCard && wasDragging && _scrollViewer != null)
+            AnimateToOffset(SnapToNearestCard(_scrollViewer.HorizontalOffset));
     }
 
     private void HorizontalScrollBar_PreviewMouseWheel(object sender, MouseWheelEventArgs e) =>

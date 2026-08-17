@@ -90,6 +90,10 @@
                  VirtualizingPanel.IsVirtualizing="True"
                  VirtualizingPanel.VirtualizationMode="Recycling"
                  VirtualizingPanel.ScrollUnit="Pixel"
+                 PreviewMouseLeftButtonDown="ItemListBox_PreviewMouseLeftButtonDown"
+                 PreviewMouseMove="ItemListBox_PreviewMouseMove"
+                 PreviewMouseLeftButtonUp="ItemListBox_PreviewMouseLeftButtonUp"
+                 LostMouseCapture="ItemListBox_LostMouseCapture"
                  PreviewMouseWheel="ItemListBox_PreviewMouseWheel">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
