@@ -121,7 +121,9 @@ public partial class TablePage : UserControl
                         if (SteamClient.IsValid == false) return;
                     //只有此，需要再次判断，如果未登录，但是steam已经启动，可以尝试获取缓存
                     var query = Query.Items.WhereUserSubscribed();
-                    query = query.WithMetadata(true);
+                    query = query
+                        .WithMetadata(true)
+                        .WithLongDescription(true);
                     ResultPage? page = await query.GetPageAsync(nowPage);
                     if (!IsCurrentLoad(generation)) return;
                     if (page.HasValue && page.Value.ResultCount > 0)
@@ -149,7 +151,9 @@ public partial class TablePage : UserControl
                     if (SteamClient.IsValid == false && MainWindow.Inst.SteamInit() == false)
                         return;
                     var query = Query.All.WhereUserPublished().AllowCachedResponse(10);
-                    query = query.WithMetadata(true);
+                    query = query
+                        .WithMetadata(true)
+                        .WithLongDescription(true);
                     var page = await query.GetPageAsync(nowPage);
                     if (!IsCurrentLoad(generation)) return;
                     if (page.HasValue && page.Value.ResultCount > 0)
@@ -170,7 +174,9 @@ public partial class TablePage : UserControl
                     if (SteamClient.IsValid == false && MainWindow.Inst.SteamInit() == false)
                         return;
                     var query = Query.Screenshots.CreatedByFriends().AllowCachedResponse(10);
-                    query = query.WithMetadata(true);
+                    query = query
+                        .WithMetadata(true)
+                        .WithLongDescription(true);
                     var page = await query.GetPageAsync(nowPage);
                     if (!IsCurrentLoad(generation)) return;
                     if (page.HasValue && page.Value.ResultCount > 0)
@@ -311,7 +317,8 @@ public partial class TablePage : UserControl
 
         return query
             .MatchAnyTag()
-            .WithMetadata(true);
+            .WithMetadata(true)
+            .WithLongDescription(true);
     }
 
     private static List<Item> MergeWorkshopEntries(
@@ -366,14 +373,19 @@ public partial class TablePage : UserControl
             return null;
         }
 
-        var item = await SteamUGC.QueryFileAsync(tableItem.Item.Value.Id);
-        if (!item.HasValue) return null;
+        var query = Query.Items
+            .WithFileId(tableItem.Item.Value.Id)
+            .WithMetadata(true)
+            .WithLongDescription(true);
+        ResultPage? page = await query.GetPageAsync(1);
+        if (!page.HasValue || page.Value.ResultCount == 0) return null;
+        Item item = page.Value.Entries.First();
 
         int index = TableItemList.IndexOf(tableItem);
         if (index < 0) return null;
 
-        var newTableItem = new TablePageItem(item.Value, item.Value.IsInstalled ? item.Value.Directory : null);
-        newTableItem.OnClick += item.Value.IsInstalled
+        var newTableItem = new TablePageItem(item, item.IsInstalled ? item.Directory : null);
+        newTableItem.OnClick += item.IsInstalled
             ? _owner.OnClickTableItem_OpenLocalDetailPage
             : _owner.OnClickTableItem_OpenDetailPage;
 

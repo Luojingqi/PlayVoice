@@ -202,7 +202,7 @@ namespace PlayVoice.Pages.Preset
                 };
                 string workshopDescriptionJson = JsonTool.ToJson(
                     workshopDescription,
-                    writeIndented: false);
+                    writeIndented: true);
 
                 if (string.IsNullOrEmpty(imagePath) || !File.Exists(imagePath))
                     imagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Thumbnail.png");
