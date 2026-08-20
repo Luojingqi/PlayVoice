@@ -172,15 +172,71 @@ public partial class AudioTrackItem : UserControl
             this.Tag = bmp;
         }
 
-        this.Visibility = Visibility.Hidden;
-
         DataObject dragData = new DataObject("AudioTrackItemVisual", this);
-        DragDrop.DoDragDrop(this, dragData, DragDropEffects.Move);
+        ScrollViewer scrollViewer = FindVisualParent<ScrollViewer>(this);
+        bool isDragging = true;
 
-        this.Visibility = Visibility.Visible;
-        this.Tag = null;
+        void ScrollDuringDrag(int delta, int screenX, int screenY)
+        {
+            if (!isDragging || scrollViewer == null || delta == 0)
+                return;
+
+            void RaiseMouseWheelEvent()
+            {
+                if (!isDragging || !scrollViewer.IsLoaded)
+                    return;
+
+                Point position = scrollViewer.PointFromScreen(new Point(screenX, screenY));
+                if (!new Rect(scrollViewer.RenderSize).Contains(position))
+                    return;
+
+                var wheelEvent = new MouseWheelEventArgs(
+                    Mouse.PrimaryDevice,
+                    Environment.TickCount,
+                    delta)
+                {
+                    RoutedEvent = Mouse.MouseWheelEvent,
+                    Source = scrollViewer
+                };
+                scrollViewer.RaiseEvent(wheelEvent);
+            }
+
+            if (scrollViewer.Dispatcher.CheckAccess())
+                RaiseMouseWheelEvent();
+            else
+                scrollViewer.Dispatcher.BeginInvoke(RaiseMouseWheelEvent);
+        }
+
+        HotkeyManager.Inst.MouseWheelScrolled += ScrollDuringDrag;
+        this.Visibility = Visibility.Hidden;
+        try
+        {
+            DragDrop.DoDragDrop(this, dragData, DragDropEffects.Move);
+        }
+        finally
+        {
+            isDragging = false;
+            HotkeyManager.Inst.MouseWheelScrolled -= ScrollDuringDrag;
+            this.Visibility = Visibility.Visible;
+            this.Tag = null;
+        }
 
         e.Handled = true;
+    }
+
+    private static T FindVisualParent<T>(DependencyObject child)
+        where T : DependencyObject
+    {
+        DependencyObject current = child;
+        while (current != null)
+        {
+            if (current is T parent)
+                return parent;
+
+            current = VisualTreeHelper.GetParent(current);
+        }
+
+        return null;
     }
 
     private bool IsChildOf(DependencyObject parent, DependencyObject child)

@@ -26,6 +26,7 @@ public class HotkeyManager
     private const int WM_KEYDOWN = 0x0100;
     private const int WM_SYSKEYDOWN = 0x0104;
     private const int WM_MBUTTONDOWN = 0x0207;
+    private const int WM_MOUSEWHEEL = 0x020A;
     private const int WM_XBUTTONDOWN = 0x020B;
 
     // 虚拟键码常量 (Virtual-Key Codes)
@@ -53,6 +54,8 @@ public class HotkeyManager
 
     private readonly LowLevelProc _keyboardProc;
     private readonly LowLevelProc _mouseProc;
+
+    public event Action<int, int, int> MouseWheelScrolled;
 
     public HotkeyManager()
     {
@@ -166,6 +169,15 @@ public class HotkeyManager
     {
         if (nCode >= 0)
         {
+            if (wParam == (IntPtr)WM_MOUSEWHEEL)
+            {
+                int mouseData = Marshal.ReadInt32(lParam + 8);
+                int delta = unchecked((short)(mouseData >> 16));
+                int screenX = Marshal.ReadInt32(lParam);
+                int screenY = Marshal.ReadInt32(lParam + 4);
+                MouseWheelScrolled?.Invoke(delta, screenX, screenY);
+            }
+
             int? vkCode = null;
 
             if (wParam == (IntPtr)WM_MBUTTONDOWN)
