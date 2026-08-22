@@ -336,14 +336,15 @@ public class AudioData
 
             try
             {
-                await process.WaitForExitAsync();
-                await outputTask;
+                await process.WaitForExitAsync().WaitAsync(
+                    TimeSpan.FromSeconds(5));
+                await outputTask.WaitAsync(TimeSpan.FromSeconds(5));
             }
             catch (Exception exception)
             {
                 AppLog.Warning(
                     exception,
-                    "取消响度检测时读取 FFmpeg 输出失败。",
+                    "取消响度检测时等待 FFmpeg 退出或读取输出失败。",
                     "AudioData.Loudness");
             }
 

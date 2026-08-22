@@ -123,12 +123,14 @@ internal class AudioProxy
         {
             if (value)
             {
+                physicalMicrophoneBufferArray[1]?.Clear();
                 physicalLoudspeakerMixer.AddMixerInput(physicalMicrophoneVolumeArray[1]);
                 StopPLEquipmentClear();
             }
             else
             {
                 physicalLoudspeakerMixer.RemoveMixerInput(physicalMicrophoneVolumeArray[1]);
+                physicalMicrophoneBufferArray[1]?.Clear();
                 StopPLEquipmentClear();
             }
         };
@@ -274,7 +276,7 @@ internal class AudioProxy
     private MixingSampleProvider virtualLoudspeakerMixer;
 
     //麦克风采集后方便通向虚拟扬声器和耳返
-    private BufferedWaveProvider[] physicalMicrophoneBufferArray = new BufferedWaveProvider[2];
+    private MicrophoneSampleBuffer[] physicalMicrophoneBufferArray = new MicrophoneSampleBuffer[2];
     private VolumeSampleProvider[] physicalMicrophoneVolumeArray = new VolumeSampleProvider[2];
 
     private VolumeSampleProvider physicalLoudspeakerVolume;
@@ -292,19 +294,40 @@ internal class AudioProxy
         var equipment = GlobalData.Inst.Equipment;
 
         // 初始化麦克风采集
-        WaveFormat targetFormat = equipment.PhysicalMicrophone.AudioClient.MixFormat;
         physicalMicrophoneCapture = new WasapiCapture(equipment.PhysicalMicrophone);
         physicalMicrophoneCapture.RecordingStopped += PhysicalMicrophoneCapture_RecordingStopped;
-        physicalMicrophoneWaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(targetFormat.SampleRate, targetFormat.Channels);
-        physicalMicrophoneCapture.WaveFormat = physicalMicrophoneWaveFormat;
+        WaveFormat captureFormat = physicalMicrophoneCapture.WaveFormat;
+        var microphoneBuffers = new MicrophoneSampleBuffer[physicalMicrophoneBufferArray.Length];
+        var microphoneVolumes = new VolumeSampleProvider[physicalMicrophoneVolumeArray.Length];
+        for (int i = 0; i < microphoneBuffers.Length; i++)
+        {
+            microphoneBuffers[i] = new MicrophoneSampleBuffer(
+                captureFormat,
+                readFully: true,
+                discardOnBufferOverflow: true,
+                bufferDuration: TimeSpan.FromMilliseconds(500));
+            microphoneVolumes[i] = new VolumeSampleProvider(
+                microphoneBuffers[i].SampleProvider)
+            {
+                Volume = (float)AudioData.DecibelToVolume(microphoneInputDecibel)
+            };
+        }
+        physicalMicrophoneBufferArray = microphoneBuffers;
+        physicalMicrophoneVolumeArray = microphoneVolumes;
+        physicalMicrophoneWaveFormat = microphoneBuffers[0].SampleFormat;
+        AppLog.Information(
+            $"麦克风采集格式已协商。" +
+            $"DeviceId={equipment.PhysicalMicrophone.ID} | " +
+            $"Capture={captureFormat} | Sample={physicalMicrophoneWaveFormat}",
+            "AudioProxy.PhysicalMicrophone.Format");
         physicalMicrophoneCapture.DataAvailable += (sender, e) =>
         {
             if (GlobalData.Inst.AutoMute && AllAudioList.Count > 0)
                 return;
-            physicalMicrophoneBufferArray[0].AddSamples(e.Buffer, 0, e.BytesRecorded);
+            microphoneBuffers[0].AddSamples(e.Buffer, 0, e.BytesRecorded);
 
             if (GlobalData.Inst.GetGoEar_In())
-                physicalMicrophoneBufferArray[1].AddSamples(e.Buffer, 0, e.BytesRecorded);
+                microphoneBuffers[1].AddSamples(e.Buffer, 0, e.BytesRecorded);
         };
         audioMixToVL = new MixingSampleProvider(physicalMicrophoneWaveFormat) { ReadFully = true };
         audioVolumeToVL = new VolumeSampleProvider(audioMixToVL);
@@ -313,15 +336,6 @@ internal class AudioProxy
         SetStreamVolume(audioToVLMetering, SampleEnum.AutioToVL);
 
         virtualLoudspeakerMixer = new MixingSampleProvider(physicalMicrophoneWaveFormat) { ReadFully = true };
-        for (int i = 0; i < physicalMicrophoneBufferArray.Length; i++)
-        {
-            physicalMicrophoneBufferArray[i] = new BufferedWaveProvider(physicalMicrophoneWaveFormat)
-            { DiscardOnBufferOverflow = true };
-
-            physicalMicrophoneVolumeArray[i] = new VolumeSampleProvider(physicalMicrophoneBufferArray[i].ToSampleProvider());
-            physicalMicrophoneVolumeArray[i].Volume = (float)AudioData.DecibelToVolume(microphoneInputDecibel);
-        }
-
         physicalMicrophoneMetering = new MeteringSampleProvider(physicalMicrophoneVolumeArray[0]);
         SetStreamVolume(physicalMicrophoneMetering, SampleEnum.In);
 
@@ -559,8 +573,6 @@ internal class AudioProxy
     public static void SetStreamVolume(MeteringSampleProvider meteringSample, SampleEnum index)
     {
         meteringSample.SamplesPerNotification = meteringSample.WaveFormat.SampleRate / MeteringSampleProviderCollectionRate;
-        LevelBar L = null;
-        LevelBar R = null;
         switch (index)
         {
             case SampleEnum.AutioToVL:
@@ -600,11 +612,30 @@ internal class AudioProxy
     }
     public static void Vol(LevelBar L, LevelBar R, float leftChannelVol, float rightChannelVol)
     {
-        Application.Current?.Dispatcher?.Invoke(() =>
+        float leftLevel = (float)AudioData.DecibelToProportion(
+            AudioData.VolumeToDecibel(leftChannelVol));
+        float rightLevel = (float)AudioData.DecibelToProportion(
+            AudioData.VolumeToDecibel(rightChannelVol));
+        var dispatcher = Application.Current?.Dispatcher;
+        if (dispatcher == null || dispatcher.HasShutdownStarted)
+            return;
+
+        void UpdateLevelBars()
         {
-            L?.SetLevel((float)AudioData.DecibelToProportion(AudioData.VolumeToDecibel(leftChannelVol)));
-            R?.SetLevel((float)AudioData.DecibelToProportion(AudioData.VolumeToDecibel(rightChannelVol)));
-        });
+            L?.SetLevel(leftLevel);
+            R?.SetLevel(rightLevel);
+        }
+
+        // Always enqueue the update. Stop paths enqueue their final zero after
+        // the audio threads have ended, so older meter updates cannot overwrite it.
+        try
+        {
+            dispatcher.BeginInvoke(new Action(UpdateLevelBars));
+        }
+        catch (InvalidOperationException) when (dispatcher.HasShutdownStarted)
+        {
+            // The application dispatcher completed shutdown after the guard above.
+        }
     }
 
     public enum SampleEnum

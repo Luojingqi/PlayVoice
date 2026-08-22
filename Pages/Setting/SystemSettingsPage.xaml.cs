@@ -282,44 +282,85 @@ namespace PlayVoice.Pages.Setting
             {
                 var equipment = GlobalData.Inst.Equipment;
                 string testedMicrophoneID = equipment.PhysicalMicrophone.ID;
-                WaveFormat targetFormat =
-                    equipment.PhysicalMicrophone.AudioClient.MixFormat;
-                var microphoneWaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(
-                    targetFormat.SampleRate, targetFormat.Channels);
-                var buffer = new BufferedWaveProvider(microphoneWaveFormat);
-                float[] sampleBuffer = new float[8192];
-                MeteringSampleProvider meteringSample = null;
                 string testPath = Path.Combine(
                     PresetStorage.TempPath, "VolumeTest.wav");
 
-                capture = new WasapiCapture(equipment.PhysicalMicrophone)
-                {
-                    WaveFormat = microphoneWaveFormat
-                };
-                writer = new WaveFileWriter(testPath, microphoneWaveFormat);
-                capture.DataAvailable += (sender, e) =>
-                {
-                    buffer.AddSamples(e.Buffer, 0, e.BytesRecorded);
-                    int samplesToRead = e.BytesRecorded / 4;
-                    if (sampleBuffer.Length < samplesToRead)
-                    {
-                        sampleBuffer = new float[Math.Max(
-                            sampleBuffer.Length * 2, samplesToRead)];
-                    }
-
-                    int samplesRead = meteringSample.Read(
-                        sampleBuffer, 0, samplesToRead);
-                    if (samplesRead > 0)
-                        writer.WriteSamples(sampleBuffer, 0, samplesRead);
-                };
-
-                var volumeSample = new VolumeSampleProvider(buffer.ToSampleProvider())
+                capture = new WasapiCapture(equipment.PhysicalMicrophone);
+                var microphoneBuffer = new MicrophoneSampleBuffer(
+                    capture.WaveFormat,
+                    readFully: false,
+                    discardOnBufferOverflow: false,
+                    bufferDuration: TimeSpan.FromSeconds(1));
+                WaveFormat microphoneWaveFormat = microphoneBuffer.SampleFormat;
+                int sampleBufferLength = Math.Max(
+                    microphoneWaveFormat.Channels,
+                    8192 - 8192 % microphoneWaveFormat.Channels);
+                float[] sampleBuffer = new float[sampleBufferLength];
+                Exception captureProcessingException = null;
+                var captureProcessingFailed = new TaskCompletionSource<bool>(
+                    TaskCreationOptions.RunContinuationsAsynchronously);
+                var recordingStopped = new TaskCompletionSource<StoppedEventArgs>(
+                    TaskCreationOptions.RunContinuationsAsynchronously);
+                var volumeSample = new VolumeSampleProvider(
+                    microphoneBuffer.SampleProvider)
                 {
                     Volume = (float)AudioData.DecibelToVolume(
                         GlobalData.Inst.AudioProxy.MicrophoneInputDecibel)
                 };
-                meteringSample = new MeteringSampleProvider(volumeSample);
+                var meteringSample = new MeteringSampleProvider(volumeSample);
                 SetStreamVolume(meteringSample, SampleEnum.In);
+                writer = new WaveFileWriter(testPath, microphoneWaveFormat);
+                AppLog.Information(
+                    $"开始麦克风响度采集。" +
+                    $"DeviceId={testedMicrophoneID} | " +
+                    $"Capture={microphoneBuffer.CaptureFormat} | " +
+                    $"Sample={microphoneWaveFormat}",
+                    "SystemSettings.LoudnessTest");
+                capture.RecordingStopped += (sender, e) =>
+                    recordingStopped.TrySetResult(e);
+                capture.DataAvailable += (sender, e) =>
+                {
+                    if (Volatile.Read(ref captureProcessingException) != null)
+                        return;
+
+                    try
+                    {
+                        int samplesRemaining = microphoneBuffer.AddSamples(
+                            e.Buffer,
+                            0,
+                            e.BytesRecorded);
+                        while (samplesRemaining > 0)
+                        {
+                            int samplesRequested = Math.Min(
+                                sampleBuffer.Length,
+                                samplesRemaining);
+                            int samplesRead = meteringSample.Read(
+                                sampleBuffer,
+                                0,
+                                samplesRequested);
+                            if (samplesRead <= 0)
+                            {
+                                throw new InvalidDataException(
+                                    $"麦克风采集缓冲未返回预期样本。" +
+                                    $" Requested={samplesRequested}; " +
+                                    $"Remaining={samplesRemaining}");
+                            }
+
+                            writer.WriteSamples(sampleBuffer, 0, samplesRead);
+                            samplesRemaining -= samplesRead;
+                        }
+                    }
+                    catch (Exception exception)
+                    {
+                        if (Interlocked.CompareExchange(
+                            ref captureProcessingException,
+                            exception,
+                            null) == null)
+                        {
+                            captureProcessingFailed.TrySetResult(true);
+                        }
+                    }
+                };
 
                 capture.StartRecording();
                 captureStarted = true;
@@ -328,12 +369,32 @@ namespace PlayVoice.Pages.Setting
                     () => $"{LanguageManager.Inst.GetString("正在录音")}",
                     Pages.LabelStatus.Warning, 7);
 
-                await Task.Delay(7000);
+                Task completedTask = await Task.WhenAny(
+                    Task.Delay(7000),
+                    captureProcessingFailed.Task,
+                    recordingStopped.Task);
 
-                capture.StopRecording();
+                if (completedTask != recordingStopped.Task)
+                    capture.StopRecording();
+                StoppedEventArgs recordingResult = await recordingStopped.Task.WaitAsync(
+                    TimeSpan.FromSeconds(5));
                 captureStarted = false;
                 capture.Dispose();
                 capture = null;
+                if (recordingResult.Exception != null)
+                {
+                    throw new InvalidOperationException(
+                        "麦克风在响度采集期间停止。",
+                        recordingResult.Exception);
+                }
+                Exception processingException = Volatile.Read(
+                    ref captureProcessingException);
+                if (processingException != null)
+                {
+                    throw new InvalidOperationException(
+                        "处理麦克风采集数据失败。",
+                        processingException);
+                }
                 writer.Dispose();
                 writer = null;
                 Vol(MainWindow.Inst.IL, MainWindow.Inst.IR, 0, 0);
@@ -343,7 +404,11 @@ namespace PlayVoice.Pages.Setting
                     () => $"{LanguageManager.Inst.GetString("录音结束")}",
                     Pages.LabelStatus.Warning, 3.5f);
 
-                double? microphoneLufs = await AudioData.MeasureLufs(testPath);
+                using var loudnessTimeout = new CancellationTokenSource(
+                    TimeSpan.FromSeconds(30));
+                double? microphoneLufs = await AudioData.MeasureLufs(
+                    testPath,
+                    loudnessTimeout.Token);
                 if (microphoneLufs.HasValue)
                 {
                     var config = GlobalData.Inst.Config;
