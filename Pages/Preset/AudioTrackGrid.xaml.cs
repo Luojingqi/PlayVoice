@@ -119,7 +119,7 @@ namespace PlayVoice.Pages.Preset
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = LanguageManager.Inst.GetString("添加音频");
-            openFileDialog.Filter = $"{LanguageManager.Inst.GetString("音频文件")} (*.mp3;*.wav;*.m4a;*.flac)|*.mp3;*.wav;*.m4a;*.flac";
+            openFileDialog.Filter = $"{LanguageManager.Inst.GetString("音频文件")} (*.mp3;*.wav;*.m4a;*.flac;*.aac)|*.mp3;*.wav;*.m4a;*.flac;*.aac";
             openFileDialog.FilterIndex = 1;
             openFileDialog.Multiselect = true;
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
