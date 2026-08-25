@@ -5,6 +5,8 @@ using PlayVoice.Diagnostics;
 using PlayVoice.Hotkey;
 using PlayVoice.Pages.LevelBar;
 using PlayVoice.Pages.Workshop;
+using System.Diagnostics;
+using System.IO;
 using System.Windows;
 
 namespace PlayVoice.Audio;
@@ -14,6 +16,8 @@ namespace PlayVoice.Audio;
 /// </summary>
 internal class AudioProxy
 {
+    private const int MaximumSupportedChannelCount = 32;
+
     public static AudioProxy Inst { get; private set; }
 
     /// <summary>
@@ -163,12 +167,39 @@ internal class AudioProxy
         }
 
         WasapiOut preparedOutput = null;
+        string deviceID = "<unknown>";
+        string stage = "ReadDeviceId";
+        Stopwatch stopwatch = Stopwatch.StartNew();
         try
         {
-            WaveFormat targetFormat = device.AudioClient.MixFormat;
-            WaveFormat preparedWaveFormat = WaveFormat.CreateIeeeFloatWaveFormat(
-                targetFormat.SampleRate,
-                targetFormat.Channels);
+            deviceID = device.ID;
+            AppLog.Information(
+                $"开始初始化物理扬声器。DeviceId={deviceID}",
+                "AudioProxy.PhysicalLoudspeaker.Prepare");
+
+            stage = "CreateWasapiOut";
+            AppLog.Debug(
+                $"创建物理扬声器 WASAPI 输出。DeviceId={deviceID}",
+                "AudioProxy.PhysicalLoudspeaker.Prepare");
+            preparedOutput = new WasapiOut(
+                device,
+                AudioClientShareMode.Shared,
+                false,
+                100);
+            preparedOutput.PlaybackStopped += PhysicalLoudspeakerOutput_PlaybackStopped;
+
+            stage = "ValidateMixFormat";
+            WaveFormat targetFormat = preparedOutput.OutputWaveFormat;
+            WaveFormat preparedWaveFormat = CreatePhysicalLoudspeakerWaveFormat(
+                targetFormat,
+                deviceID);
+            AppLog.Information(
+                $"物理扬声器格式已协商。DeviceId={deviceID} | " +
+                $"Mix={targetFormat} | Sample={preparedWaveFormat} | " +
+                $"ElapsedMs={stopwatch.ElapsedMilliseconds}",
+                "AudioProxy.PhysicalLoudspeaker.Format");
+
+            stage = "CreateMixingGraph";
             var preparedMixer = new MixingSampleProvider(preparedWaveFormat)
             {
                 ReadFully = true
@@ -189,15 +220,19 @@ internal class AudioProxy
             SetStreamVolume(preparedMetering, SampleEnum.AutioToPL);
             preparedMixer.AddMixerInput(preparedMetering);
 
-            preparedOutput = new WasapiOut(
-                device,
-                AudioClientShareMode.Shared,
-                false,
-                100);
-            preparedOutput.PlaybackStopped += PhysicalLoudspeakerOutput_PlaybackStopped;
+            stage = "InitializeWasapiOut";
+            AppLog.Debug(
+                $"初始化物理扬声器 WASAPI 输出。DeviceId={deviceID}",
+                "AudioProxy.PhysicalLoudspeaker.Prepare");
             preparedOutput.Init(preparedPhysicalVolume);
+
+            stage = "StartWasapiOut";
+            AppLog.Debug(
+                $"启动物理扬声器 WASAPI 输出。DeviceId={deviceID}",
+                "AudioProxy.PhysicalLoudspeaker.Prepare");
             preparedOutput.Play();
 
+            stage = "ReplacePreviousOutput";
             StopPLEquipment();
             physicalLoudspeakerWaveFormat = preparedWaveFormat;
             physicalLoudspeakerMixer = preparedMixer;
@@ -207,19 +242,97 @@ internal class AudioProxy
             audioToPLMetering = preparedMetering;
             physicalLoudspeakerOutput = preparedOutput;
             preparedOutput = null;
+            AppLog.Information(
+                $"物理扬声器初始化完成。DeviceId={deviceID} | " +
+                $"ElapsedMs={stopwatch.ElapsedMilliseconds}",
+                "AudioProxy.PhysicalLoudspeaker.Prepare");
             return true;
         }
         catch (Exception startException)
         {
-            exception = startException;
+            exception = new InvalidOperationException(
+                $"初始化物理扬声器失败。DeviceId={deviceID} | " +
+                $"Stage={stage} | ElapsedMs={stopwatch.ElapsedMilliseconds}",
+                startException);
             return false;
         }
         finally
         {
+            if (preparedOutput != null)
+                preparedOutput.PlaybackStopped -= PhysicalLoudspeakerOutput_PlaybackStopped;
             DisposeOutputSafely(
                 preparedOutput,
                 "清理初始化失败的物理扬声器输出时出错。",
                 "AudioProxy.PhysicalLoudspeaker.Prepare");
+        }
+    }
+
+    private static WaveFormat CreatePhysicalLoudspeakerWaveFormat(
+        WaveFormat targetFormat,
+        string deviceID)
+    {
+        if (targetFormat == null)
+        {
+            throw new NotSupportedException(
+                $"物理扬声器未返回混合格式。DeviceId={deviceID}");
+        }
+        if (targetFormat.SampleRate <= 0)
+        {
+            throw new NotSupportedException(
+                $"物理扬声器返回了无效采样率。DeviceId={deviceID} | " +
+                $"SampleRate={targetFormat.SampleRate} | Format={targetFormat}");
+        }
+        if (targetFormat.Channels <= 0
+            || targetFormat.Channels > MaximumSupportedChannelCount)
+        {
+            throw new NotSupportedException(
+                $"物理扬声器返回了不支持的声道数。DeviceId={deviceID} | " +
+                $"Channels={targetFormat.Channels} | Format={targetFormat}");
+        }
+        if (targetFormat.BlockAlign <= 0
+            || targetFormat.AverageBytesPerSecond <= 0)
+        {
+            throw new NotSupportedException(
+                $"物理扬声器返回了无效帧格式。DeviceId={deviceID} | " +
+                $"BlockAlign={targetFormat.BlockAlign} | " +
+                $"AverageBytesPerSecond={targetFormat.AverageBytesPerSecond} | " +
+                $"Format={targetFormat}");
+        }
+
+        try
+        {
+            // Plain IEEE-float WaveFormat does not carry a channel mask. Keep the
+            // application graph mono/stereo and let shared-mode WASAPI map it to
+            // multichannel endpoint formats such as 5.1, 7.1, or spatial audio.
+            int sampleChannels = targetFormat.Channels == 1 ? 1 : 2;
+            int expectedBlockAlign = checked(
+                sampleChannels * sizeof(float));
+            int expectedAverageBytesPerSecond = checked(
+                targetFormat.SampleRate * expectedBlockAlign);
+            WaveFormat sampleFormat = WaveFormat.CreateIeeeFloatWaveFormat(
+                targetFormat.SampleRate,
+                sampleChannels);
+            if (sampleFormat.BlockAlign != expectedBlockAlign
+                || sampleFormat.AverageBytesPerSecond
+                    != expectedAverageBytesPerSecond)
+            {
+                throw new InvalidDataException(
+                    $"生成的物理扬声器混音格式不完整。" +
+                    $"BlockAlign={sampleFormat.BlockAlign} | " +
+                    $"AverageBytesPerSecond={sampleFormat.AverageBytesPerSecond}");
+            }
+            return sampleFormat;
+        }
+        catch (Exception exception) when (
+            exception is ArgumentException
+            or ArgumentOutOfRangeException
+            or InvalidDataException
+            or OverflowException)
+        {
+            throw new NotSupportedException(
+                $"无法为物理扬声器创建浮点混音格式。DeviceId={deviceID} | " +
+                $"Format={targetFormat}",
+                exception);
         }
     }
 
@@ -249,9 +362,17 @@ internal class AudioProxy
         string source)
     {
         if (output == null) return;
+        Stopwatch stopwatch = Stopwatch.StartNew();
         try
         {
+            AppLog.Debug(
+                $"停止 WASAPI 输出。Phase=Begin | State={output.PlaybackState}",
+                source);
             output.Stop();
+            AppLog.Debug(
+                $"停止 WASAPI 输出。Phase=End | " +
+                $"ElapsedMs={stopwatch.ElapsedMilliseconds}",
+                source);
         }
         catch (Exception exception)
         {
@@ -259,7 +380,15 @@ internal class AudioProxy
         }
         try
         {
+            AppLog.Debug(
+                $"释放 WASAPI 输出。Phase=Begin | " +
+                $"ElapsedMs={stopwatch.ElapsedMilliseconds}",
+                source);
             output.Dispose();
+            AppLog.Debug(
+                $"释放 WASAPI 输出。Phase=End | " +
+                $"ElapsedMs={stopwatch.ElapsedMilliseconds}",
+                source);
         }
         catch (Exception exception)
         {
@@ -495,10 +624,11 @@ internal class AudioProxy
         object sender,
         StoppedEventArgs eventArgs)
     {
-        if (eventArgs.Exception == null) return;
+        Exception exception = eventArgs.Exception
+            ?? new InvalidOperationException("物理扬声器输出意外停止。");
         DispatchRuntimeFailure(
             () => ReferenceEquals(sender, physicalLoudspeakerOutput),
-            eventArgs.Exception,
+            exception,
             "AudioProxy.PhysicalLoudspeaker.Runtime",
             () => GlobalData.Inst.Equipment.PhysicalLoudspeaker = null);
     }
@@ -507,10 +637,11 @@ internal class AudioProxy
         object sender,
         StoppedEventArgs eventArgs)
     {
-        if (eventArgs.Exception == null) return;
+        Exception exception = eventArgs.Exception
+            ?? new InvalidOperationException("虚拟扬声器输出意外停止。");
         DispatchRuntimeFailure(
             () => ReferenceEquals(sender, virtualLoudspeakerOutput),
-            eventArgs.Exception,
+            exception,
             "AudioProxy.VirtualLoudspeaker.Runtime");
     }
 
@@ -518,10 +649,11 @@ internal class AudioProxy
         object sender,
         StoppedEventArgs eventArgs)
     {
-        if (eventArgs.Exception == null) return;
+        Exception exception = eventArgs.Exception
+            ?? new InvalidOperationException("物理麦克风采集意外停止。");
         DispatchRuntimeFailure(
             () => ReferenceEquals(sender, physicalMicrophoneCapture),
-            eventArgs.Exception,
+            exception,
             "AudioProxy.PhysicalMicrophone.Runtime");
     }
 
@@ -606,6 +738,12 @@ internal class AudioProxy
 
     private static void Vol(StreamVolumeEventArgs e, LevelBar L, LevelBar R)
     {
+        if (e.MaxSampleValues.Length == 0)
+        {
+            Vol(L, R, 0, 0);
+            return;
+        }
+
         float leftChannelVol = e.MaxSampleValues[0];
         float rightChannelVol = e.MaxSampleValues.Length > 1 ? e.MaxSampleValues[1] : leftChannelVol;
         Vol(L, R, leftChannelVol, rightChannelVol);
