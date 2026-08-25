@@ -27,6 +27,7 @@ public partial class WorkshopHorizontalView : UserControl
     private double _targetOffset;
     private int _animationGeneration;
     private WorkshopRemoteItemCard? _expandedCard;
+    private int _expandedCardVisibilityGeneration;
     private bool _isPointerDragPending;
     private bool _isPointerDragging;
     private Point _pointerDragStart;
@@ -117,9 +118,8 @@ public partial class WorkshopHorizontalView : UserControl
 
     private void ScrollViewer_ScrollChanged(object sender, ScrollChangedEventArgs e)
     {
-        if (Math.Abs(e.HorizontalChange) > BoundaryTolerance)
-            CollapseExpandedCard();
-
+        // 用户发起的滚轮、拖拽和滚动条操作会在各自的入口收起卡片。
+        // 此处也会收到展开卡片自动跟随产生的滚动，不能统一按位移收起。
         if (!_isAnimating)
             _targetOffset = _scrollViewer.HorizontalOffset;
         UpdateScrollMetrics();
@@ -443,13 +443,17 @@ public partial class WorkshopHorizontalView : UserControl
         if (card.IsExpanded)
         {
             WorkshopRemoteItemCard? previousCard = _expandedCard;
+            StopFollowingExpandedCard();
             _expandedCard = card;
+            _expandedCard.SizeChanged += ExpandedCard_SizeChanged;
+            _expandedCardVisibilityGeneration++;
+            QueueEnsureExpandedCardVisible(card);
             if (previousCard != null && !ReferenceEquals(previousCard, card))
                 previousCard.Collapse();
         }
         else if (ReferenceEquals(_expandedCard, card))
         {
-            _expandedCard = null;
+            StopFollowingExpandedCard();
         }
 
         e.Handled = true;
@@ -458,8 +462,66 @@ public partial class WorkshopHorizontalView : UserControl
     private void CollapseExpandedCard(bool animate = true)
     {
         WorkshopRemoteItemCard? card = _expandedCard;
-        _expandedCard = null;
+        StopFollowingExpandedCard();
         card?.Collapse(animate);
+    }
+
+    private void StopFollowingExpandedCard()
+    {
+        if (_expandedCard != null)
+            _expandedCard.SizeChanged -= ExpandedCard_SizeChanged;
+
+        _expandedCard = null;
+        _expandedCardVisibilityGeneration++;
+    }
+
+    private void ExpandedCard_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        if (sender is WorkshopRemoteItemCard card)
+            QueueEnsureExpandedCardVisible(card);
+    }
+
+    private void QueueEnsureExpandedCardVisible(WorkshopRemoteItemCard card)
+    {
+        int generation = _expandedCardVisibilityGeneration;
+        Dispatcher.InvokeAsync(() =>
+        {
+            if (generation != _expandedCardVisibilityGeneration ||
+                !ReferenceEquals(_expandedCard, card) ||
+                !card.IsExpanded)
+                return;
+
+            EnsureExpandedCardVisible(card);
+        }, DispatcherPriority.Render);
+    }
+
+    private void EnsureExpandedCardVisible(WorkshopRemoteItemCard card)
+    {
+        if (_scrollViewer == null || !card.IsLoaded) return;
+
+        Rect cardBounds;
+        try
+        {
+            cardBounds = card.TransformToAncestor(_scrollViewer).TransformBounds(
+                new Rect(new Point(), card.RenderSize));
+        }
+        catch (InvalidOperationException)
+        {
+            return;
+        }
+
+        double viewportWidth = _scrollViewer.ViewportWidth;
+        if (viewportWidth <= BoundaryTolerance) return;
+
+        double offsetChange = 0;
+        if (cardBounds.Right > viewportWidth + BoundaryTolerance)
+            offsetChange = cardBounds.Right - viewportWidth;
+        else if (cardBounds.Left < -BoundaryTolerance)
+            offsetChange = cardBounds.Left;
+
+        if (Math.Abs(offsetChange) <= BoundaryTolerance) return;
+
+        ScrollToExact(_scrollViewer.HorizontalOffset + offsetChange);
     }
 
     private void WorkshopHorizontalView_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -479,6 +541,8 @@ public partial class WorkshopHorizontalView : UserControl
                 ? GetMaximumOffset()
                 : Math.Min(currentOffset, GetMaximumOffset());
             ScrollToExact(targetOffset);
+            if (_expandedCard != null)
+                QueueEnsureExpandedCardVisible(_expandedCard);
         }, DispatcherPriority.Loaded);
     }
 
