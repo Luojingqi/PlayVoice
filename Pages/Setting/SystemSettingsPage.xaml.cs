@@ -239,17 +239,6 @@ namespace PlayVoice.Pages.Setting
 
             {
                 RefreshPlayingKeySettings();
-                StopAllAudioExpandArrow.ExpandedChanged += (_, e) =>
-                    AnimateSettingHotkeyPanel(StopAllAudioHotkeyPanel, e.NewValue);
-                StopAllAudioButtonListBox.SelectionChanged += (_, _) =>
-                {
-                    if (StopAllAudioButtonListBox.SelectedIndex != 0)
-                        return;
-
-                    StopAllAudioButtonListBox.SelectedIndex = -1;
-                    GlobalData.Inst.AudioProxy.StopClear();
-                };
-
                 BeforePlayingComboBox.OnSelectionChanged += (item0, item1) =>
                 {
                     GlobalData.Inst.ActiveFunctionPreset.BeforePlayingKey.Action =
@@ -844,8 +833,6 @@ namespace PlayVoice.Pages.Setting
                 functionPreset.BeforePlayingKey.HotkeyData.ToString();
             KeyboardKeyInputTextBox1.Text =
                 functionPreset.AfterPlayingKey.HotkeyData.ToString();
-            KeyboardKeyInputTextBox2.Text =
-                functionPreset.StopAllPlayingHotkey.ToString();
 
             List<PlayAudioKeyDataKeyAction> beforeActions = new()
             {
@@ -964,38 +951,6 @@ namespace PlayVoice.Pages.Setting
             });
         }
 
-        private void KeyboardKeyInputTextBox2_GotFocus(object sender, RoutedEventArgs e)
-        {
-            HotkeyManager.Inst.StartRecording(OnHotkeyRecorded2);
-        }
-
-        private void KeyboardKeyInputTextBox2_LostFocus(object sender, RoutedEventArgs e)
-        {
-            HotkeyManager.Inst.StopRecording();
-        }
-
-        private void OnHotkeyRecorded2(HotkeyData newHotkey)
-        {
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                if (newHotkey == null)
-                    ClearHotkey(2);
-                else
-                {
-                    var hotkeyData = GlobalData.Inst.ActiveFunctionPreset.StopAllPlayingHotkey;
-                    hotkeyData.Modifiers = newHotkey.Modifiers;
-                    hotkeyData.VkCode = newHotkey.VkCode;
-                    hotkeyData.IsMouse = newHotkey.IsMouse;
-
-                    KeyboardKeyInputTextBox2.Text = hotkeyData.ToString();
-                    KeyboardKeyInputTextBox2.SelectionStart = KeyboardKeyInputTextBox2.Text.Length;
-                }
-                Keyboard.Focus(null);
-                GlobalData.Inst.SaveActiveFunctionPreset();
-                GlobalData.Inst.RebuildActiveHotkeys();
-            });
-        }
-
         private void ClearHotkey(int index)
         {
             HotkeyData hotkeyData = null;
@@ -1006,9 +961,6 @@ namespace PlayVoice.Pages.Setting
                     break;
                 case 1:
                     hotkeyData = GlobalData.Inst.ActiveFunctionPreset.AfterPlayingKey.HotkeyData;
-                    break;
-                case 2:
-                    hotkeyData = GlobalData.Inst.ActiveFunctionPreset.StopAllPlayingHotkey;
                     break;
             }
 
@@ -1022,10 +974,6 @@ namespace PlayVoice.Pages.Setting
                 case 1:
                     KeyboardKeyInputTextBox1.Text = hotkeyData.ToString();
                     KeyboardKeyInputTextBox1.SelectionStart = KeyboardKeyInputTextBox1.Text.Length;
-                    break;
-                case 2:
-                    KeyboardKeyInputTextBox2.Text = hotkeyData.ToString();
-                    KeyboardKeyInputTextBox2.SelectionStart = KeyboardKeyInputTextBox2.Text.Length;
                     break;
             }
         }

@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="PlayVoice.Pages.Playback.PlaybackTransport"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:L="clr-namespace:PlayVoice.Resources.Language">
+    <UserControl.Resources><ResourceDictionary><ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/Resources/Style/ListBox.xaml"/>
+    </ResourceDictionary.MergedDictionaries></ResourceDictionary></UserControl.Resources>
+    <ListBox x:Name="Buttons" Style="{StaticResource HorizontalButtonGroupStyle}" Height="36" Tag="Uniform" SelectionChanged="Control_Click">
+        <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" ToolTip="{L:Lan 上一首}">
+            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE892;" Foreground="{DynamicResource AccentColor}"/>
+        </ListBoxItem>
+        <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" ToolTip="{L:Lan 暂停或继续}">
+            <TextBlock x:Name="PauseIcon" FontFamily="Segoe MDL2 Assets" Text="&#xE769;" Foreground="{DynamicResource AccentColor}"/>
+        </ListBoxItem>
+        <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" ToolTip="{L:Lan 下一首}">
+            <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE893;" Foreground="{DynamicResource AccentColor}"/>
+        </ListBoxItem>
+    </ListBox>
+</UserControl>

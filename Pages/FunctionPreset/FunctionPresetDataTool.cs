@@ -31,7 +31,6 @@ public static class FunctionPresetDataTool
                     Action = PlayAudioKeyData.KeyAction.抬起
                 };
                 preset.AfterPlayingKey.HotkeyData ??= new();
-                preset.StopAllPlayingHotkey ??= new();
                 presets.Add(preset);
             }
         }

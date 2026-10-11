@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -540,12 +540,6 @@ Do not leave this page.</value>
   <data name="播放后" xml:space="preserve">
     <value>Post-play simulation</value>
   </data>
-  <data name="停止所有音频" xml:space="preserve">
-    <value>Stop all audio</value>
-  </data>
-  <data name="停止所有音频_说明" xml:space="preserve">
-    <value>Stops all audio currently playing.</value>
-  </data>
   <data name="停止" xml:space="preserve">
     <value>Stop</value>
   </data>
@@ -783,4 +777,25 @@ O</value>
   <data name="停止加载" xml:space="preserve"><value>Stop loading</value></data>
   <data name="程序已经在运行" xml:space="preserve"><value>PlayVoice is already running.</value></data>
   <data name="日志初始化失败" xml:space="preserve"><value>Unable to create the log files. PlayVoice cannot continue starting.</value></data>
+  <data name="单曲播放" xml:space="preserve"><value>Play once</value></data>
+  <data name="单曲循环" xml:space="preserve"><value>Repeat one</value></data>
+  <data name="列表循环" xml:space="preserve"><value>Repeat playlist</value></data>
+  <data name="随机循环" xml:space="preserve"><value>Shuffle repeat</value></data>
+  <data name="上一首" xml:space="preserve"><value>Previous track</value></data>
+  <data name="下一首" xml:space="preserve"><value>Next track</value></data>
+  <data name="暂停或继续" xml:space="preserve"><value>Pause / resume</value></data>
+  <data name="播放控制" xml:space="preserve"><value>Playback controls</value></data>
+  <data name="重命名" xml:space="preserve"><value>Rename</value></data>
+  <data name="新名称" xml:space="preserve"><value>New name</value></data>
+  <data name="向上移动" xml:space="preserve"><value>Move up</value></data>
+  <data name="向下移动" xml:space="preserve"><value>Move down</value></data>
+  <data name="选择" xml:space="preserve"><value>Select</value></data>
+  <data name="拖放音频以导入" xml:space="preserve"><value>Drop audio files to import</value></data>
+  <data name="已忽略不支持的文件" xml:space="preserve"><value>Unsupported files were skipped.</value></data>
+  <data name="名称无效" xml:space="preserve"><value>Invalid file name.</value></data>
+  <data name="文件已存在" xml:space="preserve"><value>A file with this name already exists.</value></data>
+  <data name="保存失败" xml:space="preserve"><value>Could not save the configuration.</value></data>
+  <data name="重命名失败" xml:space="preserve"><value>Could not rename the file.</value></data>
+  <data name="播放失败" xml:space="preserve"><value>Could not play the audio file.</value></data>
+  <data name="快捷键已占用" xml:space="preserve"><value>This shortcut is already in use.</value></data>
 </root>

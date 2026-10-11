@@ -17,6 +17,8 @@ public class HotkeyManager
 
     private readonly List<HotkeyData> _registeredHotkeys = new();
 
+    private readonly HashSet<int> heldHotkeyCodes = new();
+
     public bool IsRecording { get; private set; }
     private Action<HotkeyData> _recordCallback;
 
@@ -74,6 +76,10 @@ public class HotkeyManager
 
     public void RemoveHotkey(HotkeyData hotkeyData) => _registeredHotkeys.Remove(hotkeyData);
 
+    public bool IsAssigned(HotkeyData value, HotkeyData except) => value != null && value.VkCode != 0
+        && _registeredHotkeys.Any(h => !ReferenceEquals(h, except) && h.VkCode == value.VkCode
+            && h.Modifiers == value.Modifiers && h.IsMouse == value.IsMouse);
+
     public void ClearHotkeys() => _registeredHotkeys.Clear();
 
     public void Start()
@@ -87,6 +93,7 @@ public class HotkeyManager
 
     public void Stop()
     {
+        heldHotkeyCodes.Clear();
         if (_keyboardHookId != IntPtr.Zero)
         {
             UnhookWindowsHookEx(_keyboardHookId);
@@ -121,6 +128,8 @@ public class HotkeyManager
 
     private IntPtr KeyboardHookCallback(int nCode, IntPtr wParam, IntPtr lParam)
     {
+        if (nCode >= 0 && (wParam == (IntPtr)0x0101 || wParam == (IntPtr)0x0105))
+            heldHotkeyCodes.Remove(Marshal.ReadInt32(lParam));
         if (nCode >= 0 && (wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN))
         {
             int vkCode = Marshal.ReadInt32(lParam);
@@ -130,10 +139,12 @@ public class HotkeyManager
                 return CallNextHookEx(_keyboardHookId, nCode, wParam, lParam);
             }
 
+            if (heldHotkeyCodes.Contains(vkCode)) return (IntPtr)1;
             Win32Modifiers currentModifiers = GetCurrentModifiers();
 
             if (IsRecording && MainWindow.Inst.IsActive)
             {
+                heldHotkeyCodes.Add(vkCode);
                 if (currentModifiers == Win32Modifiers.None &&
                    (vkCode == VK_ESCAPE || vkCode == VK_BACK || vkCode == VK_DELETE))
                 {
@@ -156,6 +167,7 @@ public class HotkeyManager
                 {
                     if (!hotkey.IsMouse && hotkey.Modifiers == currentModifiers && hotkey.VkCode == vkCode)
                     {
+                        heldHotkeyCodes.Add(vkCode);
                         hotkey.Callback?.Invoke();
                         return (IntPtr)1;
                     }

@@ -559,6 +559,7 @@ internal class AudioProxy
 
     public void StopClear()
     {
+        GlobalData.Inst.Playback.StopPresetAudio();
         foreach (var item in AllAudioList.ToArray())
             item.Stop();
         AllAudioList.Clear();

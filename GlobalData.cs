@@ -55,10 +55,12 @@ internal class GlobalData
     private readonly List<IFunctionPresetFeatureHandler> functionPresetFeatures =
         new()
         {
-            new StopAllPlayingPresetFeatureHandler(),
             new AudioHotkeyPresetFeatureHandler(),
+            new PlaybackPresetFeatureHandler(),
             new AudioVolumePresetFeatureHandler()
         };
+
+    public PlaybackController Playback { get; } = new();
 
     private AudioPresetData activeAudioPreset;
     private FunctionPresetData activeFunctionPreset;
@@ -73,12 +75,14 @@ internal class GlobalData
         {
             if (ReferenceEquals(activeAudioPreset, value)) return;
 
+            Playback.Reset();
             ClearFunctionPresetFeatures();
             activeAudioPreset?.Dispose();
             activeAudioPreset = value;
             config.ActiveAudioPresetName = activeAudioPreset?.Config.Name;
             ApplyFunctionPresetFeatures();
             config.Save();
+            Playback.NotifyChanged();
             ActiveAudioPresetChanged?.Invoke(activeAudioPreset);
         }
     }
@@ -90,11 +94,13 @@ internal class GlobalData
         {
             if (ReferenceEquals(activeFunctionPreset, value)) return;
 
+            audioProxy.StopClear();
             ClearFunctionPresetFeatures();
             activeFunctionPreset = value;
             config.ActiveFunctionPresetName = activeFunctionPreset?.Name;
             ApplyFunctionPresetFeatures();
             config.Save();
+            Playback.GamePresetChanged();
             ActiveFunctionPresetChanged?.Invoke(activeFunctionPreset);
         }
     }
@@ -185,6 +191,7 @@ internal class GlobalData
 
     public void DisposeAudioPresetForExit()
     {
+        Playback.Reset();
         ClearFunctionPresetFeatures();
         activeAudioPreset?.Dispose();
         activeAudioPreset = null;

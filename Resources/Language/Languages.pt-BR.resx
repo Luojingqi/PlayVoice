@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
@@ -154,8 +154,6 @@
   <data name="自动闭麦" xml:space="preserve"><value>Mudo automático</value></data>
   <data name="播放前" xml:space="preserve"><value>Simulação antes</value></data>
   <data name="播放后" xml:space="preserve"><value>Simulação depois</value></data>
-  <data name="停止所有音频" xml:space="preserve"><value>Parar todos os áudios</value></data>
-  <data name="停止所有音频_说明" xml:space="preserve"><value>Para todos os áudios em reprodução.</value></data>
   <data name="停止" xml:space="preserve"><value>Parar</value></data>
   <data name="按下" xml:space="preserve"><value>Pressionar</value></data>
   <data name="抬起" xml:space="preserve"><value>Soltar</value></data>
@@ -243,4 +241,25 @@
   <data name="停止加载" xml:space="preserve"><value>Parar carregamento</value></data>
   <data name="程序已经在运行" xml:space="preserve"><value>O PlayVoice já está em execução.</value></data>
   <data name="日志初始化失败" xml:space="preserve"><value>Não foi possível criar os arquivos de log. O PlayVoice não pode continuar a inicialização.</value></data>
+  <data name="单曲播放" xml:space="preserve"><value>Reproduzir uma vez</value></data>
+  <data name="单曲循环" xml:space="preserve"><value>Repetir faixa</value></data>
+  <data name="列表循环" xml:space="preserve"><value>Repetir lista</value></data>
+  <data name="随机循环" xml:space="preserve"><value>Repetição aleatória</value></data>
+  <data name="上一首" xml:space="preserve"><value>Faixa anterior</value></data>
+  <data name="下一首" xml:space="preserve"><value>Próxima faixa</value></data>
+  <data name="暂停或继续" xml:space="preserve"><value>Pausar / retomar</value></data>
+  <data name="播放控制" xml:space="preserve"><value>Controles de reprodução</value></data>
+  <data name="重命名" xml:space="preserve"><value>Renomear</value></data>
+  <data name="新名称" xml:space="preserve"><value>Novo nome</value></data>
+  <data name="向上移动" xml:space="preserve"><value>Mover para cima</value></data>
+  <data name="向下移动" xml:space="preserve"><value>Mover para baixo</value></data>
+  <data name="选择" xml:space="preserve"><value>Selecionar</value></data>
+  <data name="拖放音频以导入" xml:space="preserve"><value>Solte arquivos de áudio para importar</value></data>
+  <data name="已忽略不支持的文件" xml:space="preserve"><value>Arquivos incompatíveis foram ignorados.</value></data>
+  <data name="名称无效" xml:space="preserve"><value>Nome de arquivo inválido.</value></data>
+  <data name="文件已存在" xml:space="preserve"><value>Já existe um arquivo com esse nome.</value></data>
+  <data name="保存失败" xml:space="preserve"><value>Não foi possível salvar a configuração.</value></data>
+  <data name="重命名失败" xml:space="preserve"><value>Não foi possível renomear o arquivo.</value></data>
+  <data name="播放失败" xml:space="preserve"><value>Não foi possível reproduzir o arquivo de áudio.</value></data>
+  <data name="快捷键已占用" xml:space="preserve"><value>Este atalho já está em uso.</value></data>
 </root>

@@ -1,4 +1,4 @@
-using NAudio.Wave;
+﻿using NAudio.Wave;
 using PlayVoice.Audio;
 using PlayVoice.Diagnostics;
 using System.IO;
@@ -15,17 +15,66 @@ public class AudioPresetData
     {
         string path = Path.Combine(AudioPresetDataTool.BasePath, Config.Name);
         return Directory.Exists(path)
-            && JsonTool.SaveJson(Path.Combine(path, AudioPresetDataTool.ConfigFileName), Config);
+            && JsonTool.SaveJsonAtomically(Path.Combine(path, AudioPresetDataTool.ConfigFileName), Config);
     }
 
     public void SwapOrder(int index0, int index1)
     {
-        AudioList[index0].Index = index1;
-        AudioList[index1].Index = index0;
+        var audio = AudioList[index0];
+        var config = Config.AudioDataConfigList[index0];
+        AudioList.RemoveAt(index0);
+        Config.AudioDataConfigList.RemoveAt(index0);
+        AudioList.Insert(index1, audio);
+        Config.AudioDataConfigList.Insert(index1, config);
+        for (int i = 0; i < AudioList.Count; i++) AudioList[i].Index = i;
+        NotifyTracksChanged();
+    }
 
-        (AudioList[index0], AudioList[index1]) = (AudioList[index1], AudioList[index0]);
-        (Config.AudioDataConfigList[index0], Config.AudioDataConfigList[index1]) =
-            (Config.AudioDataConfigList[index1], Config.AudioDataConfigList[index0]);
+    public void RenameAudio(AudioData audio, string newName)
+    {
+        if (!AudioList.Contains(audio)) throw new InvalidOperationException();
+        newName = newName.Trim();
+        if (string.IsNullOrWhiteSpace(newName) || newName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0
+            || newName.EndsWith('.') || newName is "." or ".."
+            || System.Text.RegularExpressions.Regex.IsMatch(newName.Split('.')[0],
+                @"^(CON|PRN|AUX|NUL|COM[0-9¹²³]|LPT[0-9¹²³])$", System.Text.RegularExpressions.RegexOptions.IgnoreCase))
+            throw new ArgumentException(Resources.Language.LanguageManager.Inst.GetString("名称无效"));
+        var config = audio.Config;
+        string oldName = config.FileName;
+        if (newName == oldName) return;
+        string folder = Path.Combine(AudioPresetDataTool.BasePath, Config.Name);
+        string oldPath = Path.Combine(folder, config.Name);
+        string newPath = Path.Combine(folder, newName + config.FileFormat);
+        if (!string.Equals(oldPath, newPath, StringComparison.OrdinalIgnoreCase) && File.Exists(newPath))
+            throw new IOException(Resources.Language.LanguageManager.Inst.GetString("文件已存在"));
+        audio.Stop();
+        foreach (var reader in audio.AudioTrackArray) reader?.Dispose();
+        bool moved = false;
+        try
+        {
+            File.Move(oldPath, newPath);
+            moved = true;
+            config.FileName = newName;
+            OpenReaders(audio, newPath);
+            if (!Save()) throw new IOException(Resources.Language.LanguageManager.Inst.GetString("保存失败"));
+            var copies = GlobalData.Inst.CopyAudioPathList;
+            for (int i = 0; i < copies.Count; i++)
+                if (string.Equals(copies[i], oldPath, StringComparison.OrdinalIgnoreCase)) copies[i] = newPath;
+        }
+        catch
+        {
+            foreach (var reader in audio.AudioTrackArray) reader?.Dispose();
+            if (moved) File.Move(newPath, oldPath);
+            config.FileName = oldName;
+            OpenReaders(audio, oldPath);
+            throw;
+        }
+    }
+
+    private static void OpenReaders(AudioData audio, string path)
+    {
+        audio.AudioTrackArray[0] = new AudioFileReader(path);
+        audio.AudioTrackArray[1] = new AudioFileReader(path);
     }
 
     public async Task<AudioData> AddAudio(
@@ -87,6 +136,7 @@ public class AudioPresetData
                 $"音频导入完成。Name={audioDataConfig.Name} | LUFS={actualLufs}",
                 "AudioPreset.Import");
             Config.AudioDataConfigList.Add(audioDataConfig);
+            NotifyTracksChanged();
             return audioData;
         }
         catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
@@ -128,7 +178,13 @@ public class AudioPresetData
             AudioList[i].Index = i;
 
         GlobalData.Inst.RemoveAudioBinding(Config.Name, audioId);
+        NotifyTracksChanged();
         return true;
+    }
+
+    private void NotifyTracksChanged()
+    {
+        if (GlobalData.Inst?.ActiveAudioPreset == this) GlobalData.Inst.Playback.TracksChanged();
     }
 
     public void Dispose()

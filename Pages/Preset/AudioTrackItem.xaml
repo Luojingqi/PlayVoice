@@ -13,6 +13,7 @@
                 <ResourceDictionary Source="/Resources/Style/Drag.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/ListBox.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <BooleanToVisibilityConverter x:Key="MarkedVisibilityConverter"/>
         </ResourceDictionary>
     </UserControl.Resources>
 
@@ -97,7 +98,7 @@
                                 <Ellipse Width="8" Height="8"
                                         Fill="{DynamicResource AccentColor}"
                                         x:Name="SelectCenterPoint"
-                                         Visibility="Collapsed"/>
+                                         Visibility="{Binding Marked, Converter={StaticResource MarkedVisibilityConverter}}"/>
                             </Grid>
                         </ListBoxItem>
                     </ListBox>

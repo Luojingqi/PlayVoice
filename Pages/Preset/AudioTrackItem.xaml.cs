@@ -24,18 +24,6 @@ public partial class AudioTrackItem : UserControl
         DataContextChanged += AudioTrackItem_DataContextChanged;
     }
 
-    public override void OnApplyTemplate()
-    {
-        base.OnApplyTemplate();
-        ViewModel.MarkedChanged += b =>
-        {
-            if (b)
-                SelectCenterPoint.Visibility = Visibility.Visible;
-            else
-                SelectCenterPoint.Visibility = Visibility.Collapsed;
-        };
-    }
-
     private void CheckBoxListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         if (CheckBoxListBox.SelectedIndex == -1) return;
@@ -53,7 +41,7 @@ public partial class AudioTrackItem : UserControl
         if (IsChildOf(KeyboardKeyListBox, originalSource)) return;
 
         ClickRippleEffect.Start(RippleCanvas, e.GetPosition(RippleCanvas));
-        ViewModel.Data.Start();
+        GlobalData.Inst.Playback.Toggle(ViewModel.Data);
     }
 
     private void RippleCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -158,7 +146,8 @@ public partial class AudioTrackItem : UserControl
     private void ResetPlaybackAnimation()
     {
         BackgroundScale.BeginAnimation(ScaleTransform.ScaleXProperty, null);
-        BackgroundScale.ScaleX = 0;
+        BackgroundScale.ScaleX = subscribedAudioData?.IsPaused == true
+            ? subscribedAudioData.PlaybackProgress : 0;
     }
 
     private void DragHandle_MouseDown(object sender, MouseButtonEventArgs e)

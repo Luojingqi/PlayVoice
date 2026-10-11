@@ -1,4 +1,4 @@
-using PlayVoice.Hotkey;
+﻿using PlayVoice.Hotkey;
 using PlayVoice.Pages.Workshop;
 using PlayVoice.Resources.Language;
 using System.Text.Json;
@@ -20,7 +20,11 @@ public class FunctionPresetData
     {
         Action = PlayAudioKeyData.KeyAction.抬起
     };
-    public HotkeyData StopAllPlayingHotkey { get; set; } = new();
+
+    public PlayVoice.Audio.PlaybackMode PlaybackMode { get; set; }
+    public HotkeyData PausePlaybackHotkey { get; set; } = new();
+    public HotkeyData PreviousTrackHotkey { get; set; } = new();
+    public HotkeyData NextTrackHotkey { get; set; } = new();
 
     [JsonIgnore]
     public string DisplayName => IsDefault

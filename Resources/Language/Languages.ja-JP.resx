@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
@@ -154,8 +154,6 @@
   <data name="自动闭麦" xml:space="preserve"><value>自動ミュート</value></data>
   <data name="播放前" xml:space="preserve"><value>再生前シミュレーション</value></data>
   <data name="播放后" xml:space="preserve"><value>再生後シミュレーション</value></data>
-  <data name="停止所有音频" xml:space="preserve"><value>すべての音声を停止</value></data>
-  <data name="停止所有音频_说明" xml:space="preserve"><value>再生中のすべての音声を停止します。</value></data>
   <data name="停止" xml:space="preserve"><value>停止</value></data>
   <data name="按下" xml:space="preserve"><value>押す</value></data>
   <data name="抬起" xml:space="preserve"><value>離す</value></data>
@@ -243,4 +241,25 @@
   <data name="停止加载" xml:space="preserve"><value>読み込みを停止</value></data>
   <data name="程序已经在运行" xml:space="preserve"><value>PlayVoice は既に実行中です。</value></data>
   <data name="日志初始化失败" xml:space="preserve"><value>ログファイルを作成できないため、PlayVoice を起動できません。</value></data>
+  <data name="单曲播放" xml:space="preserve"><value>1曲再生</value></data>
+  <data name="单曲循环" xml:space="preserve"><value>1曲リピート</value></data>
+  <data name="列表循环" xml:space="preserve"><value>リストをリピート</value></data>
+  <data name="随机循环" xml:space="preserve"><value>シャッフルリピート</value></data>
+  <data name="上一首" xml:space="preserve"><value>前の曲</value></data>
+  <data name="下一首" xml:space="preserve"><value>次の曲</value></data>
+  <data name="暂停或继续" xml:space="preserve"><value>一時停止／再開</value></data>
+  <data name="播放控制" xml:space="preserve"><value>再生コントロール</value></data>
+  <data name="重命名" xml:space="preserve"><value>名前を変更</value></data>
+  <data name="新名称" xml:space="preserve"><value>新しい名前</value></data>
+  <data name="向上移动" xml:space="preserve"><value>上へ移動</value></data>
+  <data name="向下移动" xml:space="preserve"><value>下へ移動</value></data>
+  <data name="选择" xml:space="preserve"><value>選択</value></data>
+  <data name="拖放音频以导入" xml:space="preserve"><value>音声ファイルをドロップしてインポート</value></data>
+  <data name="已忽略不支持的文件" xml:space="preserve"><value>非対応のファイルをスキップしました。</value></data>
+  <data name="名称无效" xml:space="preserve"><value>無効なファイル名です。</value></data>
+  <data name="文件已存在" xml:space="preserve"><value>同じ名前のファイルが既に存在します。</value></data>
+  <data name="保存失败" xml:space="preserve"><value>設定を保存できませんでした。</value></data>
+  <data name="重命名失败" xml:space="preserve"><value>ファイル名を変更できませんでした。</value></data>
+  <data name="播放失败" xml:space="preserve"><value>音声ファイルを再生できませんでした。</value></data>
+  <data name="快捷键已占用" xml:space="preserve"><value>このショートカットは既に使用されています。</value></data>
 </root>

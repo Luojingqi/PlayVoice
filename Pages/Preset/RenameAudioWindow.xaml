@@ -1,0 +1,34 @@
+﻿<Window x:Class="PlayVoice.Pages.Preset.RenameAudioWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:L="clr-namespace:PlayVoice.Resources.Language"
+        Width="420" SizeToContent="Height" WindowStartupLocation="CenterOwner"
+        WindowStyle="None" AllowsTransparency="True" Background="Transparent" ResizeMode="NoResize"
+        ShowInTaskbar="False" Title="{L:Lan 重命名}" KeyDown="Window_KeyDown">
+    <Window.Resources>
+        <ResourceDictionary><ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="/Resources/Style/Button.xaml"/>
+            <ResourceDictionary Source="/Resources/Style/ListBox.xaml"/>
+        </ResourceDictionary.MergedDictionaries></ResourceDictionary>
+    </Window.Resources>
+    <Border Background="{DynamicResource BgDark}" BorderBrush="{DynamicResource AccentColor}" BorderThickness="1" CornerRadius="10">
+        <StackPanel>
+            <Grid Height="32" Background="{DynamicResource Title}" MouseLeftButtonDown="Title_MouseDown">
+                <TextBlock Text="{L:Lan 重命名}" Margin="12,0" VerticalAlignment="Center" Foreground="{DynamicResource AccentColor}"/>
+                <Button Content="╳" Width="36" HorizontalAlignment="Right" Style="{StaticResource CloseButtonStyle}" Click="Close_Click"/>
+            </Grid>
+            <StackPanel Margin="20">
+                <TextBlock x:Name="OriginalName" TextWrapping="Wrap" Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,12"/>
+                <ListBox Tag="Uniform" Height="36" Style="{StaticResource HorizontalButtonGroupStyle}">
+                    <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
+                        <TextBox x:Name="NewName" Style="{StaticResource GroupTextBoxStyle}" Tag="{L:Lan 新名称}"/>
+                    </ListBoxItem>
+                </ListBox>
+                <TextBlock x:Name="ErrorText" TextWrapping="Wrap" Foreground="{DynamicResource TextPrimary}" Margin="0,8"/>
+                <ListBox Tag="Uniform" Width="90" Height="34" Style="{StaticResource HorizontalButtonGroupStyle}" SelectionChanged="Confirm_Click">
+                    <ListBoxItem Style="{StaticResource GroupButtonItemStyle}"><TextBlock Text="{L:Lan 确认}" Style="{StaticResource TextBlockLight}"/></ListBoxItem>
+                </ListBox>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</Window>

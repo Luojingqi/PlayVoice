@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
@@ -154,8 +154,6 @@
   <data name="自动闭麦" xml:space="preserve"><value>자동 음소거</value></data>
   <data name="播放前" xml:space="preserve"><value>재생 전 시뮬레이션</value></data>
   <data name="播放后" xml:space="preserve"><value>재생 후 시뮬레이션</value></data>
-  <data name="停止所有音频" xml:space="preserve"><value>모든 오디오 중지</value></data>
-  <data name="停止所有音频_说明" xml:space="preserve"><value>현재 재생 중인 모든 오디오를 중지합니다.</value></data>
   <data name="停止" xml:space="preserve"><value>중지</value></data>
   <data name="按下" xml:space="preserve"><value>누르기</value></data>
   <data name="抬起" xml:space="preserve"><value>떼기</value></data>
@@ -243,4 +241,25 @@
   <data name="停止加载" xml:space="preserve"><value>불러오기 중지</value></data>
   <data name="程序已经在运行" xml:space="preserve"><value>PlayVoice가 이미 실행 중입니다.</value></data>
   <data name="日志初始化失败" xml:space="preserve"><value>로그 파일을 만들 수 없어 PlayVoice를 계속 시작할 수 없습니다.</value></data>
+  <data name="单曲播放" xml:space="preserve"><value>한 곡 재생</value></data>
+  <data name="单曲循环" xml:space="preserve"><value>한 곡 반복</value></data>
+  <data name="列表循环" xml:space="preserve"><value>목록 반복</value></data>
+  <data name="随机循环" xml:space="preserve"><value>무작위 반복</value></data>
+  <data name="上一首" xml:space="preserve"><value>이전 곡</value></data>
+  <data name="下一首" xml:space="preserve"><value>다음 곡</value></data>
+  <data name="暂停或继续" xml:space="preserve"><value>일시 정지 / 계속</value></data>
+  <data name="播放控制" xml:space="preserve"><value>재생 제어</value></data>
+  <data name="重命名" xml:space="preserve"><value>이름 바꾸기</value></data>
+  <data name="新名称" xml:space="preserve"><value>새 이름</value></data>
+  <data name="向上移动" xml:space="preserve"><value>위로 이동</value></data>
+  <data name="向下移动" xml:space="preserve"><value>아래로 이동</value></data>
+  <data name="选择" xml:space="preserve"><value>선택</value></data>
+  <data name="拖放音频以导入" xml:space="preserve"><value>오디오 파일을 끌어 놓아 가져오기</value></data>
+  <data name="已忽略不支持的文件" xml:space="preserve"><value>지원하지 않는 파일을 건너뛰었습니다.</value></data>
+  <data name="名称无效" xml:space="preserve"><value>올바르지 않은 파일 이름입니다.</value></data>
+  <data name="文件已存在" xml:space="preserve"><value>같은 이름의 파일이 이미 있습니다.</value></data>
+  <data name="保存失败" xml:space="preserve"><value>설정을 저장하지 못했습니다.</value></data>
+  <data name="重命名失败" xml:space="preserve"><value>파일 이름을 바꾸지 못했습니다.</value></data>
+  <data name="播放失败" xml:space="preserve"><value>오디오 파일을 재생하지 못했습니다.</value></data>
+  <data name="快捷键已占用" xml:space="preserve"><value>이미 사용 중인 단축키입니다.</value></data>
 </root>

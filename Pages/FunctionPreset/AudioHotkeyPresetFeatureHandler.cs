@@ -24,7 +24,7 @@ public sealed class AudioHotkeyPresetFeatureHandler : IFunctionPresetFeatureHand
             hotkey.Callback = () =>
             {
                 if (GlobalData.Inst.GetRun())
-                    audio.Start();
+                    GlobalData.Inst.Playback.Toggle(audio);
             };
             appliedHotkeys.Add(hotkey);
             HotkeyManager.Inst.AddHotkey(hotkey);

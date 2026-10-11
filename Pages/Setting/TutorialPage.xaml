@@ -215,6 +215,146 @@
                             Margin="4,5"
                             FontSize="13.5"/>
                 </Grid>
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               FontFamily="Segoe MDL2 Assets"
+                               Text="&#xE768;"
+                               Foreground="{DynamicResource AccentColor}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1"
+                               Text="{L:Lan 单曲播放}"
+                               TextWrapping="WrapWithOverflow"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="4,5"
+                               FontSize="13.5"/>
+                </Grid>
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               FontFamily="Segoe MDL2 Assets"
+                               Text="&#xE8ED;"
+                               Foreground="{DynamicResource AccentColor}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1"
+                               Text="{L:Lan 单曲循环}"
+                               TextWrapping="WrapWithOverflow"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="4,5"
+                               FontSize="13.5"/>
+                </Grid>
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               FontFamily="Segoe MDL2 Assets"
+                               Text="&#xE8EE;"
+                               Foreground="{DynamicResource AccentColor}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1"
+                               Text="{L:Lan 列表循环}"
+                               TextWrapping="WrapWithOverflow"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="4,5"
+                               FontSize="13.5"/>
+                </Grid>
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               FontFamily="Segoe MDL2 Assets"
+                               Text="&#xE8B1;"
+                               Foreground="{DynamicResource AccentColor}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1"
+                               Text="{L:Lan 随机循环}"
+                               TextWrapping="WrapWithOverflow"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="4,5"
+                               FontSize="13.5"/>
+                </Grid>
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               FontFamily="Segoe MDL2 Assets"
+                               Text="&#xE892;"
+                               Foreground="{DynamicResource AccentColor}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1"
+                               Text="{L:Lan 上一首}"
+                               TextWrapping="WrapWithOverflow"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="4,5"
+                               FontSize="13.5"/>
+                </Grid>
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               FontFamily="Segoe MDL2 Assets"
+                               Text="&#xE769;"
+                               Foreground="{DynamicResource AccentColor}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1"
+                               Text="{L:Lan 暂停或继续}"
+                               TextWrapping="WrapWithOverflow"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="4,5"
+                               FontSize="13.5"/>
+                </Grid>
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32.5"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0"
+                               FontFamily="Segoe MDL2 Assets"
+                               Text="&#xE893;"
+                               Foreground="{DynamicResource AccentColor}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1"
+                               Text="{L:Lan 下一首}"
+                               TextWrapping="WrapWithOverflow"
+                               TextAlignment="Center"
+                               HorizontalAlignment="Stretch"
+                               Style="{StaticResource TextBlockLight}"
+                               Margin="4,5"
+                               FontSize="13.5"/>
+                </Grid>
                     </WrapPanel>
                 </local:TutorialSection.SectionContent>
             </local:TutorialSection>

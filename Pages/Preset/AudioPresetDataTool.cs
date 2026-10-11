@@ -64,7 +64,7 @@ public static class AudioPresetDataTool
                     {
                         audioData.AudioTrackArray[0]?.Dispose();
                         audioData.AudioTrackArray[1]?.Dispose();
-                        audioData.PlayTimer.Dispose();
+                        audioData.PlayTimer.Stop();
                         throw;
                     }
                 }

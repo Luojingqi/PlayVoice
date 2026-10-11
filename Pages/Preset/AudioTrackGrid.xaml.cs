@@ -1,4 +1,6 @@
 ﻿using Microsoft.Win32;
+using PlayVoice.Audio;
+using System.Windows.Input;
 using PlayVoice.Pages.Loading;
 using PlayVoice.Resources.Language;
 using System.Collections.ObjectModel;
@@ -20,6 +22,8 @@ namespace PlayVoice.Pages.Preset
             TopButtonGroupListBox.SelectionChanged += TopButtonGroupOnSelection;
             audioFileProgressOverlay.StopRequested += AudioFileProgressOverlay_StopRequested;
             this.Unloaded += AudioTrackGrid_Unloaded;
+            Loaded += AudioTrackGrid_Loaded;
+            AudioListBox.PreviewMouseRightButtonDown += AudioListBox_RightClick;
         }
 
 
@@ -181,7 +185,10 @@ namespace PlayVoice.Pages.Preset
                 {
                     targetPreset.Save();
                     if (ReferenceEquals(GlobalData.Inst.ActiveAudioPreset, targetPreset))
-                        await InitLoadAudioPreset(targetPreset.Config.Name);
+                    {
+                        GlobalData.Inst.RebuildActiveHotkeys();
+                        await RefreshCurrentAudioPreset();
+                    }
                 }
                 finally
                 {
@@ -214,7 +221,7 @@ namespace PlayVoice.Pages.Preset
                 GlobalData.Inst.ActiveAudioPreset.RemoveAudio(index);
 
             GlobalData.Inst.ActiveAudioPreset.Save();
-            await InitLoadAudioPreset(GlobalData.Inst.ActiveAudioPreset.Config.Name);
+            await RefreshCurrentAudioPreset();
         }
 
 
@@ -236,6 +243,15 @@ namespace PlayVoice.Pages.Preset
         // 悬停高频触发：精准控制提示条位置
         private void ListBox_DragOver(object sender, DragEventArgs e)
         {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                var files = e.Data.GetData(DataFormats.FileDrop) as string[] ?? Array.Empty<string>();
+                bool supported = !isAddingAudio && files.Any(IsSupportedFile);
+                e.Effects = supported ? DragDropEffects.Copy : DragDropEffects.None;
+                FileDropHint.Visibility = supported ? Visibility.Visible : Visibility.Collapsed;
+                e.Handled = true;
+                return;
+            }
             if (e.Data.GetDataPresent("AudioTrackItemVisual"))
             {
                 e.Effects = DragDropEffects.Move;
@@ -344,9 +360,15 @@ namespace PlayVoice.Pages.Preset
         }
 
         // 鼠标松开放置：精准落位
-        private void ListBox_Drop(object sender, DragEventArgs e)
+        private async void ListBox_Drop(object sender, DragEventArgs e)
         {
             HideDragVisuals();
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Handled = true;
+                await ImportDroppedFiles(e.Data.GetData(DataFormats.FileDrop) as string[] ?? Array.Empty<string>());
+                return;
+            }
 
             if (e.Data.GetDataPresent("AudioTrackItemVisual"))
             {
@@ -419,6 +441,7 @@ namespace PlayVoice.Pages.Preset
 
         private void HideDragVisuals()
         {
+            FileDropHint.Visibility = Visibility.Collapsed;
             DragGhost.Visibility = Visibility.Collapsed;
             InsertionLine.Visibility = Visibility.Collapsed;
         }
@@ -434,6 +457,11 @@ namespace PlayVoice.Pages.Preset
             if (!PresetPage.Inst.IsAudioPresetPageSelected(name))
                 return;
 
+            if (GlobalData.Inst.ActiveAudioPreset?.Config.Name == name)
+            {
+                await RefreshCurrentAudioPreset();
+                return;
+            }
             CancelPendingAudioPresetLoad(clearItems: true);
             using var cancellationSource = new CancellationTokenSource();
             audioPresetLoadCancellation = cancellationSource;
@@ -466,6 +494,7 @@ namespace PlayVoice.Pages.Preset
         public async Task RefreshCurrentAudioPreset(
             CancellationToken cancellationToken = default)
         {
+            GlobalData.Inst.Playback.NotifyChanged();
             int refreshVersion = ++audioTrackRefreshVersion;
             ShortcutList.Clear();
             TopButtonGroupListBox.SelectedIndex = -1;
@@ -509,6 +538,105 @@ namespace PlayVoice.Pages.Preset
 
 
 
+        private NativeFileDrop nativeFileDrop;
+        private bool syncingPlaybackMode;
+
+        private void AudioTrackGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            GlobalData.Inst.Playback.Changed += RefreshPlaybackMode;
+            RefreshPlaybackMode();
+            nativeFileDrop = new NativeFileDrop(AudioListBox, ImportDroppedFiles);
+        }
+
+        private void RefreshPlaybackMode()
+        {
+            syncingPlaybackMode = true;
+            PlaybackModeListBox.SelectedIndex = (int)GlobalData.Inst.Playback.Mode;
+            syncingPlaybackMode = false;
+        }
+
+        private void PlaybackMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!syncingPlaybackMode && PlaybackModeListBox.SelectedIndex >= 0)
+                GlobalData.Inst.Playback.SetMode((PlaybackMode)PlaybackModeListBox.SelectedIndex);
+        }
+
+        private static bool IsSupportedFile(string path) => File.Exists(path)
+            && new[] { ".mp3", ".wav", ".m4a", ".flac", ".aac" }
+                .Contains(Path.GetExtension(path), StringComparer.OrdinalIgnoreCase);
+
+        private async Task ImportDroppedFiles(string[] files)
+        {
+            if (isAddingAudio || !IsLoaded || !IsEnabled) return;
+            var supported = files.Where(IsSupportedFile).ToArray();
+            if (supported.Length != files.Length)
+                MainWindow.Inst.AddNotification(
+                    () => LanguageManager.Inst.GetString("通知"),
+                    () => LanguageManager.Inst.GetString("已忽略不支持的文件"), Pages.LabelStatus.Warning, 4);
+            await AddAudioFilesAsync(supported, LanguageManager.Inst.GetString("导入"));
+        }
+
+        private void AudioListBox_RightClick(object sender, MouseButtonEventArgs e)
+        {
+            var element = e.OriginalSource as DependencyObject;
+            while (element != null && element is not AudioTrackItem)
+                element = VisualTreeHelper.GetParent(element);
+            if (element is not AudioTrackItem row) return;
+            var target = row.ViewModel;
+            if (!target.Marked)
+            {
+                foreach (var item in ShortcutList) item.Marked = item == target;
+                SelectAll = false;
+            }
+            var menu = new ContextMenu();
+            menu.SetResourceReference(Control.BackgroundProperty, "BgMedium");
+            menu.SetResourceReference(Control.ForegroundProperty, "TextPrimary");
+            void Add(string key, Action action, bool enabled = true)
+            {
+                var item = new MenuItem { Header = LanguageManager.Inst.GetString(key), IsEnabled = enabled };
+                item.Click += (_, _) => action();
+                menu.Items.Add(item);
+            }
+            Add("选择", () => target.Marked = !target.Marked);
+            Add("复制", CopyButton_Click);
+            var delete = new MenuItem { Header = LanguageManager.Inst.GetString("删除") };
+            delete.Click += async (_, _) => await DeleteButton_Click();
+            menu.Items.Add(delete);
+            Add("文件资源浏览器", FolderButton_Click);
+            menu.Items.Add(new Separator());
+            Add("向上移动", () => MoveSelected(-1), CanMoveSelected(-1));
+            Add("向下移动", () => MoveSelected(1), CanMoveSelected(1));
+            menu.Items.Add(new Separator());
+            Add("重命名", () => RenameTrack(target), ShortcutList.Count(x => x.Marked) == 1);
+            menu.PlacementTarget = row;
+            menu.IsOpen = true;
+            e.Handled = true;
+        }
+
+        private bool CanMoveSelected(int direction) => ShortcutList.Select((item, i) => (item, i))
+            .Any(x => x.item.Marked && x.i + direction >= 0 && x.i + direction < ShortcutList.Count
+                && !ShortcutList[x.i + direction].Marked);
+
+        private void MoveSelected(int direction)
+        {
+            var indexes = Enumerable.Range(0, ShortcutList.Count);
+            if (direction > 0) indexes = indexes.Reverse();
+            foreach (int i in indexes)
+            {
+                int next = i + direction;
+                if (!ShortcutList[i].Marked || next < 0 || next >= ShortcutList.Count || ShortcutList[next].Marked) continue;
+                ShortcutList.Move(i, next);
+                GlobalData.Inst.ActiveAudioPreset.SwapOrder(i, next);
+            }
+            GlobalData.Inst.ActiveAudioPreset.Save();
+        }
+
+        private void RenameTrack(AudioTrackItemViewModel target)
+        {
+            var window = new RenameAudioWindow(target.Data) { Owner = Window.GetWindow(this) };
+            if (window.ShowDialog() == true) target.Header = target.Data.Config.Name;
+        }
+
         public void Leave()
         {
             GlobalData.Inst.ActiveAudioPreset?.Save();
@@ -516,6 +644,9 @@ namespace PlayVoice.Pages.Preset
 
         private void AudioTrackGrid_Unloaded(object sender, RoutedEventArgs e)
         {
+            nativeFileDrop?.Dispose();
+            nativeFileDrop = null;
+            GlobalData.Inst.Playback.Changed -= RefreshPlaybackMode;
             addAudioCancellation?.Cancel();
             CancelPendingAudioPresetLoad(clearItems: false);
             Leave();

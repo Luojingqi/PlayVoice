@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+        xmlns:Playback="clr-namespace:PlayVoice.Pages.Playback"
         xmlns:local="clr-namespace:PlayVoice.Pages.Setting"
         xmlns:L="clr-namespace:PlayVoice.Resources.Language"
         xmlns:DropDownList="clr-namespace:PlayVoice.Pages.DropDownList"
@@ -213,72 +214,7 @@
                 </Grid>
             </Grid>
 
-            <Grid Grid.Row="6" Margin="0,1.5" Height="42.5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="24"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <ExpandArrow:ExpandArrow x:Name="StopAllAudioExpandArrow"
-                                         Grid.Column="0"
-                                         HorizontalAlignment="Center"
-                                         VerticalAlignment="Center"/>
-                <HeaderToolTip:HeaderToolTip Grid.Column="1"
-                                             Header="{L:Lan 停止所有音频}"
-                                             ToolTipText="{L:Lan 停止所有音频_说明}"
-                                             VerticalAlignment="Center"
-                                             HorizontalAlignment="Left"/>
-                <ListBox Grid.Column="2"
-                         Margin="10,0,0,0"
-                         Style="{StaticResource HorizontalButtonGroupStyle}"
-                         x:Name="StopAllAudioButtonListBox"
-                         Tag="Uniform"
-                         HorizontalAlignment="Right"
-                         VerticalAlignment="Center"
-                         Width="130">
-                    <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
-                        <TextBlock Text="{L:Lan 停止}"
-                                   FontSize="14.5"
-                                   Style="{StaticResource TextBlockLight}"/>
-                    </ListBoxItem>
-                </ListBox>
-            </Grid>
-            <Grid x:Name="StopAllAudioHotkeyPanel"
-                  Grid.Row="7"
-                  Height="0"
-                  Opacity="0"
-                  ClipToBounds="True"
-                  IsHitTestVisible="False">
-                <Grid.RenderTransform>
-                    <TranslateTransform Y="-6"/>
-                </Grid.RenderTransform>
-                <Grid Height="37.5" Margin="0,1.5">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="24"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <HeaderToolTip:HeaderToolTip Grid.Column="1"
-                                                 Header="{L:Lan 快捷键}"
-                                                 VerticalAlignment="Center"
-                                                 HorizontalAlignment="Left"/>
-                    <ListBox Grid.Column="2"
-                             Margin="10,0,0,0"
-                             Style="{StaticResource HorizontalButtonGroupStyle}"
-                             x:Name="KeyboardKeyListBox2"
-                             HorizontalAlignment="Right"
-                             Width="96">
-                        <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
-                            <TextBox Tag="{L:Lan 输入按键}"
-                                     x:Name="KeyboardKeyInputTextBox2"
-                                     Style="{StaticResource GroupTextBoxStyle}"
-                                     GotFocus="KeyboardKeyInputTextBox2_GotFocus"
-                                     LostFocus="KeyboardKeyInputTextBox2_LostFocus"
-                                     InputMethod.IsInputMethodEnabled="False"/>
-                        </ListBoxItem>
-                    </ListBox>
-                </Grid>
-            </Grid>
+            <Playback:PlaybackSettings Grid.Row="6" Grid.RowSpan="2"/>
 
             <StackPanel Grid.Row="8">
                 <DropDownList:DropDownList

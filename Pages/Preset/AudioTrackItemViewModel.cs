@@ -64,11 +64,11 @@ public class AudioTrackItemViewModel : INotifyPropertyChanged
         get => marked;
         set
         {
+            if (marked == value) return;
             marked = value;
-            MarkedChanged?.Invoke(value);
+            OnPropertyChanged();
         }
     }
-    public event Action<bool> MarkedChanged;
     public AudioTrackItemViewModel(AudioData audioData)
     {
         this.Data = audioData;

@@ -26,23 +26,26 @@ public class AudioData
     {
         get
         {
-            if (!IsPlaying)
+            if (!IsPlaying && !IsPaused)
                 return 0;
 
-            AudioFileReader audioTrack =
-                (PlayMode & PlayModeEnum.VL播放) == PlayModeEnum.VL播放
-                    ? AudioTrackArray[0]
-                    : AudioTrackArray[1];
-            if (audioTrack == null || audioTrack.Length <= 0)
-                return 0;
-
-            return Math.Clamp((double)audioTrack.Position / audioTrack.Length, 0, 1);
+            double duration = AudioTrackArray[0]?.TotalTime.TotalMilliseconds ?? 0;
+            return duration > 0
+                ? Math.Clamp(playbackClock.Elapsed.TotalMilliseconds / duration, 0, 1)
+                : 0;
         }
     }
 
     public int Index { get; set; }
 
-    public System.Timers.Timer PlayTimer { get; set; } = new System.Timers.Timer();
+    public System.Windows.Threading.DispatcherTimer PlayTimer { get; } = new(System.Windows.Threading.DispatcherPriority.Normal, Application.Current.Dispatcher);
+    public bool IsPaused { get; private set; }
+    private MediaFoundationResampler vmResampler;
+    private MediaFoundationResampler plResampler;
+    private bool workshopPlayback;
+    // Reader.Position includes decoder/resampler read-ahead, not audible progress.
+    private readonly Stopwatch playbackClock = new();
+    private PlayModeEnum pausedPlayMode;
 
     public AudioPresetData AudioPreset { get; set; }
 
@@ -101,7 +104,7 @@ public class AudioData
 
     public AudioData()
     {
-        PlayTimer.Elapsed += (o, e) => Application.Current.Dispatcher.Invoke(Stop);
+        PlayTimer.Tick += (_, _) => StopCore(completed: true);
     }
 
     public Action AnimationPlayAction;
@@ -115,6 +118,8 @@ public class AudioData
         if ((PlayMode & PlayModeEnum.不播放) != PlayModeEnum.不播放) Stop();
         else
         {
+            if (IsPaused && TryResume()) return;
+            workshopPlayback = false;
             var audioProxy = GlobalData.Inst.AudioProxy;
             bool canPlay = false;
             if (GlobalData.Inst.GetRun())
@@ -122,11 +127,11 @@ public class AudioData
                 PlayMode = 0;
                 PlayMode |= PlayModeEnum.VL播放;
                 VolumeProvider_ToVM = new VolumeSampleProvider(
-                  new MediaFoundationResampler(AudioTrackArray[0], audioProxy.PhysicalMicrophoneWaveFormat) { ResamplerQuality = 60 }.ToSampleProvider());
+                  (vmResampler = new MediaFoundationResampler(AudioTrackArray[0], audioProxy.PhysicalMicrophoneWaveFormat) { ResamplerQuality = 60 }).ToSampleProvider());
                 if (GlobalData.Inst.GetGoEar_Audio())
                 {
                     VolumeProvider_ToPL = new VolumeSampleProvider(
-                      new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }.ToSampleProvider());
+                      (plResampler = new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }).ToSampleProvider());
                     PlayMode |= PlayModeEnum.PL播放;
                 }
                 canPlay = true;
@@ -137,7 +142,7 @@ public class AudioData
                 PlayMode |= PlayModeEnum.PL播放;
                 VolumeProvider_ToVM = null;
                 VolumeProvider_ToPL = new VolumeSampleProvider(
-                  new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }.ToSampleProvider());
+                  (plResampler = new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }).ToSampleProvider());
                 canPlay = true;
                 if (GlobalData.Inst.Config.MicrophoneLufs == null)
                 {
@@ -156,9 +161,11 @@ public class AudioData
             }
 
             if (canPlay == false) return;
-            PlayTimer.Interval = AudioTrackArray[0].TotalTime.TotalMilliseconds;
+            IsPaused = false;
+            PlayTimer.Interval = RemainingTime;
             SetVolume(GlobalData.Inst.GetAudioDecibel(this));
             audioProxy.AddAudio(this);
+            playbackClock.Start();
             PlayTimer.Start();
             AnimationPlayAction?.Invoke();
             PlaybackStarted?.Invoke();
@@ -170,6 +177,7 @@ public class AudioData
     /// </summary>
     public void Start_创意工坊播放()
     {
+        workshopPlayback = true;
         if ((PlayMode & PlayModeEnum.不播放) != PlayModeEnum.不播放) Stop();
         else
         {
@@ -180,10 +188,12 @@ public class AudioData
                 PlayMode |= PlayModeEnum.PL播放;
                 VolumeProvider_ToVM = null;
                 VolumeProvider_ToPL = new VolumeSampleProvider(
-                  new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }.ToSampleProvider());
-                PlayTimer.Interval = AudioTrackArray[0].TotalTime.TotalMilliseconds;
+                  (plResampler = new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }).ToSampleProvider());
+                IsPaused = false;
+                PlayTimer.Interval = RemainingTime;
                 SetVolume(0);
                 audioProxy.AddAudio(this);
+                playbackClock.Start();
                 PlayTimer.Start();
                 AnimationPlayAction?.Invoke();
                 PlaybackStarted?.Invoke();
@@ -198,43 +208,94 @@ public class AudioData
         }
     }
 
-    public void Stop()
-    {
-        if ((PlayMode & PlayModeEnum.不播放) == PlayModeEnum.不播放) return;
+    private TimeSpan RemainingTime => TimeSpan.FromMilliseconds(Math.Max(1,
+        AudioTrackArray[0].TotalTime.TotalMilliseconds - playbackClock.Elapsed.TotalMilliseconds));
 
+    private bool TryResume()
+    {
+        var global = GlobalData.Inst;
+        var proxy = global.AudioProxy;
+        var desired = global.GetRun()
+            ? PlayModeEnum.VL播放 | (global.GetGoEar_Audio() ? PlayModeEnum.PL播放 : 0)
+            : global.Equipment.PhysicalLoudspeakerState ? PlayModeEnum.PL播放 : PlayModeEnum.不播放;
+        if (desired == pausedPlayMode
+            && ((desired & PlayModeEnum.VL播放) == 0 || vmResampler?.WaveFormat.Equals(proxy.PhysicalMicrophoneWaveFormat) == true)
+            && ((desired & PlayModeEnum.PL播放) == 0 || plResampler?.WaveFormat.Equals(proxy.PhysicalLoudspeakerWaveFormat) == true))
+        {
+            // Keep decoder buffers intact: rebuilding from the reader's prefetched position skips audio.
+            PlayMode = pausedPlayMode;
+            IsPaused = false;
+            SetVolume(global.GetAudioDecibel(this));
+            proxy.AddAudio(this);
+            PlayTimer.Interval = RemainingTime;
+            playbackClock.Start();
+            PlayTimer.Start();
+            AnimationPlayAction?.Invoke();
+            PlaybackStarted?.Invoke();
+            return true;
+        }
+
+        // The output route changed while paused. Rebuild at the frozen playback position.
+        DisposeProviders();
+        foreach (var track in AudioTrackArray)
+            track.CurrentTime = TimeSpan.FromMilliseconds(Math.Min(
+                playbackClock.Elapsed.TotalMilliseconds, track.TotalTime.TotalMilliseconds));
+        return false;
+    }
+
+    public void Pause()
+    {
+        if (!IsPlaying) return;
         PlayTimer.Stop();
-        var audioProxy = GlobalData.Inst.AudioProxy;
-        audioProxy.RemoveAudio(this);
-        for (int i = 0; i < AudioTrackArray.Length; i++)
-            AudioTrackArray[i].Position = 0;
-        VolumeProvider_ToVM = null;
-        VolumeProvider_ToPL = null;
+        playbackClock.Stop();
+        pausedPlayMode = PlayMode;
+        GlobalData.Inst.AudioProxy.RemoveAudio(this);
+        IsPaused = true;
         PlayMode = PlayModeEnum.不播放;
         AnimationStopAction?.Invoke();
         PlaybackStopped?.Invoke();
     }
 
+    public void Stop() => StopCore(completed: false);
 
-    public void Stop_创意工坊播放()
+    private void StopCore(bool completed)
     {
-        if ((PlayMode & PlayModeEnum.不播放) == PlayModeEnum.不播放) return;
+        if (!IsPlaying && !IsPaused) return;
         PlayTimer.Stop();
-        var audioProxy = GlobalData.Inst.AudioProxy;
-        audioProxy.RemoveAudio(this);
-        for (int i = 0; i < AudioTrackArray.Length; i++)
-            AudioTrackArray[i].Position = 0;
-        VolumeProvider_ToVM = null;
-        VolumeProvider_ToPL = null;
+        playbackClock.Reset();
+        if (IsPlaying)
+            GlobalData.Inst.AudioProxy.RemoveAudio(this);
+        DisposeProviders();
+        foreach (var track in AudioTrackArray)
+            if (track != null) track.Position = 0;
+        IsPaused = false;
         PlayMode = PlayModeEnum.不播放;
         AnimationStopAction?.Invoke();
         PlaybackStopped?.Invoke();
+        if (!workshopPlayback)
+        {
+            if (completed) GlobalData.Inst.Playback.OnCompleted(this);
+            else GlobalData.Inst.Playback.OnStopped(this);
+        }
     }
+
+    private void DisposeProviders()
+    {
+        VolumeProvider_ToVM = null;
+        VolumeProvider_ToPL = null;
+        vmResampler?.Dispose();
+        plResampler?.Dispose();
+        vmResampler = null;
+        plResampler = null;
+    }
+
+    public void Stop_创意工坊播放() => Stop();
 
     public void Dispose()
     {
         Stop();
         for (int i = 0; i < AudioTrackArray.Length; i++)
-            AudioTrackArray[i].Dispose();
+            AudioTrackArray[i]?.Dispose();
         AnimationPlayAction = null;
         AnimationStopAction = null;
         PlaybackStarted = null;
@@ -242,7 +303,7 @@ public class AudioData
         VolumeProvider_ToVM = null;
         VolumeProvider_ToPL = null;
         PlayTimer.Stop();
-        PlayTimer.Dispose();
+
     }
 
     public enum PlayModeEnum

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
@@ -154,8 +154,6 @@
   <data name="自动闭麦" xml:space="preserve"><value>自動靜音</value></data>
   <data name="播放前" xml:space="preserve"><value>播放前模擬</value></data>
   <data name="播放后" xml:space="preserve"><value>播放後模擬</value></data>
-  <data name="停止所有音频" xml:space="preserve"><value>停止所有音訊</value></data>
-  <data name="停止所有音频_说明" xml:space="preserve"><value>停止所有正在播放的音訊。</value></data>
   <data name="停止" xml:space="preserve"><value>停止</value></data>
   <data name="按下" xml:space="preserve"><value>按下</value></data>
   <data name="抬起" xml:space="preserve"><value>放開</value></data>
@@ -243,4 +241,25 @@
   <data name="停止加载" xml:space="preserve"><value>停止載入</value></data>
   <data name="程序已经在运行" xml:space="preserve"><value>PlayVoice 已經在執行。</value></data>
   <data name="日志初始化失败" xml:space="preserve"><value>無法建立日誌，PlayVoice 無法繼續啟動。</value></data>
+  <data name="单曲播放" xml:space="preserve"><value>單曲播放</value></data>
+  <data name="单曲循环" xml:space="preserve"><value>單曲循環</value></data>
+  <data name="列表循环" xml:space="preserve"><value>清單循環</value></data>
+  <data name="随机循环" xml:space="preserve"><value>隨機循環</value></data>
+  <data name="上一首" xml:space="preserve"><value>上一首</value></data>
+  <data name="下一首" xml:space="preserve"><value>下一首</value></data>
+  <data name="暂停或继续" xml:space="preserve"><value>暫停或繼續</value></data>
+  <data name="播放控制" xml:space="preserve"><value>播放控制</value></data>
+  <data name="重命名" xml:space="preserve"><value>重新命名</value></data>
+  <data name="新名称" xml:space="preserve"><value>新名稱</value></data>
+  <data name="向上移动" xml:space="preserve"><value>向上移動</value></data>
+  <data name="向下移动" xml:space="preserve"><value>向下移動</value></data>
+  <data name="选择" xml:space="preserve"><value>選取</value></data>
+  <data name="拖放音频以导入" xml:space="preserve"><value>拖放音訊以匯入</value></data>
+  <data name="已忽略不支持的文件" xml:space="preserve"><value>已忽略不支援的檔案</value></data>
+  <data name="名称无效" xml:space="preserve"><value>名稱無效</value></data>
+  <data name="文件已存在" xml:space="preserve"><value>檔案已存在</value></data>
+  <data name="保存失败" xml:space="preserve"><value>儲存失敗</value></data>
+  <data name="重命名失败" xml:space="preserve"><value>重新命名失敗</value></data>
+  <data name="播放失败" xml:space="preserve"><value>播放失敗</value></data>
+  <data name="快捷键已占用" xml:space="preserve"><value>快捷鍵已佔用</value></data>
 </root>
