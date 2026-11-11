@@ -262,4 +262,30 @@
   <data name="重命名失败" xml:space="preserve"><value>Die Datei konnte nicht umbenannt werden.</value></data>
   <data name="播放失败" xml:space="preserve"><value>Die Audiodatei konnte nicht abgespielt werden.</value></data>
   <data name="快捷键已占用" xml:space="preserve"><value>Dieses Tastenkürzel wird bereits verwendet.</value></data>
+  <data name="编辑作品" xml:space="preserve"><value>Eintrag bearbeiten</value></data>
+  <data name="更换封面" xml:space="preserve"><value>Cover ändern</value></data>
+  <data name="恢复原封面" xml:space="preserve"><value>Cover wiederherstellen</value></data>
+  <data name="简介" xml:space="preserve"><value>Beschreibung</value></data>
+  <data name="移除所选" xml:space="preserve"><value>Auswahl entfernen</value></data>
+  <data name="按名称升序" xml:space="preserve"><value>Name A–Z</value></data>
+  <data name="按名称降序" xml:space="preserve"><value>Name Z–A</value></data>
+  <data name="工坊编辑操作提示" xml:space="preserve"><value>Audiodateien zum Hinzufügen ablegen. Titel zum Sortieren ziehen. Strg oder Umschalt für Mehrfachauswahl.</value></data>
+  <data name="发布更新" xml:space="preserve"><value>Update veröffentlichen</value></data>
+  <data name="正在加载作品" xml:space="preserve"><value>Eintrag wird geladen…</value></data>
+  <data name="正在下载原作品" xml:space="preserve"><value>Original wird heruntergeladen…</value></data>
+  <data name="原作品下载失败" xml:space="preserve"><value>Download fehlgeschlagen oder Zeitlimit erreicht. Bitte später erneut versuchen.</value></data>
+  <data name="作品资源不完整" xml:space="preserve"><value>Der Inhalt ist unvollständig und kann nicht bearbeitet werden.</value></data>
+  <data name="只能编辑自己的作品" xml:space="preserve"><value>Du kannst nur eigene Einträge bearbeiten.</value></data>
+  <data name="工坊编辑变更摘要" xml:space="preserve"><value>Bisher {0} · Neu {1} · Entfernt {2} · Gesamt {3} · Ersetzt {4}  {5}</value></data>
+  <data name="封面已修改" xml:space="preserve"><value>Cover geändert</value></data>
+  <data name="工坊同名歌曲替换提示" xml:space="preserve"><value>Ein Titel namens „{0}“ existiert bereits. Ersetzen? Nein überspringt ihn.</value></data>
+  <data name="正在校验作品" xml:space="preserve"><value>Eintrag wird geprüft…</value></data>
+  <data name="作品已更新请重新加载" xml:space="preserve"><value>Der Eintrag wurde andernorts aktualisiert. Abbrechen und erneut öffnen.</value></data>
+  <data name="至少保留一首歌曲" xml:space="preserve"><value>Mindestens einen Titel behalten.</value></data>
+  <data name="工坊元数据超限" xml:space="preserve"><value>Die Metadaten überschreiten das Steam-Limit von 5000 Byte. Titel entfernen oder Dateinamen kürzen.</value></data>
+  <data name="正在发布更新" xml:space="preserve"><value>Update wird veröffentlicht. Bitte warten…</value></data>
+  <data name="作品更新成功" xml:space="preserve"><value>Eintrag aktualisiert</value></data>
+  <data name="简介已修改" xml:space="preserve"><value>Beschreibung geändert</value></data>
+  <data name="标签已修改" xml:space="preserve"><value>Tags geändert</value></data>
+  <data name="顺序已调整" xml:space="preserve"><value>Reihenfolge geändert</value></data>
 </root>

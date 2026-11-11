@@ -5,6 +5,15 @@ namespace PlayVoice;
 
 internal class Config
 {
+    /// <summary>创意工坊编辑时等待原资源下载的最长时间。</summary>
+    public int WorkshopDownloadTimeoutSeconds { get; set; } = 600;
+
+    /// <summary>工坊封面大小上限，单位为字节。</summary>
+    public long WorkshopPreviewMaxBytes { get; set; } = 1024 * 1024;
+
+    /// <summary>工坊封面宽高允许相差的像素数。</summary>
+    public int WorkshopPreviewSquareTolerance { get; set; } = 5;
+
     /// <summary>
     /// 界面主题。
     /// </summary>

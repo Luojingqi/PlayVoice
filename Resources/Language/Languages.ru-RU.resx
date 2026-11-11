@@ -262,4 +262,30 @@
   <data name="重命名失败" xml:space="preserve"><value>Не удалось переименовать файл.</value></data>
   <data name="播放失败" xml:space="preserve"><value>Не удалось воспроизвести аудиофайл.</value></data>
   <data name="快捷键已占用" xml:space="preserve"><value>Это сочетание клавиш уже используется.</value></data>
+  <data name="编辑作品" xml:space="preserve"><value>Редактировать работу</value></data>
+  <data name="更换封面" xml:space="preserve"><value>Изменить обложку</value></data>
+  <data name="恢复原封面" xml:space="preserve"><value>Вернуть обложку</value></data>
+  <data name="简介" xml:space="preserve"><value>Описание</value></data>
+  <data name="移除所选" xml:space="preserve"><value>Удалить выбранное</value></data>
+  <data name="按名称升序" xml:space="preserve"><value>Имя А–Я</value></data>
+  <data name="按名称降序" xml:space="preserve"><value>Имя Я–А</value></data>
+  <data name="工坊编辑操作提示" xml:space="preserve"><value>Перетащите аудиофайлы для добавления. Перетаскивайте треки для сортировки. Ctrl или Shift — выбор нескольких.</value></data>
+  <data name="发布更新" xml:space="preserve"><value>Опубликовать обновление</value></data>
+  <data name="正在加载作品" xml:space="preserve"><value>Загрузка работы…</value></data>
+  <data name="正在下载原作品" xml:space="preserve"><value>Скачивание оригинала…</value></data>
+  <data name="原作品下载失败" xml:space="preserve"><value>Не удалось скачать или истекло время ожидания. Повторите позже.</value></data>
+  <data name="作品资源不完整" xml:space="preserve"><value>Содержимое работы неполное, редактирование невозможно.</value></data>
+  <data name="只能编辑自己的作品" xml:space="preserve"><value>Можно редактировать только свои работы.</value></data>
+  <data name="工坊编辑变更摘要" xml:space="preserve"><value>Было {0} · Добавлено {1} · Удалено {2} · Всего {3} · Заменено {4}  {5}</value></data>
+  <data name="封面已修改" xml:space="preserve"><value>Обложка изменена</value></data>
+  <data name="工坊同名歌曲替换提示" xml:space="preserve"><value>Трек «{0}» уже существует. Заменить? Выберите «Нет», чтобы пропустить.</value></data>
+  <data name="正在校验作品" xml:space="preserve"><value>Проверка работы…</value></data>
+  <data name="作品已更新请重新加载" xml:space="preserve"><value>Работа обновлена в другом месте. Отмените и откройте редактор снова.</value></data>
+  <data name="至少保留一首歌曲" xml:space="preserve"><value>Оставьте хотя бы один трек.</value></data>
+  <data name="工坊元数据超限" xml:space="preserve"><value>Метаданные превышают лимит Steam в 5000 байт. Удалите треки или сократите имена файлов.</value></data>
+  <data name="正在发布更新" xml:space="preserve"><value>Публикация обновления. Подождите…</value></data>
+  <data name="作品更新成功" xml:space="preserve"><value>Работа обновлена</value></data>
+  <data name="简介已修改" xml:space="preserve"><value>Описание изменено</value></data>
+  <data name="标签已修改" xml:space="preserve"><value>Теги изменены</value></data>
+  <data name="顺序已调整" xml:space="preserve"><value>Порядок изменён</value></data>
 </root>

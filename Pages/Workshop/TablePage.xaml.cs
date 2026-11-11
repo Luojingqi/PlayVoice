@@ -150,7 +150,7 @@ public partial class TablePage : UserControl
                 {
                     if (SteamClient.IsValid == false && MainWindow.Inst.SteamInit() == false)
                         return;
-                    var query = Query.All.WhereUserPublished().AllowCachedResponse(10);
+                    var query = Query.All.WhereUserPublished().AllowCachedResponse(0);
                     query = query
                         .WithMetadata(true)
                         .WithLongDescription(true);

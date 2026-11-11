@@ -142,6 +142,8 @@ namespace PlayVoice.Pages.Workshop
             _loadCancellation = new CancellationTokenSource();
             CancellationToken cancellationToken = _loadCancellation.Token;
             var item = tableItem.Item.Value;
+            EditWorkshopButton.Visibility = SteamClient.IsValid && item.Owner.Id == SteamClient.SteamId
+                ? Visibility.Visible : Visibility.Collapsed;
             ItemTitle.Text = item.Title;
             SteamScoreText.Text = $"★ {item.Score * 5:0.0}";
             ImageLoadingPanel.Visibility = Visibility.Visible;
@@ -216,6 +218,12 @@ namespace PlayVoice.Pages.Workshop
             }
         }
 
+        private async void EditWorkshop_Click(object sender, RoutedEventArgs e)
+        {
+            if (tableItem?.Item is Item item)
+                await WorkshopPage.Inst.OpenWorkshopEditorAsync(item);
+        }
+
         private static string GetUserDescription(string description)
         {
             if (string.IsNullOrWhiteSpace(description))
@@ -242,6 +250,7 @@ namespace PlayVoice.Pages.Workshop
             _loadCancellation?.Dispose();
             _loadCancellation = null;
             tableItem = null;
+            EditWorkshopButton.Visibility = Visibility.Collapsed;
             DetailItemList.Clear();
             BgImage.Source = null;
             SubscribeButton.Visibility = Visibility.Collapsed;

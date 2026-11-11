@@ -28,6 +28,7 @@ namespace PlayVoice.Pages.Preset
         public UploadPresetPage()
         {
             InitializeComponent();
+            Unloaded += WorkshopEditor_Unloaded;
             loadingPage = new();
             loadingPage.Visibility = Visibility.Hidden;
             LoadingPageFrame.Content = loadingPage;
@@ -39,6 +40,9 @@ namespace PlayVoice.Pages.Preset
                     new TabItem<TabType>(TabType.语音),
                 };
             TabListBox.DisplayMemberPath = "Name";
+            EditTagsListBox.ItemsSource = TabListBox.ItemsSource;
+            EditTagsListBox.DisplayMemberPath = "Name";
+            EditTagsListBox.OnSelectionChanged += (_, _) => UpdateEditSummary();
 
             ImageButton.SelectionChanged += ImageButton_SelectionChanged;
             ImageCloseButton.Click += ImageCloseButton_Click;
@@ -347,7 +351,7 @@ namespace PlayVoice.Pages.Preset
             if (true == openFileDialog.ShowDialog())
             {
                 FileInfo fileInfo = new FileInfo(openFileDialog.FileName);
-                const long maxSize = 1 * 1024 * 1024;
+                long maxSize = GlobalData.Inst.Config.WorkshopPreviewMaxBytes;
                 if (fileInfo.Length > maxSize)
                 {
                     MainWindow.Inst.AddNotification(
@@ -366,7 +370,7 @@ namespace PlayVoice.Pages.Preset
 
                     int width = bitmap.PixelWidth;
                     int height = bitmap.PixelHeight;
-                    if (Math.Abs(width - height) > 5)
+                    if (Math.Abs(width - height) > GlobalData.Inst.Config.WorkshopPreviewSquareTolerance)
                     {
                         MainWindow.Inst.AddNotification(
                              () => LanguageManager.Inst.GetString("通知"),
@@ -413,6 +417,8 @@ namespace PlayVoice.Pages.Preset
                 : value;
             SetProgress(progress, 250);
             loadingPage.SetProgress(progress, 250);
+            if (EditPanel.Visibility == Visibility.Visible)
+                EditProgress.SetProgress(progress, 250);
         }
     }
 }

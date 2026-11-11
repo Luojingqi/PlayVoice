@@ -10,6 +10,7 @@ namespace PlayVoice.Pages.HorizontalList
     public partial class HorizontalList : UserControl
     {
         public bool IsSyncing { get; set; } = false;
+        public IList SelectedItems => listBox.SelectedItems;
         public HorizontalList()
         {
             InitializeComponent();

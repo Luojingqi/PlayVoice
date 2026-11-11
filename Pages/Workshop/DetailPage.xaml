@@ -59,6 +59,10 @@
             </Border>
 
             <StackPanel Grid.Column="1" HorizontalAlignment="Center" >
+                <Button x:Name="EditWorkshopButton" Visibility="Collapsed" Content="✎"
+                        Foreground="{DynamicResource AccentColor}" FontSize="18" AutomationProperties.Name="{L:Lan 编辑作品}"
+                        Style="{StaticResource WorkshopStandaloneButtonStyle}"
+                        ToolTip="{L:Lan 编辑作品}" Click="EditWorkshop_Click"/>
                 <TextBlock x:Name="SteamScoreText"
                            Text="★ --"
                            Style="{StaticResource TextBlockMedium}"

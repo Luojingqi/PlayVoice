@@ -795,4 +795,30 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="重命名失败" xml:space="preserve"><value>重命名失败</value></data>
   <data name="播放失败" xml:space="preserve"><value>播放失败</value></data>
   <data name="快捷键已占用" xml:space="preserve"><value>快捷键已占用</value></data>
+  <data name="编辑作品" xml:space="preserve"><value>编辑作品</value></data>
+  <data name="更换封面" xml:space="preserve"><value>更换封面</value></data>
+  <data name="恢复原封面" xml:space="preserve"><value>恢复原封面</value></data>
+  <data name="简介" xml:space="preserve"><value>简介</value></data>
+  <data name="移除所选" xml:space="preserve"><value>移除所选</value></data>
+  <data name="按名称升序" xml:space="preserve"><value>按名称升序</value></data>
+  <data name="按名称降序" xml:space="preserve"><value>按名称降序</value></data>
+  <data name="工坊编辑操作提示" xml:space="preserve"><value>拖入文件添加歌曲；拖动歌曲调整顺序；按 Ctrl 或 Shift 多选。</value></data>
+  <data name="发布更新" xml:space="preserve"><value>发布更新</value></data>
+  <data name="正在加载作品" xml:space="preserve"><value>正在加载作品…</value></data>
+  <data name="正在下载原作品" xml:space="preserve"><value>正在下载原作品…</value></data>
+  <data name="原作品下载失败" xml:space="preserve"><value>原作品下载失败或等待超时，请稍后重试。</value></data>
+  <data name="作品资源不完整" xml:space="preserve"><value>作品资源不完整，无法编辑。</value></data>
+  <data name="只能编辑自己的作品" xml:space="preserve"><value>只能编辑自己的作品。</value></data>
+  <data name="工坊编辑变更摘要" xml:space="preserve"><value>原有 {0} 首 · 新增 {1} 首 · 删除 {2} 首 · 更新后 {3} 首 · 替换 {4} 首  {5}</value></data>
+  <data name="封面已修改" xml:space="preserve"><value>封面已修改</value></data>
+  <data name="工坊同名歌曲替换提示" xml:space="preserve"><value>已存在同名歌曲“{0}”。是否替换？选择“否”将跳过。</value></data>
+  <data name="正在校验作品" xml:space="preserve"><value>正在校验作品…</value></data>
+  <data name="作品已更新请重新加载" xml:space="preserve"><value>作品已在其他位置更新，请取消后重新打开编辑。</value></data>
+  <data name="至少保留一首歌曲" xml:space="preserve"><value>至少保留一首歌曲。</value></data>
+  <data name="工坊元数据超限" xml:space="preserve"><value>歌曲元数据超过 Steam 的 5000 字节限制，请减少歌曲数量或缩短文件名。</value></data>
+  <data name="正在发布更新" xml:space="preserve"><value>正在发布更新，请等待完成…</value></data>
+  <data name="作品更新成功" xml:space="preserve"><value>作品更新成功</value></data>
+  <data name="简介已修改" xml:space="preserve"><value>简介已修改</value></data>
+  <data name="标签已修改" xml:space="preserve"><value>标签已修改</value></data>
+  <data name="顺序已调整" xml:space="preserve"><value>顺序已调整</value></data>
 </root>

@@ -214,6 +214,8 @@ namespace PlayVoice.Pages.Workshop
         {
             Close();
             this.tableItem = tableItem;
+            EditWorkshopButton.Visibility = SteamClient.IsValid && tableItem.Item.HasValue
+                && tableItem.Item.Value.Owner.Id == SteamClient.SteamId ? Visibility.Visible : Visibility.Collapsed;
             int generation = _loadGeneration;
             _loadCancellation = new CancellationTokenSource();
             CancellationToken cancellationToken = _loadCancellation.Token;
@@ -313,6 +315,12 @@ namespace PlayVoice.Pages.Workshop
             }
         }
 
+        private async void EditWorkshop_Click(object sender, RoutedEventArgs e)
+        {
+            if (tableItem?.Item is Steamworks.Ugc.Item item)
+                await WorkshopPage.Inst.OpenWorkshopEditorAsync(item);
+        }
+
         public void Close()
         {
             _loadGeneration++;
@@ -325,6 +333,7 @@ namespace PlayVoice.Pages.Workshop
                 data.Dispose();
             }
             tableItem = null;
+            EditWorkshopButton.Visibility = Visibility.Collapsed;
             LocalDetailItemList.Clear();
             AudioDataList.Clear();
             BgImage.Source = null;

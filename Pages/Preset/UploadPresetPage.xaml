@@ -6,6 +6,7 @@
     xmlns:L="clr-namespace:PlayVoice.Resources.Language"
     xmlns:DropDownList="clr-namespace:PlayVoice.Pages.DropDownList"
     xmlns:HorizontalList="clr-namespace:PlayVoice.Pages.HorizontalList"
+    xmlns:Workshop="clr-namespace:PlayVoice.Pages.Workshop"
     xmlns:Loading="clr-namespace:PlayVoice.Pages.Loading"
     mc:Ignorable="d" >
 
@@ -14,10 +15,14 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Style/ListBox.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/Import.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/TrashCan.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/Upload.xaml"/>
+                <ResourceDictionary Source="/Resources/Style/Drag.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Page.Resources>
 
+    <Grid>
     <Border HorizontalAlignment="Center" VerticalAlignment="Center"
             BorderBrush="{DynamicResource AccentColor}"
             BorderThickness="1" 
@@ -256,4 +261,228 @@
                        Style="{StaticResource TextBlockLight}"/>
         </Grid>
     </Border>
+    <Border x:Name="EditPanel" Visibility="Collapsed" Margin="10"
+            Background="{DynamicResource BgLight}" BorderBrush="{DynamicResource AccentColor}"
+            BorderThickness="1" CornerRadius="6" Padding="10">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <StackPanel Margin="10,3,10,12">
+                <TextBlock Text="{L:Lan 编辑作品}" Style="{StaticResource TextBlockMedium}" FontSize="16" TextAlignment="Center"/>
+                <TextBlock x:Name="EditTitle" Style="{StaticResource TextBlockLight}" TextTrimming="CharacterEllipsis" TextAlignment="Center" FontSize="13" Margin="0,5,0,0"/>
+            </StackPanel>
+            <Grid Grid.Row="1" x:Name="EditFields">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="280"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Margin="0,0,12,0">
+                    <StackPanel>
+                        <Grid Width="150" Height="150" HorizontalAlignment="Center">
+                            <Rectangle Stroke="{DynamicResource AccentColor}" StrokeThickness="2" StrokeDashArray="4 2"
+                                       RadiusX="5" RadiusY="5" Fill="Transparent"/>
+                            <Image x:Name="EditCoverImage" Margin="7" Stretch="Uniform"/>
+                        </Grid>
+                        <ListBox x:Name="EditCoverActions" Style="{StaticResource HorizontalButtonGroupStyle}"
+                                 HorizontalAlignment="Center" Margin="0,8,0,0" Height="32.5" Tag="Uniform"
+                                 SelectionChanged="EditAction_SelectionChanged">
+                            <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Tag="Cover" Padding="10,0">
+                                <TextBlock Text="{L:Lan 更换封面}" Style="{StaticResource TextBlockLight}" FontSize="13"/>
+                            </ListBoxItem>
+                            <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Tag="RestoreCover" Padding="10,0">
+                                <TextBlock Text="{L:Lan 恢复原封面}" Style="{StaticResource TextBlockLight}" FontSize="13"/>
+                            </ListBoxItem>
+                        </ListBox>
+                        <TextBlock Text="{L:Lan 简介}" Style="{StaticResource TextBlockMedium}" FontSize="14" Margin="0,10,0,5"/>
+                        <ListBox Style="{StaticResource HorizontalButtonGroupStyle}" Tag="Uniform" Height="98">
+                            <ListBoxItem Style="{StaticResource GroupInputItemStyle}" Height="92" VerticalContentAlignment="Stretch">
+                                <TextBox x:Name="EditDescription" Style="{StaticResource GroupTextBoxStyle}"
+                                         Tag="{L:Lan 为你的资源添加描述}" TextWrapping="Wrap" AcceptsReturn="True"
+                                         VerticalScrollBarVisibility="Auto" VerticalContentAlignment="Top"
+                                         FontSize="13" TextChanged="EditField_Changed"/>
+                            </ListBoxItem>
+                        </ListBox>
+                        <HorizontalList:HorizontalList x:Name="EditTagsListBox" Header="{L:Lan 标签}"
+                                                       DropDownWidth="205" ListBoxFontSize="12" Height="37.5" SelectionMode="Multiple"/>
+                        <TextBlock x:Name="EditOtherTags" Style="{StaticResource TextBlockLight}" FontSize="12"
+                                   Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap" Margin="13.5,3,0,0"/>
+                    </StackPanel>
+                </ScrollViewer>
+                <Grid Grid.Column="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <WrapPanel Margin="0,0,0,8">
+                        <ListBox x:Name="EditTrackActions" Style="{StaticResource HorizontalButtonGroupStyle}"
+                                 Height="32.5" Margin="0,0,8,0" SelectionChanged="EditAction_SelectionChanged">
+                            <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Tag="SelectAll" Padding="5,0" ToolTip="{L:Lan 全选}"
+                                         AutomationProperties.Name="{L:Lan 全选}">
+                                <Grid>
+                                    <Ellipse Width="19" Height="19" Stroke="{DynamicResource AccentColor}" StrokeThickness="1.5" Fill="Transparent"/>
+                                    <Ellipse x:Name="EditSelectAllDot" Width="8" Height="8" Fill="{DynamicResource AccentColor}" Visibility="Collapsed"/>
+                                </Grid>
+                            </ListBoxItem>
+                            <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Tag="Add" Padding="6.5" ToolTip="{L:Lan 添加音频}"
+                                         AutomationProperties.Name="{L:Lan 添加音频}">
+                                <Image Source="{StaticResource ImportIcon}"/>
+                            </ListBoxItem>
+                            <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Tag="Remove" Padding="6.5,4.5" ToolTip="{L:Lan 移除所选}"
+                                         AutomationProperties.Name="{L:Lan 移除所选}">
+                                <Image Source="{StaticResource TrashCanIcon}"/>
+                            </ListBoxItem>
+                        </ListBox>
+                        <ListBox x:Name="EditSortActions" Style="{StaticResource HorizontalButtonGroupStyle}"
+                                 Height="32.5" SelectionChanged="EditAction_SelectionChanged">
+                            <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Tag="SortAscending" Padding="10,0">
+                                <TextBlock Text="{L:Lan 按名称升序}" Style="{StaticResource TextBlockLight}" FontSize="13"/>
+                            </ListBoxItem>
+                            <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Tag="SortDescending" Padding="10,0">
+                                <TextBlock Text="{L:Lan 按名称降序}" Style="{StaticResource TextBlockLight}" FontSize="13"/>
+                            </ListBoxItem>
+                        </ListBox>
+                    </WrapPanel>
+                    <Grid Grid.Row="1" Margin="0,0,3,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="36"/>
+                            <ColumnDefinition Width="40"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="70"/>
+                            <ColumnDefinition Width="70"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="2" Text="{L:Lan 名称}" Style="{StaticResource TextBlockMedium}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="3" Text="{L:Lan 时长}" Style="{StaticResource TextBlockMedium}" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Column="4" Text="{L:Lan 大小}" Style="{StaticResource TextBlockMedium}" HorizontalAlignment="Center"/>
+                    </Grid>
+                    <ListBox x:Name="EditTrackList" Grid.Row="2" SelectionMode="Extended" AllowDrop="True"
+                             Background="Transparent" BorderThickness="0" Foreground="{DynamicResource TextPrimary}"
+                             ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                             PreviewMouseLeftButtonDown="EditTrackList_MouseDown"
+                             SelectionChanged="EditTrackList_SelectionChanged" MouseMove="EditTrackList_MouseMove"
+                             DragOver="EditTrackList_DragOver" DragLeave="EditTrackList_DragLeave" Drop="EditTrackList_Drop">
+                        <ListBox.Template>
+                            <ControlTemplate TargetType="ListBox">
+                                <ScrollViewer x:Name="PART_ScrollViewer" Focusable="False" Background="{TemplateBinding Background}"
+                                              Padding="{TemplateBinding Padding}" CanContentScroll="True">
+                                    <ItemsPresenter/>
+                                </ScrollViewer>
+                            </ControlTemplate>
+                        </ListBox.Template>
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="Height" Value="Auto"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Margin" Value="0,5.5"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource Border}"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Grid>
+                                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                                        BorderThickness="1" CornerRadius="3" IsHitTestVisible="False"/>
+                                                <Border x:Name="RowHoverBorder" BorderBrush="{DynamicResource AccentColorSecondary}"
+                                                        BorderThickness="1" CornerRadius="3" Opacity="0" IsHitTestVisible="False"/>
+                                                <ContentPresenter/>
+                                            </Grid>
+                                            <ControlTemplate.Triggers>
+                                                <EventTrigger RoutedEvent="Mouse.MouseEnter">
+                                                    <BeginStoryboard><Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="RowHoverBorder" Storyboard.TargetProperty="Opacity" To="1" Duration="0:0:0.2"/>
+                                                    </Storyboard></BeginStoryboard>
+                                                </EventTrigger>
+                                                <EventTrigger RoutedEvent="Mouse.MouseLeave">
+                                                    <BeginStoryboard><Storyboard>
+                                                        <DoubleAnimation Storyboard.TargetName="RowHoverBorder" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.2"/>
+                                                    </Storyboard></BeginStoryboard>
+                                                </EventTrigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Background" Value="{DynamicResource AccentSurface}"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid MinHeight="32.5" Margin="0,0,3,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="36"/>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="70"/>
+                                        <ColumnDefinition Width="70"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ListBox x:Name="EditTrackSelector" Style="{StaticResource HorizontalButtonGroupStyle}"
+                                             SelectionChanged="EditTrackSelector_SelectionChanged" HorizontalAlignment="Left">
+                                        <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="5,0"
+                                                     AutomationProperties.Name="{Binding Resource.Name}">
+                                            <Grid>
+                                                <Ellipse Width="19" Height="19" Stroke="{DynamicResource AccentColor}" StrokeThickness="1.5" Fill="Transparent"/>
+                                                <Ellipse x:Name="EditSelectionDot" Width="8" Height="8" Fill="{DynamicResource AccentColor}" Visibility="Collapsed"/>
+                                            </Grid>
+                                        </ListBoxItem>
+                                    </ListBox>
+                                    <Border Grid.Column="1" x:Name="EditDragHandle" Background="Transparent" Width="30"
+                                            Margin="0,0,10,0" Padding="10,0" Cursor="SizeNS"
+                                            PreviewMouseLeftButtonDown="EditDragHandle_MouseDown">
+                                        <Image Source="{StaticResource DragIcon}"/>
+                                    </Border>
+                                    <TextBlock Grid.Column="2" Text="{Binding Resource.Name}" Style="{StaticResource TextBlockLight}" FontSize="13"
+                                               TextTrimming="CharacterEllipsis" ToolTip="{Binding Resource.Name}" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Column="3" Text="{Binding DurationText}" Style="{StaticResource TextBlockLight}" FontSize="13"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0"/>
+                                    <TextBlock Grid.Column="4" Text="{Binding SizeText}" Style="{StaticResource TextBlockLight}" FontSize="13"
+                                               HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5,0"/>
+                                </Grid>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource AncestorType=ListBoxItem}}" Value="True">
+                                        <Setter TargetName="EditSelectionDot" Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                    <Canvas x:Name="EditDragOverlay" Grid.Row="2" IsHitTestVisible="False" ClipToBounds="True">
+                        <Border x:Name="EditInsertionLine" Height="3" Background="{DynamicResource AccentColor}" CornerRadius="1.5" Visibility="Collapsed"/>
+                    </Canvas>
+                </Grid>
+            </Grid>
+            <StackPanel Grid.Row="2" Margin="0,10,0,0">
+                <TextBlock x:Name="EditSummary" Style="{StaticResource TextBlockMedium}" FontSize="13" TextWrapping="Wrap"/>
+                <Grid Margin="0,5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Workshop:CircularProgressBar x:Name="EditProgress" Width="36" Height="36" Margin="0,0,10,0" Visibility="Collapsed"/>
+                    <TextBlock x:Name="EditStatus" Grid.Column="1" Style="{StaticResource TextBlockLight}" FontSize="13" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                </Grid>
+            </StackPanel>
+            <ListBox x:Name="EditPublishActions" Grid.Row="3" Style="{StaticResource HorizontalButtonGroupStyle}"
+                     Tag="Uniform" HorizontalAlignment="Right" Height="32.5" Margin="0,8,0,0"
+                     SelectionChanged="EditAction_SelectionChanged">
+                <ListBoxItem x:Name="EditCancelButton" Style="{StaticResource GroupButtonItemStyle}" Tag="Cancel" Padding="15,0">
+                    <TextBlock Text="{L:Lan 取消}" Style="{StaticResource TextBlockLight}" FontSize="13"/>
+                </ListBoxItem>
+                <ListBoxItem x:Name="EditPublishButton" Style="{StaticResource GroupButtonItemStyle}" Tag="Publish" Padding="12,0" IsEnabled="False">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{StaticResource UploadIcon}" Width="17" Height="17" Margin="0,0,6,0"/>
+                        <TextBlock Text="{L:Lan 发布更新}" Style="{StaticResource TextBlockLight}" FontSize="13" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </ListBoxItem>
+            </ListBox>
+        </Grid>
+    </Border>
+    </Grid>
 </Page>

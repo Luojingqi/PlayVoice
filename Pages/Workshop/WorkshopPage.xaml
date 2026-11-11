@@ -292,5 +292,9 @@
             <Frame Grid.Column="1"
                    x:Name="PageNumberSelectionFrame"/>
         </Grid>
+        <Border x:Name="WorkshopEditorHost" Grid.RowSpan="3" Panel.ZIndex="10"
+                Background="{DynamicResource BgMedium}" Visibility="Collapsed">
+            <Frame x:Name="WorkshopEditorFrame" NavigationUIVisibility="Hidden"/>
+        </Border>
     </Grid>
 </Page>

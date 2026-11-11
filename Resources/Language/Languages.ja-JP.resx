@@ -262,4 +262,30 @@
   <data name="重命名失败" xml:space="preserve"><value>ファイル名を変更できませんでした。</value></data>
   <data name="播放失败" xml:space="preserve"><value>音声ファイルを再生できませんでした。</value></data>
   <data name="快捷键已占用" xml:space="preserve"><value>このショートカットは既に使用されています。</value></data>
+  <data name="编辑作品" xml:space="preserve"><value>作品を編集</value></data>
+  <data name="更换封面" xml:space="preserve"><value>カバーを変更</value></data>
+  <data name="恢复原封面" xml:space="preserve"><value>元のカバーに戻す</value></data>
+  <data name="简介" xml:space="preserve"><value>説明</value></data>
+  <data name="移除所选" xml:space="preserve"><value>選択を削除</value></data>
+  <data name="按名称升序" xml:space="preserve"><value>名前の昇順</value></data>
+  <data name="按名称降序" xml:space="preserve"><value>名前の降順</value></data>
+  <data name="工坊编辑操作提示" xml:space="preserve"><value>音声ファイルをドロップして追加。曲をドラッグして並べ替え。Ctrl または Shift で複数選択。</value></data>
+  <data name="发布更新" xml:space="preserve"><value>更新を公開</value></data>
+  <data name="正在加载作品" xml:space="preserve"><value>作品を読み込み中…</value></data>
+  <data name="正在下载原作品" xml:space="preserve"><value>元の作品をダウンロード中…</value></data>
+  <data name="原作品下载失败" xml:space="preserve"><value>ダウンロードに失敗したか、時間切れです。後でもう一度お試しください。</value></data>
+  <data name="作品资源不完整" xml:space="preserve"><value>作品のデータが不完全なため編集できません。</value></data>
+  <data name="只能编辑自己的作品" xml:space="preserve"><value>自分の作品のみ編集できます。</value></data>
+  <data name="工坊编辑变更摘要" xml:space="preserve"><value>元 {0} 曲 · 追加 {1} · 削除 {2} · 合計 {3} · 置換 {4}  {5}</value></data>
+  <data name="封面已修改" xml:space="preserve"><value>カバーを変更済み</value></data>
+  <data name="工坊同名歌曲替换提示" xml:space="preserve"><value>同名の曲「{0}」があります。置き換えますか？「いいえ」でスキップします。</value></data>
+  <data name="正在校验作品" xml:space="preserve"><value>作品を確認中…</value></data>
+  <data name="作品已更新请重新加载" xml:space="preserve"><value>作品が別の場所で更新されました。キャンセルして開き直してください。</value></data>
+  <data name="至少保留一首歌曲" xml:space="preserve"><value>少なくとも1曲を残してください。</value></data>
+  <data name="工坊元数据超限" xml:space="preserve"><value>曲のメタデータが Steam の5000バイト制限を超えています。曲数を減らすかファイル名を短くしてください。</value></data>
+  <data name="正在发布更新" xml:space="preserve"><value>更新を公開中です。お待ちください…</value></data>
+  <data name="作品更新成功" xml:space="preserve"><value>作品を更新しました</value></data>
+  <data name="简介已修改" xml:space="preserve"><value>説明を変更済み</value></data>
+  <data name="标签已修改" xml:space="preserve"><value>タグを変更済み</value></data>
+  <data name="顺序已调整" xml:space="preserve"><value>曲順を変更済み</value></data>
 </root>

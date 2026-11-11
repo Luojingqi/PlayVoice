@@ -262,4 +262,30 @@
   <data name="重命名失败" xml:space="preserve"><value>No se pudo cambiar el nombre del archivo.</value></data>
   <data name="播放失败" xml:space="preserve"><value>No se pudo reproducir el archivo de audio.</value></data>
   <data name="快捷键已占用" xml:space="preserve"><value>Este atajo ya está en uso.</value></data>
+  <data name="编辑作品" xml:space="preserve"><value>Editar elemento</value></data>
+  <data name="更换封面" xml:space="preserve"><value>Cambiar portada</value></data>
+  <data name="恢复原封面" xml:space="preserve"><value>Restaurar portada</value></data>
+  <data name="简介" xml:space="preserve"><value>Descripción</value></data>
+  <data name="移除所选" xml:space="preserve"><value>Eliminar selección</value></data>
+  <data name="按名称升序" xml:space="preserve"><value>Nombre A–Z</value></data>
+  <data name="按名称降序" xml:space="preserve"><value>Nombre Z–A</value></data>
+  <data name="工坊编辑操作提示" xml:space="preserve"><value>Suelta archivos de audio para añadirlos. Arrastra pistas para ordenarlas. Usa Ctrl o Mayús para seleccionar varias.</value></data>
+  <data name="发布更新" xml:space="preserve"><value>Publicar actualización</value></data>
+  <data name="正在加载作品" xml:space="preserve"><value>Cargando elemento…</value></data>
+  <data name="正在下载原作品" xml:space="preserve"><value>Descargando original…</value></data>
+  <data name="原作品下载失败" xml:space="preserve"><value>La descarga falló o agotó el tiempo. Inténtalo más tarde.</value></data>
+  <data name="作品资源不完整" xml:space="preserve"><value>El contenido está incompleto y no se puede editar.</value></data>
+  <data name="只能编辑自己的作品" xml:space="preserve"><value>Solo puedes editar tus propios elementos.</value></data>
+  <data name="工坊编辑变更摘要" xml:space="preserve"><value>Original {0} · Añadidas {1} · Eliminadas {2} · Total {3} · Sustituidas {4}  {5}</value></data>
+  <data name="封面已修改" xml:space="preserve"><value>Portada modificada</value></data>
+  <data name="工坊同名歌曲替换提示" xml:space="preserve"><value>Ya existe una pista llamada «{0}». ¿Sustituirla? Elige No para omitirla.</value></data>
+  <data name="正在校验作品" xml:space="preserve"><value>Comprobando elemento…</value></data>
+  <data name="作品已更新请重新加载" xml:space="preserve"><value>El elemento se actualizó en otro lugar. Cancela y vuelve a abrir el editor.</value></data>
+  <data name="至少保留一首歌曲" xml:space="preserve"><value>Conserva al menos una pista.</value></data>
+  <data name="工坊元数据超限" xml:space="preserve"><value>Los metadatos superan el límite de 5000 bytes de Steam. Elimina pistas o acorta los nombres de archivo.</value></data>
+  <data name="正在发布更新" xml:space="preserve"><value>Publicando actualización. Espera…</value></data>
+  <data name="作品更新成功" xml:space="preserve"><value>Elemento actualizado</value></data>
+  <data name="简介已修改" xml:space="preserve"><value>Descripción modificada</value></data>
+  <data name="标签已修改" xml:space="preserve"><value>Etiquetas modificadas</value></data>
+  <data name="顺序已调整" xml:space="preserve"><value>Orden modificado</value></data>
 </root>

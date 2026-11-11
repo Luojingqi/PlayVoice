@@ -109,32 +109,38 @@ public static class JsonTool
         return JsonSerializer.Serialize(data, new JsonSerializerOptions { Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping, WriteIndented = writeIndented });
     }
 
-    public static async Task CopyDirectoryReplaceTrueAsync(string sourceDir, string destinationDir)
+    public static async Task CopyDirectoryReplaceTrueAsync(string sourceDir, string destinationDir, CancellationToken cancellationToken = default)
     {
         if (Directory.Exists(destinationDir))
         {
             Directory.Delete(destinationDir, true);
         }
-        await CopyDirectoryRecursiveAsync(new DirectoryInfo(sourceDir), destinationDir);
+        await CopyDirectoryRecursiveAsync(new DirectoryInfo(sourceDir), destinationDir, cancellationToken);
     }
 
-    private static async Task CopyDirectoryRecursiveAsync(DirectoryInfo source, string destPath)
+    private static async Task CopyDirectoryRecursiveAsync(DirectoryInfo source, string destPath, CancellationToken cancellationToken)
     {
+        cancellationToken.ThrowIfCancellationRequested();
+        if ((source.Attributes & FileAttributes.ReparsePoint) != 0)
+            throw new IOException($"Cannot copy linked directory: {source.Name}");
         Directory.CreateDirectory(destPath);
         foreach (FileInfo file in source.GetFiles())
         {
+            cancellationToken.ThrowIfCancellationRequested();
+            if ((file.Attributes & FileAttributes.ReparsePoint) != 0)
+                throw new IOException($"Cannot copy linked file: {file.Name}");
             string destFile = Path.Combine(destPath, file.Name);
             using (FileStream sourceStream = new FileStream(file.FullName, FileMode.Open, FileAccess.Read, FileShare.Read, 4096, true))
             using (FileStream destStream = new FileStream(destFile, FileMode.CreateNew, FileAccess.Write, FileShare.None, 4096, true))
             {
-                await sourceStream.CopyToAsync(destStream);
+                await sourceStream.CopyToAsync(destStream, cancellationToken);
                 await Task.Yield();
             }
         }
         foreach (DirectoryInfo subDir in source.GetDirectories())
         {
             string newDest = Path.Combine(destPath, subDir.Name);
-            await CopyDirectoryRecursiveAsync(subDir, newDest);
+            await CopyDirectoryRecursiveAsync(subDir, newDest, cancellationToken);
         }
     }
 }

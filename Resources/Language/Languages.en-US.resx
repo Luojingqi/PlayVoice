@@ -798,4 +798,30 @@ O</value>
   <data name="重命名失败" xml:space="preserve"><value>Could not rename the file.</value></data>
   <data name="播放失败" xml:space="preserve"><value>Could not play the audio file.</value></data>
   <data name="快捷键已占用" xml:space="preserve"><value>This shortcut is already in use.</value></data>
+  <data name="编辑作品" xml:space="preserve"><value>Edit item</value></data>
+  <data name="更换封面" xml:space="preserve"><value>Change cover</value></data>
+  <data name="恢复原封面" xml:space="preserve"><value>Restore cover</value></data>
+  <data name="简介" xml:space="preserve"><value>Description</value></data>
+  <data name="移除所选" xml:space="preserve"><value>Remove selected</value></data>
+  <data name="按名称升序" xml:space="preserve"><value>Name A–Z</value></data>
+  <data name="按名称降序" xml:space="preserve"><value>Name Z–A</value></data>
+  <data name="工坊编辑操作提示" xml:space="preserve"><value>Drop audio files to add. Drag tracks to reorder. Use Ctrl or Shift to select multiple tracks.</value></data>
+  <data name="发布更新" xml:space="preserve"><value>Publish update</value></data>
+  <data name="正在加载作品" xml:space="preserve"><value>Loading item…</value></data>
+  <data name="正在下载原作品" xml:space="preserve"><value>Downloading original item…</value></data>
+  <data name="原作品下载失败" xml:space="preserve"><value>Download failed or timed out. Please try again later.</value></data>
+  <data name="作品资源不完整" xml:space="preserve"><value>The item content is incomplete and cannot be edited.</value></data>
+  <data name="只能编辑自己的作品" xml:space="preserve"><value>You can only edit your own items.</value></data>
+  <data name="工坊编辑变更摘要" xml:space="preserve"><value>Original {0} · Added {1} · Removed {2} · Total {3} · Replaced {4}  {5}</value></data>
+  <data name="封面已修改" xml:space="preserve"><value>Cover changed</value></data>
+  <data name="工坊同名歌曲替换提示" xml:space="preserve"><value>A track named “{0}” already exists. Replace it? Choose No to skip.</value></data>
+  <data name="正在校验作品" xml:space="preserve"><value>Checking item…</value></data>
+  <data name="作品已更新请重新加载" xml:space="preserve"><value>This item was updated elsewhere. Cancel and reopen the editor.</value></data>
+  <data name="至少保留一首歌曲" xml:space="preserve"><value>Keep at least one track.</value></data>
+  <data name="工坊元数据超限" xml:space="preserve"><value>Track metadata exceeds the Steam 5000-byte limit. Remove tracks or shorten file names.</value></data>
+  <data name="正在发布更新" xml:space="preserve"><value>Publishing update. Please wait…</value></data>
+  <data name="作品更新成功" xml:space="preserve"><value>Item updated successfully</value></data>
+  <data name="简介已修改" xml:space="preserve"><value>Description changed</value></data>
+  <data name="标签已修改" xml:space="preserve"><value>Tags changed</value></data>
+  <data name="顺序已调整" xml:space="preserve"><value>Order changed</value></data>
 </root>

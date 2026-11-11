@@ -1,5 +1,6 @@
 ﻿using PlayVoice.Pages.Loading;
 using PlayVoice.Resources.Language;
+using PlayVoice.Pages.Preset;
 using PlayVoice.Diagnostics;
 using Steamworks;
 using Steamworks.Ugc;
@@ -28,6 +29,28 @@ namespace PlayVoice.Pages.Workshop
         public PageNumberSelection PageNumberSelection;
 
         public PageType NowPageType => (PageType)TopButtonListBox.SelectedIndex;
+        private UploadPresetPage workshopEditor;
+
+        public async Task OpenWorkshopEditorAsync(Item item)
+        {
+            if (workshopEditor != null) return;
+            CloseDetailPage();
+            CloseLocalDetailPage();
+            workshopEditor = new UploadPresetPage();
+            workshopEditor.WorkshopEditClosed += WorkshopEditor_Closed;
+            WorkshopEditorFrame.Content = workshopEditor;
+            WorkshopEditorHost.Visibility = Visibility.Visible;
+            await workshopEditor.OpenWorkshopEditAsync(item);
+        }
+
+        private void WorkshopEditor_Closed(bool published)
+        {
+            workshopEditor.WorkshopEditClosed -= WorkshopEditor_Closed;
+            workshopEditor = null;
+            WorkshopEditorHost.Visibility = Visibility.Collapsed;
+            WorkshopEditorFrame.Content = null;
+            if (published) ChangedPage(null, null);
+        }
         public WorkshopPage()
         {
             Inst = this;

@@ -262,4 +262,30 @@
   <data name="重命名失败" xml:space="preserve"><value>파일 이름을 바꾸지 못했습니다.</value></data>
   <data name="播放失败" xml:space="preserve"><value>오디오 파일을 재생하지 못했습니다.</value></data>
   <data name="快捷键已占用" xml:space="preserve"><value>이미 사용 중인 단축키입니다.</value></data>
+  <data name="编辑作品" xml:space="preserve"><value>작품 편집</value></data>
+  <data name="更换封面" xml:space="preserve"><value>표지 변경</value></data>
+  <data name="恢复原封面" xml:space="preserve"><value>원래 표지 복원</value></data>
+  <data name="简介" xml:space="preserve"><value>설명</value></data>
+  <data name="移除所选" xml:space="preserve"><value>선택 항목 제거</value></data>
+  <data name="按名称升序" xml:space="preserve"><value>이름 오름차순</value></data>
+  <data name="按名称降序" xml:space="preserve"><value>이름 내림차순</value></data>
+  <data name="工坊编辑操作提示" xml:space="preserve"><value>오디오 파일을 끌어 추가하세요. 곡을 끌어 순서를 변경하세요. Ctrl 또는 Shift로 여러 곡을 선택하세요.</value></data>
+  <data name="发布更新" xml:space="preserve"><value>업데이트 게시</value></data>
+  <data name="正在加载作品" xml:space="preserve"><value>작품 불러오는 중…</value></data>
+  <data name="正在下载原作品" xml:space="preserve"><value>원본 작품 다운로드 중…</value></data>
+  <data name="原作品下载失败" xml:space="preserve"><value>다운로드에 실패했거나 시간이 초과되었습니다. 나중에 다시 시도하세요.</value></data>
+  <data name="作品资源不完整" xml:space="preserve"><value>작품 데이터가 불완전하여 편집할 수 없습니다.</value></data>
+  <data name="只能编辑自己的作品" xml:space="preserve"><value>자신의 작품만 편집할 수 있습니다.</value></data>
+  <data name="工坊编辑变更摘要" xml:space="preserve"><value>기존 {0}곡 · 추가 {1} · 삭제 {2} · 합계 {3} · 교체 {4}  {5}</value></data>
+  <data name="封面已修改" xml:space="preserve"><value>표지 변경됨</value></data>
+  <data name="工坊同名歌曲替换提示" xml:space="preserve"><value>이름이 “{0}”인 곡이 이미 있습니다. 교체하시겠습니까? 아니요를 선택하면 건너뜁니다.</value></data>
+  <data name="正在校验作品" xml:space="preserve"><value>작품 확인 중…</value></data>
+  <data name="作品已更新请重新加载" xml:space="preserve"><value>다른 곳에서 작품이 업데이트되었습니다. 취소 후 다시 여세요.</value></data>
+  <data name="至少保留一首歌曲" xml:space="preserve"><value>최소 한 곡을 유지하세요.</value></data>
+  <data name="工坊元数据超限" xml:space="preserve"><value>곡 메타데이터가 Steam의 5000바이트 제한을 초과합니다. 곡 수를 줄이거나 파일 이름을 줄이세요.</value></data>
+  <data name="正在发布更新" xml:space="preserve"><value>업데이트 게시 중입니다. 기다려 주세요…</value></data>
+  <data name="作品更新成功" xml:space="preserve"><value>작품 업데이트 완료</value></data>
+  <data name="简介已修改" xml:space="preserve"><value>설명 변경됨</value></data>
+  <data name="标签已修改" xml:space="preserve"><value>태그 변경됨</value></data>
+  <data name="顺序已调整" xml:space="preserve"><value>순서 변경됨</value></data>
 </root>

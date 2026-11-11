@@ -23,6 +23,23 @@ internal static class PresetStorage
     public static readonly string ExtendedExplanationPath = Path.Combine(
         ResourcesPath, "ExtendedExplanation");
 
+    public static string CreateWorkshopEditDirectory(ulong itemId)
+    {
+        string path = Path.Combine(TempPath, $"WorkshopEdit-{itemId}-{Guid.NewGuid():N}");
+        Directory.CreateDirectory(path);
+        return path;
+    }
+
+    public static void DeleteWorkshopEditDirectory(string path)
+    {
+        if (string.IsNullOrEmpty(path)) return;
+        string fullPath = Path.GetFullPath(path);
+        if (!string.Equals(Path.GetDirectoryName(fullPath), Path.GetFullPath(TempPath), StringComparison.OrdinalIgnoreCase)
+            || !Path.GetFileName(fullPath).StartsWith("WorkshopEdit-", StringComparison.Ordinal))
+            throw new IOException("Invalid workshop edit directory.");
+        if (Directory.Exists(fullPath)) Directory.Delete(fullPath, true);
+    }
+
     public static void EnsureInitialized()
     {
         Directory.CreateDirectory(ResourcesPath);
