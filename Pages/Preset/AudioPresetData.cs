@@ -90,6 +90,10 @@ public class AudioPresetData
 
         try
         {
+            if (AudioList.Count >= GlobalData.Inst.Config.AudioPresetMaxFiles
+                || new FileInfo(completePath).Length > GlobalData.Inst.Config.AudioImportMaxBytes
+                || (File.GetAttributes(completePath) & FileAttributes.ReparsePoint) != 0)
+                throw new InvalidDataException("Audio import exceeds configured limits or uses a linked file.");
             using var sourceReader = new AudioFileReader(completePath);
             if (sourceReader.Length <= 0 || sourceReader.TotalTime.TotalMilliseconds <= 0)
             {

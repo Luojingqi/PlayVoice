@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
@@ -288,4 +288,44 @@
   <data name="简介已修改" xml:space="preserve"><value>簡介已修改</value></data>
   <data name="标签已修改" xml:space="preserve"><value>標籤已修改</value></data>
   <data name="顺序已调整" xml:space="preserve"><value>順序已調整</value></data>
+  <data name="音效库" xml:space="preserve"><value>音效庫</value></data>
+  <data name="搜索名称或标签" xml:space="preserve"><value>搜尋名稱或標籤</value></data>
+  <data name="收藏" xml:space="preserve"><value>收藏</value></data>
+  <data name="最近播放" xml:space="preserve"><value>最近播放</value></data>
+  <data name="输出设备" xml:space="preserve"><value>輸出裝置</value></data>
+  <data name="试听设备" xml:space="preserve"><value>試聽裝置</value></data>
+  <data name="停止全部" xml:space="preserve"><value>停止全部</value></data>
+  <data name="标签以逗号分隔" xml:space="preserve"><value>標籤以逗號分隔</value></data>
+  <data name="保存所选" xml:space="preserve"><value>儲存所選</value></data>
+  <data name="独立试听" xml:space="preserve"><value>獨立試聽</value></data>
+  <data name="测试播放链路" xml:space="preserve"><value>測試播放鏈路</value></data>
+  <data name="使用所选音效测试当前输出" xml:space="preserve"><value>使用所選音效測試目前輸出</value></data>
+  <data name="没有匹配的音效" xml:space="preserve"><value>沒有符合的音效</value></data>
+  <data name="正在播放" xml:space="preserve"><value>正在播放</value></data>
+  <data name="已暂停" xml:space="preserve"><value>已暫停</value></data>
+  <data name="已停止" xml:space="preserve"><value>已停止</value></data>
+  <data name="操作失败" xml:space="preserve"><value>操作失敗</value></data>
+  <data name="编辑" xml:space="preserve"><value>編輯</value></data>
+  <data name="主题配色" xml:space="preserve"><value>主題配色</value></data>
+  <data name="森林绿" xml:space="preserve"><value>森林綠</value></data>
+  <data name="海洋蓝" xml:space="preserve"><value>海洋藍</value></data>
+  <data name="琥珀橙" xml:space="preserve"><value>琥珀橙</value></data>
+  <data name="玫瑰红" xml:space="preserve"><value>玫瑰紅</value></data>
+  <data name="主题" xml:space="preserve"><value>主題</value></data>
+<data name="音量" xml:space="preserve"><value>音量</value></data>
+<data name="取消" xml:space="preserve"><value>取消</value></data>
+<data name="关闭" xml:space="preserve"><value>關閉</value></data>
+<data name="自定义主题" xml:space="preserve"><value>自訂主題</value></data>
+<data name="主题名称" xml:space="preserve"><value>主題名稱</value></data>
+<data name="字体" xml:space="preserve"><value>字型</value></data>
+<data name="界面字号" xml:space="preserve"><value>介面字級</value></data>
+<data name="强调色" xml:space="preserve"><value>強調色</value></data>
+<data name="背景色" xml:space="preserve"><value>背景色</value></data>
+<data name="前景色" xml:space="preserve"><value>前景色</value></data>
+<data name="应用" xml:space="preserve"><value>套用</value></data>
+<data name="保存主题" xml:space="preserve"><value>儲存主題</value></data>
+<data name="导入主题" xml:space="preserve"><value>匯入主題</value></data>
+<data name="导出主题" xml:space="preserve"><value>匯出主題</value></data>
+<data name="重置外观" xml:space="preserve"><value>重設外觀</value></data>
+<data name="主题文件无效" xml:space="preserve"><value>主題無效。請檢查名稱、字級（11–18）及顏色（#RRGGBB）。</value></data>
 </root>

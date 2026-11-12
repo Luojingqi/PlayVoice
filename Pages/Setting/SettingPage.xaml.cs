@@ -1,89 +1,43 @@
-﻿using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-
+using System.Windows.Media;
+using PlayVoice.Resources.Language;
+using PlayVoice.Resources.Themes;
 namespace PlayVoice.Pages.Setting;
-
 public partial class SettingPage : Page
 {
-    private const double NarrowThreshold = 600;
-    private bool _isMerged = false;
-    private List<UIElement> _cachedRightElements = new List<UIElement>();
-
-    // 用于防止 SizeChanged 递归重入
-    private bool _suppressSizeChanged = false;
-
     public SettingPage()
     {
         InitializeComponent();
-        this.SizeChanged += OnPageSizeChanged;
+        InitializeAppearanceEditor();
+        Loaded += OnLoaded;
+        Unloaded += (_, _) => { ThemeManager.ThemeChanged -= ThemeChanged; LanguageManager.Inst.CultureChanged -= LanguageChanged; };
+        AppearanceChoices.SelectionChanged += (_, _) => { if (AppearanceChoices.SelectedItem is ThemeManager.ThemeInfo theme && theme != ThemeManager.NowTheme) ThemeManager.SwitchTheme(theme.Theme); };
     }
-
-    private void OnPageSizeChanged(object sender, SizeChangedEventArgs e)
+    private void OnLoaded(object sender, RoutedEventArgs e)
     {
-        if (_suppressSizeChanged) return;   // 正在执行合并/拆分，忽略中间触发的 SizeChanged
-
-        UpdateLayoutState(e.NewSize.Width);
+        ThemeManager.ThemeChanged += ThemeChanged;
+        LanguageManager.Inst.CultureChanged += LanguageChanged;
+        RefreshChoices();
     }
-
-    private void UpdateLayoutState(double width)
+    private void ThemeChanged(ThemeManager.ThemeInfo theme) => RefreshChoices();
+    private void LanguageChanged(System.Globalization.CultureInfo culture, LanguageManager.LanguageInfo language) => RefreshChoices();
+    private void RefreshChoices()
     {
-        bool shouldMerge = width < NarrowThreshold;
-        if (shouldMerge == _isMerged) return;
-
-        _suppressSizeChanged = true;   // 锁定，避免移动控件时触发布局更新再次进入
-
-        if (shouldMerge)
+        AppearanceChoices.ItemsSource = null;
+        AppearanceChoices.ItemsSource = ThemeManager.ThemeList;
+        AppearanceChoices.SelectedItem = ThemeManager.NowTheme;
+        RefreshAppearanceEditor();
+        PaletteChoices.Children.Clear();
+        foreach (var palette in ThemeManager.Palettes)
         {
-            MergePanels();
+            var content = new StackPanel();
+            content.Children.Add(new Border { Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(palette.Value.Light[0])), Width = 100, Height = 54, CornerRadius = new CornerRadius(8), Margin = new Thickness(0,0,0,12) });
+            content.Children.Add(new TextBlock { Text = LanguageManager.Inst.GetString(palette.Value.Name) });
+            var button = new Button { Content = content, Margin = new Thickness(0,0,12,12), Padding = new Thickness(16), BorderThickness = new Thickness(1) };
+            button.SetResourceReference(Control.BorderBrushProperty, GlobalData.Inst.Config.ColorPalette == palette.Key ? "AccentColor" : "Border");
+            button.Click += (_, _) => { ThemeManager.SwitchPalette(palette.Key); RefreshChoices(); };
+            PaletteChoices.Children.Add(button);
         }
-        else
-        {
-            SplitPanels();
-        }
-
-        _isMerged = shouldMerge;
-        _suppressSizeChanged = false;
-    }
-
-    private void MergePanels()
-    {
-        // 缓存右侧所有子控件，然后清空右侧
-        _cachedRightElements.Clear();
-        foreach (UIElement element in ContentRightPanel.Children)
-        {
-            _cachedRightElements.Add(element);
-        }
-        ContentRightPanel.Children.Clear();
-
-        // 将缓存的控件按原顺序添加到左侧面板底部
-        foreach (UIElement element in _cachedRightElements)
-        {
-            ContentLeftPanel.Children.Add(element);
-        }
-
-        // 调整间距：左侧面板此时为“全内容”，右侧面板可隐藏或自动缩小
-        // 由于右侧面板无内容，会自动塌陷，但最好显式将右侧列宽度设为0，左侧占满
-        ContentGrid.ColumnDefinitions[1].Width = new GridLength(0);
-        ContentGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
-    }
-
-    private void SplitPanels()
-    {
-        // 从左侧面板中移除之前移入的控件
-        foreach (UIElement element in _cachedRightElements)
-        {
-            ContentLeftPanel.Children.Remove(element);
-        }
-
-        // 将这些控件加回右侧面板
-        foreach (UIElement element in _cachedRightElements)
-        {
-            ContentRightPanel.Children.Add(element);
-        }
-
-        // 恢复列宽为左右各半
-        ContentGrid.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
-        ContentGrid.ColumnDefinitions[1].Width = new GridLength(1, GridUnitType.Star);
     }
 }

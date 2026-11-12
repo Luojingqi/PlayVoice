@@ -1,4 +1,4 @@
-﻿<Page x:Class="PlayVoice.Pages.Setting.VirtualSoundCardInstallationPage"
+<Page x:Class="PlayVoice.Pages.Setting.VirtualSoundCardInstallationPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -47,13 +47,13 @@
                 <TextBlock  Grid.Column="1"
                             Style="{StaticResource TextBlockHeavy}"
                             Margin="10,0,7.5,0"
-                            FontSize="15"
+                            FontSize="{DynamicResource UiFontSize15}"
                             Text="VB-AUDIO"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Center"/>
                 <TextBlock  Grid.Column="2"
                             Style="{StaticResource TextBlockLight}"
-                            FontSize="15"
+                            FontSize="{DynamicResource UiFontSize15}"
                             Text="Software"
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Left"/>
@@ -64,21 +64,21 @@
                      Grid.Row="1"
                      Margin="2.5,12.5,2.5,1.5"
                      Tag="Uniform">
-                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
-                    <TextBlock Text="{L:Lan 安装}" Style="{StaticResource TextBlockLight}"/>
+                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" ToolTip="{L:Lan 安装}" AutomationProperties.Name="{L:Lan 安装}">
+                    <TextBlock Text="&#xE896;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{DynamicResource TextPrimary}"/>
                 </ListBoxItem>
-                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
-                    <TextBlock Text="{L:Lan 卸载}" Style="{StaticResource TextBlockLight}"/>
+                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" ToolTip="{L:Lan 卸载}" AutomationProperties.Name="{L:Lan 卸载}">
+                    <TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{DynamicResource TextPrimary}"/>
                 </ListBoxItem>
-                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
-                    <TextBlock Text="{L:Lan 检测}" Style="{StaticResource TextBlockLight}"/>
+                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" ToolTip="{L:Lan 检测}" AutomationProperties.Name="{L:Lan 检测}">
+                    <TextBlock Text="&#xE72C;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{DynamicResource TextPrimary}"/>
                 </ListBoxItem>
             </ListBox>
 
             <TextBlock  Style="{StaticResource TextBlockLight}"
             Grid.Row="2"
             Margin="15,10.5,2.5,0"
-            FontSize="11"
+            FontSize="{DynamicResource UiFontSize11}"
             HorizontalAlignment="Left"
             Text="{L:Lan VB-AUDIO_分销规则与感谢}"/>
 

@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PlayVoice.Pages.Workshop.DetailPageItem"
+<UserControl x:Class="PlayVoice.Pages.Workshop.DetailPageItem"
              x:Name="self"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -26,7 +26,7 @@
                            Style="{StaticResource TextBlockLight}"
                            VerticalAlignment="Center"
                            HorizontalAlignment="Left"
-                           FontSize="11">
+                           FontSize="{DynamicResource UiFontSize11}">
                 </TextBlock>
             </Border>
             <Border Grid.Row="1" Opacity="0.5">
@@ -40,14 +40,14 @@
                            Style="{StaticResource TextBlockMedium}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           FontSize="11"
+                           FontSize="{DynamicResource UiFontSize11}"
                            Margin="5,0"/>
                     <TextBlock Grid.Column="1" 
                            Text="{Binding ItemSize}" 
                            Style="{StaticResource TextBlockMedium}"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
-                           FontSize="11"/>
+                           FontSize="{DynamicResource UiFontSize11}"/>
                 </Grid>
             </Border>
         </Grid>

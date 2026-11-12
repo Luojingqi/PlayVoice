@@ -39,10 +39,15 @@ public partial class AudioTrackItem : UserControl
         if (IsChildOf(VolumeSlider, originalSource)) return;
         if (IsChildOf(DragHandle, originalSource)) return;
         if (IsChildOf(KeyboardKeyListBox, originalSource)) return;
+        if (IsChildOf(RowPlayButton, originalSource)) return;
 
         ClickRippleEffect.Start(RippleCanvas, e.GetPosition(RippleCanvas));
-        GlobalData.Inst.Playback.Toggle(ViewModel.Data);
+        var container = FindVisualParent<ListBoxItem>(this);
+        if (container != null) container.IsSelected = true;
+        if (e.ClickCount == 2) GlobalData.Inst.Playback.Toggle(ViewModel.Data);
     }
+
+    private void RowPlay_Click(object sender, RoutedEventArgs e) => GlobalData.Inst.Playback.Toggle(ViewModel.Data);
 
     private void RippleCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
     {
@@ -121,6 +126,7 @@ public partial class AudioTrackItem : UserControl
             return;
 
         var audioData = viewModel.Data;
+        RowPlayIcon.Text = audioData.IsPlaying ? "\uE769" : "\uE768";
         double progress = audioData.PlaybackProgress;
         if (!audioData.IsPlaying || progress >= 1)
         {
@@ -145,6 +151,7 @@ public partial class AudioTrackItem : UserControl
 
     private void ResetPlaybackAnimation()
     {
+        RowPlayIcon.Text = "\uE768";
         BackgroundScale.BeginAnimation(ScaleTransform.ScaleXProperty, null);
         BackgroundScale.ScaleX = subscribedAudioData?.IsPaused == true
             ? subscribedAudioData.PlaybackProgress : 0;
@@ -259,6 +266,15 @@ public partial class AudioTrackItem : UserControl
                 var hotkeyData = GlobalData.Inst.GetAudioHotkey(viewModel.Data, create: true);
                 if (hotkeyData == null)
                 {
+                    Keyboard.Focus(null);
+                    return;
+                }
+                if (HotkeyManager.Inst.IsAssigned(newHotkey, hotkeyData))
+                {
+                    MainWindow.Inst.AddNotification(
+                        () => PlayVoice.Resources.Language.LanguageManager.Inst.GetString("通知"),
+                        () => PlayVoice.Resources.Language.LanguageManager.Inst.GetString("快捷键已占用"),
+                        LabelStatus.Warning, 4);
                     Keyboard.Focus(null);
                     return;
                 }

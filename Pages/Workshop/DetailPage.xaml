@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="PlayVoice.Pages.Workshop.DetailPage"
+<UserControl x:Class="PlayVoice.Pages.Workshop.DetailPage"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -60,7 +60,7 @@
 
             <StackPanel Grid.Column="1" HorizontalAlignment="Center" >
                 <Button x:Name="EditWorkshopButton" Visibility="Collapsed" Content="✎"
-                        Foreground="{DynamicResource AccentColor}" FontSize="18" AutomationProperties.Name="{L:Lan 编辑作品}"
+                        Foreground="{DynamicResource AccentColor}" FontSize="{DynamicResource UiFontSize18}" AutomationProperties.Name="{L:Lan 编辑作品}"
                         Style="{StaticResource WorkshopStandaloneButtonStyle}"
                         ToolTip="{L:Lan 编辑作品}" Click="EditWorkshop_Click"/>
                 <TextBlock x:Name="SteamScoreText"
@@ -158,7 +158,7 @@
                            x:Name="ItemTitle"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Top"
-                           FontSize="14"/>
+                           FontSize="{DynamicResource UiFontSize14}"/>
                 <StackPanel x:Name="AuthorPanel"
                             Orientation="Horizontal"
                             HorizontalAlignment="Center"

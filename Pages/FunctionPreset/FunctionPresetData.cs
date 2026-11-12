@@ -8,6 +8,7 @@ namespace PlayVoice.Pages.FunctionPreset;
 
 public class FunctionPresetData
 {
+    public int Version { get; set; } = 1;
     public string Name { get; set; }
     public bool IsDefault { get; set; }
     public List<FunctionPresetAudioBinding> Bindings { get; set; } = new();
@@ -25,6 +26,7 @@ public class FunctionPresetData
     public HotkeyData PausePlaybackHotkey { get; set; } = new();
     public HotkeyData PreviousTrackHotkey { get; set; } = new();
     public HotkeyData NextTrackHotkey { get; set; } = new();
+    public HotkeyData StopAllHotkey { get; set; } = new();
 
     [JsonIgnore]
     public string DisplayName => IsDefault

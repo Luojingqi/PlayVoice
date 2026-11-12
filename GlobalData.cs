@@ -659,8 +659,8 @@ internal class GlobalData
         }
         catch (Exception exception)
         {
-            AppLog.Error(exception, "配置加载失败，将重新生成配置。", "GlobalData.Config");
-            config = new Config();
+            AppLog.Error(exception, "配置加载失败，保留原文件并停止启动。", "GlobalData.Config");
+            throw;
         }
         NormalizeMicrophoneLoudnessConfig();
 

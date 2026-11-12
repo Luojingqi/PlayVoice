@@ -71,13 +71,14 @@ public static class JsonTool
     /// </summary>
     public static bool SaveJsonAtomically<T>(string path, T data)
     {
-        string tempPath = $"{path}.tmp";
+        string tempPath = $"{path}.{Guid.NewGuid():N}.tmp";
 
         try
         {
             string jsonString = ToJson(data);
             File.WriteAllText(tempPath, jsonString);
-            File.Move(tempPath, path, true);
+            if (File.Exists(path)) File.Replace(tempPath, path, path + ".bak");
+            else File.Move(tempPath, path);
             return true;
         }
         catch (Exception exception)
