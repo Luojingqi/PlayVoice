@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using PlayVoice.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
@@ -23,6 +23,7 @@ public partial class NotificationPanel : UserControl
 
     public void AddNotification(string title, string message, LabelStatus status = LabelStatus.None, float autoDismissSeconds = 5)
     {
+        if (NotificationItems.Any(item => item.Title == title && item.Message == message && item.Status == status)) return;
         AppLog.Notification(title, message, status);
         var item = new NotificationItem(title, message, status, autoDismissSeconds)
         {
@@ -32,6 +33,9 @@ public partial class NotificationPanel : UserControl
     }
     public void AddNotification(Func<string> title, Func<string> message, LabelStatus status = LabelStatus.None, float autoDismissSeconds = 5)
     {
+        string currentTitle = title();
+        string currentMessage = message();
+        if (NotificationItems.Any(item => item.Title == currentTitle && item.Message == currentMessage && item.Status == status)) return;
         var item = new NotificationItem(title, message, status, autoDismissSeconds)
         {
             Owner = this
@@ -87,36 +91,18 @@ public partial class NotificationPanel : UserControl
         storyboard.Begin();
     }
 
-    // 进度条加载时创建并启动进度动画
-    private void ProgressBar_Loaded(object sender, RoutedEventArgs e)
+    // The invisible animation clock preserves pause/resume and automatic dismissal.
+    private void DismissTimer_Loaded(object sender, RoutedEventArgs e)
     {
-        if (sender is Border progressBarBorder && progressBarBorder.DataContext is NotificationItem item)
-        {
-            // 查找内部的进度填充 Border 和 ScaleTransform
-            var progressFill = progressBarBorder.Child as Border;
-            if (progressFill == null) return;
-
-            var scaleTransform = progressFill.RenderTransform as ScaleTransform;
-            if (scaleTransform == null) return;
-
-            // 创建动画：ScaleX 从 1 到 0，时长 = 通知存在时间
-            var animation = new DoubleAnimation(1, 0, TimeSpan.FromSeconds(item.DurationSeconds));
-            Storyboard.SetTarget(animation, progressFill);
-            Storyboard.SetTargetProperty(animation, new PropertyPath("(UIElement.RenderTransform).(ScaleTransform.ScaleX)"));
-
-            var storyboard = new Storyboard();
-            storyboard.Children.Add(animation);
-            storyboard.Completed += (s, args) =>
-            {
-                // 动画自然结束 → 移除通知
-                RemoveNotificationWithAnimation(item);
-            };
-
-            // 保存到 item 以便后续暂停/恢复
-            item.ProgressStoryboard = storyboard;
-
-            storyboard.Begin();
-        }
+        if (sender is not Border clock || clock.DataContext is not NotificationItem item) return;
+        var animation = new DoubleAnimation(0, 0, TimeSpan.FromSeconds(item.DurationSeconds));
+        Storyboard.SetTarget(animation, clock);
+        Storyboard.SetTargetProperty(animation, new PropertyPath(OpacityProperty));
+        var storyboard = new Storyboard();
+        storyboard.Children.Add(animation);
+        storyboard.Completed += (_, _) => RemoveNotificationWithAnimation(item);
+        item.ProgressStoryboard = storyboard;
+        storyboard.Begin();
     }
 
     // 鼠标悬停暂停进度

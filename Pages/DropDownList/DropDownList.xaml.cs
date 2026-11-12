@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -14,6 +14,8 @@ public partial class DropDownList : UserControl
     public DropDownList()
     {
         InitializeComponent();
+        SetResourceReference(ComboBoxFontSizeProperty, "UiFontSize14");
+        SetResourceReference(TextBlockFontSizeProperty, "UiFontSize16");
 
         comboBox.DropDownOpened += ComboBox_DropDownOpened;
         comboBox.SelectionChanged += ComboBox_SelectionChanged;
@@ -44,18 +46,18 @@ public partial class DropDownList : UserControl
 
 
     public static readonly DependencyProperty TextBlockFontSizeProperty =
-        DependencyProperty.Register("TextBlockFontSize", typeof(int), typeof(DropDownList), new PropertyMetadata(16));
-    public int TextBlockFontSize
+        DependencyProperty.Register("TextBlockFontSize", typeof(double), typeof(DropDownList), new PropertyMetadata(16.0));
+    public double TextBlockFontSize
     {
-        get => (int)GetValue(TextBlockFontSizeProperty);
+        get => (double)GetValue(TextBlockFontSizeProperty);
         set => SetValue(TextBlockFontSizeProperty, value);
     }
 
     public static readonly DependencyProperty ComboBoxFontSizeProperty =
-        DependencyProperty.Register("ComboBoxFontSize", typeof(int), typeof(DropDownList), new PropertyMetadata(14));
-    public int ComboBoxFontSize
+        DependencyProperty.Register("ComboBoxFontSize", typeof(double), typeof(DropDownList), new PropertyMetadata(14.0));
+    public double ComboBoxFontSize
     {
-        get => (int)GetValue(ComboBoxFontSizeProperty);
+        get => (double)GetValue(ComboBoxFontSizeProperty);
         set => SetValue(ComboBoxFontSizeProperty, value);
     }
 

@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace PlayVoice.Pages.ToggleSwitchButton
@@ -16,6 +16,7 @@ namespace PlayVoice.Pages.ToggleSwitchButton
         public ToggleSwitchButton()
         {
             InitializeComponent();
+        SetResourceReference(TextBlockFontSizeProperty, "UiFontSize16");
             toggleButton.Click += ToggleButton_Click;
         }
 
@@ -44,10 +45,10 @@ namespace PlayVoice.Pages.ToggleSwitchButton
 
 
         public static readonly DependencyProperty TextBlockFontSizeProperty =
-            DependencyProperty.Register("TextBlockFontSize", typeof(int), typeof(ToggleSwitchButton), new PropertyMetadata(16));
-        public int TextBlockFontSize
+            DependencyProperty.Register("TextBlockFontSize", typeof(double), typeof(ToggleSwitchButton), new PropertyMetadata(16.0));
+        public double TextBlockFontSize
         {
-            get => (int)GetValue(TextBlockFontSizeProperty);
+            get => (double)GetValue(TextBlockFontSizeProperty);
             set => SetValue(TextBlockFontSizeProperty, value);
         }
 

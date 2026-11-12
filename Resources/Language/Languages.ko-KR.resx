@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
@@ -288,4 +288,44 @@
   <data name="简介已修改" xml:space="preserve"><value>설명 변경됨</value></data>
   <data name="标签已修改" xml:space="preserve"><value>태그 변경됨</value></data>
   <data name="顺序已调整" xml:space="preserve"><value>순서 변경됨</value></data>
+  <data name="音效库" xml:space="preserve"><value>사운드 라이브러리</value></data>
+  <data name="搜索名称或标签" xml:space="preserve"><value>이름 또는 태그 검색</value></data>
+  <data name="收藏" xml:space="preserve"><value>즐겨찾기</value></data>
+  <data name="最近播放" xml:space="preserve"><value>최근 재생</value></data>
+  <data name="输出设备" xml:space="preserve"><value>출력 장치</value></data>
+  <data name="试听设备" xml:space="preserve"><value>미리 듣기 장치</value></data>
+  <data name="停止全部" xml:space="preserve"><value>모두 정지</value></data>
+  <data name="标签以逗号分隔" xml:space="preserve"><value>쉼표로 태그 구분</value></data>
+  <data name="保存所选" xml:space="preserve"><value>선택 항목 저장</value></data>
+  <data name="独立试听" xml:space="preserve"><value>로컬 미리 듣기</value></data>
+  <data name="测试播放链路" xml:space="preserve"><value>재생 경로 테스트</value></data>
+  <data name="使用所选音效测试当前输出" xml:space="preserve"><value>선택한 소리를 현재 출력으로 재생</value></data>
+  <data name="没有匹配的音效" xml:space="preserve"><value>일치하는 소리 없음</value></data>
+  <data name="正在播放" xml:space="preserve"><value>재생 중</value></data>
+  <data name="已暂停" xml:space="preserve"><value>일시 정지</value></data>
+  <data name="已停止" xml:space="preserve"><value>정지됨</value></data>
+  <data name="操作失败" xml:space="preserve"><value>작업 실패</value></data>
+  <data name="编辑" xml:space="preserve"><value>편집</value></data>
+  <data name="主题配色" xml:space="preserve"><value>색상 테마</value></data>
+  <data name="森林绿" xml:space="preserve"><value>포레스트</value></data>
+  <data name="海洋蓝" xml:space="preserve"><value>오션</value></data>
+  <data name="琥珀橙" xml:space="preserve"><value>앰버</value></data>
+  <data name="玫瑰红" xml:space="preserve"><value>로즈</value></data>
+  <data name="主题" xml:space="preserve"><value>모양</value></data>
+<data name="音量" xml:space="preserve"><value>음량</value></data>
+<data name="取消" xml:space="preserve"><value>취소</value></data>
+<data name="关闭" xml:space="preserve"><value>닫기</value></data>
+<data name="自定义主题" xml:space="preserve"><value>사용자 지정 테마</value></data>
+<data name="主题名称" xml:space="preserve"><value>테마 이름</value></data>
+<data name="字体" xml:space="preserve"><value>글꼴</value></data>
+<data name="界面字号" xml:space="preserve"><value>인터페이스 글꼴 크기</value></data>
+<data name="强调色" xml:space="preserve"><value>강조색</value></data>
+<data name="背景色" xml:space="preserve"><value>배경색</value></data>
+<data name="前景色" xml:space="preserve"><value>글자색</value></data>
+<data name="应用" xml:space="preserve"><value>적용</value></data>
+<data name="保存主题" xml:space="preserve"><value>테마 저장</value></data>
+<data name="导入主题" xml:space="preserve"><value>테마 가져오기</value></data>
+<data name="导出主题" xml:space="preserve"><value>테마 내보내기</value></data>
+<data name="重置外观" xml:space="preserve"><value>모양 초기화</value></data>
+<data name="主题文件无效" xml:space="preserve"><value>잘못된 테마입니다. 이름, 글꼴 크기(11–18), 색상(#RRGGBB)을 확인하세요.</value></data>
 </root>

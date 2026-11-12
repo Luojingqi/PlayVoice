@@ -161,6 +161,8 @@ public class AudioData
             }
 
             if (canPlay == false) return;
+            Config.LastPlayedAt = DateTimeOffset.UtcNow;
+            AudioPreset.Save();
             IsPaused = false;
             PlayTimer.Interval = RemainingTime;
             SetVolume(GlobalData.Inst.GetAudioDecibel(this));

@@ -1,4 +1,4 @@
-﻿<Page x:Class="PlayVoice.Pages.Preset.CreatePresetPage"
+<Page x:Class="PlayVoice.Pages.Preset.CreatePresetPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -16,11 +16,11 @@
     </Page.Resources>
 
 
-    <Border Width="176" HorizontalAlignment="Center" VerticalAlignment="Center"
-                BorderBrush="{DynamicResource AccentColor}"
+    <Border HorizontalAlignment="Stretch" VerticalAlignment="Top"
+                Background="{DynamicResource AccentSurfaceSubtle}" BorderBrush="{DynamicResource Border}"
                 BorderThickness="1" 
-                CornerRadius="6"
-                Padding="0,13">
+                CornerRadius="12"
+                Padding="24">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -30,13 +30,13 @@
             <TextBlock Style="{StaticResource TextBlockMedium}"
                             Grid.Row="0"
                             Text="{L:Lan 创建新音频预设}"
-                            FontSize="16"
+                            FontSize="{DynamicResource UiFontSize18}"
                             Margin="0,0,0,10"
-                            TextAlignment="Center"/>
+                            TextAlignment="Left"/>
             <ListBox Grid.Row="1"
                         Margin="0,5"
-                        Width="130"
-                        Height="35"
+                        Width="260" HorizontalAlignment="Left"
+                        Height="38"
                         Style="{StaticResource HorizontalButtonGroupStyle}">
                 <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
                     <TextBox Tag="{L:Lan 输入音频预设名称}"
@@ -45,14 +45,13 @@
                 </ListBoxItem>
             </ListBox>
             <ListBox Tag="Uniform"
-                    Width="80"
+                    Width="120" HorizontalAlignment="Left"
                     Grid.Row="2"
                     Margin="0,5"
                     Style="{StaticResource HorizontalButtonGroupStyle}"
                     x:Name="ButtonGroupListBox">
-                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
-                    <TextBlock Text="{L:Lan 确认}"
-                                 Style="{StaticResource TextBlockLight}"/>
+                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" ToolTip="{L:Lan 确认}" AutomationProperties.Name="{L:Lan 确认}">
+                    <TextBlock Text="&#xE8FB;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{DynamicResource TextPrimary}"/>
                 </ListBoxItem>
             </ListBox>
         </Grid>

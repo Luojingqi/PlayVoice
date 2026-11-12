@@ -1,10 +1,11 @@
-﻿<Page x:Class="PlayVoice.Pages.Setting.AboutPage"
+<Page x:Class="PlayVoice.Pages.Setting.AboutPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:PlayVoice.Pages.Setting"
       xmlns:L="clr-namespace:PlayVoice.Resources.Language"
+      xmlns:Hyperlink="clr-namespace:PlayVoice.Pages.Hyperlink"
       mc:Ignorable="d">
     
     <Page.Resources>
@@ -17,18 +18,15 @@
 
     <HeaderedContentControl Style="{StaticResource PageBoxStyle}"
                             Header="{L:Lan 关于}">
-        <Grid Margin="2.5,2.5,2.5,0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            
-            <Border Grid.Row="4" Margin="0,1.5,0,0"/>
-        </Grid>
+        <StackPanel>
+            <TextBlock Text="PlayVoice" FontSize="{DynamicResource UiFontSize28}" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
+            <TextBlock x:Name="VersionText" Foreground="{DynamicResource TextSecondary}" Margin="0,8,0,24"/>
+            <WrapPanel>
+                <Button  Hyperlink:HyperlinkBehavior.Url="https://store.steampowered.com/app/4907460/PlayVoice/" Margin="0,0,12,12" ToolTip="{L:Lan 去Steam}" AutomationProperties.Name="{L:Lan 去Steam}" Width="40"><TextBlock Text="&#xE8A7;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
+                <Button  Hyperlink:HyperlinkBehavior.Url="https://github.com/Luojingqi/PlayVoice" Margin="0,0,12,12" ToolTip="{L:Lan 去Github}" AutomationProperties.Name="{L:Lan 去Github}" Width="40"><TextBlock Text="&#xE8A7;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
+                <Button  Hyperlink:HyperlinkBehavior.Url="https://source-xu.top/projects/playvoice" Margin="0,0,12,12" ToolTip="{L:Lan 官网}" AutomationProperties.Name="{L:Lan 官网}" Width="40"><TextBlock Text="&#xE774;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
+            </WrapPanel>
+        </StackPanel>
     </HeaderedContentControl>
 
 </Page>

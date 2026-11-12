@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
   <resheader name="version"><value>2.0</value></resheader>
@@ -288,4 +288,44 @@
   <data name="简介已修改" xml:space="preserve"><value>Beschreibung geändert</value></data>
   <data name="标签已修改" xml:space="preserve"><value>Tags geändert</value></data>
   <data name="顺序已调整" xml:space="preserve"><value>Reihenfolge geändert</value></data>
+  <data name="音效库" xml:space="preserve"><value>Soundbibliothek</value></data>
+  <data name="搜索名称或标签" xml:space="preserve"><value>Namen oder Tags suchen</value></data>
+  <data name="收藏" xml:space="preserve"><value>Favoriten</value></data>
+  <data name="最近播放" xml:space="preserve"><value>Zuletzt gespielt</value></data>
+  <data name="输出设备" xml:space="preserve"><value>Ausgabegerät</value></data>
+  <data name="试听设备" xml:space="preserve"><value>Vorschaugerät</value></data>
+  <data name="停止全部" xml:space="preserve"><value>Alles stoppen</value></data>
+  <data name="标签以逗号分隔" xml:space="preserve"><value>Tags durch Kommas trennen</value></data>
+  <data name="保存所选" xml:space="preserve"><value>Auswahl speichern</value></data>
+  <data name="独立试听" xml:space="preserve"><value>Lokal vorhören</value></data>
+  <data name="测试播放链路" xml:space="preserve"><value>Wiedergabeweg testen</value></data>
+  <data name="使用所选音效测试当前输出" xml:space="preserve"><value>Ausgewählten Sound über den aktuellen Ausgang abspielen</value></data>
+  <data name="没有匹配的音效" xml:space="preserve"><value>Keine passenden Sounds</value></data>
+  <data name="正在播放" xml:space="preserve"><value>Wiedergabe</value></data>
+  <data name="已暂停" xml:space="preserve"><value>Pausiert</value></data>
+  <data name="已停止" xml:space="preserve"><value>Gestoppt</value></data>
+  <data name="操作失败" xml:space="preserve"><value>Vorgang fehlgeschlagen</value></data>
+  <data name="编辑" xml:space="preserve"><value>Bearbeiten</value></data>
+  <data name="主题配色" xml:space="preserve"><value>Farbthemen</value></data>
+  <data name="森林绿" xml:space="preserve"><value>Wald</value></data>
+  <data name="海洋蓝" xml:space="preserve"><value>Ozean</value></data>
+  <data name="琥珀橙" xml:space="preserve"><value>Bernstein</value></data>
+  <data name="玫瑰红" xml:space="preserve"><value>Rose</value></data>
+  <data name="主题" xml:space="preserve"><value>Darstellung</value></data>
+<data name="音量" xml:space="preserve"><value>Lautstärke</value></data>
+<data name="取消" xml:space="preserve"><value>Abbrechen</value></data>
+<data name="关闭" xml:space="preserve"><value>Schließen</value></data>
+<data name="自定义主题" xml:space="preserve"><value>Eigene Designs</value></data>
+<data name="主题名称" xml:space="preserve"><value>Designname</value></data>
+<data name="字体" xml:space="preserve"><value>Schriftart</value></data>
+<data name="界面字号" xml:space="preserve"><value>Schriftgröße</value></data>
+<data name="强调色" xml:space="preserve"><value>Akzentfarbe</value></data>
+<data name="背景色" xml:space="preserve"><value>Hintergrundfarbe</value></data>
+<data name="前景色" xml:space="preserve"><value>Textfarbe</value></data>
+<data name="应用" xml:space="preserve"><value>Anwenden</value></data>
+<data name="保存主题" xml:space="preserve"><value>Design speichern</value></data>
+<data name="导入主题" xml:space="preserve"><value>Design importieren</value></data>
+<data name="导出主题" xml:space="preserve"><value>Design exportieren</value></data>
+<data name="重置外观" xml:space="preserve"><value>Darstellung zurücksetzen</value></data>
+<data name="主题文件无效" xml:space="preserve"><value>Ungültiges Design. Name, Schriftgröße (11–18) und Farben (#RRGGBB) prüfen.</value></data>
 </root>

@@ -224,7 +224,7 @@
                                Text="★ --"
                                Style="{StaticResource TextBlockMedium}"
                                Foreground="{DynamicResource Warning}"
-                               FontSize="11"/>
+                               FontSize="{DynamicResource UiFontSize11}"/>
                 </Border>
 
                 <Button x:Name="SubscribeButton"
@@ -235,7 +235,7 @@
                         Click="SubscribeButton_Click">
                     <TextBlock Text="{L:Lan 订阅按钮}"
                                Style="{StaticResource TextBlockMedium}"
-                               FontSize="11"
+                               FontSize="{DynamicResource UiFontSize11}"
                                TextTrimming="CharacterEllipsis"/>
                 </Button>
                 <Button x:Name="UnsubscribeButton"
@@ -246,7 +246,7 @@
                         Click="UnsubscribeButton_Click">
                     <TextBlock Text="{L:Lan 取消订阅按钮}"
                                Style="{StaticResource TextBlockMedium}"
-                               FontSize="11"
+                               FontSize="{DynamicResource UiFontSize11}"
                                TextTrimming="CharacterEllipsis"/>
                 </Button>
 
@@ -264,7 +264,7 @@
                        Margin="2,5,2,0"
                        MaxHeight="36"
                        Style="{StaticResource TextBlockMedium}"
-                       FontSize="13"
+                       FontSize="{DynamicResource UiFontSize13}"
                        TextAlignment="Center"
                        TextWrapping="Wrap"
                        TextTrimming="CharacterEllipsis"/>
@@ -308,13 +308,13 @@
                            x:Name="AudioCountText"
                            Style="{StaticResource TextBlockMedium}"
                            Foreground="{DynamicResource TextSecondary}"
-                           FontSize="10"
+                           FontSize="{DynamicResource UiFontSize10}"
                            HorizontalAlignment="Left"/>
                 <TextBlock Grid.Column="1"
                            x:Name="ResourceSizeText"
                            Style="{StaticResource TextBlockMedium}"
                            Foreground="{DynamicResource TextSecondary}"
-                           FontSize="10"
+                           FontSize="{DynamicResource UiFontSize10}"
                            HorizontalAlignment="Right"/>
             </Grid>
 
@@ -356,7 +356,7 @@
                                         <TextBlock Text="{Binding Title}"
                                                    ToolTip="{Binding Title}"
                                                    Style="{StaticResource TextBlockLight}"
-                                                   FontSize="11"
+                                                   FontSize="{DynamicResource UiFontSize11}"
                                                    TextTrimming="CharacterEllipsis"/>
                                         <Grid Grid.Row="1"
                                               Margin="0,2,0,0"

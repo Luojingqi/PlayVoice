@@ -14,13 +14,13 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Border Width="176"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center"
-            BorderBrush="{DynamicResource AccentColor}"
+    <Border
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top"
+            Background="{DynamicResource AccentSurfaceSubtle}" BorderBrush="{DynamicResource Border}"
             BorderThickness="1"
-            CornerRadius="6"
-            Padding="0,13">
+            CornerRadius="12"
+            Padding="24">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -30,13 +30,13 @@
             <TextBlock Grid.Row="0"
                        Style="{StaticResource TextBlockMedium}"
                        Text="{L:Lan 创建新游戏预设}"
-                       FontSize="16"
+                       FontSize="{DynamicResource UiFontSize18}"
                        Margin="0,0,0,10"
-                       TextAlignment="Center"/>
+                       TextAlignment="Left"/>
             <ListBox Grid.Row="1"
                      Margin="0,5"
-                     Width="130"
-                     Height="35"
+                     Width="260" HorizontalAlignment="Left"
+                     Height="38"
                      Style="{StaticResource HorizontalButtonGroupStyle}">
                 <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
                     <TextBox x:Name="FunctionPresetNameInputTextBox"
@@ -47,12 +47,11 @@
             <ListBox Grid.Row="2"
                      x:Name="ButtonGroupListBox"
                      Tag="Uniform"
-                     Width="80"
+                     Width="120" HorizontalAlignment="Left"
                      Margin="0,5"
                      Style="{StaticResource HorizontalButtonGroupStyle}">
-                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}">
-                    <TextBlock Text="{L:Lan 确认}"
-                               Style="{StaticResource TextBlockLight}"/>
+                <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" ToolTip="{L:Lan 确认}" AutomationProperties.Name="{L:Lan 确认}">
+                    <TextBlock Text="&#xE8FB;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{DynamicResource TextPrimary}"/>
                 </ListBoxItem>
             </ListBox>
         </Grid>

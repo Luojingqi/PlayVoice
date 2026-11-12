@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -14,6 +14,8 @@ namespace PlayVoice.Pages.HorizontalList
         public HorizontalList()
         {
             InitializeComponent();
+        SetResourceReference(ListBoxFontSizeProperty, "UiFontSize14");
+        SetResourceReference(TextBlockFontSizeProperty, "UiFontSize16");
             listBox.SelectionChanged += ListBox_SelectionChanged;
         }
 
@@ -35,19 +37,19 @@ namespace PlayVoice.Pages.HorizontalList
 
 
         public static readonly DependencyProperty TextBlockFontSizeProperty =
-            DependencyProperty.Register("TextBlockFontSize", typeof(int), typeof(HorizontalList), new PropertyMetadata(16));
-        public int TextBlockFontSize
+            DependencyProperty.Register("TextBlockFontSize", typeof(double), typeof(HorizontalList), new PropertyMetadata(16.0));
+        public double TextBlockFontSize
         {
-            get => (int)GetValue(TextBlockFontSizeProperty);
+            get => (double)GetValue(TextBlockFontSizeProperty);
             set => SetValue(TextBlockFontSizeProperty, value);
         }
 
 
         public static readonly DependencyProperty ListBoxFontSizeProperty =
-        DependencyProperty.Register("ListBoxFontSize", typeof(int), typeof(HorizontalList), new PropertyMetadata(14));
-        public int ListBoxFontSize
+        DependencyProperty.Register("ListBoxFontSize", typeof(double), typeof(HorizontalList), new PropertyMetadata(14.0));
+        public double ListBoxFontSize
         {
-            get => (int)GetValue(ListBoxFontSizeProperty);
+            get => (double)GetValue(ListBoxFontSizeProperty);
             set => SetValue(ListBoxFontSizeProperty, value);
         }
 

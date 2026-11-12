@@ -24,12 +24,13 @@ public partial class PlaybackSettings : UserControl
         if (preset == null) return null;
         if (input == PauseInput) return preset.PausePlaybackHotkey;
         if (input == PreviousInput) return preset.PreviousTrackHotkey;
+        if (input == StopInput) return preset.StopAllHotkey ??= new();
         return preset.NextTrackHotkey;
     }
     private void Refresh()
     {
         IsEnabled = GlobalData.Inst.ActiveFunctionPreset != null;
-        foreach (var input in new[] { PreviousInput, PauseInput, NextInput })
+        foreach (var input in new[] { PreviousInput, PauseInput, NextInput, StopInput })
             input.Text = GetHotkey(input)?.ToString() ?? "None";
     }
     private void Hotkey_GotFocus(object sender, RoutedEventArgs e)
@@ -64,7 +65,7 @@ public partial class PlaybackSettings : UserControl
     }
     private void Hotkey_LostFocus(object sender, RoutedEventArgs e) => StopRecording();
     private void Controls_ExpandedChanged(object sender, RoutedPropertyChangedEventArgs<bool> e) =>
-        AnimatePanel(ControlHotkeyPanel, e.NewValue, 3 * 40.5);
+        AnimatePanel(ControlHotkeyPanel, e.NewValue, 4 * 40.5);
 
     private static void AnimatePanel(FrameworkElement panel, bool expanded, double height)
     {
