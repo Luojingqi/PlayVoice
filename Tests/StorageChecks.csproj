@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>warnings</Nullable></PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.3.0" />
+    <Compile Include="../Audio/AudioEditSettings.cs" Link="AudioEditSettings.cs" />
+    <Compile Include="../Audio/EditedSampleProvider.cs" Link="EditedSampleProvider.cs" />
+    <Compile Include="../Audio/WaveformPeaks.cs" Link="WaveformPeaks.cs" />
     <None Include="../Resources/Themes/ColorPalettes.json" Link="ColorPalettes.json" CopyToOutputDirectory="PreserveNewest" />
     <Compile Include="../Config.cs" Link="Config.cs" />
     <Compile Include="../Resources/Themes/AppearanceProfile.cs" Link="AppearanceProfile.cs" />

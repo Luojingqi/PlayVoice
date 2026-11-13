@@ -12,6 +12,7 @@ internal class Config
     public Dictionary<string, System.Text.Json.JsonElement> AdditionalSettings { get; set; }
     public long AudioImportMaxBytes { get; set; } = 512L * 1024 * 1024;
     public int AudioPresetMaxFiles { get; set; } = 5000;
+    public int WaveformPeakBins { get; set; } = 1024;
     /// <summary>创意工坊编辑时等待原资源下载的最长时间。</summary>
     public int WorkshopDownloadTimeoutSeconds { get; set; } = 600;
 

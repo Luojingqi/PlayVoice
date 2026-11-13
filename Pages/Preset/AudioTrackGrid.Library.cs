@@ -17,7 +17,7 @@ public partial class AudioTrackGrid
 
     private void InitializeLibrary()
     {
-        Library = new AudioLibraryViewModel(ShortcutList, ShowLibraryError, RefreshLibraryStatus);
+        Library = new AudioLibraryViewModel(ShortcutList, ShowLibraryError, RefreshLibraryStatus, StopPreview);
         AudioView = CollectionViewSource.GetDefaultView(ShortcutList);
         AudioView.Filter = item => item is AudioTrackItemViewModel track
             && AudioLibraryFilter.Matches(track.Data.Config, LibrarySearch.Text,
@@ -27,6 +27,7 @@ public partial class AudioTrackGrid
 
     private void SubscribeLibrary()
     {
+        Library.PropertyChanged += EditSelectionChanged;
         GlobalData.Inst.Playback.Changed += RefreshLibraryStatus;
         GlobalData.Inst.StartupRequirementsChanged += DeviceStateChanged;
         LanguageManager.Inst.CultureChanged += LibraryLanguageChanged;
@@ -35,13 +36,19 @@ public partial class AudioTrackGrid
 
     private void UnsubscribeLibrary()
     {
+        Library.PropertyChanged -= EditSelectionChanged;
+        waveformCancellation?.Cancel();
         GlobalData.Inst.Playback.Changed -= RefreshLibraryStatus;
         GlobalData.Inst.StartupRequirementsChanged -= DeviceStateChanged;
         LanguageManager.Inst.CultureChanged -= LibraryLanguageChanged;
         StopPreview();
     }
 
-    private void LibraryLanguageChanged(System.Globalization.CultureInfo culture, LanguageManager.LanguageInfo language) => RefreshLibraryStatus();
+    private void LibraryLanguageChanged(System.Globalization.CultureInfo culture, LanguageManager.LanguageInfo language)
+    {
+        RefreshLibraryStatus();
+        WaveformStatus.Text = string.IsNullOrEmpty(waveformStatusKey) ? "" : LanguageManager.Inst.GetString(waveformStatusKey);
+    }
     private void DeviceStateChanged() { StopPreview(); RefreshLibraryStatus(); }
 
     private void LibraryFilterChanged(object sender, RoutedEventArgs e)
@@ -79,7 +86,7 @@ public partial class AudioTrackGrid
     private void PreviewLibraryAudio(object sender, RoutedEventArgs e)
     {
         if (Library.Selected == null) return;
-        try { GlobalData.Inst.Playback.Preview(Library.Selected.Data); }
+        try { GlobalData.Inst.Playback.Preview(Library.Selected.Data, Library.PendingEdit()); }
         catch (Exception exception) { ShowLibraryError(exception); }
     }
 
@@ -96,5 +103,45 @@ public partial class AudioTrackGrid
         Diagnostics.AppLog.Error(exception, "音效库操作失败。", "AudioLibrary");
         MainWindow.Inst.AddNotification(() => LanguageManager.Inst.GetString("通知"),
             () => LanguageManager.Inst.GetString("操作失败"), LabelStatus.Error, 4);
+    }
+
+    private CancellationTokenSource waveformCancellation;
+    private string waveformStatusKey;
+    private async void EditSelectionChanged(object sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(Library.Selected)) await LoadWaveformAsync();
+    }
+    private async Task LoadWaveformAsync()
+    {
+        waveformCancellation?.Cancel();
+        Waveform.Peaks = null;
+        waveformStatusKey = null;
+        WaveformStatus.Text = "";
+        var selected = Library.Selected;
+        if (selected == null) return;
+        using var cancellation = new CancellationTokenSource();
+        waveformCancellation = cancellation;
+        waveformStatusKey = "加载波形";
+        WaveformStatus.Text = LanguageManager.Inst.GetString(waveformStatusKey);
+        try
+        {
+            string path = selected.Data.AudioTrackArray[0].FileName;
+            int bins = Math.Clamp(GlobalData.Inst.Config.WaveformPeakBins, 16, 4096);
+            var token = cancellation.Token;
+            var peaks = await Task.Run(() => WaveformPeaks.Read(path, bins, token), token);
+            if (token.IsCancellationRequested || !IsLoaded || Library.Selected != selected) return;
+            Waveform.Peaks = peaks;
+            waveformStatusKey = null;
+            WaveformStatus.Text = "";
+        }
+        catch (OperationCanceledException) { }
+        catch (Exception exception)
+        {
+            if (cancellation.IsCancellationRequested || Library.Selected != selected || !IsLoaded) return;
+            Diagnostics.AppLog.Error(exception, "波形加载失败。", "AudioLibrary.Waveform");
+            waveformStatusKey = "波形加载失败";
+            WaveformStatus.Text = LanguageManager.Inst.GetString(waveformStatusKey);
+        }
+        finally { if (ReferenceEquals(waveformCancellation, cancellation)) waveformCancellation = null; }
     }
 }

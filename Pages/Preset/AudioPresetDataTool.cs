@@ -71,6 +71,7 @@ public static class AudioPresetDataTool
                     {
                         audioData.AudioTrackArray[0] = new AudioFileReader(audioPath);
                         audioData.AudioTrackArray[1] = new AudioFileReader(audioPath);
+                        audioDataConfig.Edit?.Validate(audioData.AudioTrackArray[0].TotalTime.TotalSeconds, audioData.AudioTrackArray[0].WaveFormat.SampleRate);
                         cancellationToken.ThrowIfCancellationRequested();
                         presetData.AudioList.Add(audioData);
                     }

@@ -13,6 +13,7 @@ public class AudioDataConfig
     public bool IsFavorite { get; set; }
     public List<string> Tags { get; set; } = new();
     public DateTimeOffset? LastPlayedAt { get; set; }
+    public AudioEditSettings Edit { get; set; }
     [JsonIgnore]
     public string Name => FileName + FileFormat;
 }

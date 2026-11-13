@@ -1,4 +1,4 @@
-﻿using Microsoft.Win32;
+using Microsoft.Win32;
 using PlayVoice.Audio;
 using System.Windows.Input;
 using PlayVoice.Pages.Loading;
@@ -549,12 +549,13 @@ namespace PlayVoice.Pages.Preset
         private NativeFileDrop nativeFileDrop;
         private bool syncingPlaybackMode;
 
-        private void AudioTrackGrid_Loaded(object sender, RoutedEventArgs e)
+        private async void AudioTrackGrid_Loaded(object sender, RoutedEventArgs e)
         {
             SubscribeLibrary();
             GlobalData.Inst.Playback.Changed += RefreshPlaybackMode;
             RefreshPlaybackMode();
             nativeFileDrop = new NativeFileDrop(AudioListBox, ImportDroppedFiles);
+            await LoadWaveformAsync();
         }
 
         private void RefreshPlaybackMode()

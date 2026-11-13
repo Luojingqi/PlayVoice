@@ -11,25 +11,80 @@ public partial class AudioLibraryViewModel : ObservableObject
     private readonly ObservableCollection<AudioTrackItemViewModel> tracks;
     private readonly Action<Exception> reportError;
     private readonly Action refresh;
+    private readonly Action stopPreview;
     [ObservableProperty] private AudioTrackItemViewModel selected;
     [ObservableProperty] private bool isFavorite;
     [ObservableProperty] private string tagsText = "";
+    [ObservableProperty] private double selectionStart;
+    [ObservableProperty] private double selectionEnd;
+    [ObservableProperty] private double fadeIn;
+    [ObservableProperty] private double fadeOut;
+    [ObservableProperty] private string editError = "";
+    public double OriginalDuration => Selected?.Data.AudioTrackArray[0]?.TotalTime.TotalSeconds ?? 0;
     public bool HasSelection => Selected != null;
     public string SelectedName => Selected?.Header ?? "";
 
-    public AudioLibraryViewModel(ObservableCollection<AudioTrackItemViewModel> tracks, Action<Exception> reportError, Action refresh)
+    public AudioLibraryViewModel(ObservableCollection<AudioTrackItemViewModel> tracks, Action<Exception> reportError, Action refresh, Action stopPreview)
     {
         this.tracks = tracks;
         this.reportError = reportError;
         this.refresh = refresh;
+        this.stopPreview = stopPreview;
     }
 
     partial void OnSelectedChanged(AudioTrackItemViewModel value)
     {
         IsFavorite = value?.Data.Config.IsFavorite ?? false;
         TagsText = string.Join(", ", value?.Data.Config.Tags ?? new());
+        LoadEditValues();
         OnPropertyChanged(nameof(HasSelection));
         OnPropertyChanged(nameof(SelectedName));
+        OnPropertyChanged(nameof(OriginalDuration));
+    }
+
+    private void LoadEditValues()
+    {
+        EditError = "";
+        var edit = Selected?.Data.Config.Edit;
+        SelectionStart = edit?.StartSeconds ?? 0;
+        SelectionEnd = edit?.EndSeconds ?? OriginalDuration;
+        FadeIn = edit?.FadeInSeconds ?? 0;
+        FadeOut = edit?.FadeOutSeconds ?? 0;
+    }
+
+    public AudioEditSettings PendingEdit()
+    {
+        var edit = new AudioEditSettings { StartSeconds = SelectionStart, EndSeconds = SelectionEnd, FadeInSeconds = FadeIn, FadeOutSeconds = FadeOut };
+        edit.Validate(OriginalDuration, Selected.Data.AudioTrackArray[0].WaveFormat.SampleRate);
+        return edit;
+    }
+
+    [RelayCommand]
+    private void SaveAudioEdit() => PersistEdit(reset: false);
+    [RelayCommand]
+    private void ResetAudioEdit() => PersistEdit(reset: true);
+    private void PersistEdit(bool reset)
+    {
+        if (Selected == null) return;
+        var selected = Selected;
+        var previous = selected.Data.Config.Edit;
+        try
+        {
+            var next = reset ? null : PendingEdit();
+            stopPreview();
+            selected.Data.Stop();
+            selected.Data.Config.Edit = next;
+            if (!selected.Data.AudioPreset.Save()) throw new IOException(Resources.Language.LanguageManager.Inst.GetString("保存失败"));
+            selected.Duration = selected.Data.PlaybackDuration;
+            LoadEditValues();
+            refresh();
+        }
+        catch (Exception exception)
+        {
+            selected.Data.Config.Edit = previous;
+            EditError = Resources.Language.LanguageManager.Inst.GetString(exception is ArgumentException ? "选区或淡化时长无效" : "保存失败");
+            reportError(exception);
+        }
     }
 
     [RelayCommand]

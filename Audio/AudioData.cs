@@ -1,4 +1,4 @@
-﻿using NAudio.Wave;
+using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using PlayVoice.Diagnostics;
 using PlayVoice.Pages.Preset;
@@ -29,7 +29,7 @@ public class AudioData
             if (!IsPlaying && !IsPaused)
                 return 0;
 
-            double duration = AudioTrackArray[0]?.TotalTime.TotalMilliseconds ?? 0;
+            double duration = PlaybackDuration.TotalMilliseconds;
             return duration > 0
                 ? Math.Clamp(playbackClock.Elapsed.TotalMilliseconds / duration, 0, 1)
                 : 0;
@@ -127,11 +127,11 @@ public class AudioData
                 PlayMode = 0;
                 PlayMode |= PlayModeEnum.VL播放;
                 VolumeProvider_ToVM = new VolumeSampleProvider(
-                  (vmResampler = new MediaFoundationResampler(AudioTrackArray[0], audioProxy.PhysicalMicrophoneWaveFormat) { ResamplerQuality = 60 }).ToSampleProvider());
+                  (vmResampler = CreateResampler(0, audioProxy.PhysicalMicrophoneWaveFormat)).ToSampleProvider());
                 if (GlobalData.Inst.GetGoEar_Audio())
                 {
                     VolumeProvider_ToPL = new VolumeSampleProvider(
-                      (plResampler = new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }).ToSampleProvider());
+                      (plResampler = CreateResampler(1, audioProxy.PhysicalLoudspeakerWaveFormat)).ToSampleProvider());
                     PlayMode |= PlayModeEnum.PL播放;
                 }
                 canPlay = true;
@@ -142,7 +142,7 @@ public class AudioData
                 PlayMode |= PlayModeEnum.PL播放;
                 VolumeProvider_ToVM = null;
                 VolumeProvider_ToPL = new VolumeSampleProvider(
-                  (plResampler = new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }).ToSampleProvider());
+                  (plResampler = CreateResampler(1, audioProxy.PhysicalLoudspeakerWaveFormat)).ToSampleProvider());
                 canPlay = true;
                 if (GlobalData.Inst.Config.MicrophoneLufs == null)
                 {
@@ -190,7 +190,7 @@ public class AudioData
                 PlayMode |= PlayModeEnum.PL播放;
                 VolumeProvider_ToVM = null;
                 VolumeProvider_ToPL = new VolumeSampleProvider(
-                  (plResampler = new MediaFoundationResampler(AudioTrackArray[1], audioProxy.PhysicalLoudspeakerWaveFormat) { ResamplerQuality = 60 }).ToSampleProvider());
+                  (plResampler = CreateResampler(1, audioProxy.PhysicalLoudspeakerWaveFormat)).ToSampleProvider());
                 IsPaused = false;
                 PlayTimer.Interval = RemainingTime;
                 SetVolume(0);
@@ -210,8 +210,23 @@ public class AudioData
         }
     }
 
+    private AudioEditSettings EffectiveEdit => AudioPreset == null ? null : Config.Edit;
+    public TimeSpan PlaybackDuration
+    {
+        get
+        {
+            double original = AudioTrackArray[0]?.TotalTime.TotalSeconds ?? 0;
+            if (original <= 0) return TimeSpan.Zero;
+            EffectiveEdit?.Validate(original);
+            return TimeSpan.FromSeconds(EffectiveEdit?.Duration(original) ?? original);
+        }
+    }
+    private MediaFoundationResampler CreateResampler(int index, WaveFormat format) => new(
+        new EditedSampleProvider(AudioTrackArray[index], EffectiveEdit, playbackClock.Elapsed.TotalSeconds).ToWaveProvider(), format)
+        { ResamplerQuality = 60 };
+
     private TimeSpan RemainingTime => TimeSpan.FromMilliseconds(Math.Max(1,
-        AudioTrackArray[0].TotalTime.TotalMilliseconds - playbackClock.Elapsed.TotalMilliseconds));
+        PlaybackDuration.TotalMilliseconds - playbackClock.Elapsed.TotalMilliseconds));
 
     private bool TryResume()
     {
@@ -241,7 +256,7 @@ public class AudioData
         DisposeProviders();
         foreach (var track in AudioTrackArray)
             track.CurrentTime = TimeSpan.FromMilliseconds(Math.Min(
-                playbackClock.Elapsed.TotalMilliseconds, track.TotalTime.TotalMilliseconds));
+                (EffectiveEdit?.StartSeconds ?? 0) * 1000 + playbackClock.Elapsed.TotalMilliseconds, track.TotalTime.TotalMilliseconds));
         return false;
     }
 

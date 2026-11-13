@@ -5,6 +5,7 @@ using PlayVoice.Audio;
 using PlayVoice.Hotkey;
 
 static void Check(bool value, string message) { if (!value) throw new Exception(message); }
+AudioEditingChecks.Run();
 var customTheme = PlayVoice.Resources.Themes.AppearanceProfile.Parse("""{"Name":"Test","FontSize":16,"Accent":"#5577CC","Background":"#101010","Foreground":"#EEEEEE"}""");
 Check(customTheme.Copy().FontSize == 16, "Theme roundtrip");
 foreach (var invalid in new[] { "{\"Version\":99}", "{\"FontSize\":100}", "{\"Accent\":\"red\"}", "{\"FontFamily\":\"https://example.com/font\"}", "{\"Background\":\"#000000\",\"Foreground\":\"#000000\"}" })

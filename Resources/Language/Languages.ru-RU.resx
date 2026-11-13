@@ -328,4 +328,16 @@
 <data name="导出主题" xml:space="preserve"><value>Экспорт темы</value></data>
 <data name="重置外观" xml:space="preserve"><value>Сбросить оформление</value></data>
 <data name="主题文件无效" xml:space="preserve"><value>Некорректная тема. Проверьте имя, размер шрифта (11–18) и цвета (#RRGGBB).</value></data>
+<data name="波形选区" xml:space="preserve"><value>Выделение волны</value></data>
+<data name="波形操作提示" xml:space="preserve"><value>Выделите диапазон мышью. Стрелки меняют начало; Shift+стрелки — конец.</value></data>
+<data name="开始秒" xml:space="preserve"><value>Начало (с)</value></data>
+<data name="结束秒" xml:space="preserve"><value>Конец (с)</value></data>
+<data name="淡入秒" xml:space="preserve"><value>Нарастание (с)</value></data>
+<data name="淡出秒" xml:space="preserve"><value>Затухание (с)</value></data>
+<data name="加载波形" xml:space="preserve"><value>Загрузка волны…</value></data>
+<data name="波形加载失败" xml:space="preserve"><value>Не удалось загрузить волну</value></data>
+<data name="选区或淡化时长无效" xml:space="preserve"><value>Проверьте диапазон и длительность эффектов: они не должны быть длиннее выделения.</value></data>
+<data name="保留原文件" xml:space="preserve"><value>Сохраняются только параметры. Исходный аудиофайл не изменяется.</value></data>
+<data name="应用剪辑" xml:space="preserve"><value>Применить монтаж</value></data>
+<data name="恢复原始音频" xml:space="preserve"><value>Восстановить исходное аудио</value></data>
 </root>

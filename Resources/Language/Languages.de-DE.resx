@@ -328,4 +328,16 @@
 <data name="导出主题" xml:space="preserve"><value>Design exportieren</value></data>
 <data name="重置外观" xml:space="preserve"><value>Darstellung zurücksetzen</value></data>
 <data name="主题文件无效" xml:space="preserve"><value>Ungültiges Design. Name, Schriftgröße (11–18) und Farben (#RRGGBB) prüfen.</value></data>
+<data name="波形选区" xml:space="preserve"><value>Wellenformauswahl</value></data>
+<data name="波形操作提示" xml:space="preserve"><value>Bereich oder Ränder ziehen. Pfeile: Anfang, Umschalt+Pfeile: Ende.</value></data>
+<data name="开始秒" xml:space="preserve"><value>Anfang (s)</value></data>
+<data name="结束秒" xml:space="preserve"><value>Ende (s)</value></data>
+<data name="淡入秒" xml:space="preserve"><value>Einblenden (s)</value></data>
+<data name="淡出秒" xml:space="preserve"><value>Ausblenden (s)</value></data>
+<data name="加载波形" xml:space="preserve"><value>Wellenform wird geladen…</value></data>
+<data name="波形加载失败" xml:space="preserve"><value>Wellenform konnte nicht geladen werden</value></data>
+<data name="选区或淡化时长无效" xml:space="preserve"><value>Auswahl und Überblendzeiten prüfen. Jede Überblendung muss in den Bereich passen.</value></data>
+<data name="保留原文件" xml:space="preserve"><value>Nur Bearbeitungsparameter werden gespeichert. Die Originaldatei bleibt unverändert.</value></data>
+<data name="应用剪辑" xml:space="preserve"><value>Audiobearbeitung anwenden</value></data>
+<data name="恢复原始音频" xml:space="preserve"><value>Originalaudio wiederherstellen</value></data>
 </root>
