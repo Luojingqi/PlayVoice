@@ -883,4 +883,10 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
 <data name="麦克风电平" xml:space="preserve"><value>麦克风</value></data>
 <data name="输出电平" xml:space="preserve"><value>输出</value></data>
 <data name="未选择音效" xml:space="preserve"><value>未选择音效</value></data>
+  <data name="窗口材质" xml:space="preserve"><value>窗口材质</value></data>
+  <data name="纯色" xml:space="preserve"><value>纯色</value></data>
+  <data name="亚克力" xml:space="preserve"><value>亚克力</value></data>
+  <data name="云母" xml:space="preserve"><value>云母</value></data>
+  <data name="材质不透明度" xml:space="preserve"><value>材质不透明度</value></data>
+  <data name="系统材质说明" xml:space="preserve"><value>亚克力和云母需要 Windows 11 22H2 或更高版本并开启系统透明效果；不可用时自动使用实色。正文不模糊。</value></data>
 </root>

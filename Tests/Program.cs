@@ -23,7 +23,15 @@ Check(PlayVoice.Resources.Language.LocalizationCatalog.Translate("删除") == "D
 Console.WriteLine("PASS: Lepo.i18n nine-language loading, runtime culture selection, bootstrap isolation and missing-key fallback");
 AudioEditingChecks.Run();
 var customTheme = PlayVoice.Resources.Themes.AppearanceProfile.Parse("""{"Name":"Test","FontSize":16,"Accent":"#5577CC","Background":"#101010","Foreground":"#EEEEEE"}""");
-Check(customTheme.Copy().FontSize == 16, "Theme roundtrip");
+Check(customTheme.WindowMaterial == "Acrylic" && customTheme.MaterialOpacity == .84, "Old theme material defaults");
+customTheme.WindowMaterial = "Mica";
+customTheme.MaterialOpacity = .72;
+Check(customTheme.Copy().FontSize == 16 && customTheme.Copy().WindowMaterial == "Mica" && customTheme.Copy().MaterialOpacity == .72, "Theme roundtrip");
+foreach (var json in new[] { """{"WindowMaterial":"Gaussian"}""", """{"MaterialOpacity":0.1}""", """{"MaterialOpacity":1.1}""" })
+{
+    try { PlayVoice.Resources.Themes.AppearanceProfile.Parse(json); throw new Exception("Invalid material accepted"); }
+    catch (System.IO.InvalidDataException) { }
+}
 foreach (var invalid in new[] { "{\"Version\":99}", "{\"FontSize\":100}", "{\"Accent\":\"red\"}", "{\"FontFamily\":\"https://example.com/font\"}", "{\"Background\":\"#000000\",\"Foreground\":\"#000000\"}" })
 {
     try { PlayVoice.Resources.Themes.AppearanceProfile.Parse(invalid); throw new Exception("Invalid theme accepted"); }
@@ -79,7 +87,7 @@ try
     loaded.CustomThemes[customTheme.Name] = customTheme.Copy();
     Check(ConfigStorage.Save(loaded, path), "Custom appearance save");
     var restoredAppearance = ConfigStorage.Load(path);
-    Check(restoredAppearance.Appearance.FontSize == 16 && restoredAppearance.CustomThemes["Test"].Accent == "#5577CC", "Custom themes and font settings must survive restart");
+    Check(restoredAppearance.Appearance.WindowMaterial == "Mica" && restoredAppearance.Appearance.MaterialOpacity == .72 && restoredAppearance.Appearance.FontSize == 16 && restoredAppearance.CustomThemes["Test"].Accent == "#5577CC", "Custom themes and font settings must survive restart");
     File.WriteAllText(path, "{broken");
     Check(ConfigStorage.Load(path).MaxPlayingAudioCount == 8, "Backup recovery failed");
     Check(Directory.GetFiles(folder, "config.json.corrupt-*").Length == 1, "Damaged original must be retained");

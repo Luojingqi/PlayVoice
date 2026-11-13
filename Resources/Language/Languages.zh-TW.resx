@@ -350,4 +350,10 @@
 <data name="麦克风电平" xml:space="preserve"><value>麥克風</value></data>
 <data name="输出电平" xml:space="preserve"><value>輸出</value></data>
 <data name="未选择音效" xml:space="preserve"><value>尚未選取音效</value></data>
+  <data name="窗口材质" xml:space="preserve"><value>視窗材質</value></data>
+  <data name="纯色" xml:space="preserve"><value>純色</value></data>
+  <data name="亚克力" xml:space="preserve"><value>壓克力</value></data>
+  <data name="云母" xml:space="preserve"><value>雲母</value></data>
+  <data name="材质不透明度" xml:space="preserve"><value>材質不透明度</value></data>
+  <data name="系统材质说明" xml:space="preserve"><value>壓克力與雲母需要 Windows 11 22H2 或更新版本並開啟系統透明效果；無法使用時改用實色。文字不模糊。</value></data>
 </root>

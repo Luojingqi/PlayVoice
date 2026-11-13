@@ -886,4 +886,10 @@ O</value>
 <data name="麦克风电平" xml:space="preserve"><value>Mic</value></data>
 <data name="输出电平" xml:space="preserve"><value>Output</value></data>
 <data name="未选择音效" xml:space="preserve"><value>No sound selected</value></data>
+  <data name="窗口材质" xml:space="preserve"><value>Window material</value></data>
+  <data name="纯色" xml:space="preserve"><value>Solid</value></data>
+  <data name="亚克力" xml:space="preserve"><value>Acrylic</value></data>
+  <data name="云母" xml:space="preserve"><value>Mica</value></data>
+  <data name="材质不透明度" xml:space="preserve"><value>Material opacity</value></data>
+  <data name="系统材质说明" xml:space="preserve"><value>Acrylic and Mica require Windows 11 22H2 or later with system transparency enabled; otherwise solid surfaces are used. Text remains sharp.</value></data>
 </root>

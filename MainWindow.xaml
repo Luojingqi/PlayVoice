@@ -1,6 +1,7 @@
 <Window x:Class="PlayVoice.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:shell="clr-namespace:System.Windows.Shell;assembly=PresentationFramework"
         xmlns:Playback="clr-namespace:PlayVoice.Pages.Playback"
         xmlns:Sidebar="clr-namespace:PlayVoice.Pages.Sidebar"
         xmlns:L="clr-namespace:PlayVoice.Resources.Language"
@@ -8,32 +9,33 @@
         xmlns:LevelBar="clr-namespace:PlayVoice.Pages.LevelBar"
         Height="820" Width="1320" MinHeight="620" MinWidth="960" FontFamily="{DynamicResource UiFont}" FontSize="{DynamicResource UiFontSize13}" UseLayoutRounding="True"
         WindowStyle="None"
-        AllowsTransparency="True"
+        AllowsTransparency="False"
         ResizeMode="CanResizeWithGrip"
         Background="Transparent"
         MouseDown="Window_MouseDown"
         KeyDown="Window_KeyDown"
         Focusable="True"
         Title="Play Voice"
-        Icon="/Resources/Style/PlayVoice.png">
+        Icon="/Resources/Style/PlayVoice.png" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" RenderOptions.BitmapScalingMode="HighQuality">
 
+    <shell:WindowChrome.WindowChrome><shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="6" GlassFrameThickness="-1" CornerRadius="12" UseAeroCaptionButtons="False"/></shell:WindowChrome.WindowChrome>
     <Window.Resources><DataTemplate x:Key="SidebarItemTemplate"><StackPanel Orientation="Horizontal"><TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="17" Width="30"/><TextBlock Text="{Binding Title}" FontWeight="SemiBold"/></StackPanel></DataTemplate></Window.Resources>
-    <Border Background="{DynamicResource BgDark}" BorderBrush="{DynamicResource Border}" BorderThickness="1" CornerRadius="12">
+    <Border Background="{DynamicResource WindowSurface}" BorderBrush="{DynamicResource Border}" BorderThickness="1" CornerRadius="12">
       <Grid><Grid.RowDefinitions><RowDefinition Height="52"/><RowDefinition Height="*"/><RowDefinition Height="Auto" MinHeight="88"/></Grid.RowDefinitions>
-        <Border Grid.Row="0" Background="{DynamicResource BgMedium}" BorderBrush="{DynamicResource Border}" BorderThickness="0,0,0,1" CornerRadius="12,12,0,0">
+        <Border Grid.Row="0" Background="{DynamicResource MaterialSurface}" BorderBrush="{DynamicResource Border}" BorderThickness="0,0,0,1" CornerRadius="12,12,0,0">
           <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="132"/></Grid.ColumnDefinitions>
             <Border Background="Transparent" MouseLeftButtonDown="TitleBar_OnMouseLeftButtonDown"><StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="22,0"><Border Background="{DynamicResource AccentColor}" Width="26" Height="26" CornerRadius="8"><TextBlock Text="&#xE767;" FontFamily="Segoe MDL2 Assets" Foreground="{DynamicResource AccentForeground}" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><TextBlock Text="PlayVoice" Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold" FontSize="{DynamicResource UiFontSize16}" Margin="10,0" VerticalAlignment="Center"/></StackPanel></Border>
             <UniformGrid Grid.Column="1" Columns="3"><Button x:Name="MinimizeButton" Content="─" Click="MinimizeButton_OnClick" Style="{StaticResource ChromeButton}"/><Button x:Name="MaximizeButton" Content="☐" Click="MaximizeButton_OnClick" Style="{StaticResource ChromeButton}"/><Button x:Name="CloseButton" Content="╳" Click="CloseButton_OnClick" Style="{StaticResource ChromeButton}"/></UniformGrid>
           </Grid>
         </Border>
         <Grid Grid.Row="1"><Grid.ColumnDefinitions><ColumnDefinition Width="206"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-          <Border Background="{DynamicResource BgMedium}" BorderBrush="{DynamicResource Border}" BorderThickness="0,0,1,0"><DockPanel Margin="12,20,12,16">
+          <Border Background="{DynamicResource MaterialSurface}" BorderBrush="{DynamicResource Border}" BorderThickness="0,0,1,0"><DockPanel Margin="12,20,12,16">
             <Border DockPanel.Dock="Bottom" x:Name="StartupChecklistBorder" Background="{DynamicResource AccentSurfaceSubtle}" CornerRadius="10" Padding="12" Visibility="Collapsed"><Border.RenderTransform><TranslateTransform X="24"/></Border.RenderTransform><Expander Header="{L:Lan 启动准备}" Foreground="{DynamicResource TextPrimary}"><ScrollViewer MaxHeight="240" VerticalScrollBarVisibility="Auto"><StackPanel x:Name="StartupRequirementsPanel" Margin="0,10,0,0"/></ScrollViewer></Expander></Border>
             <Sidebar:SidebarControl x:Name="Sidebar" VerticalAlignment="Top" ItemsSource="{Binding MenuItems}" SelectedItem="{Binding SelectedMenu, Mode=TwoWay}" ItemTemplate="{StaticResource SidebarItemTemplate}"/>
           </DockPanel></Border>
-          <Grid Grid.Column="1" Margin="24,20,24,16"><Frame x:Name="ContentFrame" NavigationUIVisibility="Hidden"/><NotificationPanel:NotificationPanel x:Name="NotificationPanel" Panel.ZIndex="100"/></Grid>
+          <Grid Grid.Column="1" Background="{DynamicResource BgDark}" Margin="24,20,24,16"><Frame x:Name="ContentFrame" NavigationUIVisibility="Hidden"/><NotificationPanel:NotificationPanel x:Name="NotificationPanel" Panel.ZIndex="100"/></Grid>
         </Grid>
-        <Border Grid.Row="2" BorderBrush="{DynamicResource Border}" BorderThickness="0,1,0,0" Background="{DynamicResource BgLight}" CornerRadius="0,0,12,12" Padding="22,12">
+        <Border Grid.Row="2" BorderBrush="{DynamicResource Border}" BorderThickness="0,1,0,0" Background="{DynamicResource MaterialSurface}" CornerRadius="0,0,12,12" Padding="22,12">
          <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
           <StackPanel VerticalAlignment="Center" Margin="0,0,24,0">
            <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions><TextBlock x:Name="ShellPlaybackState" Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" ToolTip="{Binding Text, RelativeSource={RelativeSource Self}}"/><TextBlock x:Name="ShellPlaybackStatus" Grid.Column="1" Foreground="{DynamicResource TextSecondary}" FontSize="{DynamicResource UiFontSize11}" Margin="12,0,0,0"/></Grid>

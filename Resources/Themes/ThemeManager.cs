@@ -77,6 +77,7 @@ public static class ThemeManager
         ApplyPalette();
         ApplyTypographyAndColors();
         GlobalData.Inst.Config.Save();
+        ThemeChanged?.Invoke(NowTheme);
     }
     private static void ApplyPalette()
     {

@@ -350,4 +350,10 @@
 <data name="麦克风电平" xml:space="preserve"><value>Микрофон</value></data>
 <data name="输出电平" xml:space="preserve"><value>Выход</value></data>
 <data name="未选择音效" xml:space="preserve"><value>Звук не выбран</value></data>
+  <data name="窗口材质" xml:space="preserve"><value>Материал окна</value></data>
+  <data name="纯色" xml:space="preserve"><value>Сплошной</value></data>
+  <data name="亚克力" xml:space="preserve"><value>Акрил</value></data>
+  <data name="云母" xml:space="preserve"><value>Слюда</value></data>
+  <data name="材质不透明度" xml:space="preserve"><value>Непрозрачность материала</value></data>
+  <data name="系统材质说明" xml:space="preserve"><value>Акрил и слюда требуют Windows 11 22H2 или новее с включённой прозрачностью. Иначе используются непрозрачные поверхности. Текст остаётся чётким.</value></data>
 </root>

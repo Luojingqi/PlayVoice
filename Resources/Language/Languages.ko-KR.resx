@@ -350,4 +350,10 @@
 <data name="麦克风电平" xml:space="preserve"><value>마이크</value></data>
 <data name="输出电平" xml:space="preserve"><value>출력</value></data>
 <data name="未选择音效" xml:space="preserve"><value>선택된 소리 없음</value></data>
+  <data name="窗口材质" xml:space="preserve"><value>창 재질</value></data>
+  <data name="纯色" xml:space="preserve"><value>단색</value></data>
+  <data name="亚克力" xml:space="preserve"><value>아크릴</value></data>
+  <data name="云母" xml:space="preserve"><value>마이카</value></data>
+  <data name="材质不透明度" xml:space="preserve"><value>재질 불투명도</value></data>
+  <data name="系统材质说明" xml:space="preserve"><value>아크릴과 마이카는 Windows 11 22H2 이상과 시스템 투명 효과가 필요합니다. 사용할 수 없으면 단색으로 표시합니다. 텍스트는 흐리게 처리하지 않습니다.</value></data>
 </root>

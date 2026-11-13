@@ -17,6 +17,11 @@
  <WrapPanel x:Name="PaletteChoices" Margin="0,0,0,16"/>
  <Border Background="{DynamicResource BgMedium}" BorderBrush="{DynamicResource Border}" BorderThickness="1" CornerRadius="12" Padding="20"><StackPanel>
   <TextBlock Text="{L:Lan 主题}" Foreground="{DynamicResource TextSecondary}" Margin="0,0,0,8"/><ComboBox x:Name="AppearanceChoices" Width="240" HorizontalAlignment="Left" MinHeight="38" DisplayMemberPath="Name"/>
+  <TextBlock Text="{L:Lan 窗口材质}" Foreground="{DynamicResource TextSecondary}" Margin="0,20,0,8"/>
+  <ComboBox x:Name="MaterialChoices" Width="240" HorizontalAlignment="Left" MinHeight="38" DisplayMemberPath="Name" SelectedValuePath="Key" AutomationProperties.Name="{L:Lan 窗口材质}"/>
+  <TextBlock Text="{L:Lan 材质不透明度}" Foreground="{DynamicResource TextSecondary}" Margin="0,20,0,8"/>
+  <StackPanel Orientation="Horizontal"><Slider x:Name="MaterialOpacityInput" Minimum="0.6" Maximum="1" TickFrequency="0.02" IsSnapToTickEnabled="True" Width="240" AutomationProperties.Name="{L:Lan 材质不透明度}"/><TextBlock Text="{Binding Value, ElementName=MaterialOpacityInput, StringFormat={}{0:P0}}" Foreground="{DynamicResource TextPrimary}" Margin="16,0,0,0"/></StackPanel>
+  <TextBlock Text="{L:Lan 系统材质说明}" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap" Margin="0,8,0,0"/>
   <TextBlock Text="{L:Lan 自定义主题}" Foreground="{DynamicResource TextSecondary}" Margin="0,20,0,8"/><ComboBox x:Name="CustomThemeChoices" Width="300" HorizontalAlignment="Left" MinHeight="38"/>
   <TextBlock Text="{L:Lan 主题名称}" Foreground="{DynamicResource TextSecondary}" Margin="0,20,0,8"/><TextBox x:Name="ThemeNameInput" MaxLength="80" Width="300" HorizontalAlignment="Left" AutomationProperties.Name="{L:Lan 主题名称}"/>
   <TextBlock Text="{L:Lan 字体}" Foreground="{DynamicResource TextSecondary}" Margin="0,20,0,8"/><ComboBox x:Name="FontChoices" Width="300" HorizontalAlignment="Left" MinHeight="38"/>

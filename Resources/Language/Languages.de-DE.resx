@@ -350,4 +350,10 @@
 <data name="麦克风电平" xml:space="preserve"><value>Mikrofon</value></data>
 <data name="输出电平" xml:space="preserve"><value>Ausgang</value></data>
 <data name="未选择音效" xml:space="preserve"><value>Kein Sound ausgewählt</value></data>
+  <data name="窗口材质" xml:space="preserve"><value>Fenstermaterial</value></data>
+  <data name="纯色" xml:space="preserve"><value>Einfarbig</value></data>
+  <data name="亚克力" xml:space="preserve"><value>Acryl</value></data>
+  <data name="云母" xml:space="preserve"><value>Mica</value></data>
+  <data name="材质不透明度" xml:space="preserve"><value>Materialdeckkraft</value></data>
+  <data name="系统材质说明" xml:space="preserve"><value>Acryl und Mica benötigen Windows 11 22H2 oder neuer mit aktivierter Transparenz. Andernfalls werden deckende Flächen verwendet. Text bleibt scharf.</value></data>
 </root>

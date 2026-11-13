@@ -12,6 +12,8 @@ public sealed class AppearanceProfile
     public string Mode { get; set; } = "System";
     public string FontFamily { get; set; } = "Segoe UI";
     public double FontSize { get; set; } = 13;
+    public string WindowMaterial { get; set; } = "Acrylic";
+    public double MaterialOpacity { get; set; } = .84;
     public string Accent { get; set; }
     public string Background { get; set; }
     public string Foreground { get; set; }
@@ -20,6 +22,8 @@ public sealed class AppearanceProfile
     {
         if (Version != 1 || string.IsNullOrWhiteSpace(Name) || Name.Length > 80
             || !double.IsFinite(FontSize) || FontSize < 11 || FontSize > 18
+            || !double.IsFinite(MaterialOpacity) || MaterialOpacity < .6 || MaterialOpacity > 1
+            || WindowMaterial is not ("Solid" or "Acrylic" or "Mica")
             || FontFamily == null || !Regex.IsMatch(FontFamily, @"^[\p{L}\p{N} ._-]{1,100}$")
             || Mode is not ("Light" or "Dark" or "System")
             || Palette is not ("Forest" or "Ocean" or "Amber" or "Rose"))

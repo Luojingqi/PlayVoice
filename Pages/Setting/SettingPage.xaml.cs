@@ -36,7 +36,7 @@ public partial class SettingPage : Page
             content.Children.Add(new TextBlock { Text = LanguageManager.Inst.GetString(palette.Value.Name) });
             var button = new Button { Content = content, Margin = new Thickness(0,0,12,12), Padding = new Thickness(16), BorderThickness = new Thickness(1) };
             button.SetResourceReference(Control.BorderBrushProperty, GlobalData.Inst.Config.ColorPalette == palette.Key ? "AccentColor" : "Border");
-            button.Click += (_, _) => { ThemeManager.SwitchPalette(palette.Key); RefreshChoices(); };
+            button.Click += (_, _) => ThemeManager.SwitchPalette(palette.Key);
             PaletteChoices.Children.Add(button);
         }
     }

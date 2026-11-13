@@ -220,11 +220,7 @@
                            Foreground="{DynamicResource AccentColor}"/>
             </Border>
             <Canvas Grid.Row="2" x:Name="DragOverlayCanvas" IsHitTestVisible="False">
-                <Rectangle x:Name="DragGhost" Opacity="0.45" Visibility="Collapsed">
-                    <Rectangle.Effect>
-                        <BlurEffect Radius="3"/>
-                    </Rectangle.Effect>
-                </Rectangle>
+                <Rectangle x:Name="DragGhost" Opacity="0.65" Visibility="Collapsed"/>
 
                 <Border x:Name="InsertionLine" Height="3" Background="{DynamicResource AccentColor}" CornerRadius="1.5" Visibility="Collapsed"/>
             </Canvas>

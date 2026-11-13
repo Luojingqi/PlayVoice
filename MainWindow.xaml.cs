@@ -54,6 +54,7 @@ namespace PlayVoice
             new GlobalData();
 
             InitializeComponent();
+            InitializeWindowMaterial();
             shellStatusTimer = new System.Windows.Threading.DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(Math.Clamp(GlobalData.Inst.Config.PlaybackStatusRefreshMilliseconds, 100, 1000))

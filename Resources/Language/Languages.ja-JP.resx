@@ -350,4 +350,10 @@
 <data name="麦克风电平" xml:space="preserve"><value>マイク</value></data>
 <data name="输出电平" xml:space="preserve"><value>出力</value></data>
 <data name="未选择音效" xml:space="preserve"><value>サウンド未選択</value></data>
+  <data name="窗口材质" xml:space="preserve"><value>ウィンドウの素材</value></data>
+  <data name="纯色" xml:space="preserve"><value>単色</value></data>
+  <data name="亚克力" xml:space="preserve"><value>アクリル</value></data>
+  <data name="云母" xml:space="preserve"><value>マイカ</value></data>
+  <data name="材质不透明度" xml:space="preserve"><value>素材の不透明度</value></data>
+  <data name="系统材质说明" xml:space="preserve"><value>アクリルとマイカには Windows 11 22H2 以降とシステムの透明効果が必要です。利用できない場合は単色になります。文字はぼかしません。</value></data>
 </root>

@@ -10,7 +10,7 @@
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
         Background="Transparent"
-        Title="{L:Lan 教程提示}">
+        Title="{L:Lan 教程提示}" UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" RenderOptions.BitmapScalingMode="HighQuality">
 
     <Window.Resources>
         <Style x:Key="ConfirmButtonStyle" TargetType="Button">
