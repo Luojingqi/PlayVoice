@@ -879,4 +879,8 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
 <data name="删除所选预设确认" xml:space="preserve"><value>确定删除以下预设及其数据？此操作不可撤销。
 
 {0}</value></data>
+<data name="音效电平" xml:space="preserve"><value>音效</value></data>
+<data name="麦克风电平" xml:space="preserve"><value>麦克风</value></data>
+<data name="输出电平" xml:space="preserve"><value>输出</value></data>
+<data name="未选择音效" xml:space="preserve"><value>未选择音效</value></data>
 </root>

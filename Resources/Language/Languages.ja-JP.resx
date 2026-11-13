@@ -346,4 +346,8 @@
 <data name="删除所选预设确认" xml:space="preserve"><value>以下のプリセットとデータを削除しますか？この操作は元に戻せません。
 
 {0}</value></data>
+<data name="音效电平" xml:space="preserve"><value>サウンド</value></data>
+<data name="麦克风电平" xml:space="preserve"><value>マイク</value></data>
+<data name="输出电平" xml:space="preserve"><value>出力</value></data>
+<data name="未选择音效" xml:space="preserve"><value>サウンド未選択</value></data>
 </root>

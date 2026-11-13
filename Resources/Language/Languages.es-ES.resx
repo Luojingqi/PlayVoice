@@ -346,4 +346,8 @@
 <data name="删除所选预设确认" xml:space="preserve"><value>¿Eliminar estos preajustes y sus datos? Esta acción es irreversible.
 
 {0}</value></data>
+<data name="音效电平" xml:space="preserve"><value>Sonidos</value></data>
+<data name="麦克风电平" xml:space="preserve"><value>Micrófono</value></data>
+<data name="输出电平" xml:space="preserve"><value>Salida</value></data>
+<data name="未选择音效" xml:space="preserve"><value>Ningún sonido seleccionado</value></data>
 </root>

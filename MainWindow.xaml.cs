@@ -23,6 +23,7 @@ namespace PlayVoice
     {
         public static MainWindow Inst { get; private set; }
         private readonly MainViewModel viewModel;
+        private readonly System.Windows.Threading.DispatcherTimer shellStatusTimer;
         private readonly System.Windows.Forms.NotifyIcon trayIcon;
         private readonly System.Windows.Forms.ContextMenuStrip trayMenu;
         private readonly System.Windows.Forms.ToolStripMenuItem showTrayMenuItem;
@@ -53,6 +54,12 @@ namespace PlayVoice
             new GlobalData();
 
             InitializeComponent();
+            shellStatusTimer = new System.Windows.Threading.DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(Math.Clamp(GlobalData.Inst.Config.PlaybackStatusRefreshMilliseconds, 100, 1000))
+            };
+            shellStatusTimer.Tick += (_, _) => RefreshShellPlayback();
+            Closed += (_, _) => shellStatusTimer.Stop();
             Audio.AudioProxy.LevelChanged += UpdateAudioLevels;
             GlobalData.Inst.Playback.Changed += RefreshShellPlayback;
             GlobalData.Inst.StartupRequirementsChanged += RefreshShellPlayback;
@@ -110,14 +117,28 @@ namespace PlayVoice
         }
 
         private void StopAll_OnClick(object sender, RoutedEventArgs e) => GlobalData.Inst.Playback.StopAll();
+        private void ShellDevice_Click(object sender, RoutedEventArgs e)
+        {
+            var settings = viewModel.MenuItems.First(item => item.PageUri == "Pages/Setting/SettingPage.xaml");
+            if (ReferenceEquals(viewModel.SelectedMenu, settings)) NavigateToPage(settings);
+            else viewModel.SelectedMenu = settings;
+        }
         private void ShellLanguageChanged(System.Globalization.CultureInfo culture, LanguageManager.LanguageInfo language) => RefreshShellPlayback();
         private void RefreshShellPlayback()
         {
             if (!Dispatcher.CheckAccess()) { Dispatcher.BeginInvoke(RefreshShellPlayback); return; }
             var global = GlobalData.Inst;
-            ShellPlaybackState.Text = global.Playback.Current?.Config.Name ?? LanguageManager.Inst.GetString("已停止");
+            var language = LanguageManager.Inst;
+            var current = global.Playback.Current;
+            ShellPlaybackState.Text = current?.Config.Name ?? language.GetString("未选择音效");
+            ShellPlaybackStatus.Text = language.GetString(global.Playback.IsPlaying ? "正在播放" : global.Playback.IsPaused ? "已暂停" : "已停止");
+            double progress = current?.PlaybackProgress ?? 0;
+            var duration = current?.PlaybackDuration ?? TimeSpan.Zero;
+            ShellProgress.Value = progress;
+            ShellTime.Text = Audio.AudioData.DurationToString(TimeSpan.FromTicks((long)(duration.Ticks * progress))) + " / " + Audio.AudioData.DurationToString(duration);
             var device = global.GetRun() ? global.Equipment.VirtualLoudspeaker : global.Equipment.PhysicalLoudspeaker;
-            ShellOutputDevice.Text = LanguageManager.Inst.GetString("输出设备") + " · " + (device?.FriendlyName ?? LanguageManager.Inst.GetString("未绑定"));
+            ShellOutputDevice.Text = device?.FriendlyName ?? language.GetString("未绑定");
+            ShellDevice.ToolTip = language.GetString("输出设备") + " · " + ShellOutputDevice.Text;
         }
 
         private void UpdateAudioLevels(Audio.AudioProxy.SampleEnum stream, float left, float right)
@@ -159,6 +180,7 @@ namespace PlayVoice
             }
 
             GlobalData.Inst.EnableAutomaticRun();
+            shellStatusTimer.Start();
         }
 
         private void ContentFrame_Navigating(object sender, NavigatingCancelEventArgs e)

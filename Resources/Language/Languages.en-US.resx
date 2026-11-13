@@ -882,4 +882,8 @@ O</value>
 <data name="删除所选预设确认" xml:space="preserve"><value>Delete these presets and their data? This cannot be undone.
 
 {0}</value></data>
+<data name="音效电平" xml:space="preserve"><value>Sounds</value></data>
+<data name="麦克风电平" xml:space="preserve"><value>Mic</value></data>
+<data name="输出电平" xml:space="preserve"><value>Output</value></data>
+<data name="未选择音效" xml:space="preserve"><value>No sound selected</value></data>
 </root>

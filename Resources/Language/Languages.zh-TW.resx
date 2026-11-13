@@ -346,4 +346,8 @@
 <data name="删除所选预设确认" xml:space="preserve"><value>確定刪除以下預設及其資料？此操作無法復原。
 
 {0}</value></data>
+<data name="音效电平" xml:space="preserve"><value>音效</value></data>
+<data name="麦克风电平" xml:space="preserve"><value>麥克風</value></data>
+<data name="输出电平" xml:space="preserve"><value>輸出</value></data>
+<data name="未选择音效" xml:space="preserve"><value>尚未選取音效</value></data>
 </root>

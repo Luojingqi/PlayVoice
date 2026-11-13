@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace PlayVoice.Pages.Playback;
@@ -13,20 +13,17 @@ public partial class PlaybackTransport : UserControl
     }
     private void Refresh()
     {
-        PauseIcon.Text = GlobalData.Inst.Playback.IsPlaying ? "\uE769" : "\uE768";
+        PauseIcon.Data = System.Windows.Media.Geometry.Parse(GlobalData.Inst.Playback.IsPlaying ? "M 4,3 H 8 V 17 H 4 Z M 12,3 H 16 V 17 H 12 Z" : "M 6,3 L 17,10 L 6,17 Z");
         Buttons.IsEnabled = GlobalData.Inst.ActiveAudioPreset?.AudioList.Count > 0;
     }
-    private void Control_Click(object sender, SelectionChangedEventArgs e)
+    private void Control_Click(object sender, RoutedEventArgs e)
     {
-        int index = Buttons.SelectedIndex;
-        if (index < 0) return;
-        Buttons.SelectedIndex = -1;
         var playback = GlobalData.Inst.Playback;
-        switch (index)
+        switch ((sender as Button)?.Tag as string)
         {
-            case 0: playback.Previous(); break;
-            case 1: playback.PauseOrResume(); break;
-            case 2: playback.Next(); break;
+            case "Previous": playback.Previous(); break;
+            case "Play": playback.PauseOrResume(); break;
+            case "Next": playback.Next(); break;
         }
     }
 }

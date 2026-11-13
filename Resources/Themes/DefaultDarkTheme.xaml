@@ -11,8 +11,8 @@
     <SolidColorBrush x:Key="AccentColorSecondary" Color="#82CBBE"/>
     <SolidColorBrush x:Key="AccentSurface" Color="#284936"/>
     <SolidColorBrush x:Key="AccentSurfaceSubtle" Color="#1E3428"/>
-    <SolidColorBrush x:Key="TextPrimary" Color="#EDF3EE"/>
-    <SolidColorBrush x:Key="TextSecondary" Color="#A3B3A7"/>
+    <SolidColorBrush x:Key="TextPrimary" Color="#F1F3F5"/>
+    <SolidColorBrush x:Key="TextSecondary" Color="#AFB5BF"/>
     <SolidColorBrush x:Key="Error" Color="#FF453A"/>
     <SolidColorBrush x:Key="Warning" Color="#FF9F0A"/>
     <SolidColorBrush x:Key="Success" Color="#30D158"/>

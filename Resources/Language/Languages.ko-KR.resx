@@ -346,4 +346,8 @@
 <data name="删除所选预设确认" xml:space="preserve"><value>이 프리셋과 데이터를 삭제할까요? 되돌릴 수 없습니다.
 
 {0}</value></data>
+<data name="音效电平" xml:space="preserve"><value>효과음</value></data>
+<data name="麦克风电平" xml:space="preserve"><value>마이크</value></data>
+<data name="输出电平" xml:space="preserve"><value>출력</value></data>
+<data name="未选择音效" xml:space="preserve"><value>선택된 소리 없음</value></data>
 </root>

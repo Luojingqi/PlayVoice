@@ -16,14 +16,14 @@
       "#10251B"
     ],
     "SurfacesLight": [
-      "#F3F6F3",
-      "#EAF0EB",
+      "#FFFFFF",
+      "#F6F7F9",
       "#FFFFFF"
     ],
     "SurfacesDark": [
-      "#101612",
-      "#18221C",
-      "#202C24"
+      "#191B1F",
+      "#22252A",
+      "#272A30"
     ]
   },
   "Ocean": {
@@ -43,14 +43,14 @@
       "#10213A"
     ],
     "SurfacesLight": [
-      "#F2F5FA",
-      "#E9EEF6",
+      "#FFFFFF",
+      "#F6F7F9",
       "#FFFFFF"
     ],
     "SurfacesDark": [
-      "#111722",
-      "#192333",
-      "#222F43"
+      "#191B1F",
+      "#22252A",
+      "#272A30"
     ]
   },
   "Amber": {
@@ -70,14 +70,14 @@
       "#2B1C0B"
     ],
     "SurfacesLight": [
-      "#F8F5F0",
-      "#F0EBE3",
-      "#FFFEFB"
+      "#FFFFFF",
+      "#F6F7F9",
+      "#FFFFFF"
     ],
     "SurfacesDark": [
-      "#1B1712",
-      "#282119",
-      "#342B20"
+      "#191B1F",
+      "#22252A",
+      "#272A30"
     ]
   },
   "Rose": {
@@ -97,14 +97,14 @@
       "#321321"
     ],
     "SurfacesLight": [
-      "#F9F3F5",
-      "#F2E9ED",
-      "#FFFCFD"
+      "#FFFFFF",
+      "#F6F7F9",
+      "#FFFFFF"
     ],
     "SurfacesDark": [
-      "#1C1419",
-      "#291D25",
-      "#352630"
+      "#191B1F",
+      "#22252A",
+      "#272A30"
     ]
   }
 }

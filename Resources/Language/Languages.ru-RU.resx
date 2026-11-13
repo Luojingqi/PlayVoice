@@ -346,4 +346,8 @@
 <data name="删除所选预设确认" xml:space="preserve"><value>Удалить эти пресеты и их данные? Отменить действие нельзя.
 
 {0}</value></data>
+<data name="音效电平" xml:space="preserve"><value>Звуки</value></data>
+<data name="麦克风电平" xml:space="preserve"><value>Микрофон</value></data>
+<data name="输出电平" xml:space="preserve"><value>Выход</value></data>
+<data name="未选择音效" xml:space="preserve"><value>Звук не выбран</value></data>
 </root>
