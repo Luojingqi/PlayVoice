@@ -18,6 +18,14 @@ public sealed class AppearanceProfile
     public string Background { get; set; }
     public string Foreground { get; set; }
 
+    public void UseBuiltInMode(string mode)
+    {
+        if (mode is not ("Light" or "Dark" or "System")) throw new ArgumentException("Invalid theme mode.", nameof(mode));
+        Mode = mode;
+        Background = null;
+        Foreground = null;
+    }
+
     public void Validate()
     {
         if (Version != 1 || string.IsNullOrWhiteSpace(Name) || Name.Length > 80

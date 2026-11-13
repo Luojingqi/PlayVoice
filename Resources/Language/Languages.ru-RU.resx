@@ -356,4 +356,7 @@
   <data name="云母" xml:space="preserve"><value>Слюда</value></data>
   <data name="材质不透明度" xml:space="preserve"><value>Непрозрачность материала</value></data>
   <data name="系统材质说明" xml:space="preserve"><value>Акрил и слюда требуют Windows 11 22H2 или новее с включённой прозрачностью. Иначе используются непрозрачные поверхности. Текст остаётся чётким.</value></data>
+  <data name="最小化" xml:space="preserve"><value>Свернуть</value></data>
+  <data name="最大化" xml:space="preserve"><value>Развернуть / Восстановить</value></data>
+  <data name="自定义颜色" xml:space="preserve"><value>Свои цвета</value></data>
 </root>

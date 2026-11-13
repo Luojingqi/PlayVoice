@@ -356,4 +356,7 @@
   <data name="云母" xml:space="preserve"><value>雲母</value></data>
   <data name="材质不透明度" xml:space="preserve"><value>材質不透明度</value></data>
   <data name="系统材质说明" xml:space="preserve"><value>壓克力與雲母需要 Windows 11 22H2 或更新版本並開啟系統透明效果；無法使用時改用實色。文字不模糊。</value></data>
+  <data name="最小化" xml:space="preserve"><value>最小化</value></data>
+  <data name="最大化" xml:space="preserve"><value>最大化／還原</value></data>
+  <data name="自定义颜色" xml:space="preserve"><value>自訂顏色</value></data>
 </root>

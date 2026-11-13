@@ -47,6 +47,12 @@ public static class ThemeManager
         };
     }
     private static ResourceDictionary NowThemeResourceDictionary;
+    public static void SelectTheme(ThemeEnum themeEnum)
+    {
+        GlobalData.Inst.Config.Appearance ??= new();
+        GlobalData.Inst.Config.Appearance.UseBuiltInMode(themeEnum.ToString());
+        SwitchTheme(themeEnum);
+    }
     public static void SwitchTheme(ThemeEnum themeEnum)
     {
         var themeInfo = ThemeList.FirstOrDefault(t => t.Theme == themeEnum) ?? ThemeList[2];

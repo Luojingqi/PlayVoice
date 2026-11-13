@@ -356,4 +356,7 @@
   <data name="云母" xml:space="preserve"><value>Mica</value></data>
   <data name="材质不透明度" xml:space="preserve"><value>Opacidad del material</value></data>
   <data name="系统材质说明" xml:space="preserve"><value>Acrílico y Mica requieren Windows 11 22H2 o posterior con transparencia activada. En caso contrario se usan superficies sólidas. El texto permanece nítido.</value></data>
+  <data name="最小化" xml:space="preserve"><value>Minimizar</value></data>
+  <data name="最大化" xml:space="preserve"><value>Maximizar / Restaurar</value></data>
+  <data name="自定义颜色" xml:space="preserve"><value>Colores personalizados</value></data>
 </root>

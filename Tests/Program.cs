@@ -37,6 +37,14 @@ foreach (var invalid in new[] { "{\"Version\":99}", "{\"FontSize\":100}", "{\"Ac
     try { PlayVoice.Resources.Themes.AppearanceProfile.Parse(invalid); throw new Exception("Invalid theme accepted"); }
     catch (System.IO.InvalidDataException) { }
 }
+var modeSwitch = customTheme.Copy();
+modeSwitch.UseBuiltInMode("Dark");
+Check(modeSwitch.Mode == "Dark" && modeSwitch.Background == null && modeSwitch.Foreground == null, "Explicit mode selection must release fixed background/text colors");
+Check(modeSwitch.Accent == customTheme.Accent && modeSwitch.FontSize == 16 && modeSwitch.WindowMaterial == "Mica", "Mode change must retain accent, typography and material");
+Check(customTheme.Background == "#101010", "Switching mode must not modify a saved custom theme");
+try { modeSwitch.UseBuiltInMode("invalid"); throw new Exception("Unknown mode accepted"); }
+catch (ArgumentException) { }
+Check(modeSwitch.Mode == "Dark", "Invalid mode must not mutate appearance");
 var palettes = JsonNode.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "ColorPalettes.json")))!.AsObject();
 Check(palettes.Count == 4, "Four distinct color themes required");
 foreach (var palette in palettes)

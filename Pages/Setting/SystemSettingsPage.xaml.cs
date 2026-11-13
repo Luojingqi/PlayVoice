@@ -52,7 +52,7 @@ namespace PlayVoice.Pages.Setting
                 StyleListBox.OnSelectionChanged += (obj0, obj1) =>
                 {
                     var themeInfo = (ThemeManager.ThemeInfo)obj1;
-                    ThemeManager.SwitchTheme(themeInfo.Theme);
+                    ThemeManager.SelectTheme(themeInfo.Theme);
                 };
                 ThemeManager.ThemeChanged += UpdateThemeAction;
             }

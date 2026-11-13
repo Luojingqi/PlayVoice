@@ -55,6 +55,10 @@ namespace PlayVoice
 
             InitializeComponent();
             InitializeWindowMaterial();
+            StateChanged += (_, _) => MaximizeGlyph.Data = System.Windows.Media.Geometry.Parse(
+                WindowState == WindowState.Maximized
+                    ? "M 2.5,0.5 L 9.5,0.5 L 9.5,7.5 M 0.5,2.5 L 7.5,2.5 L 7.5,9.5 L 0.5,9.5 Z"
+                    : "M 0.5,0.5 L 9.5,0.5 L 9.5,9.5 L 0.5,9.5 Z");
             shellStatusTimer = new System.Windows.Threading.DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(Math.Clamp(GlobalData.Inst.Config.PlaybackStatusRefreshMilliseconds, 100, 1000))
@@ -216,16 +220,7 @@ namespace PlayVoice
 
         private void MaximizeButton_OnClick(object sender, RoutedEventArgs e)
         {
-            if (this.WindowState == WindowState.Maximized)
-            {
-                this.WindowState = WindowState.Normal;
-                MaximizeButton.Content = "☐";
-            }
-            else
-            {
-                this.WindowState = WindowState.Maximized;
-                MaximizeButton.Content = "⧉";
-            }
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         }
         private void CloseButton_OnClick(object sender, RoutedEventArgs e)
         {

@@ -20,12 +20,23 @@
 
     <shell:WindowChrome.WindowChrome><shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="6" GlassFrameThickness="-1" CornerRadius="12" UseAeroCaptionButtons="False"/></shell:WindowChrome.WindowChrome>
     <Window.Resources><DataTemplate x:Key="SidebarItemTemplate"><StackPanel Orientation="Horizontal"><TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="17" Width="30"/><TextBlock Text="{Binding Title}" FontWeight="SemiBold"/></StackPanel></DataTemplate></Window.Resources>
-    <Border Background="{DynamicResource WindowSurface}" BorderBrush="{DynamicResource Border}" BorderThickness="1" CornerRadius="12">
+    <Border Background="{DynamicResource WindowSurface}" BorderBrush="{DynamicResource Border}" BorderThickness="0" CornerRadius="12">
       <Grid><Grid.RowDefinitions><RowDefinition Height="52"/><RowDefinition Height="*"/><RowDefinition Height="Auto" MinHeight="88"/></Grid.RowDefinitions>
-        <Border Grid.Row="0" Background="{DynamicResource MaterialSurface}" BorderBrush="{DynamicResource Border}" BorderThickness="0,0,0,1" CornerRadius="12,12,0,0">
+        <Border Grid.Row="0" Background="{DynamicResource MaterialSurface}" BorderBrush="{DynamicResource Border}" BorderThickness="0" CornerRadius="12,12,0,0">
           <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="132"/></Grid.ColumnDefinitions>
-            <Border Background="Transparent" MouseLeftButtonDown="TitleBar_OnMouseLeftButtonDown"><StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="22,0"><Border Background="{DynamicResource AccentColor}" Width="26" Height="26" CornerRadius="8"><TextBlock Text="&#xE767;" FontFamily="Segoe MDL2 Assets" Foreground="{DynamicResource AccentForeground}" HorizontalAlignment="Center" VerticalAlignment="Center"/></Border><TextBlock Text="PlayVoice" Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold" FontSize="{DynamicResource UiFontSize16}" Margin="10,0" VerticalAlignment="Center"/></StackPanel></Border>
-            <UniformGrid Grid.Column="1" Columns="3"><Button x:Name="MinimizeButton" Content="─" Click="MinimizeButton_OnClick" Style="{StaticResource ChromeButton}"/><Button x:Name="MaximizeButton" Content="☐" Click="MaximizeButton_OnClick" Style="{StaticResource ChromeButton}"/><Button x:Name="CloseButton" Content="╳" Click="CloseButton_OnClick" Style="{StaticResource ChromeButton}"/></UniformGrid>
+            <Border Background="Transparent" MouseLeftButtonDown="TitleBar_OnMouseLeftButtonDown">
+              <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
+                <Border Background="{DynamicResource AccentSurface}" Width="28" Height="28" CornerRadius="9">
+                  <Path Data="M 1,8 L 1,14 M 5,4 L 5,18 M 9,1 L 9,21 M 13,6 L 13,16 M 17,9 L 17,13" Stroke="{DynamicResource TextPrimary}" StrokeThickness="1.7" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Width="18" Height="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <TextBlock Text="PlayVoice" Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold" FontSize="{DynamicResource UiFontSize14}" Margin="10,0,0,0" VerticalAlignment="Center"/>
+              </StackPanel>
+            </Border>
+            <UniformGrid Grid.Column="1" Columns="3" Margin="0,6,8,6">
+              <Button x:Name="MinimizeButton" Click="MinimizeButton_OnClick" Style="{StaticResource ChromeButton}" ToolTip="{L:Lan 最小化}" AutomationProperties.Name="{L:Lan 最小化}"><Path Data="M 0,5 L 10,5" Stroke="{DynamicResource TextPrimary}" StrokeThickness="1" Width="10" Height="10"/></Button>
+              <Button x:Name="MaximizeButton" Click="MaximizeButton_OnClick" Style="{StaticResource ChromeButton}" ToolTip="{L:Lan 最大化}" AutomationProperties.Name="{L:Lan 最大化}"><Path x:Name="MaximizeGlyph" Data="M 0.5,0.5 L 9.5,0.5 L 9.5,9.5 L 0.5,9.5 Z" Stroke="{DynamicResource TextPrimary}" StrokeThickness="1" Width="10" Height="10"/></Button>
+              <Button x:Name="CloseButton" Click="CloseButton_OnClick" Style="{StaticResource ChromeButton}" ToolTip="{L:Lan 关闭}" AutomationProperties.Name="{L:Lan 关闭}"><Path Data="M 0,0 L 10,10 M 10,0 L 0,10" Stroke="{DynamicResource TextPrimary}" StrokeThickness="1" Width="10" Height="10"/></Button>
+            </UniformGrid>
           </Grid>
         </Border>
         <Grid Grid.Row="1"><Grid.ColumnDefinitions><ColumnDefinition Width="206"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
@@ -33,7 +44,7 @@
             <Border DockPanel.Dock="Bottom" x:Name="StartupChecklistBorder" Background="{DynamicResource AccentSurfaceSubtle}" CornerRadius="10" Padding="12" Visibility="Collapsed"><Border.RenderTransform><TranslateTransform X="24"/></Border.RenderTransform><Expander Header="{L:Lan 启动准备}" Foreground="{DynamicResource TextPrimary}"><ScrollViewer MaxHeight="240" VerticalScrollBarVisibility="Auto"><StackPanel x:Name="StartupRequirementsPanel" Margin="0,10,0,0"/></ScrollViewer></Expander></Border>
             <Sidebar:SidebarControl x:Name="Sidebar" VerticalAlignment="Top" ItemsSource="{Binding MenuItems}" SelectedItem="{Binding SelectedMenu, Mode=TwoWay}" ItemTemplate="{StaticResource SidebarItemTemplate}"/>
           </DockPanel></Border>
-          <Grid Grid.Column="1" Background="{DynamicResource BgDark}" Margin="24,20,24,16"><Frame x:Name="ContentFrame" NavigationUIVisibility="Hidden"/><NotificationPanel:NotificationPanel x:Name="NotificationPanel" Panel.ZIndex="100"/></Grid>
+          <Border Grid.Column="1" Background="{DynamicResource BgDark}" Padding="28,24,28,20"><Grid><Frame x:Name="ContentFrame" NavigationUIVisibility="Hidden"/><NotificationPanel:NotificationPanel x:Name="NotificationPanel" Panel.ZIndex="100"/></Grid></Border>
         </Grid>
         <Border Grid.Row="2" BorderBrush="{DynamicResource Border}" BorderThickness="0,1,0,0" Background="{DynamicResource MaterialSurface}" CornerRadius="0,0,12,12" Padding="22,12">
          <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>

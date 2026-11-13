@@ -892,4 +892,7 @@ O</value>
   <data name="云母" xml:space="preserve"><value>Mica</value></data>
   <data name="材质不透明度" xml:space="preserve"><value>Material opacity</value></data>
   <data name="系统材质说明" xml:space="preserve"><value>Acrylic and Mica require Windows 11 22H2 or later with system transparency enabled; otherwise solid surfaces are used. Text remains sharp.</value></data>
+  <data name="最小化" xml:space="preserve"><value>Minimize</value></data>
+  <data name="最大化" xml:space="preserve"><value>Maximize / Restore</value></data>
+  <data name="自定义颜色" xml:space="preserve"><value>Custom colors</value></data>
 </root>

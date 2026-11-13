@@ -356,4 +356,7 @@
   <data name="云母" xml:space="preserve"><value>マイカ</value></data>
   <data name="材质不透明度" xml:space="preserve"><value>素材の不透明度</value></data>
   <data name="系统材质说明" xml:space="preserve"><value>アクリルとマイカには Windows 11 22H2 以降とシステムの透明効果が必要です。利用できない場合は単色になります。文字はぼかしません。</value></data>
+  <data name="最小化" xml:space="preserve"><value>最小化</value></data>
+  <data name="最大化" xml:space="preserve"><value>最大化 / 元に戻す</value></data>
+  <data name="自定义颜色" xml:space="preserve"><value>カスタムカラー</value></data>
 </root>

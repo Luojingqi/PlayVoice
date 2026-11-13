@@ -356,4 +356,7 @@
   <data name="云母" xml:space="preserve"><value>마이카</value></data>
   <data name="材质不透明度" xml:space="preserve"><value>재질 불투명도</value></data>
   <data name="系统材质说明" xml:space="preserve"><value>아크릴과 마이카는 Windows 11 22H2 이상과 시스템 투명 효과가 필요합니다. 사용할 수 없으면 단색으로 표시합니다. 텍스트는 흐리게 처리하지 않습니다.</value></data>
+  <data name="最小化" xml:space="preserve"><value>최소화</value></data>
+  <data name="最大化" xml:space="preserve"><value>최대화 / 복원</value></data>
+  <data name="自定义颜色" xml:space="preserve"><value>사용자 지정 색상</value></data>
 </root>

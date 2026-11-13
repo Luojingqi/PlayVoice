@@ -889,4 +889,7 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="云母" xml:space="preserve"><value>云母</value></data>
   <data name="材质不透明度" xml:space="preserve"><value>材质不透明度</value></data>
   <data name="系统材质说明" xml:space="preserve"><value>亚克力和云母需要 Windows 11 22H2 或更高版本并开启系统透明效果；不可用时自动使用实色。正文不模糊。</value></data>
+  <data name="最小化" xml:space="preserve"><value>最小化</value></data>
+  <data name="最大化" xml:space="preserve"><value>最大化</value></data>
+  <data name="自定义颜色" xml:space="preserve"><value>自定义颜色</value></data>
 </root>

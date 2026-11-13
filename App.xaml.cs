@@ -67,9 +67,16 @@ namespace PlayVoice
 
         private void OnUserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
         {
-            if (e.Category == UserPreferenceCategory.General)
-                if (ThemeManager.NowTheme.Theme == ThemeManager.ThemeEnum.System)
-                    ThemeManager.SwitchTheme(ThemeManager.ThemeEnum.System);
+            if (e.Category != UserPreferenceCategory.General || Dispatcher.HasShutdownStarted) return;
+            try
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    if (!Dispatcher.HasShutdownStarted && ThemeManager.NowTheme?.Theme == ThemeManager.ThemeEnum.System)
+                        ThemeManager.SwitchTheme(ThemeManager.ThemeEnum.System);
+                });
+            }
+            catch (InvalidOperationException) when (Dispatcher.HasShutdownStarted) { }
         }
 
         public void SetAlignment()

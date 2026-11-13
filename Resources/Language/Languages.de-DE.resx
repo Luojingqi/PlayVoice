@@ -356,4 +356,7 @@
   <data name="云母" xml:space="preserve"><value>Mica</value></data>
   <data name="材质不透明度" xml:space="preserve"><value>Materialdeckkraft</value></data>
   <data name="系统材质说明" xml:space="preserve"><value>Acryl und Mica benötigen Windows 11 22H2 oder neuer mit aktivierter Transparenz. Andernfalls werden deckende Flächen verwendet. Text bleibt scharf.</value></data>
+  <data name="最小化" xml:space="preserve"><value>Minimieren</value></data>
+  <data name="最大化" xml:space="preserve"><value>Maximieren / Wiederherstellen</value></data>
+  <data name="自定义颜色" xml:space="preserve"><value>Eigene Farben</value></data>
 </root>
