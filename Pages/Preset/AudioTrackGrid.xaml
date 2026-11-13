@@ -53,7 +53,7 @@
                     <TextBlock x:Name="OutputStatus" TextWrapping="Wrap" Foreground="{DynamicResource TextPrimary}"/>
                     <WrapPanel Margin="0,8,0,0">
                         <TextBlock x:Name="PlaybackStatus" VerticalAlignment="Center" Margin="0,0,16,0" Foreground="{DynamicResource TextPrimary}"/>
-                        <Button  Padding="12,6" Click="StopLibraryAudio" ToolTip="{L:Lan 停止全部}" AutomationProperties.Name="{L:Lan 停止全部}" Width="40"><TextBlock Text="&#xE71A;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
+                        <Button  Click="StopLibraryAudio" ToolTip="{L:Lan 停止全部}" AutomationProperties.Name="{L:Lan 停止全部}" Width="40" Padding="0" Height="40"><TextBlock Text="&#xE71A;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
                     </WrapPanel>
                 </StackPanel>
             </Border>
@@ -74,10 +74,10 @@
                     <Grid Margin="0,3"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions><TextBlock Text="{L:Lan 淡出秒}" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Library.FadeOut, Mode=TwoWay, StringFormat={}{0:0.###}, ValidatesOnExceptions=True}" AutomationProperties.Name="{L:Lan 淡出秒}"/></Grid>
                     <TextBlock Text="{Binding Library.EditError}" Foreground="{DynamicResource Error}" TextWrapping="Wrap"/>
                     <TextBlock Text="{L:Lan 保留原文件}" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap" FontSize="{DynamicResource UiFontSize11}" Margin="0,8"/>
-                    <WrapPanel Margin="0,0,0,16"><Button Command="{Binding Library.SaveAudioEditCommand}" Width="40" ToolTip="{L:Lan 应用剪辑}" AutomationProperties.Name="{L:Lan 应用剪辑}" Margin="0,0,8,0"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8FB;"/></Button><Button Command="{Binding Library.ResetAudioEditCommand}" Width="40" ToolTip="{L:Lan 恢复原始音频}" AutomationProperties.Name="{L:Lan 恢复原始音频}"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE777;"/></Button></WrapPanel>
-                    <Button Style="{StaticResource PrimaryButton}"  Padding="8" Command="{Binding Library.SaveSelectedCommand}" Margin="0,0,0,12" ToolTip="{L:Lan 保存所选}" AutomationProperties.Name="{L:Lan 保存所选}" Width="40"><TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
-                    <Button  Padding="8" Click="PreviewLibraryAudio" Margin="0,0,0,8" ToolTip="{L:Lan 独立试听}" AutomationProperties.Name="{L:Lan 独立试听}" Width="40"><TextBlock Text="&#xE7F5;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
-                    <Button  Padding="8" Click="TestLibraryRoute" ToolTip="{L:Lan 使用所选音效测试当前输出}" AutomationProperties.Name="{L:Lan 测试播放链路}" Width="40"><TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
+                    <WrapPanel Margin="0,0,0,16"><Button Command="{Binding Library.SaveAudioEditCommand}" Width="40" ToolTip="{L:Lan 应用剪辑}" AutomationProperties.Name="{L:Lan 应用剪辑}" Margin="0,0,8,0" Padding="0" Height="40"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8FB;"/></Button><Button Command="{Binding Library.ResetAudioEditCommand}" Width="40" ToolTip="{L:Lan 恢复原始音频}" AutomationProperties.Name="{L:Lan 恢复原始音频}" Padding="0" Height="40"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE777;"/></Button></WrapPanel>
+                    <Button Style="{StaticResource PrimaryButton}"  Command="{Binding Library.SaveSelectedCommand}" Margin="0,0,0,12" ToolTip="{L:Lan 保存所选}" AutomationProperties.Name="{L:Lan 保存所选}" Width="40" Padding="0" Height="40"><TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
+                    <Button  Click="PreviewLibraryAudio" Margin="0,0,0,8" ToolTip="{L:Lan 独立试听}" AutomationProperties.Name="{L:Lan 独立试听}" Width="40" Padding="0" Height="40"><TextBlock Text="&#xE7F5;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
+                    <Button  Click="TestLibraryRoute" ToolTip="{L:Lan 使用所选音效测试当前输出}" AutomationProperties.Name="{L:Lan 测试播放链路}" Width="40" Padding="0" Height="40"><TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
                 </StackPanel></ScrollViewer>
             </Expander>
         <Grid>

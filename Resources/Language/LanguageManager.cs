@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Globalization;
-using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -8,7 +7,6 @@ namespace PlayVoice.Resources.Language;
 
 public sealed class LanguageManager : INotifyPropertyChanged
 {
-    private static readonly ResourceManager ResourceManager = new("PlayVoice.Resources.Language.Languages", typeof(LanguageManager).Assembly);
     private CultureInfo _currentCulture;
 
     public static LanguageManager Inst { get; private set; }
@@ -28,17 +26,19 @@ public sealed class LanguageManager : INotifyPropertyChanged
 
     public void SetCulture(string cultureName)
     {
-        SetCulture(CultureInfo.GetCultureInfo(cultureName));
+        SetCulture(LocalizationCatalog.ResolveCulture(cultureName));
     }
 
     public void SetCulture(CultureInfo culture)
     {
+        culture = LocalizationCatalog.ResolveCulture(culture.Name);
         if (Equals(_currentCulture, culture))
         {
             return;
         }
         nowLanguageInfo = LanguageList.FirstOrDefault(x => x.Key == culture.Name);
         _currentCulture = culture;
+        LocalizationCatalog.SetCulture(culture);
         CultureInfo.DefaultThreadCurrentCulture = culture;
         CultureInfo.DefaultThreadCurrentUICulture = culture;
         CultureInfo.CurrentCulture = culture;
@@ -57,12 +57,12 @@ public sealed class LanguageManager : INotifyPropertyChanged
             return string.Empty;
         }
 
-        return ResourceManager.GetString(key, _currentCulture) ?? key;
+        return LocalizationCatalog.Translate(key, _currentCulture);
     }
 
     public static string GetBootstrapString(string key)
     {
-        return ResourceManager.GetString(key, CultureInfo.CurrentUICulture) ?? key;
+        return LocalizationCatalog.Translate(key, CultureInfo.CurrentUICulture);
     }
 
     public string SpliceString(string input, IEnumerable<string> replacements)

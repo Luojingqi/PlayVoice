@@ -873,4 +873,10 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
 <data name="保留原文件" xml:space="preserve"><value>编辑只保存参数，原始音频文件保持不变。</value></data>
 <data name="应用剪辑" xml:space="preserve"><value>应用剪辑</value></data>
 <data name="恢复原始音频" xml:space="preserve"><value>恢复原始音频</value></data>
+<data name="暂无预设" xml:space="preserve"><value>暂无预设</value></data>
+<data name="已选择" xml:space="preserve"><value>已选择</value></data>
+<data name="删除所选" xml:space="preserve"><value>删除所选</value></data>
+<data name="删除所选预设确认" xml:space="preserve"><value>确定删除以下预设及其数据？此操作不可撤销。
+
+{0}</value></data>
 </root>

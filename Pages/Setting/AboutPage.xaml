@@ -22,9 +22,9 @@
             <TextBlock Text="PlayVoice" FontSize="{DynamicResource UiFontSize28}" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}"/>
             <TextBlock x:Name="VersionText" Foreground="{DynamicResource TextSecondary}" Margin="0,8,0,24"/>
             <WrapPanel>
-                <Button  Hyperlink:HyperlinkBehavior.Url="https://store.steampowered.com/app/4907460/PlayVoice/" Margin="0,0,12,12" ToolTip="{L:Lan 去Steam}" AutomationProperties.Name="{L:Lan 去Steam}" Width="40"><TextBlock Text="&#xE8A7;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
-                <Button  Hyperlink:HyperlinkBehavior.Url="https://github.com/Luojingqi/PlayVoice" Margin="0,0,12,12" ToolTip="{L:Lan 去Github}" AutomationProperties.Name="{L:Lan 去Github}" Width="40"><TextBlock Text="&#xE8A7;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
-                <Button  Hyperlink:HyperlinkBehavior.Url="https://source-xu.top/projects/playvoice" Margin="0,0,12,12" ToolTip="{L:Lan 官网}" AutomationProperties.Name="{L:Lan 官网}" Width="40"><TextBlock Text="&#xE774;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
+                <Button  Hyperlink:HyperlinkBehavior.Url="https://store.steampowered.com/app/4907460/PlayVoice/" Margin="0,0,12,12" ToolTip="{L:Lan 去Steam}" AutomationProperties.Name="{L:Lan 去Steam}" Width="40" Padding="0" Height="40"><TextBlock Text="&#xE8A7;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
+                <Button  Hyperlink:HyperlinkBehavior.Url="https://github.com/Luojingqi/PlayVoice" Margin="0,0,12,12" ToolTip="{L:Lan 去Github}" AutomationProperties.Name="{L:Lan 去Github}" Width="40" Padding="0" Height="40"><TextBlock Text="&#xE8A7;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
+                <Button  Hyperlink:HyperlinkBehavior.Url="https://source-xu.top/projects/playvoice" Margin="0,0,12,12" ToolTip="{L:Lan 官网}" AutomationProperties.Name="{L:Lan 官网}" Width="40" Padding="0" Height="40"><TextBlock Text="&#xE774;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
             </WrapPanel>
         </StackPanel>
     </HeaderedContentControl>

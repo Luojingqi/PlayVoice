@@ -340,4 +340,10 @@
 <data name="保留原文件" xml:space="preserve"><value>編集は設定のみ保存し、元の音声ファイルは変更しません。</value></data>
 <data name="应用剪辑" xml:space="preserve"><value>編集を適用</value></data>
 <data name="恢复原始音频" xml:space="preserve"><value>元の音声に戻す</value></data>
+<data name="暂无预设" xml:space="preserve"><value>プリセットがありません</value></data>
+<data name="已选择" xml:space="preserve"><value>選択済み</value></data>
+<data name="删除所选" xml:space="preserve"><value>選択項目を削除</value></data>
+<data name="删除所选预设确认" xml:space="preserve"><value>以下のプリセットとデータを削除しますか？この操作は元に戻せません。
+
+{0}</value></data>
 </root>

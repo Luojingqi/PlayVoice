@@ -876,4 +876,10 @@ O</value>
 <data name="保留原文件" xml:space="preserve"><value>Edits save metadata only. The original audio file stays unchanged.</value></data>
 <data name="应用剪辑" xml:space="preserve"><value>Apply audio edit</value></data>
 <data name="恢复原始音频" xml:space="preserve"><value>Restore original audio</value></data>
+<data name="暂无预设" xml:space="preserve"><value>No presets</value></data>
+<data name="已选择" xml:space="preserve"><value>Selected</value></data>
+<data name="删除所选" xml:space="preserve"><value>Delete selected</value></data>
+<data name="删除所选预设确认" xml:space="preserve"><value>Delete these presets and their data? This cannot be undone.
+
+{0}</value></data>
 </root>

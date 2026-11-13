@@ -41,15 +41,7 @@
                         </StackPanel>
                     </ScrollViewer>
                 </Border>
-                <Border x:Name="Frame2" Background="Transparent">
-                    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                        <Grid VerticalAlignment="Top">
-                            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <Frame Grid.Column="0" x:Name="DeleteAudioPresetPageFrame" NavigationUIVisibility="Hidden" Margin="0,0,10,0" VerticalAlignment="Top"/>
-                            <Frame Grid.Column="1" x:Name="DeleteFunctionPresetPageFrame" NavigationUIVisibility="Hidden" Margin="10,0,0,0" VerticalAlignment="Top"/>
-                        </Grid>
-                    </ScrollViewer>
-                </Border>
+                <Border x:Name="Frame2" Background="Transparent"><Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions><Frame Grid.Column="0" x:Name="DeleteAudioPresetPageFrame" NavigationUIVisibility="Hidden" Margin="0,0,10,0"/><Frame Grid.Column="1" x:Name="DeleteFunctionPresetPageFrame" NavigationUIVisibility="Hidden" Margin="10,0,0,0"/></Grid></Border>
             </Grid>
         </Border>
     </Grid>

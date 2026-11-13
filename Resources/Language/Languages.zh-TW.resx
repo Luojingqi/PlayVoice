@@ -340,4 +340,10 @@
 <data name="保留原文件" xml:space="preserve"><value>編輯只儲存參數，原始音訊檔案保持不變。</value></data>
 <data name="应用剪辑" xml:space="preserve"><value>套用剪輯</value></data>
 <data name="恢复原始音频" xml:space="preserve"><value>還原原始音訊</value></data>
+<data name="暂无预设" xml:space="preserve"><value>暫無預設</value></data>
+<data name="已选择" xml:space="preserve"><value>已選取</value></data>
+<data name="删除所选" xml:space="preserve"><value>刪除所選</value></data>
+<data name="删除所选预设确认" xml:space="preserve"><value>確定刪除以下預設及其資料？此操作無法復原。
+
+{0}</value></data>
 </root>

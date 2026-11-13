@@ -5,6 +5,22 @@ using PlayVoice.Audio;
 using PlayVoice.Hotkey;
 
 static void Check(bool value, string message) { if (!value) throw new Exception(message); }
+foreach (string culture in PlayVoice.Resources.Language.LocalizationCatalog.CultureNames)
+{
+    PlayVoice.Resources.Language.LocalizationCatalog.SetCulture(System.Globalization.CultureInfo.GetCultureInfo(culture));
+    string translated = PlayVoice.Resources.Language.LocalizationCatalog.Translate("删除");
+    Check(!string.IsNullOrWhiteSpace(translated), "i18n language loading: " + culture);
+    var legacy = new System.Resources.ResourceManager("PlayVoice.Resources.Language.Languages", typeof(PlayVoice.Resources.Language.LocalizationCatalog).Assembly);
+    foreach (System.Collections.DictionaryEntry entry in legacy.GetResourceSet(System.Globalization.CultureInfo.GetCultureInfo(culture), true, true)!)
+        Check(PlayVoice.Resources.Language.LocalizationCatalog.Translate((string)entry.Key) == (string)entry.Value!, "Translation parity: " + culture + ": " + entry.Key);
+}
+PlayVoice.Resources.Language.LocalizationCatalog.SetCulture(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+Check(PlayVoice.Resources.Language.LocalizationCatalog.Translate("删除") == "Delete", "i18n English translation");
+Check(PlayVoice.Resources.Language.LocalizationCatalog.Translate("missing-key") == "missing-key", "i18n missing key fallback");
+Check(PlayVoice.Resources.Language.LocalizationCatalog.ResolveCulture("invalid-culture").Name == "en-US", "Unsupported locale fallback");
+Check(PlayVoice.Resources.Language.LocalizationCatalog.Translate("删除", System.Globalization.CultureInfo.GetCultureInfo("zh-CN")) == "删除", "Bootstrap translation must not alter selected locale");
+Check(PlayVoice.Resources.Language.LocalizationCatalog.Translate("删除") == "Delete", "Bootstrap culture isolation");
+Console.WriteLine("PASS: Lepo.i18n nine-language loading, runtime culture selection, bootstrap isolation and missing-key fallback");
 AudioEditingChecks.Run();
 var customTheme = PlayVoice.Resources.Themes.AppearanceProfile.Parse("""{"Name":"Test","FontSize":16,"Accent":"#5577CC","Background":"#101010","Foreground":"#EEEEEE"}""");
 Check(customTheme.Copy().FontSize == 16, "Theme roundtrip");

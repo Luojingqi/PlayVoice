@@ -340,4 +340,10 @@
 <data name="保留原文件" xml:space="preserve"><value>Nur Bearbeitungsparameter werden gespeichert. Die Originaldatei bleibt unverändert.</value></data>
 <data name="应用剪辑" xml:space="preserve"><value>Audiobearbeitung anwenden</value></data>
 <data name="恢复原始音频" xml:space="preserve"><value>Originalaudio wiederherstellen</value></data>
+<data name="暂无预设" xml:space="preserve"><value>Keine Voreinstellungen</value></data>
+<data name="已选择" xml:space="preserve"><value>Ausgewählt</value></data>
+<data name="删除所选" xml:space="preserve"><value>Auswahl löschen</value></data>
+<data name="删除所选预设确认" xml:space="preserve"><value>Diese Voreinstellungen und ihre Daten unwiderruflich löschen?
+
+{0}</value></data>
 </root>
