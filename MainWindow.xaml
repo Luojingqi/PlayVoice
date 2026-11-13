@@ -16,7 +16,7 @@
         KeyDown="Window_KeyDown"
         Focusable="True"
         Title="Play Voice"
-        Icon="/Resources/Style/PlayVoice.png" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" RenderOptions.BitmapScalingMode="HighQuality">
+        Icon="/Resources/Style/PlayVoice.ico" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" RenderOptions.BitmapScalingMode="HighQuality">
 
     <shell:WindowChrome.WindowChrome><shell:WindowChrome CaptionHeight="0" ResizeBorderThickness="6" GlassFrameThickness="-1" CornerRadius="12" UseAeroCaptionButtons="False"/></shell:WindowChrome.WindowChrome>
     <Window.Resources><DataTemplate x:Key="SidebarItemTemplate"><StackPanel Orientation="Horizontal"><TextBlock Text="{Binding Icon}" FontFamily="Segoe MDL2 Assets" FontSize="17" Width="30"/><TextBlock Text="{Binding Title}" FontWeight="SemiBold"/></StackPanel></DataTemplate></Window.Resources>
@@ -26,9 +26,7 @@
           <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="132"/></Grid.ColumnDefinitions>
             <Border Background="Transparent" MouseLeftButtonDown="TitleBar_OnMouseLeftButtonDown">
               <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="20,0">
-                <Border Background="{DynamicResource AccentSurface}" Width="28" Height="28" CornerRadius="9">
-                  <Path Data="M 1,8 L 1,14 M 5,4 L 5,18 M 9,1 L 9,21 M 13,6 L 13,16 M 17,9 L 17,13" Stroke="{DynamicResource TextPrimary}" StrokeThickness="1.7" StrokeStartLineCap="Round" StrokeEndLineCap="Round" Width="18" Height="22" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                </Border>
+                <Image Source="/Resources/Style/PlayVoice.png" Width="28" Height="28" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality"/>
                 <TextBlock Text="PlayVoice" Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold" FontSize="{DynamicResource UiFontSize14}" Margin="10,0,0,0" VerticalAlignment="Center"/>
               </StackPanel>
             </Border>
