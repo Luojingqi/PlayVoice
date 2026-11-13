@@ -359,4 +359,19 @@
   <data name="最小化" xml:space="preserve"><value>Minimizar</value></data>
   <data name="最大化" xml:space="preserve"><value>Maximizar / Restaurar</value></data>
   <data name="自定义颜色" xml:space="preserve"><value>Colores personalizados</value></data>
+  <data name="刷新" xml:space="preserve"><value>Actualizar</value></data>
+  <data name="热键" xml:space="preserve"><value>Atajo</value></data>
+  <data name="保存" xml:space="preserve"><value>Guardar</value></data>
+  <data name="试听" xml:space="preserve"><value>Escuchar</value></data>
+  <data name="波形裁剪" xml:space="preserve"><value>Recortar onda</value></data>
+  <data name="开始时间" xml:space="preserve"><value>Inicio</value></data>
+  <data name="结束时间" xml:space="preserve"><value>Fin</value></data>
+  <data name="淡入" xml:space="preserve"><value>Fundido de entrada</value></data>
+  <data name="淡出" xml:space="preserve"><value>Fundido de salida</value></data>
+  <data name="播放模式" xml:space="preserve"><value>Modo de reproducción</value></data>
+  <data name="音频耳返" xml:space="preserve"><value>Monitor de audio</value></data>
+  <data name="输入耳返" xml:space="preserve"><value>Monitor de micrófono</value></data>
+  <data name="创建音频预设" xml:space="preserve"><value>Crear preajuste de audio</value></data>
+  <data name="创建游戏预设" xml:space="preserve"><value>Crear preajuste de juego</value></data>
+  <data name="播放" xml:space="preserve"><value>Reproducir</value></data>
 </root>

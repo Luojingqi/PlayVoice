@@ -192,3 +192,18 @@ git diff --check
 - 标题栏使用同一品牌 PNG，窗口图标改为多尺寸 ICO；程序 EXE 仍通过既有 ApplicationIcon 嵌入 ICO，托盘继续复用现有的 EXE 图标提取逻辑。
 - 检查 ICO 目录、各 PNG 帧尺寸与 RGBA 格式以及窗口资源引用通过；bin/LogoReview 构建 0 错误、92 条警告。不涉及业务逻辑，未重复运行音频和存储测试。
 - 未启动程序或操作桌面；任务栏与托盘实际显示、高 DPI 小尺寸观感和 Windows 图标缓存更新未实测。未更改用户数据或推送分支。
+
+
+## 2026-11-13：Avalonia Windows 试验迁移（尚未达到 WPF 功能等价）
+
+- 新建 feature/avalonia-desktop 分支与 AvaloniaDesktop/PlayVoice.Avalonia.csproj，固定 Avalonia 12.1.6，保留 WPF 工程并在解决方案并列列出。原 WPF 工程排除迁移目录，两个输出独立，未覆盖原用户运行目录。
+- 链接复用原 AudioProxy、AudioData、PlaybackController/Queue、设备、预设、迁移、热键、Lepo.i18n 与 JSON 保存代码，不另写音频引擎。少量条件编译替换 WPF 调度器和播放计时器；设备加载器新增退出释放入口，退出不清空已保存设备 ID。
+- 新 UI 使用 Fluent 控件、侧栏导航、固定底部播放控制、虚拟化多选音效列表、侧边编辑、设备设置与原生窗口边框。图标沿用新 Logo，控件包含键盘焦点和辅助名称，波形支持拖选及方向键调整。
+- 接通搜索/收藏/最近播放、导入、新建预设、独立试听、热键录制、游戏预设/播放模式、音量与非破坏性裁剪淡化。预设异步加载使用请求序号避免快速切换后旧请求覆盖当前选择。
+- 使用原九语言资源；主题使用 Avalonia ThemeVariant 与现有配色/字体配置，支持主题 JSON 导入导出。Steam 查询和订阅调用原 Facepunch SDK；未引入跨平台承诺。
+- 未迁移完成：工坊下载导入/上传编辑、响度测试向导、托盘关闭行为、批量删除整理及完整预设管理。当前为试验入口，不能替代完整 WPF 产品；没有实现的功能不提供假成功状态。
+- NuGet 大型原生包下载遇到 TLS EOF，通过官方源重试下载至系统临时缓存后还原，缓存与临时源配置均未纳入仓库。Avalonia MIT 许可放入 LICENSE 并随输出复制。
+- Avalonia Headless 检查真实 AXAML、资源与控件加载，浅色/深色/系统三个模式和 960x640 布局通过，不创建桌面窗口、音频设备或用户配置。原存储/恢复、国际化、热键冲突与音频编辑检查通过。
+- 未启动桌面应用；真实 WASAPI、全局 Hook、Steam 在线/离线、设备拔插、跨屏 DPI、材质与窗口交互均未实测。旧数据路径仍相对各自程序目录，未自动复制、删除、迁移或覆盖旧数据，也未修改 Steam 云配置。
+
+- 最终构建：Avalonia bin/AvaloniaReview 0 错误、1 条原 HotkeyManager 空引用警告；WPF bin/WpfMigrationBaseline 0 错误、92 条警告；最终 Headless 检查及九语言键一致性通过。

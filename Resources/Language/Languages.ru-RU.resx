@@ -359,4 +359,19 @@
   <data name="最小化" xml:space="preserve"><value>Свернуть</value></data>
   <data name="最大化" xml:space="preserve"><value>Развернуть / Восстановить</value></data>
   <data name="自定义颜色" xml:space="preserve"><value>Свои цвета</value></data>
+  <data name="刷新" xml:space="preserve"><value>Обновить</value></data>
+  <data name="热键" xml:space="preserve"><value>Горячая клавиша</value></data>
+  <data name="保存" xml:space="preserve"><value>Сохранить</value></data>
+  <data name="试听" xml:space="preserve"><value>Прослушать</value></data>
+  <data name="波形裁剪" xml:space="preserve"><value>Обрезка волны</value></data>
+  <data name="开始时间" xml:space="preserve"><value>Начало</value></data>
+  <data name="结束时间" xml:space="preserve"><value>Конец</value></data>
+  <data name="淡入" xml:space="preserve"><value>Нарастание</value></data>
+  <data name="淡出" xml:space="preserve"><value>Затухание</value></data>
+  <data name="播放模式" xml:space="preserve"><value>Режим воспроизведения</value></data>
+  <data name="音频耳返" xml:space="preserve"><value>Мониторинг аудио</value></data>
+  <data name="输入耳返" xml:space="preserve"><value>Мониторинг микрофона</value></data>
+  <data name="创建音频预设" xml:space="preserve"><value>Создать аудиопресет</value></data>
+  <data name="创建游戏预设" xml:space="preserve"><value>Создать игровой пресет</value></data>
+  <data name="播放" xml:space="preserve"><value>Воспроизвести</value></data>
 </root>

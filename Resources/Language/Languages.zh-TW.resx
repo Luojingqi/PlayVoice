@@ -359,4 +359,19 @@
   <data name="最小化" xml:space="preserve"><value>最小化</value></data>
   <data name="最大化" xml:space="preserve"><value>最大化／還原</value></data>
   <data name="自定义颜色" xml:space="preserve"><value>自訂顏色</value></data>
+  <data name="刷新" xml:space="preserve"><value>重新整理</value></data>
+  <data name="热键" xml:space="preserve"><value>快捷鍵</value></data>
+  <data name="保存" xml:space="preserve"><value>儲存</value></data>
+  <data name="试听" xml:space="preserve"><value>試聽</value></data>
+  <data name="波形裁剪" xml:space="preserve"><value>波形裁剪</value></data>
+  <data name="开始时间" xml:space="preserve"><value>開始時間</value></data>
+  <data name="结束时间" xml:space="preserve"><value>結束時間</value></data>
+  <data name="淡入" xml:space="preserve"><value>淡入</value></data>
+  <data name="淡出" xml:space="preserve"><value>淡出</value></data>
+  <data name="播放模式" xml:space="preserve"><value>播放模式</value></data>
+  <data name="音频耳返" xml:space="preserve"><value>音訊監聽</value></data>
+  <data name="输入耳返" xml:space="preserve"><value>麥克風監聽</value></data>
+  <data name="创建音频预设" xml:space="preserve"><value>建立音訊預設</value></data>
+  <data name="创建游戏预设" xml:space="preserve"><value>建立遊戲預設</value></data>
+  <data name="播放" xml:space="preserve"><value>播放</value></data>
 </root>

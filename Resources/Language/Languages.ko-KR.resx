@@ -359,4 +359,19 @@
   <data name="最小化" xml:space="preserve"><value>최소화</value></data>
   <data name="最大化" xml:space="preserve"><value>최대화 / 복원</value></data>
   <data name="自定义颜色" xml:space="preserve"><value>사용자 지정 색상</value></data>
+  <data name="刷新" xml:space="preserve"><value>새로 고침</value></data>
+  <data name="热键" xml:space="preserve"><value>단축키</value></data>
+  <data name="保存" xml:space="preserve"><value>저장</value></data>
+  <data name="试听" xml:space="preserve"><value>미리 듣기</value></data>
+  <data name="波形裁剪" xml:space="preserve"><value>파형 자르기</value></data>
+  <data name="开始时间" xml:space="preserve"><value>시작 시간</value></data>
+  <data name="结束时间" xml:space="preserve"><value>종료 시간</value></data>
+  <data name="淡入" xml:space="preserve"><value>페이드 인</value></data>
+  <data name="淡出" xml:space="preserve"><value>페이드 아웃</value></data>
+  <data name="播放模式" xml:space="preserve"><value>재생 모드</value></data>
+  <data name="音频耳返" xml:space="preserve"><value>오디오 모니터</value></data>
+  <data name="输入耳返" xml:space="preserve"><value>마이크 모니터</value></data>
+  <data name="创建音频预设" xml:space="preserve"><value>오디오 프리셋 만들기</value></data>
+  <data name="创建游戏预设" xml:space="preserve"><value>게임 프리셋 만들기</value></data>
+  <data name="播放" xml:space="preserve"><value>재생</value></data>
 </root>

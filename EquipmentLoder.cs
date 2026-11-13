@@ -3,12 +3,18 @@ using NAudio.CoreAudioApi;
 using PlayVoice.Diagnostics;
 using System.Diagnostics;
 using System.IO;
+#if AVALONIA
+using Application = PlayVoice.DesktopApplication;
+#else
 using System.Windows;
+#endif
 
 namespace PlayVoice;
 
-internal class EquipmentLoder
+internal class EquipmentLoder : IDisposable
 {
+    private volatile bool disposed;
+    public void Dispose() { disposed = true; enumerator.Dispose(); }
     private MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
     public MMDeviceEnumerator Enumerator => enumerator;
     private Equipment equipment;
@@ -19,9 +25,10 @@ internal class EquipmentLoder
         UpdateSafely();
         Thread thread = new(() =>
         {
-            while (true)
+            while (!disposed)
             {
                 Thread.Sleep(UpdateTimeInterval);
+                if (disposed) return;
                 var dispatcher = Application.Current?.Dispatcher;
                 if (dispatcher == null || dispatcher.HasShutdownStarted)
                     return;

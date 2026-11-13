@@ -6,7 +6,11 @@ using PlayVoice.Resources.Language;
 using System.Diagnostics;
 using System.Globalization;
 using System.Text.RegularExpressions;
+#if AVALONIA
+using Application = PlayVoice.DesktopApplication;
+#else
 using System.Windows;
+#endif
 
 namespace PlayVoice.Audio;
 
@@ -38,7 +42,11 @@ public class AudioData
 
     public int Index { get; set; }
 
+#if AVALONIA
+    public Avalonia.Threading.DispatcherTimer PlayTimer { get; } = new();
+#else
     public System.Windows.Threading.DispatcherTimer PlayTimer { get; } = new(System.Windows.Threading.DispatcherPriority.Normal, Application.Current.Dispatcher);
+#endif
     public bool IsPaused { get; private set; }
     private MediaFoundationResampler vmResampler;
     private MediaFoundationResampler plResampler;
