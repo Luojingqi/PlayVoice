@@ -61,8 +61,31 @@ public static class ThemeManager
         var foreground = Color.Parse(profile.Foreground ?? (dark ? "#F1F3F5" : "#202124"));
         Color Mix(Color a, Color b, double n) => Color.FromRgb((byte)(a.R * (1 - n) + b.R * n), (byte)(a.G * (1 - n) + b.G * n), (byte)(a.B * (1 - n) + b.B * n));
         void Set(string key, Color color) => app.Resources[key] = new SolidColorBrush(color);
-        Set("BgDark", background); Set("BgMedium", profile.Background == null ? Color.Parse(surfaces[1]) : Mix(background, foreground, .035)); Set("BgLight", profile.Background == null ? Color.Parse(surfaces[2]) : Mix(background, foreground, .065));
-        Set("TextPrimary", foreground); Set("TextSecondary", Mix(background, foreground, .72)); Set("Border", Mix(background, foreground, .14)); Set("AccentColor", accent); Set("AccentSurface", Mix(background, foreground, .075));
+        var sidebar = profile.Background == null ? Color.Parse(surfaces[1]) : Mix(background, foreground, .035);
+        var surface = profile.Background == null ? Color.Parse(surfaces[2]) : Mix(background, foreground, .065);
+        if (profile.SurfaceStyle == "Tinted")
+        {
+            background = Mix(background, accent, dark ? .08 : .025);
+            sidebar = Mix(sidebar, accent, dark ? .18 : .10);
+            surface = Mix(surface, accent, dark ? .10 : .04);
+        }
+        if (profile.SurfaceStyle == "Contrast")
+        {
+            background = dark ? Color.Parse("#101114") : Colors.White;
+            sidebar = dark ? Color.Parse("#202329") : Color.Parse("#EBEDF0");
+            surface = dark ? Color.Parse("#292D34") : Colors.White;
+        }
+        Set("BgDark", background);
+        Set("BgMedium", string.IsNullOrEmpty(profile.SidebarBackground) ? sidebar : Color.Parse(profile.SidebarBackground));
+        Set("BgLight", string.IsNullOrEmpty(profile.SurfaceBackground) ? surface : Color.Parse(profile.SurfaceBackground));
+        Set("TextPrimary", foreground);
+        Set("TextSecondary", string.IsNullOrEmpty(profile.SecondaryForeground) ? Mix(background, foreground, .72) : Color.Parse(profile.SecondaryForeground));
+        Set("Border", string.IsNullOrEmpty(profile.BorderColor) ? Mix(background, foreground, profile.SurfaceStyle == "Contrast" ? .32 : .14) : Color.Parse(profile.BorderColor));
+        Set("AccentColor", accent); Set("AccentSurface", Mix(background, accent, dark ? .25 : .14));
+        app.Resources["CardRadius"] = new CornerRadius(profile.CornerRadius);
+        app.Resources["ControlRadius"] = new CornerRadius(profile.CornerRadius * 2 / 3);
+        app.Resources["ControlHeight"] = profile.ControlHeight;
+        app.Resources["RowHeight"] = profile.RowHeight;
         app.Resources["SystemAccentColor"] = accent;
         app.Resources["UiFont"] = new FontFamily(profile.FontFamily);
         app.Resources["UiFontSize"] = profile.FontSize;

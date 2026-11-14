@@ -45,6 +45,19 @@ Check(customTheme.Background == "#101010", "Switching mode must not modify a sav
 try { modeSwitch.UseBuiltInMode("invalid"); throw new Exception("Unknown mode accepted"); }
 catch (ArgumentException) { }
 Check(modeSwitch.Mode == "Dark", "Invalid mode must not mutate appearance");
+var expanded = customTheme.Copy();
+expanded.SurfaceStyle = "Tinted"; expanded.SurfaceBackground = "#112233";
+expanded.SidebarBackground = "#223344"; expanded.SecondaryForeground = "#AABBCC";
+expanded.BorderColor = "#445566"; expanded.CornerRadius = 20; expanded.ControlHeight = 44; expanded.RowHeight = 64;
+var roundtrip = expanded.Copy();
+Check(roundtrip.SurfaceStyle == "Tinted" && roundtrip.SurfaceBackground == "#112233" && roundtrip.CornerRadius == 20 && roundtrip.RowHeight == 64, "Expanded appearance roundtrip");
+foreach(var invalid in new[]{ """{"CornerRadius":25}""", """{"RowHeight":20}""", """{"ControlHeight":100}""", """{"SurfaceStyle":"invalid"}""", """{"SidebarBackground":"red"}""" })
+{
+ try { PlayVoice.Resources.Themes.AppearanceProfile.Parse(invalid); throw new Exception("Invalid expanded theme accepted"); }
+ catch(System.IO.InvalidDataException) { }
+}
+expanded.UseBuiltInMode("Dark");
+Check(expanded.SurfaceBackground == null && expanded.SidebarBackground == null && expanded.BorderColor == null, "Built-in mode clears custom surfaces");
 var palettes = JsonNode.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "ColorPalettes.json")))!.AsObject();
 Check(palettes.Count == 4, "Four distinct color themes required");
 foreach (var palette in palettes)

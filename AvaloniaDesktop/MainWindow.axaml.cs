@@ -85,20 +85,60 @@ public partial class MainWindow : Window
     private void PlayPause(object s, RoutedEventArgs e) => Act(() => GlobalData.Inst.Playback.PauseOrResume());
     private void StopAll(object s, RoutedEventArgs e) => Act(() => GlobalData.Inst.Playback.StopAll());
     private void MasterChanged(object s, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e) => Act(() => GlobalData.Inst.AudioProxy.GlobalDecibel = MasterVolume.Value);
-    private void RefreshSettings() { syncing = true; ThemeChoices.ItemsSource = ThemeManager.ThemeList.Select(x => x.Name).ToArray(); ThemeChoices.SelectedIndex = (int)GlobalData.Inst.Config.Theme; PaletteChoices.ItemsSource = ThemeManager.Palettes.Keys.ToArray(); PaletteChoices.SelectedItem = GlobalData.Inst.Config.ColorPalette; LanguageChoices.ItemsSource = LanguageManager.Inst.LanguageList.Select(x => x.Value).ToArray(); LanguageChoices.SelectedIndex = LanguageManager.Inst.NowLanguageInfo.Index; Materials.ItemsSource = new[] { "Solid", "Acrylic", "Mica" }; Materials.SelectedItem = GlobalData.Inst.Config.Appearance.WindowMaterial; FontInput.Text = GlobalData.Inst.Config.Appearance.FontFamily; FontSizeInput.Value = (decimal)GlobalData.Inst.Config.Appearance.FontSize; PlaybackModes.ItemsSource = Enum.GetNames<PlaybackMode>(); PlaybackModes.SelectedIndex = (int)GlobalData.Inst.Playback.Mode; syncing = false; RefreshDevices(this, new()); }
+    private void RefreshSettings() { syncing = true; RefreshThemeEditor(); ThemeChoices.ItemsSource = ThemeManager.ThemeList.Select(x => x.Name).ToArray(); ThemeChoices.SelectedIndex = (int)GlobalData.Inst.Config.Theme; PaletteChoices.ItemsSource = ThemeManager.Palettes.Keys.ToArray(); PaletteChoices.SelectedItem = GlobalData.Inst.Config.ColorPalette; LanguageChoices.ItemsSource = LanguageManager.Inst.LanguageList.Select(x => x.Value).ToArray(); LanguageChoices.SelectedIndex = LanguageManager.Inst.NowLanguageInfo.Index; Materials.ItemsSource = new[] { "Solid", "Acrylic", "Mica" }; Materials.SelectedItem = GlobalData.Inst.Config.Appearance.WindowMaterial; FontInput.Text = GlobalData.Inst.Config.Appearance.FontFamily; FontSizeInput.Value = (decimal)GlobalData.Inst.Config.Appearance.FontSize; PlaybackModes.ItemsSource = Enum.GetNames<PlaybackMode>(); PlaybackModes.SelectedIndex = (int)GlobalData.Inst.Playback.Mode; syncing = false; RefreshDevices(this, new()); }
     private record DeviceChoice(string Id, string Name) { public override string ToString() => Name; }
     private void RefreshDevices(object s, RoutedEventArgs e) { if (!ready) return; syncing = true; var g = GlobalData.Inst; var combos = new[] { PhysicalMic, PhysicalOutput, VirtualMic, VirtualOutput }; var ids = new[] { g.Config.PhysicalMicrophoneID, g.Config.PhysicalLoudspeakerID, g.Config.VirtualMicrophoneID, g.Config.VirtualLoudspeakerID }; for (int i = 0; i < 4; i++) { var dic = i % 2 == 0 ? g.Equipment.MicrophoneDic : g.Equipment.LoudspeakerDic; var list = dic.Select(x => new DeviceChoice(x.Key, x.Value)).ToArray(); combos[i].ItemsSource = list; combos[i].SelectedItem = list.FirstOrDefault(x => x.Id == ids[i]); } syncing = false; }
     private void DeviceChanged(object s, SelectionChangedEventArgs e) { if (syncing || s is not ComboBox combo || combo.SelectedItem is not DeviceChoice d) return; Act(() => { var equipment = GlobalData.Inst.Equipment; if (combo == PhysicalMic) equipment.PhysicalMicrophone = equipment.GetMicrophone(d.Id); else if (combo == VirtualMic) equipment.VirtualMicrophone = equipment.GetMicrophone(d.Id); else if (combo == PhysicalOutput) equipment.PhysicalLoudspeaker = equipment.GetLoudspeaker(d.Id); else equipment.VirtualLoudspeaker = equipment.GetLoudspeaker(d.Id); }); }
     private void TestChain(object s, RoutedEventArgs e) => Act(() => GlobalData.Inst.TryRun(true));
     private void MonitorChanged(object s, RoutedEventArgs e) => Act(() => { GlobalData.Inst.TryGoEar_Audio(AudioMonitor.IsChecked == true); GlobalData.Inst.TryGoEar_In(MicMonitor.IsChecked == true); GlobalData.Inst.AutoMute = AutoMute.IsChecked == true; });
-    private void ThemeSelected(object s, SelectionChangedEventArgs e) { if (!syncing && ThemeChoices.SelectedIndex >= 0) Act(() => ThemeManager.SelectTheme((ThemeManager.ThemeEnum)ThemeChoices.SelectedIndex)); }
-    private void PaletteSelected(object s, SelectionChangedEventArgs e) { if (!syncing && PaletteChoices.SelectedItem is string name) Act(() => { var p = ThemeManager.CaptureAppearance(); p.Palette = name; p.Accent = null; ThemeManager.ApplyAppearance(p); }); }
-    private void LanguageSelected(object s, SelectionChangedEventArgs e) { if (!syncing && LanguageChoices.SelectedIndex >= 0) Act(() => { LanguageManager.Inst.SetCulture(LanguageManager.Inst.LanguageList[LanguageChoices.SelectedIndex].Key); vm.RefreshLanguage(); }); }
-    private void ApplyAppearance(object s, RoutedEventArgs e) => Act(() => { var p = ThemeManager.CaptureAppearance(); p.FontFamily = FontInput.Text; p.FontSize = (double)(FontSizeInput.Value ?? 13); if (!string.IsNullOrWhiteSpace(AccentInput.Text)) p.Accent = AccentInput.Text; ThemeManager.ApplyAppearance(p); });
+    private void ThemeSelected(object s, SelectionChangedEventArgs e) { if (!syncing && ThemeChoices.SelectedIndex >= 0) Act(() => { ThemeManager.SelectTheme((ThemeManager.ThemeEnum)ThemeChoices.SelectedIndex); RefreshSettings(); }); }
+    private void PaletteSelected(object s, SelectionChangedEventArgs e) { if (!syncing && PaletteChoices.SelectedItem is string name) Act(() => { var p = ThemeManager.CaptureAppearance(); p.Palette = name; p.Accent = null; ThemeManager.ApplyAppearance(p); RefreshSettings(); }); }
+    private void LanguageSelected(object s, SelectionChangedEventArgs e) { if (!syncing && LanguageChoices.SelectedIndex >= 0) Act(() => { LanguageManager.Inst.SetCulture(LanguageManager.Inst.LanguageList[LanguageChoices.SelectedIndex].Key); vm.RefreshLanguage(); RefreshSettings(); }); }
+    private AppearanceProfile ReadTheme()
+    {
+        var p = ThemeManager.CaptureAppearance();
+        p.Name = string.IsNullOrWhiteSpace(ThemeNameInput.Text) ? "Custom" : ThemeNameInput.Text.Trim();
+        p.FontFamily = FontInput.Text ?? "Segoe UI";
+        p.FontSize = (double)(FontSizeInput.Value ?? 13);
+        p.SurfaceStyle = new[] { "Neutral", "Tinted", "Contrast" }[Math.Max(0, SurfaceStyles.SelectedIndex)];
+        p.CornerRadius = (double)(RadiusInput.Value ?? 12);
+        p.ControlHeight = (double)(ControlHeightInput.Value ?? 38);
+        p.RowHeight = (double)(RowHeightInput.Value ?? 52);
+        p.Accent = Clean(AccentInput.Text); p.Background = Clean(BackgroundInput.Text); p.Foreground = Clean(ForegroundInput.Text);
+        p.SurfaceBackground = Clean(SurfaceInput.Text); p.SidebarBackground = Clean(SidebarInput.Text);
+        p.SecondaryForeground = Clean(SecondaryInput.Text); p.BorderColor = Clean(BorderInput.Text);
+        p.Validate(); return p;
+    }
+    private static string Clean(string text) => string.IsNullOrWhiteSpace(text) ? null : text.Trim();
+    private void ApplyAppearance(object s, RoutedEventArgs e) => Act(() => { ThemeManager.ApplyAppearance(ReadTheme()); RefreshSettings(); });
+    private void SaveTheme(object s, RoutedEventArgs e) => Act(() =>
+    {
+        var p = ReadTheme(); GlobalData.Inst.Config.CustomThemes[p.Name] = p.Copy();
+        ThemeManager.ApplyAppearance(p); RefreshSettings();
+    });
+    private void ResetTheme(object s, RoutedEventArgs e) => Act(() => { ThemeManager.ApplyAppearance(new AppearanceProfile()); RefreshSettings(); });
+    private void SavedThemeSelected(object s, SelectionChangedEventArgs e)
+    {
+        if (!syncing && SavedThemes.SelectedItem is string name) Act(() => { ThemeManager.ApplyAppearance(GlobalData.Inst.Config.CustomThemes[name]); RefreshSettings(); });
+    }
+    private void RefreshThemeEditor()
+    {
+        var p = ThemeManager.CaptureAppearance();
+        SurfaceStyles.ItemsSource = new[] { vm.L.GetString("中性"), vm.L.GetString("染色"), vm.L.GetString("鲜明") };
+        SurfaceStyles.SelectedIndex = Array.IndexOf(new[] { "Neutral", "Tinted", "Contrast" }, p.SurfaceStyle);
+        BackgroundInput.Text = p.Background ?? ""; ForegroundInput.Text = p.Foreground ?? "";
+        AccentInput.Text = p.Accent ?? ""; SurfaceInput.Text = p.SurfaceBackground ?? "";
+        SidebarInput.Text = p.SidebarBackground ?? ""; SecondaryInput.Text = p.SecondaryForeground ?? "";
+        BorderInput.Text = p.BorderColor ?? ""; RadiusInput.Value = (decimal)p.CornerRadius;
+        ControlHeightInput.Value = (decimal)p.ControlHeight; RowHeightInput.Value = (decimal)p.RowHeight;
+        ThemeNameInput.Text = p.Name;
+        SavedThemes.ItemsSource = GlobalData.Inst.Config.CustomThemes.Keys.OrderBy(x=>x).ToArray();
+        SavedThemes.SelectedItem = GlobalData.Inst.Config.CustomThemes.ContainsKey(p.Name) ? p.Name : null;
+    }
     private void MaterialSelected(object s, SelectionChangedEventArgs e) { if (!syncing && Materials.SelectedItem is string mode) Act(() => { var p = ThemeManager.CaptureAppearance(); p.WindowMaterial = mode; ThemeManager.ApplyAppearance(p); TransparencyLevelHint = mode switch { "Mica" => [WindowTransparencyLevel.Mica], "Acrylic" => [WindowTransparencyLevel.AcrylicBlur], _ => [WindowTransparencyLevel.None] }; }); }
     private void PlaybackModeChanged(object s, SelectionChangedEventArgs e) { if (!syncing && PlaybackModes.SelectedIndex >= 0) Act(() => GlobalData.Inst.Playback.SetMode((PlaybackMode)PlaybackModes.SelectedIndex)); }
-    private async void ImportTheme(object s, RoutedEventArgs e) { await Execute(async () => { var files = await StorageProvider.OpenFilePickerAsync(new() { AllowMultiple = false }); if (files.FirstOrDefault()?.TryGetLocalPath() is string path) { if (new FileInfo(path).Length > 65536) throw new InvalidDataException(); ThemeManager.ApplyAppearance(AppearanceProfile.Parse(await File.ReadAllTextAsync(path))); RefreshSettings(); } }); }
-    private async void ExportTheme(object s, RoutedEventArgs e) { await Execute(async () => { var file = await StorageProvider.SaveFilePickerAsync(new() { SuggestedFileName = "PlayVoice-theme.json" }); if (file?.TryGetLocalPath() is string path && !JsonTool.SaveJsonAtomically(path, ThemeManager.CaptureAppearance())) throw new IOException(); }); }
+    private async void ImportTheme(object s, RoutedEventArgs e) { await Execute(async () => { var files = await StorageProvider.OpenFilePickerAsync(new() { AllowMultiple = false }); if (files.FirstOrDefault()?.TryGetLocalPath() is string path) { if (new FileInfo(path).Length > 65536) throw new InvalidDataException(); var imported = AppearanceProfile.Parse(await File.ReadAllTextAsync(path)); GlobalData.Inst.Config.CustomThemes[imported.Name] = imported.Copy(); ThemeManager.ApplyAppearance(imported); RefreshSettings(); } }); }
+    private async void ExportTheme(object s, RoutedEventArgs e) { await Execute(async () => { var file = await StorageProvider.SaveFilePickerAsync(new() { SuggestedFileName = "PlayVoice-theme.json" }); if (file?.TryGetLocalPath() is string path && !JsonTool.SaveJsonAtomically(path, ReadTheme())) throw new IOException(); }); }
     private async void SearchWorkshop(object s, RoutedEventArgs e)
     {
         if (!ready) return;

@@ -374,4 +374,15 @@
   <data name="创建音频预设" xml:space="preserve"><value>建立音訊預設</value></data>
   <data name="创建游戏预设" xml:space="preserve"><value>建立遊戲預設</value></data>
   <data name="播放" xml:space="preserve"><value>播放</value></data>
+<data name="配色风格" xml:space="preserve"><value>配色風格</value></data>
+<data name="中性" xml:space="preserve"><value>中性</value></data>
+<data name="染色" xml:space="preserve"><value>染色</value></data>
+<data name="鲜明" xml:space="preserve"><value>鮮明</value></data>
+<data name="面板背景" xml:space="preserve"><value>面板背景</value></data>
+<data name="侧栏背景" xml:space="preserve"><value>側欄背景</value></data>
+<data name="次级文字" xml:space="preserve"><value>次要文字</value></data>
+<data name="边框颜色" xml:space="preserve"><value>邊框顏色</value></data>
+<data name="圆角" xml:space="preserve"><value>圓角</value></data>
+<data name="控件高度" xml:space="preserve"><value>控制項高度</value></data>
+<data name="列表行高" xml:space="preserve"><value>清單列高</value></data>
 </root>
