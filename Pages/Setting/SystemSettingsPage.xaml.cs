@@ -95,18 +95,11 @@ namespace PlayVoice.Pages.Setting
                 AudioPresetComboBox.SelectedIndex = presetIndex;
                 AudioPresetComboBox.IsSyncing = false;
 
-                bool isSyncing = false;
                 AudioPresetComboBox.OnSelectionChanged += async (obj0, obj1) =>
                 {
-                    if (isSyncing == true) return;
-                    isSyncing = true;
                     var presetName = (string)obj1;
-                    if (presetName != LanguageManager.Inst.GetString("无"))
-                        GlobalData.Inst.ActiveAudioPreset =
-                            await AudioPresetDataTool.LoadAudioPresetData(presetName);
-                    else
-                        GlobalData.Inst.ActiveAudioPreset = null;
-                    isSyncing = false;
+                    await GlobalData.Inst.SelectAudioPresetAsync(
+                        presetName == LanguageManager.Inst.GetString("无") ? null : presetName);
                 };
             }
             {

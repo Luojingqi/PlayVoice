@@ -20,7 +20,6 @@ public partial class MainWindow : Window
     private AudioData selected;
     private readonly DispatcherTimer timer = new();
     private CancellationTokenSource waveformCancellation = new();
-    private long presetRequest;
     public MainWindow()
     {
         Inst = this; InitializeComponent(); DataContext = vm;
@@ -28,6 +27,7 @@ public partial class MainWindow : Window
         {
             new GlobalData(); ready = true;
             await GlobalData.Inst.RestoreActiveAudioPresetAsync();
+            if (DesktopApplication.Current.Dispatcher.HasShutdownStarted) return;
             HotkeyManager.Inst.Start(); RefreshNames(); RefreshSettings(); vm.Filter();
             timer.Interval = TimeSpan.FromMilliseconds(250); timer.Tick += (_, _) => RefreshStatus(); timer.Start();
         });
@@ -42,12 +42,15 @@ public partial class MainWindow : Window
     private async void AudioPresetChanged(object s, SelectionChangedEventArgs e)
     {
         if (!ready || syncing || AudioPresets.SelectedItem is not string name) return;
-        var request = ++presetRequest;
         await Execute(async () =>
         {
-            var preset = await AudioPresetDataTool.LoadAudioPresetData(name);
-            if (request != presetRequest || DesktopApplication.Current.Dispatcher.HasShutdownStarted) { preset?.Dispose(); return; }
-            GlobalData.Inst.ActiveAudioPreset = preset; selected = null; vm.Filter();
+            if (!await GlobalData.Inst.SelectAudioPresetAsync(name)) return;
+            waveformCancellation.Cancel();
+            selected = null;
+            vm.SelectedName = "";
+            Waveform.Peaks = [];
+            Waveform.InvalidateVisual();
+            vm.Filter();
         });
     }
     private void GamePresetChanged(object s, SelectionChangedEventArgs e) { if (!syncing && GamePresets.SelectedItem is string n) Act(() => { GlobalData.Inst.ActiveFunctionPreset = FunctionPresetDataTool.Load(n); vm.Filter(); }); }

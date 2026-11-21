@@ -7,7 +7,7 @@ namespace PlayVoice;
 public partial class ShellViewModel : ObservableObject
 {
     public LanguageManager L => LanguageManager.Inst;
-    public ObservableCollection<TrackRow> Tracks { get; } = new();
+    [ObservableProperty] private IReadOnlyList<TrackRow> tracks = Array.Empty<TrackRow>();
     public ObservableCollection<string> AudioPresetNames { get; } = new();
     public ObservableCollection<string> GamePresetNames { get; } = new();
     [ObservableProperty] private string search = "";
@@ -33,9 +33,9 @@ public partial class ShellViewModel : ObservableObject
     partial void OnRecentChanged(bool value) => Filter();
     public void Filter()
     {
-        Tracks.Clear();
-        foreach (var audio in GlobalData.Inst?.ActiveAudioPreset?.AudioList ?? [])
-            if (AudioLibraryFilter.Matches(audio.Config, Search, Favorites, Recent)) Tracks.Add(new TrackRow(audio));
+        Tracks = GlobalData.Inst?.ActiveAudioPreset?.AudioList
+            .Where(audio => AudioLibraryFilter.Matches(audio.Config, Search, Favorites, Recent))
+            .Select(audio => new TrackRow(audio)).ToArray() ?? Array.Empty<TrackRow>();
         IsEmpty = Tracks.Count == 0;
     }
     public void RefreshLanguage() { OnPropertyChanged(nameof(L)); Filter(); }

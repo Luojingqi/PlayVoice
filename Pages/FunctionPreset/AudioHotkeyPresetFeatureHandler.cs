@@ -14,10 +14,10 @@ public sealed class AudioHotkeyPresetFeatureHandler : IFunctionPresetFeatureHand
         if (functionPreset == null || audioPreset == null)
             return;
 
+        var bindings = functionPreset.GetBindingsByAudioId(audioPreset.Config.Name);
         foreach (var audio in audioPreset.AudioList)
         {
-            var hotkey = functionPreset.GetHotkey(
-                audioPreset.Config.Name, audio.Config.Id, create: false);
+            var hotkey = bindings[audio.Config.Id].FirstOrDefault()?.HotkeyData;
             if (hotkey == null || hotkey.VkCode == 0)
                 continue;
 

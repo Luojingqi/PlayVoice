@@ -70,6 +70,8 @@ public partial class AudioTrackItem : UserControl
         object sender,
         DependencyPropertyChangedEventArgs e)
     {
+        if (KeyboardKeyInputTextBox.IsKeyboardFocusWithin)
+            Keyboard.ClearFocus();
         if (!IsLoaded) return;
 
         SubscribeToPlaybackState();
@@ -159,6 +161,8 @@ public partial class AudioTrackItem : UserControl
 
     private void DragHandle_MouseDown(object sender, MouseButtonEventArgs e)
     {
+        var dragged = ViewModel;
+        var dragData = new DataObject(typeof(AudioTrackItemViewModel), dragged);
         var dpi = VisualTreeHelper.GetDpi(this);
         int width = (int)Math.Ceiling(ActualWidth * dpi.DpiScaleX);
         int height = (int)Math.Ceiling(ActualHeight * dpi.DpiScaleY);
@@ -166,10 +170,9 @@ public partial class AudioTrackItem : UserControl
         {
             RenderTargetBitmap bmp = new RenderTargetBitmap(width, height, dpi.PixelsPerInchX, dpi.PixelsPerInchY, PixelFormats.Pbgra32);
             bmp.Render(this);
-            this.Tag = bmp;
+            dragData.SetData("AudioTrackDragImage", bmp);
         }
 
-        DataObject dragData = new DataObject("AudioTrackItemVisual", this);
         ScrollViewer scrollViewer = FindVisualParent<ScrollViewer>(this);
         bool isDragging = true;
 
@@ -205,7 +208,7 @@ public partial class AudioTrackItem : UserControl
         }
 
         HotkeyManager.Inst.MouseWheelScrolled += ScrollDuringDrag;
-        this.Visibility = Visibility.Hidden;
+        dragged.IsDragging = true;
         try
         {
             DragDrop.DoDragDrop(this, dragData, DragDropEffects.Move);
@@ -214,8 +217,7 @@ public partial class AudioTrackItem : UserControl
         {
             isDragging = false;
             HotkeyManager.Inst.MouseWheelScrolled -= ScrollDuringDrag;
-            this.Visibility = Visibility.Visible;
-            this.Tag = null;
+            dragged.IsDragging = false;
         }
 
         e.Handled = true;

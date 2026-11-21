@@ -15,15 +15,13 @@ public partial class PresetPage : Page
 
     private readonly List<PageData> pageList = new();
     private readonly AudioTrackGrid audioTrackGridPage;
-    private readonly CreatePresetPage createAudioPresetPage;
-    private readonly CreateFunctionPresetPage createFunctionPresetPage;
-    private readonly DeletePresetPage deleteAudioPresetPage;
-    private readonly DeleteFunctionPresetPage deleteFunctionPresetPage;
-    private readonly UploadPresetPage uploadPresetPage;
+    private UploadPresetPage uploadPresetPage;
+    private DeletePresetPage deleteAudioPresetPage;
+    private DeleteFunctionPresetPage deleteFunctionPresetPage;
+    private CancellationTokenSource pageRequest;
     private List<FunctionPresetData> functionPresets = new();
     private bool isSynchronizingAudioPresetSelection;
     private bool isSynchronizingFunctionPresetSelection;
-    private int audioPresetPageLoadCount;
 
     public PresetPage()
     {
@@ -32,25 +30,7 @@ public partial class PresetPage : Page
 
         audioTrackGridPage = new AudioTrackGrid();
         Frame0.Content = audioTrackGridPage;
-        Frame0.Visibility = Visibility.Hidden;
-        Frame1.Visibility = Visibility.Hidden;
-        Frame2.Visibility = Visibility.Hidden;
-
-        createAudioPresetPage = new CreatePresetPage();
-        createFunctionPresetPage = new CreateFunctionPresetPage();
-        deleteAudioPresetPage = new DeletePresetPage();
-        deleteFunctionPresetPage = new DeleteFunctionPresetPage();
-        uploadPresetPage = new UploadPresetPage();
-        CreateAudioPresetPageFrame.Content = createAudioPresetPage;
-        CreateFunctionPresetPageFrame.Content = createFunctionPresetPage;
-        DeleteAudioPresetPageFrame.Content = deleteAudioPresetPage;
-        DeleteFunctionPresetPageFrame.Content = deleteFunctionPresetPage;
-        UploadPresetPageFrame.Content = uploadPresetPage;
-
-        foreach (var config in AudioPresetDataTool.GetAllAudioPresetConfigs())
-            pageList.Add(new PageData { Name = config.Name });
-        pageList.Add(PageData.CreateAddPage());
-        pageList.Add(PageData.CreateDeletePage());
+        Frame0.Visibility = Frame1.Visibility = Frame2.Visibility = Visibility.Collapsed;
 
         TopButtonListBox.ItemsSource = pageList;
         TopButtonListBox.DisplayMemberPath = nameof(PageData.Name);
@@ -65,45 +45,67 @@ public partial class PresetPage : Page
     {
         if (isSynchronizingAudioPresetSelection) return;
 
-        var selectedPage = TopButtonListBox.SelectedItem as PageData;
-        audioTrackGridPage.CancelPendingAudioPresetLoad(clearItems: true);
-        if (selectedPage == null)
+        pageRequest?.Cancel();
+        if (TopButtonListBox.SelectedItem is not PageData page) return;
+        ShowPage(page);
+        if (page.IsAddPage || page.IsDeletePage) return;
+
+        using var request = new CancellationTokenSource();
+        pageRequest = request;
+        try
         {
-            Frame0.Visibility = Visibility.Hidden;
-            Frame1.Visibility = Visibility.Hidden;
-            Frame2.Visibility = Visibility.Hidden;
+            Frame0.IsEnabled = false;
+            bool selected = await GlobalData.Inst.SelectAudioPresetAsync(page.Name, request.Token);
+            if (request.IsCancellationRequested) return;
+            if (selected) audioTrackGridPage.RefreshCurrentAudioPreset();
+            else UpdateAudioPresetPage(GlobalData.Inst.ActiveAudioPreset);
         }
-        else if (selectedPage.IsAddPage)
+        catch (Exception exception)
         {
-            Frame0.Visibility = Visibility.Hidden;
-            Frame1.Visibility = Visibility.Visible;
-            Frame2.Visibility = Visibility.Hidden;
-            uploadPresetPage.Open(-1);
-        }
-        else if (selectedPage.IsDeletePage)
-        {
-            Frame0.Visibility = Visibility.Hidden;
-            Frame1.Visibility = Visibility.Hidden;
-            Frame2.Visibility = Visibility.Visible;
-            deleteAudioPresetPage.Open();
-            deleteFunctionPresetPage.Open();
-        }
-        else
-        {
-            Frame0.Visibility = Visibility.Visible;
-            Frame1.Visibility = Visibility.Hidden;
-            Frame2.Visibility = Visibility.Hidden;
-            audioPresetPageLoadCount++;
-            try
+            if (!request.IsCancellationRequested)
             {
-                await audioTrackGridPage.InitLoadAudioPreset(selectedPage.Name);
+                audioTrackGridPage.ShowLibraryError(exception);
+                UpdateAudioPresetPage(GlobalData.Inst.ActiveAudioPreset);
             }
-            finally
+        }
+        finally
+        {
+            if (ReferenceEquals(pageRequest, request))
             {
-                audioPresetPageLoadCount--;
+                pageRequest = null;
+                Frame0.IsEnabled = true;
             }
         }
     }
+
+    private void ShowPage(PageData page)
+    {
+        Frame0.Visibility = !page.IsAddPage && !page.IsDeletePage ? Visibility.Visible : Visibility.Collapsed;
+        Frame1.Visibility = page.IsAddPage ? Visibility.Visible : Visibility.Collapsed;
+        Frame2.Visibility = page.IsDeletePage ? Visibility.Visible : Visibility.Collapsed;
+        if (page.IsAddPage)
+        {
+            if (uploadPresetPage == null)
+            {
+                CreateAudioPresetPageFrame.Content = new CreatePresetPage();
+                CreateFunctionPresetPageFrame.Content = new CreateFunctionPresetPage();
+                UploadPresetPageFrame.Content = uploadPresetPage = new UploadPresetPage();
+            }
+            uploadPresetPage.Open(-1, pageList.Where(IsAudioPage).Select(p => p.Name).ToArray());
+        }
+        else if (page.IsDeletePage)
+        {
+            if (deleteAudioPresetPage == null)
+            {
+                DeleteAudioPresetPageFrame.Content = deleteAudioPresetPage = new DeletePresetPage();
+                DeleteFunctionPresetPageFrame.Content = deleteFunctionPresetPage = new DeleteFunctionPresetPage();
+            }
+            deleteAudioPresetPage.Open();
+            deleteFunctionPresetPage.Open();
+        }
+    }
+
+    private static bool IsAudioPage(PageData page) => !page.IsAddPage && !page.IsDeletePage;
 
     private void FunctionPresetComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -121,16 +123,59 @@ public partial class PresetPage : Page
         LanguageManager.Inst.CultureChanged -= UpdateLanguage;
         LanguageManager.Inst.CultureChanged += UpdateLanguage;
 
-        RefreshFunctionPresetList();
-        var audioPresetBeforeRestore = GlobalData.Inst.ActiveAudioPreset;
-        await GlobalData.Inst.RestoreActiveAudioPresetAsync();
-        if (ReferenceEquals(audioPresetBeforeRestore, GlobalData.Inst.ActiveAudioPreset))
-            UpdateAudioPresetPage(GlobalData.Inst.ActiveAudioPreset);
-        UpdateFunctionPresetSelection(GlobalData.Inst.ActiveFunctionPreset);
+        pageRequest?.Cancel();
+        using var request = new CancellationTokenSource();
+        pageRequest = request;
+        IsEnabled = false;
+        try
+        {
+            var catalog = await Task.Run(() => (
+                Names: AudioPresetDataTool.GetAllAudioPresetName(),
+                Functions: ReadFunctionPresets()), request.Token);
+            if (request.IsCancellationRequested) return;
+            if (pageList.Count == 0 || !catalog.Names.SequenceEqual(pageList.Where(IsAudioPage).Select(p => p.Name)))
+            {
+                isSynchronizingAudioPresetSelection = true;
+                try
+                {
+                    pageList.Clear();
+                    pageList.AddRange(catalog.Names.Select(name => new PageData { Name = name }));
+                    pageList.Add(PageData.CreateAddPage());
+                    pageList.Add(PageData.CreateDeletePage());
+                    TopButtonListBox.Items.Refresh();
+                }
+                finally { isSynchronizingAudioPresetSelection = false; }
+            }
+            SetFunctionPresets(catalog.Functions);
+            IsEnabled = true;
+            var global = GlobalData.Inst;
+            var before = global.ActiveAudioPreset;
+            await global.RestoreActiveAudioPresetAsync(request.Token);
+            if (!request.IsCancellationRequested && ReferenceEquals(before, global.ActiveAudioPreset))
+                UpdateAudioPresetPage(global.ActiveAudioPreset);
+        }
+        catch (OperationCanceledException) when (request.IsCancellationRequested) { }
+        catch (Exception exception)
+        {
+            if (!request.IsCancellationRequested)
+            {
+                audioTrackGridPage.ShowLibraryError(exception);
+                UpdateAudioPresetPage(GlobalData.Inst.ActiveAudioPreset);
+            }
+        }
+        finally
+        {
+            if (ReferenceEquals(pageRequest, request))
+            {
+                pageRequest = null;
+                IsEnabled = true;
+            }
+        }
     }
 
     private void PresetPage_Unloaded(object sender, RoutedEventArgs e)
     {
+        pageRequest?.Cancel();
         GlobalData.Inst.ActiveAudioPresetChanged -= UpdateAudioPresetPage;
         GlobalData.Inst.ActiveFunctionPresetChanged -= UpdateFunctionPresetSelection;
         LanguageManager.Inst.CultureChanged -= UpdateLanguage;
@@ -141,96 +186,61 @@ public partial class PresetPage : Page
         LanguageManager.LanguageInfo languageInfo)
     {
         FunctionPresetComboBox.Items.Refresh();
-        deleteFunctionPresetPage.RefreshLanguage();
+        deleteFunctionPresetPage?.RefreshLanguage();
     }
 
-    public void RefreshFunctionPresetList()
+    private static List<FunctionPresetData> ReadFunctionPresets()
     {
-        functionPresets = FunctionPresetDataTool.GetAll();
-        if (functionPresets.Count == 0)
+        var presets = FunctionPresetDataTool.GetAll();
+        if (presets.Count == 0 && FunctionPresetDataTool.CreateDefault() is { } defaultPreset)
+            presets.Add(defaultPreset);
+        return presets;
+    }
+
+    public void RefreshFunctionPresetList() => SetFunctionPresets(ReadFunctionPresets());
+
+    private void SetFunctionPresets(List<FunctionPresetData> presets)
+    {
+        functionPresets = presets;
+        isSynchronizingFunctionPresetSelection = true;
+        try
         {
-            var defaultPreset = FunctionPresetDataTool.CreateDefault();
-            if (defaultPreset != null)
-                functionPresets.Add(defaultPreset);
+            var active = GlobalData.Inst.ActiveFunctionPreset;
+            int index = FindFunctionPreset(active);
+            if (index >= 0) presets[index] = active;
+            FunctionPresetComboBox.ItemsSource = presets;
+            FunctionPresetComboBox.SelectedIndex = index;
         }
-
-        FunctionPresetComboBox.ItemsSource = functionPresets;
-        var selectedPreset = functionPresets.FirstOrDefault(item =>
-            string.Equals(
-                item.Name,
-                GlobalData.Inst.ActiveFunctionPreset?.Name,
-                StringComparison.OrdinalIgnoreCase));
-        if (selectedPreset != null
-            && !ReferenceEquals(selectedPreset, GlobalData.Inst.ActiveFunctionPreset))
-            GlobalData.Inst.ActiveFunctionPreset = selectedPreset;
+        finally { isSynchronizingFunctionPresetSelection = false; }
+        audioTrackGridPage.RefreshFunctionPresetValues();
     }
 
-    private async void UpdateAudioPresetPage(AudioPresetData audioPreset)
+    private int FindFunctionPreset(FunctionPresetData preset) => functionPresets.FindIndex(item =>
+        string.Equals(item.Name, preset?.Name, StringComparison.OrdinalIgnoreCase));
+
+    private void UpdateAudioPresetPage(AudioPresetData audioPreset)
     {
-        if (audioPresetPageLoadCount > 0) return;
         if (!Dispatcher.CheckAccess())
         {
             Dispatcher.Invoke(() => UpdateAudioPresetPage(audioPreset));
             return;
         }
 
-        bool keepDeleteManagementPage =
-            (TopButtonListBox.SelectedItem as PageData)?.IsDeletePage == true;
-        int selectedIndex = pageList.FindIndex(page => keepDeleteManagementPage
-            ? page.IsDeletePage
-            : page.IsAddPage);
-        if (audioPreset != null)
-        {
-            int presetIndex = pageList.FindIndex(page => string.Equals(
-                page.Name,
-                audioPreset.Config.Name,
-                StringComparison.OrdinalIgnoreCase));
-            if (presetIndex >= 0)
-                selectedIndex = presetIndex;
-        }
-
+        var active = pageList.FirstOrDefault(page => IsAudioPage(page)
+            && string.Equals(page.Name, audioPreset?.Config.Name, StringComparison.OrdinalIgnoreCase));
+        var selected = active ?? (TopButtonListBox.SelectedItem is PageData { IsDeletePage: true } delete
+            ? delete : pageList.FirstOrDefault(page => page.IsAddPage));
+        if (selected == null) return;
         isSynchronizingAudioPresetSelection = true;
         try
         {
-            TopButtonListBox.SelectedIndex = -1;
-            await Dispatcher.InvokeAsync(() =>
-            {
-                TopButtonListBox.UpdateLayout();
-                TopButtonListBox.SelectedIndex = selectedIndex;
-                TopButtonListBox.ScrollIntoView(TopButtonListBox.SelectedItem);
-            }, System.Windows.Threading.DispatcherPriority.Loaded);
+            TopButtonListBox.SelectedItem = selected;
+            TopButtonListBox.ScrollIntoView(selected);
         }
-        finally
-        {
-            isSynchronizingAudioPresetSelection = false;
-        }
-
-        if (audioPreset == null)
-        {
-            Frame0.Visibility = Visibility.Hidden;
-            Frame1.Visibility = keepDeleteManagementPage
-                ? Visibility.Hidden
-                : Visibility.Visible;
-            Frame2.Visibility = keepDeleteManagementPage
-                ? Visibility.Visible
-                : Visibility.Hidden;
-            if (keepDeleteManagementPage)
-            {
-                deleteAudioPresetPage.Open();
-                deleteFunctionPresetPage.Open();
-            }
-            else
-            {
-                uploadPresetPage.Open(-1);
-            }
-        }
-        else
-        {
-            Frame0.Visibility = Visibility.Visible;
-            Frame1.Visibility = Visibility.Hidden;
-            Frame2.Visibility = Visibility.Hidden;
-            await audioTrackGridPage.RefreshCurrentAudioPreset();
-        }
+        finally { isSynchronizingAudioPresetSelection = false; }
+        Frame0.IsEnabled = true;
+        ShowPage(selected);
+        audioTrackGridPage.RefreshCurrentAudioPreset();
     }
 
     private void UpdateFunctionPresetSelection(FunctionPresetData functionPreset)
@@ -241,13 +251,18 @@ public partial class PresetPage : Page
             return;
         }
 
-        int selectedIndex = functionPresets.FindIndex(item => string.Equals(
-            item.Name,
-            functionPreset?.Name,
-            StringComparison.OrdinalIgnoreCase));
+        int selectedIndex = FindFunctionPreset(functionPreset);
         isSynchronizingFunctionPresetSelection = true;
-        FunctionPresetComboBox.SelectedIndex = selectedIndex;
-        isSynchronizingFunctionPresetSelection = false;
+        try
+        {
+            if (selectedIndex >= 0 && !ReferenceEquals(functionPresets[selectedIndex], functionPreset))
+            {
+                functionPresets[selectedIndex] = functionPreset;
+                FunctionPresetComboBox.Items.Refresh();
+            }
+            FunctionPresetComboBox.SelectedIndex = selectedIndex;
+        }
+        finally { isSynchronizingFunctionPresetSelection = false; }
         audioTrackGridPage.RefreshFunctionPresetValues();
     }
 
@@ -279,18 +294,6 @@ public partial class PresetPage : Page
     {
         TopButtonListBox.SelectedIndex = pageList.FindIndex(page => page.IsAddPage);
     }
-
-    public bool IsAudioPresetPageSelected(string name)
-    {
-        return TopButtonListBox.SelectedItem is PageData selectedPage
-            && !selectedPage.IsAddPage
-            && !selectedPage.IsDeletePage
-            && string.Equals(
-                selectedPage.Name,
-                name,
-                StringComparison.OrdinalIgnoreCase);
-    }
-
     public void RemoveAudioPresetPage(string name, bool keepManagementPage = false)
     {
         var pageToRemove = pageList.FirstOrDefault(page =>

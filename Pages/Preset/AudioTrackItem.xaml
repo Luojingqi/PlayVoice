@@ -22,6 +22,15 @@
             Margin="0,2"
             Padding="8" MinHeight="54"
             PreviewMouseLeftButtonDown="RowBorder_PreviewMouseLeftButtonDown">
+        <Border.Style>
+            <Style TargetType="Border">
+                <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsDragging}" Value="True">
+                        <Setter Property="Visibility" Value="Hidden"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
 
 
 

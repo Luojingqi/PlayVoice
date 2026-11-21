@@ -67,6 +67,7 @@ internal class GlobalData
     public PlaybackController Playback { get; } = new();
 
     private AudioPresetData activeAudioPreset;
+    private CancellationTokenSource pendingAudioPresetLoad;
     private FunctionPresetData activeFunctionPreset;
 
     public event Action<AudioPresetData> ActiveAudioPresetChanged;
@@ -77,6 +78,7 @@ internal class GlobalData
         get => activeAudioPreset;
         set
         {
+            pendingAudioPresetLoad?.Cancel();
             if (ReferenceEquals(activeAudioPreset, value)) return;
 
             Playback.Reset();
@@ -109,19 +111,63 @@ internal class GlobalData
         }
     }
 
-    public async Task RestoreActiveAudioPresetAsync()
+    public Task RestoreActiveAudioPresetAsync(CancellationToken cancellationToken = default)
     {
-        if (activeAudioPreset != null || string.IsNullOrWhiteSpace(config.ActiveAudioPresetName))
-            return;
+        if (activeAudioPreset != null || pendingAudioPresetLoad is { IsCancellationRequested: false }
+            || string.IsNullOrWhiteSpace(config.ActiveAudioPresetName))
+            return Task.CompletedTask;
+        return SelectAudioPresetAsync(config.ActiveAudioPresetName, cancellationToken);
+    }
 
-        var restoredPreset = await AudioPresetDataTool.LoadAudioPresetData(config.ActiveAudioPresetName);
-        if (restoredPreset == null)
+    // Selection and publication belong to the UI thread. Only the loader owns background work.
+    public async Task<bool> SelectAudioPresetAsync(string name, CancellationToken cancellationToken = default)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+        pendingAudioPresetLoad?.Cancel();
+        if (name == null)
         {
-            config.ActiveAudioPresetName = null;
-            config.Save();
-            return;
+            ActiveAudioPreset = null;
+            if (config.ActiveAudioPresetName != null)
+            {
+                config.ActiveAudioPresetName = null;
+                config.Save();
+            }
+            return true;
         }
-        ActiveAudioPreset = restoredPreset;
+        if (string.Equals(activeAudioPreset?.Config.Name, name, StringComparison.OrdinalIgnoreCase))
+            return true;
+
+        using var request = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        pendingAudioPresetLoad = request;
+        AudioPresetData loaded = null;
+        try
+        {
+            loaded = await AudioPresetDataTool.LoadAudioPresetData(name, request.Token);
+            request.Token.ThrowIfCancellationRequested();
+            pendingAudioPresetLoad = null;
+            if (loaded == null)
+            {
+                if (activeAudioPreset == null && string.Equals(config.ActiveAudioPresetName, name, StringComparison.OrdinalIgnoreCase))
+                {
+                    config.ActiveAudioPresetName = null;
+                    config.Save();
+                }
+                return false;
+            }
+            ActiveAudioPreset = loaded;
+            loaded = null;
+            return true;
+        }
+        catch (OperationCanceledException) when (request.IsCancellationRequested)
+        {
+            return false;
+        }
+        finally
+        {
+            if (ReferenceEquals(pendingAudioPresetLoad, request)) pendingAudioPresetLoad = null;
+            if (loaded != null && !ReferenceEquals(loaded, activeAudioPreset))
+                await Task.Run(loaded.Dispose);
+        }
     }
 
     public HotkeyData GetAudioHotkey(AudioData audioData, bool create)
@@ -195,6 +241,7 @@ internal class GlobalData
 
     public void DisposeAudioPresetForExit()
     {
+        pendingAudioPresetLoad?.Cancel();
         Playback.Reset();
         ClearFunctionPresetFeatures();
         activeAudioPreset?.Dispose();

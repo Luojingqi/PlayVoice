@@ -26,7 +26,11 @@ public static class JsonTool
         data = default(T);
         if (File.Exists(path))
         {
-            string jsonString = File.ReadAllText(path);
+            string jsonString;
+            // Preset discovery can overlap a save that atomically replaces this manifest.
+            using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read | FileShare.Delete))
+            using (var reader = new StreamReader(stream))
+                jsonString = reader.ReadToEnd();
             try
             {
                 data = JsonSerializer.Deserialize<T>(jsonString);

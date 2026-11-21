@@ -11,10 +11,10 @@ public sealed class AudioVolumePresetFeatureHandler : IFunctionPresetFeatureHand
         if (functionPreset == null || audioPreset == null)
             return;
 
+        var bindings = functionPreset.GetBindingsByAudioId(audioPreset.Config.Name);
         foreach (var audio in audioPreset.AudioList)
         {
-            double decibel = functionPreset.GetAudioDecibel(
-                audioPreset.Config.Name, audio.Config.Id);
+            double decibel = bindings[audio.Config.Id].FirstOrDefault()?.Decibel ?? 0;
             audio.SetVolume(decibel);
         }
     }

@@ -86,6 +86,10 @@ public class FunctionPresetData
 
     public bool Save() => FunctionPresetDataTool.Save(this);
 
+    internal ILookup<string, FunctionPresetAudioBinding> GetBindingsByAudioId(string audioPresetName) =>
+        Bindings.Where(binding => binding.AudioPresetName == audioPresetName)
+            .ToLookup(binding => binding.AudioId, StringComparer.Ordinal);
+
     private FunctionPresetAudioBinding GetAudioBinding(
         string audioPresetName, string audioId, bool create)
     {

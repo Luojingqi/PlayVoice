@@ -4,6 +4,8 @@ using System.Windows.Input;
 using PlayVoice.Pages.Loading;
 using PlayVoice.Resources.Language;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Windows;
@@ -29,12 +31,25 @@ namespace PlayVoice.Pages.Preset
         }
 
 
-        public ObservableCollection<AudioTrackItemViewModel> ShortcutList { get; set; } = new();
+        private sealed class TrackCollection : ObservableCollection<AudioTrackItemViewModel>
+        {
+            public void ReplaceAll(IReadOnlyList<AudioTrackItemViewModel> rows)
+            {
+                Items.Clear();
+                foreach (var row in rows) Items.Add(row);
+                OnPropertyChanged(new PropertyChangedEventArgs(nameof(Count)));
+                OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+                OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            }
+        }
+
+        private TrackCollection ShortcutList { get; } = new();
+        private AudioPresetData displayedPreset;
+        private long displayedTracksVersion;
+        private long recentVersion;
         private bool isAddingAudio;
         private readonly AudioFileProgressOverlay audioFileProgressOverlay = new();
         private CancellationTokenSource addAudioCancellation;
-        private CancellationTokenSource audioPresetLoadCancellation;
-        private int audioTrackRefreshVersion;
 
         private bool selectAll = false;
         private bool SelectAll
@@ -64,7 +79,7 @@ namespace PlayVoice.Pages.Preset
                 case 2: await PasteButton_Click(); break;
                 case 3: await StartImportAsync(); break;
                 case 4: await Task.Delay(75); UploadButton_Click(); break;
-                case 5: await DeleteButton_Click(); break;
+                case 5: DeleteButton_Click(); break;
                 case 6: FolderButton_Click(); break;
             }
         }
@@ -193,7 +208,7 @@ namespace PlayVoice.Pages.Preset
                     if (ReferenceEquals(GlobalData.Inst.ActiveAudioPreset, targetPreset))
                     {
                         GlobalData.Inst.RebuildActiveHotkeys();
-                        await RefreshCurrentAudioPreset();
+                        RefreshCurrentAudioPreset();
                     }
                 }
                 finally
@@ -216,7 +231,7 @@ namespace PlayVoice.Pages.Preset
             PresetPage.Inst.SelectCreateManagementPage();
         }
 
-        private async Task DeleteButton_Click()
+        private void DeleteButton_Click()
         {
             var selectedIndexes = ShortcutList
                 .Where(item => item.Marked)
@@ -227,7 +242,7 @@ namespace PlayVoice.Pages.Preset
                 GlobalData.Inst.ActiveAudioPreset.RemoveAudio(index);
 
             GlobalData.Inst.ActiveAudioPreset.Save();
-            await RefreshCurrentAudioPreset();
+            RefreshCurrentAudioPreset();
         }
 
 
@@ -258,115 +273,59 @@ namespace PlayVoice.Pages.Preset
                 e.Handled = true;
                 return;
             }
-            if (e.Data.GetDataPresent("AudioTrackItemVisual"))
+            if (e.Data.GetData(typeof(AudioTrackItemViewModel)) is not AudioTrackItemViewModel) return;
+            e.Handled = true;
+            e.Effects = DragDropEffects.None;
+            if (IsLibraryFiltered || !TryGetInsertionPoint(e, out _, out var line))
             {
-                if (IsLibraryFiltered) { e.Effects = DragDropEffects.None; e.Handled = true; return; }
-                e.Effects = DragDropEffects.Move;
-                var dragItem = e.Data.GetData("AudioTrackItemVisual") as AudioTrackItem;
-                if (dragItem == null) return;
-
-                Point mousePos = e.GetPosition(DragOverlayCanvas);
-
-                // --- 1. 处理跟随鼠标的虚化影子 ---
-                if (DragGhost.Visibility == Visibility.Collapsed)
-                {
-                    if (dragItem.Tag is RenderTargetBitmap bmp)
-                    {
-                        DragGhost.Fill = new ImageBrush(bmp);
-                    }
-                    else
-                    {
-                        DragGhost.Fill = new VisualBrush(dragItem);
-                    }
-                    DragGhost.Width = dragItem.ActualWidth;
-                    DragGhost.Height = dragItem.ActualHeight;
-                    DragGhost.Visibility = Visibility.Visible;
-                    InsertionLine.Width = dragItem.ActualWidth;
-                }
-                Canvas.SetLeft(DragGhost, mousePos.X - 25);
-                Canvas.SetTop(DragGhost, mousePos.Y - dragItem.ActualHeight / 2);
-
-                // 获取当前正在拖拽的项的原始索引
-                int oldIndex = ShortcutList.IndexOf(dragItem.DataContext as AudioTrackItemViewModel);
-
-                // --- 2. 核心修复：最顶部磁吸安全边界判定 ---
-                if (ShortcutList.Count > 0)
-                {
-                    var firstItem = AudioListBox.ItemContainerGenerator.ContainerFromIndex(0) as ListBoxItem;
-                    if (firstItem != null)
-                    {
-                        Point mouseInFirst = e.GetPosition(firstItem);
-                        // 如果鼠标超出了第一个项的顶边（Y < 0），或者处于第一个项的上半段
-                        if (mouseInFirst.Y < firstItem.ActualHeight / 2)
-                        {
-                            Point itemPos = firstItem.TransformToVisual(DragOverlayCanvas).Transform(new Point(0, 0));
-                            // 高亮条强行吸附在绝对最顶部（第一项的上方）
-                            Canvas.SetLeft(InsertionLine, itemPos.X);
-                            Canvas.SetTop(InsertionLine, itemPos.Y - 1.5);
-                            InsertionLine.Visibility = Visibility.Visible;
-                            e.Handled = true;
-                            return; // 提前拦截，不走后面的下方卡位逻辑
-                        }
-                    }
-                }
-
-                // --- 3. 正常的项落位判定 ---
-                DependencyObject target = e.OriginalSource as DependencyObject;
-                while (target != null && !(target is ListBoxItem))
-                {
-                    target = VisualTreeHelper.GetParent(target);
-                }
-
-                if (target is ListBoxItem listBoxItem)
-                {
-                    var targetData = listBoxItem.DataContext as AudioTrackItemViewModel;
-                    int targetIndex = ShortcutList.IndexOf(targetData);
-                    Point itemPos = listBoxItem.TransformToVisual(DragOverlayCanvas).Transform(new Point(0, 0));
-
-                    // 核心修复：如果鼠标在自己隐藏的空白空间内部
-                    if (targetIndex == oldIndex)
-                    {
-                        if (oldIndex == 0)
-                        {
-                            // 如果是第一个项在自己的空白空间内，高亮条依然无脑吸附在最顶部，极大方便放回原位
-                            Canvas.SetLeft(InsertionLine, itemPos.X);
-                            Canvas.SetTop(InsertionLine, itemPos.Y - 1.5);
-                        }
-                        else
-                        {
-                            // 其他项在自己空间内，保持在下方即可
-                            Canvas.SetLeft(InsertionLine, itemPos.X);
-                            Canvas.SetTop(InsertionLine, itemPos.Y + listBoxItem.ActualHeight - 1.5);
-                        }
-                    }
-                    else
-                    {
-                        // 正常拖到别的项上面，永远显示在当前项的下方
-                        Canvas.SetLeft(InsertionLine, itemPos.X);
-                        Canvas.SetTop(InsertionLine, itemPos.Y + listBoxItem.ActualHeight - 1.5);
-                    }
-                    InsertionLine.Visibility = Visibility.Visible;
-                }
-                else
-                {
-                    // 如果鼠标彻底滑到了列表最下方的空白处（由于上方已经拦截了最顶部越界，这里一定是底部越界）
-                    if (ShortcutList.Count > 0)
-                    {
-                        var lastItem = AudioListBox.ItemContainerGenerator.ContainerFromIndex(ShortcutList.Count - 1) as ListBoxItem;
-                        if (lastItem != null)
-                        {
-                            Point itemPos = lastItem.TransformToVisual(DragOverlayCanvas).Transform(new Point(0, 0));
-                            Canvas.SetLeft(InsertionLine, itemPos.X);
-                            Canvas.SetTop(InsertionLine, itemPos.Y + lastItem.ActualHeight - 1.5);
-                            InsertionLine.Visibility = Visibility.Visible;
-                        }
-                    }
-                }
-                e.Handled = true;
+                HideDragVisuals();
+                return;
             }
+
+            e.Effects = DragDropEffects.Move;
+            if (e.Data.GetData("AudioTrackDragImage") is BitmapSource image)
+            {
+                if (DragGhost.Visibility != Visibility.Visible)
+                {
+                    DragGhost.Fill = new ImageBrush(image);
+                    DragGhost.Width = image.Width;
+                    DragGhost.Height = image.Height;
+                    DragGhost.Visibility = Visibility.Visible;
+                }
+                var mouse = e.GetPosition(DragOverlayCanvas);
+                Canvas.SetLeft(DragGhost, mouse.X - 25);
+                Canvas.SetTop(DragGhost, mouse.Y - image.Height / 2);
+            }
+            Canvas.SetLeft(InsertionLine, line.X);
+            Canvas.SetTop(InsertionLine, line.Y - InsertionLine.Height / 2);
+            InsertionLine.Width = DragGhost.Visibility == Visibility.Visible ? DragGhost.Width : AudioListBox.ActualWidth;
+            InsertionLine.Visibility = Visibility.Visible;
         }
 
-        // 鼠标松开放置：精准落位
+        private bool TryGetInsertionPoint(DragEventArgs e, out int index, out Point line)
+        {
+            index = -1;
+            line = default;
+            if (ShortcutList.Count == 0 || e.OriginalSource is not DependencyObject source) return false;
+            var row = ItemsControl.ContainerFromElement(AudioListBox, source) as ListBoxItem;
+            if (row == null)
+            {
+                // Empty space beyond a realized edge is a valid target; a scrollbar is not.
+                var first = AudioListBox.ItemContainerGenerator.ContainerFromIndex(0) as ListBoxItem;
+                row = first != null && e.GetPosition(first).Y <= 0 ? first
+                    : AudioListBox.ItemContainerGenerator.ContainerFromIndex(ShortcutList.Count - 1) as ListBoxItem;
+                if (row == null) return false;
+                var point = e.GetPosition(row);
+                if (point.X < 0 || point.X > row.ActualWidth || (row != first && point.Y < row.ActualHeight)) return false;
+            }
+            int rowIndex = AudioListBox.ItemContainerGenerator.IndexFromContainer(row);
+            if (rowIndex < 0) return false;
+            bool after = e.GetPosition(row).Y >= row.ActualHeight / 2;
+            index = after ? rowIndex + 1 : rowIndex;
+            line = row.TranslatePoint(new Point(0, after ? row.ActualHeight : 0), DragOverlayCanvas);
+            return true;
+        }
+
         private async void ListBox_Drop(object sender, DragEventArgs e)
         {
             HideDragVisuals();
@@ -377,74 +336,17 @@ namespace PlayVoice.Pages.Preset
                 return;
             }
 
-            if (e.Data.GetDataPresent("AudioTrackItemVisual"))
-            {
-                if (IsLibraryFiltered) { e.Handled = true; return; }
-                var dragItem = e.Data.GetData("AudioTrackItemVisual") as AudioTrackItem;
-                var droppedData = dragItem?.DataContext as AudioTrackItemViewModel;
-                if (droppedData == null) return;
-
-                DependencyObject target = e.OriginalSource as DependencyObject;
-                while (target != null && !(target is ListBoxItem))
-                {
-                    target = VisualTreeHelper.GetParent(target);
-                }
-
-                int oldIndex = ShortcutList.IndexOf(droppedData);
-                int newIndex = -1;
-
-                // 核心修复：松手时先拦截是否触发了最顶部判定
-                if (ShortcutList.Count > 0)
-                {
-                    var firstItem = AudioListBox.ItemContainerGenerator.ContainerFromIndex(0) as ListBoxItem;
-                    if (firstItem != null)
-                    {
-                        Point mouseInFirst = e.GetPosition(firstItem);
-                        if (mouseInFirst.Y < firstItem.ActualHeight / 2)
-                        {
-                            newIndex = 0; // 只要满足最顶判定，无条件归位到 0
-                        }
-                    }
-                }
-
-                // 如果没有触发最顶部判定，再计算普通的项位置
-                if (newIndex == -1)
-                {
-                    if (target is ListBoxItem listBoxItem)
-                    {
-                        var targetData = listBoxItem.DataContext as AudioTrackItemViewModel;
-                        if (targetData != null)
-                        {
-                            int targetIndex = ShortcutList.IndexOf(targetData);
-
-                            if (targetIndex == oldIndex)
-                            {
-                                newIndex = oldIndex; // 如果放到了自己隐藏的占位格子上，原位不动
-                            }
-                            else
-                            {
-                                newIndex = (oldIndex < targetIndex) ? targetIndex : targetIndex + 1;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        newIndex = ShortcutList.Count - 1; // 真正的底部空白区域
-                    }
-                }
-
-                // 安全边界限制
-                if (newIndex < 0) newIndex = 0;
-                if (newIndex >= ShortcutList.Count) newIndex = ShortcutList.Count - 1;
-
-                // 执行集合移动
-                if (oldIndex >= 0 && newIndex >= 0 && oldIndex != newIndex)
-                {
-                    ShortcutList.Move(oldIndex, newIndex);
-                    GlobalData.Inst.ActiveAudioPreset.SwapOrder(oldIndex, newIndex);
-                    GlobalData.Inst.ActiveAudioPreset.Save();
-                }
-            }
+            if (e.Data.GetData(typeof(AudioTrackItemViewModel)) is not AudioTrackItemViewModel dragged) return;
+            e.Handled = true;
+            if (IsLibraryFiltered || !TryGetInsertionPoint(e, out int insertion, out _)) return;
+            int oldIndex = ShortcutList.IndexOf(dragged);
+            if (oldIndex < 0) return;
+            int newIndex = insertion > oldIndex ? insertion - 1 : insertion;
+            if (oldIndex == newIndex) return;
+            ShortcutList.Move(oldIndex, newIndex);
+            displayedPreset.SwapOrder(oldIndex, newIndex);
+            displayedTracksVersion = displayedPreset.TracksVersion;
+            displayedPreset.Save();
         }
 
         private void HideDragVisuals()
@@ -460,88 +362,30 @@ namespace PlayVoice.Pages.Preset
         }
 
 
-        public async Task InitLoadAudioPreset(string name)
+        public void RefreshCurrentAudioPreset()
         {
-            if (!PresetPage.Inst.IsAudioPresetPageSelected(name))
+            var preset = GlobalData.Inst.ActiveAudioPreset;
+            if (ReferenceEquals(preset, displayedPreset) && displayedTracksVersion == (preset?.TracksVersion ?? 0))
                 return;
 
-            if (GlobalData.Inst.ActiveAudioPreset?.Config.Name == name)
-            {
-                await RefreshCurrentAudioPreset();
-                return;
-            }
-            CancelPendingAudioPresetLoad(clearItems: true);
-            using var cancellationSource = new CancellationTokenSource();
-            audioPresetLoadCancellation = cancellationSource;
-            AudioPresetData presetData = null;
-            try
-            {
-                presetData = await AudioPresetDataTool.LoadAudioPresetData(
-                    name,
-                    cancellationSource.Token);
-                cancellationSource.Token.ThrowIfCancellationRequested();
-
-                if (!PresetPage.Inst.IsAudioPresetPageSelected(name))
-                    return;
-
-                GlobalData.Inst.ActiveAudioPreset = presetData;
-                presetData = null; // Ownership is now held by GlobalData.
-                await RefreshCurrentAudioPreset(cancellationSource.Token);
-            }
-            catch (OperationCanceledException) when (cancellationSource.IsCancellationRequested)
-            {
-            }
-            finally
-            {
-                presetData?.Dispose();
-                if (ReferenceEquals(audioPresetLoadCancellation, cancellationSource))
-                    audioPresetLoadCancellation = null;
-            }
-        }
-
-        public async Task RefreshCurrentAudioPreset(
-            CancellationToken cancellationToken = default)
-        {
-            GlobalData.Inst.Playback.NotifyChanged();
-            int refreshVersion = ++audioTrackRefreshVersion;
-            ShortcutList.Clear();
-            TopButtonGroupListBox.SelectedIndex = -1;
-            SelectAll = false;
-            var presetData = GlobalData.Inst.ActiveAudioPreset;
-            if (presetData == null) return;
-
-            foreach (var item in presetData.AudioList)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                if (refreshVersion != audioTrackRefreshVersion
-                    || !ReferenceEquals(presetData, GlobalData.Inst.ActiveAudioPreset)
-                    || !PresetPage.Inst.IsAudioPresetPageSelected(presetData.Config.Name))
-                    return;
-
-                ShortcutList.Add(new AudioTrackItemViewModel(item));
-                await Task.Delay(1, cancellationToken);
-            }
-        }
-
-        public void CancelPendingAudioPresetLoad(bool clearItems)
-        {
-            var cancellationSource = audioPresetLoadCancellation;
-            audioPresetLoadCancellation = null;
-            cancellationSource?.Cancel();
-            audioTrackRefreshVersion++;
-
-            if (!clearItems)
-                return;
-
-            ShortcutList.Clear();
+            var bindings = GlobalData.Inst.ActiveFunctionPreset?.GetBindingsByAudioId(preset?.Config.Name);
+            var rows = preset?.AudioList.Select(audio =>
+                new AudioTrackItemViewModel(audio, bindings?[audio.Config.Id].FirstOrDefault())).ToArray();
+            displayedPreset = preset;
+            displayedTracksVersion = preset?.TracksVersion ?? 0;
+            recentVersion = preset?.PlayHistoryVersion ?? 0;
+            ShortcutList.ReplaceAll(rows ?? Array.Empty<AudioTrackItemViewModel>());
             TopButtonGroupListBox.SelectedIndex = -1;
             SelectAll = false;
         }
 
         public void RefreshFunctionPresetValues()
         {
+            if (displayedPreset == null || displayedPreset != GlobalData.Inst.ActiveAudioPreset
+                || displayedTracksVersion != displayedPreset.TracksVersion) return;
+            var bindings = GlobalData.Inst.ActiveFunctionPreset?.GetBindingsByAudioId(displayedPreset.Config.Name);
             foreach (var item in ShortcutList)
-                item.RefreshFunctionPresetValues();
+                item.RefreshFunctionPresetValues(bindings?[item.Data.Config.Id].FirstOrDefault());
         }
 
 
@@ -555,7 +399,7 @@ namespace PlayVoice.Pages.Preset
             GlobalData.Inst.Playback.Changed += RefreshPlaybackMode;
             RefreshPlaybackMode();
             nativeFileDrop = new NativeFileDrop(AudioListBox, ImportDroppedFiles);
-            await LoadWaveformAsync();
+            if (Waveform.Peaks == null) await LoadWaveformAsync();
         }
 
         private void RefreshPlaybackMode()
@@ -610,7 +454,7 @@ namespace PlayVoice.Pages.Preset
             Add("选择", () => target.Marked = !target.Marked);
             Add("复制", CopyButton_Click);
             var delete = new MenuItem { Header = LanguageManager.Inst.GetString("删除") };
-            delete.Click += async (_, _) => await DeleteButton_Click();
+            delete.Click += (_, _) => DeleteButton_Click();
             menu.Items.Add(delete);
             Add("文件资源浏览器", FolderButton_Click);
             menu.Items.Add(new Separator());
@@ -639,13 +483,18 @@ namespace PlayVoice.Pages.Preset
                 ShortcutList.Move(i, next);
                 GlobalData.Inst.ActiveAudioPreset.SwapOrder(i, next);
             }
+            displayedTracksVersion = displayedPreset.TracksVersion;
             GlobalData.Inst.ActiveAudioPreset.Save();
         }
 
         private void RenameTrack(AudioTrackItemViewModel target)
         {
             var window = new RenameAudioWindow(target.Data) { Owner = Window.GetWindow(this) };
-            if (window.ShowDialog() == true) target.Header = target.Data.Config.Name;
+            if (window.ShowDialog() == true)
+            {
+                target.Header = target.Data.Config.Name;
+                RefreshFilteredTracks();
+            }
         }
 
         public void Leave()
@@ -660,7 +509,6 @@ namespace PlayVoice.Pages.Preset
             nativeFileDrop = null;
             GlobalData.Inst.Playback.Changed -= RefreshPlaybackMode;
             addAudioCancellation?.Cancel();
-            CancelPendingAudioPresetLoad(clearItems: false);
             Leave();
         }
     }

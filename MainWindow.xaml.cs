@@ -23,6 +23,7 @@ namespace PlayVoice
     {
         public static MainWindow Inst { get; private set; }
         private readonly MainViewModel viewModel;
+        private PresetPage presetPage;
         private readonly System.Windows.Threading.DispatcherTimer shellStatusTimer;
         private readonly System.Windows.Forms.NotifyIcon trayIcon;
         private readonly System.Windows.Forms.ContextMenuStrip trayMenu;
@@ -199,7 +200,9 @@ namespace PlayVoice
 
         private void NavigateToPage(SidebarItemViewModel item)
         {
-            if (!string.IsNullOrEmpty(item.PageUri))
+            if (item.PageUri == "Pages/Preset/PresetPage.xaml")
+                ContentFrame.Navigate(presetPage ??= new PresetPage());
+            else if (!string.IsNullOrEmpty(item.PageUri))
             {
                 ContentFrame.Navigate(new Uri(item.PageUri, UriKind.Relative));
             }
@@ -548,18 +551,7 @@ namespace PlayVoice
 
             try
             {
-                if (presetName == null)
-                {
-                    GlobalData.Inst.ActiveAudioPreset = null;
-                    return;
-                }
-
-                if (string.Equals(GlobalData.Inst.ActiveAudioPreset?.Config?.Name, presetName, StringComparison.OrdinalIgnoreCase))
-                    return;
-
-                var presetData = await AudioPresetDataTool.LoadAudioPresetData(presetName);
-                if (presetData != null)
-                    GlobalData.Inst.ActiveAudioPreset = presetData;
+                await GlobalData.Inst.SelectAudioPresetAsync(presetName);
             }
             finally
             {

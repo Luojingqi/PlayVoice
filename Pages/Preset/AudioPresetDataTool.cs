@@ -9,25 +9,26 @@ public static class AudioPresetDataTool
 {
     public const string ConfigFileName = "AudioPresetConfig.json";
     public static readonly string BasePath = PresetStorage.BasePath;
+    private sealed record CatalogEntry(long Length, DateTime LastWrite, string Name);
+    private static Dictionary<string, CatalogEntry> catalog = new(StringComparer.OrdinalIgnoreCase);
 
-    public static async Task<AudioPresetData> LoadAudioPresetData(
+    public static Task<AudioPresetData> LoadAudioPresetData(
         string name,
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
-        var config = FindAudioPresetConfig(name);
-        return config == null
-            ? null
-            : await LoadAudioPresetDataFromPath(
-                BasePath,
-                config.Name,
-                cancellationToken);
+        if (!PresetStorage.TryNormalizeName(name, out var safeName) || safeName != name)
+            return Task.FromResult<AudioPresetData>(null);
+        return Task.Run(() => ReadAudioPreset(BasePath, name, cancellationToken, requireMatchingName: true), cancellationToken);
     }
 
-    public static async Task<AudioPresetData> LoadAudioPresetDataFromPath(
+    public static Task<AudioPresetData> LoadAudioPresetDataFromPath(
         string folderPath,
         string folderName,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default) =>
+        Task.Run(() => ReadAudioPreset(folderPath, folderName, cancellationToken, requireMatchingName: false), cancellationToken);
+
+    private static AudioPresetData ReadAudioPreset(string folderPath, string folderName, CancellationToken cancellationToken, bool requireMatchingName)
     {
         cancellationToken.ThrowIfCancellationRequested();
         if (!PresetStorage.TryNormalizeName(folderName, out var safeFolderName) || safeFolderName != folderName)
@@ -39,6 +40,8 @@ public static class AudioPresetDataTool
 
         if (!JsonTool.LoadJson(configPath, out AudioPresetDataConfig presetConfigData)
             || presetConfigData == null)
+            return null;
+        if (requireMatchingName && !string.Equals(presetConfigData.Name, folderName, StringComparison.OrdinalIgnoreCase))
             return null;
 
         presetConfigData.AudioDataConfigList ??= new();
@@ -57,38 +60,19 @@ public static class AudioPresetDataTool
                     || audioDataConfig.Name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
                     throw new InvalidDataException("Invalid audio file name.");
                 string audioPath = Path.Combine(path, audioDataConfig.Name);
-                if (File.Exists(audioPath) && ((File.GetAttributes(audioPath) & FileAttributes.ReparsePoint) != 0
-                    || new FileInfo(audioPath).Length > GlobalData.Inst.Config.AudioImportMaxBytes))
-                    throw new InvalidDataException("Audio file is linked or exceeds the configured size limit.");
-                if (File.Exists(audioPath))
-                {
-                    var audioData = new AudioData
-                    {
-                        Index = i,
-                        AudioPreset = presetData
-                    };
-                    try
-                    {
-                        audioData.AudioTrackArray[0] = new AudioFileReader(audioPath);
-                        audioData.AudioTrackArray[1] = new AudioFileReader(audioPath);
-                        audioDataConfig.Edit?.Validate(audioData.AudioTrackArray[0].TotalTime.TotalSeconds, audioData.AudioTrackArray[0].WaveFormat.SampleRate);
-                        cancellationToken.ThrowIfCancellationRequested();
-                        presetData.AudioList.Add(audioData);
-                    }
-                    catch (Exception)
-                    {
-                        audioData.AudioTrackArray[0]?.Dispose();
-                        audioData.AudioTrackArray[1]?.Dispose();
-                        audioData.PlayTimer.Stop();
-                        throw;
-                    }
-                }
-                else
-                {
+                var file = new FileInfo(audioPath);
+                if (!file.Exists)
                     throw new FileNotFoundException("Audio preset references a missing file; its manifest was left unchanged.", audioPath);
-                }
-                await Task.Delay(1, cancellationToken);
+                if ((file.Attributes & FileAttributes.ReparsePoint) != 0 || file.Length > GlobalData.Inst.Config.AudioImportMaxBytes)
+                    throw new InvalidDataException("Audio file is linked or exceeds the configured size limit.");
+                var audio = new AudioData { Index = i, AudioPreset = presetData };
+                presetData.AudioList.Add(audio); // Dispose also owns a partially opened reader pair.
+                var reader = audio.AudioTrackArray[0] = new AudioFileReader(audioPath);
+                audioDataConfig.Edit?.Validate(reader.TotalTime.TotalSeconds, reader.WaveFormat.SampleRate);
+                cancellationToken.ThrowIfCancellationRequested();
+                audio.AudioTrackArray[1] = new AudioFileReader(audioPath);
             }
+            cancellationToken.ThrowIfCancellationRequested();
             return presetData;
         }
         catch (OperationCanceledException)
@@ -158,8 +142,26 @@ public static class AudioPresetDataTool
         return true;
     }
 
-    public static string[] GetAllAudioPresetName() =>
-        GetAllAudioPresetConfigs().Select(item => item.Name).ToArray();
+    public static string[] GetAllAudioPresetName()
+    {
+        PresetStorage.EnsureInitialized();
+        var previous = Volatile.Read(ref catalog);
+        var next = new Dictionary<string, CatalogEntry>(StringComparer.OrdinalIgnoreCase);
+        foreach (var directory in Directory.EnumerateDirectories(BasePath))
+        {
+            var file = new FileInfo(Path.Combine(directory, ConfigFileName));
+            if (!file.Exists) continue;
+            if (!previous.TryGetValue(directory, out var entry)
+                || entry.Length != file.Length || entry.LastWrite != file.LastWriteTimeUtc)
+            {
+                if (!JsonTool.LoadJson(file.FullName, out AudioPresetDataConfig config) || config == null) continue;
+                entry = new CatalogEntry(file.Length, file.LastWriteTimeUtc, config.Name);
+            }
+            next.Add(directory, entry);
+        }
+        Volatile.Write(ref catalog, next);
+        return next.Values.Select(item => item.Name).OrderBy(name => name).ToArray();
+    }
 
     public static List<AudioPresetDataConfig> GetAllAudioPresetConfigs()
     {

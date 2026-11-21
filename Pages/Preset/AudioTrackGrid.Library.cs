@@ -17,12 +17,13 @@ public partial class AudioTrackGrid
 
     private void InitializeLibrary()
     {
-        Library = new AudioLibraryViewModel(ShortcutList, ShowLibraryError, RefreshLibraryStatus, StopPreview);
+        Library = new AudioLibraryViewModel(ShortcutList, ShowLibraryError, RefreshFilteredTracks, StopPreview);
         AudioView = CollectionViewSource.GetDefaultView(ShortcutList);
         AudioView.Filter = item => item is AudioTrackItemViewModel track
             && AudioLibraryFilter.Matches(track.Data.Config, LibrarySearch.Text,
                 FavoritesFilter.IsChecked == true, RecentFilter.IsChecked == true);
-        ShortcutList.CollectionChanged += (_, _) => RefreshLibraryStatus();
+        AudioView.CollectionChanged += (_, _) => UpdateEmptyLibrary();
+        UpdateEmptyLibrary();
     }
 
     private void SubscribeLibrary()
@@ -57,10 +58,20 @@ public partial class AudioTrackGrid
         foreach (var track in ShortcutList) track.Marked = false;
         SelectAll = false;
         // Recent ordering reads metadata directly, without changing persisted track order.
-        ((ListCollectionView)AudioView).CustomSort = RecentFilter.IsChecked == true ? new RecentComparer() : null;
-        AudioView.Refresh();
-        RefreshLibraryStatus();
+        var view = (ListCollectionView)AudioView;
+        if ((view.CustomSort != null) != (RecentFilter.IsChecked == true))
+            view.CustomSort = RecentFilter.IsChecked == true ? new RecentComparer() : null;
+        else
+            view.Refresh();
     }
+
+    private void RefreshFilteredTracks()
+    {
+        if (IsLibraryFiltered) AudioView.Refresh();
+    }
+
+    private void UpdateEmptyLibrary() =>
+        EmptyLibrary.Visibility = AudioView.IsEmpty ? Visibility.Visible : Visibility.Collapsed;
 
     private sealed class RecentComparer : System.Collections.IComparer
     {
@@ -73,9 +84,13 @@ public partial class AudioTrackGrid
     {
         if (!Dispatcher.CheckAccess()) { Dispatcher.BeginInvoke(RefreshLibraryStatus); return; }
         if (AudioView == null) return;
-        AudioView.Refresh();
-        EmptyLibrary.Visibility = AudioView.IsEmpty ? Visibility.Visible : Visibility.Collapsed;
         var global = GlobalData.Inst;
+        if (RecentFilter.IsChecked == true && displayedPreset != null && displayedPreset == global.ActiveAudioPreset
+            && displayedTracksVersion == displayedPreset.TracksVersion && recentVersion != displayedPreset.PlayHistoryVersion)
+        {
+            recentVersion = displayedPreset.PlayHistoryVersion;
+            AudioView.Refresh();
+        }
         string unavailable = LanguageManager.Inst.GetString("未绑定");
         var output = global.GetRun() ? global.Equipment.VirtualLoudspeaker : global.Equipment.PhysicalLoudspeaker;
         OutputStatus.Text = $"{LanguageManager.Inst.GetString("输出设备")}: {output?.FriendlyName ?? unavailable}  |  {LanguageManager.Inst.GetString("试听设备")}: {global.Equipment.PhysicalLoudspeaker?.FriendlyName ?? unavailable}";
@@ -98,7 +113,7 @@ public partial class AudioTrackGrid
         GlobalData.Inst.Playback.Toggle(selected.Data);
     }
 
-    private void ShowLibraryError(Exception exception)
+    internal void ShowLibraryError(Exception exception)
     {
         Diagnostics.AppLog.Error(exception, "音效库操作失败。", "AudioLibrary");
         MainWindow.Inst.AddNotification(() => LanguageManager.Inst.GetString("通知"),
@@ -118,7 +133,7 @@ public partial class AudioTrackGrid
         waveformStatusKey = null;
         WaveformStatus.Text = "";
         var selected = Library.Selected;
-        if (selected == null) return;
+        if (selected == null || selected.Data.AudioPreset != GlobalData.Inst.ActiveAudioPreset) return;
         using var cancellation = new CancellationTokenSource();
         waveformCancellation = cancellation;
         waveformStatusKey = "加载波形";

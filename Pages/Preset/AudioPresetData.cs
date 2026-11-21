@@ -8,6 +8,8 @@ namespace PlayVoice.Pages.Preset;
 public class AudioPresetData
 {
     public List<AudioData> AudioList { get; } = new();
+    public long TracksVersion { get; private set; }
+    internal long PlayHistoryVersion { get; set; }
 
     public AudioPresetDataConfig Config { get; set; }
 
@@ -188,6 +190,7 @@ public class AudioPresetData
 
     private void NotifyTracksChanged()
     {
+        TracksVersion++;
         if (GlobalData.Inst?.ActiveAudioPreset == this) GlobalData.Inst.Playback.TracksChanged();
     }
 

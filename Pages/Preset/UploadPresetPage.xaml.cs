@@ -65,17 +65,16 @@ namespace PlayVoice.Pages.Preset
             VisibleComboBox.SelectedIndex = 2;
         }
 
-        public void Open(int index)
+        public void Open(int index, string[] presetNames)
         {
             presetNameArray.Clear();
-            var tempArray = AudioPresetDataTool.GetAllAudioPresetName();
             presetNameArray.Add(LanguageManager.Inst.GetString("无"));
             int presetIndex = 0;
-            for (int i = 0; i < tempArray.Length; i++)
+            for (int i = 0; i < presetNames.Length; i++)
             {
-                presetNameArray.Add(tempArray[i]);
+                presetNameArray.Add(presetNames[i]);
                 if (GlobalData.Inst.ActiveAudioPreset != null
-                    && tempArray[i] == GlobalData.Inst.ActiveAudioPreset.Config.Name)
+                    && presetNames[i] == GlobalData.Inst.ActiveAudioPreset.Config.Name)
                     presetIndex = i + 1;
             }
             PresetComboBox.ItemsSource = presetNameArray;

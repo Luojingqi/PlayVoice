@@ -1,4 +1,5 @@
 using PlayVoice.Audio;
+using PlayVoice.Pages.FunctionPreset;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -57,6 +58,12 @@ public class AudioTrackItemViewModel : INotifyPropertyChanged
     public event Action<double> VolumeSliderValueChange;
 
     public AudioData Data;
+    private bool isDragging;
+    public bool IsDragging
+    {
+        get => isDragging;
+        set { isDragging = value; OnPropertyChanged(); }
+    }
 
     private bool marked = false;
     public bool Marked
@@ -69,16 +76,16 @@ public class AudioTrackItemViewModel : INotifyPropertyChanged
             OnPropertyChanged();
         }
     }
-    public AudioTrackItemViewModel(AudioData audioData)
+    public AudioTrackItemViewModel(AudioData audioData, FunctionPresetAudioBinding binding)
     {
         this.Data = audioData;
         var config = audioData.Config;
         _header = config.FileName + config.FileFormat;
         Duration = audioData.PlaybackDuration;
-        _hotkey = GlobalData.Inst.GetAudioHotkey(audioData, create: false)?.ToString() ?? "None";
+        _hotkey = binding?.HotkeyData?.ToString() ?? "None";
         _subHeader1 = AudioData.SizeToString(config.Size);
         _volumeSliderValue = AudioData.DecibelToProportion(
-            GlobalData.Inst.GetAudioDecibel(audioData)) * 100;
+            binding?.Decibel ?? 0) * 100;
         VolumeSliderValueChange += (value) =>
         {
             double decibel = AudioData.ProportionToDecibel(value / 100);
@@ -92,12 +99,16 @@ public class AudioTrackItemViewModel : INotifyPropertyChanged
         Hotkey = GlobalData.Inst.GetAudioHotkey(Data, create: false)?.ToString() ?? "None";
     }
 
-    public void RefreshFunctionPresetValues()
+    public void RefreshFunctionPresetValues(FunctionPresetAudioBinding binding)
     {
-        RefreshHotkey();
-        _volumeSliderValue = AudioData.DecibelToProportion(
-            GlobalData.Inst.GetAudioDecibel(Data)) * 100;
-        OnPropertyChanged(nameof(VolumeSliderValue));
+        var hotkey = binding?.HotkeyData?.ToString() ?? "None";
+        if (Hotkey != hotkey) Hotkey = hotkey;
+        var volume = AudioData.DecibelToProportion(binding?.Decibel ?? 0) * 100;
+        if (_volumeSliderValue != volume)
+        {
+            _volumeSliderValue = volume;
+            OnPropertyChanged(nameof(VolumeSliderValue));
+        }
     }
 
 

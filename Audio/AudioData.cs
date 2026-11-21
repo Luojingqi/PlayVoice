@@ -8,8 +8,10 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 #if AVALONIA
 using Application = PlayVoice.DesktopApplication;
+using DispatcherTimer = Avalonia.Threading.DispatcherTimer;
 #else
 using System.Windows;
+using DispatcherTimer = System.Windows.Threading.DispatcherTimer;
 #endif
 
 namespace PlayVoice.Audio;
@@ -42,11 +44,8 @@ public class AudioData
 
     public int Index { get; set; }
 
-#if AVALONIA
-    public Avalonia.Threading.DispatcherTimer PlayTimer { get; } = new();
-#else
-    public System.Windows.Threading.DispatcherTimer PlayTimer { get; } = new(System.Windows.Threading.DispatcherPriority.Normal, Application.Current.Dispatcher);
-#endif
+    private DispatcherTimer playTimer;
+    public DispatcherTimer PlayTimer => playTimer ??= CreatePlayTimer();
     public bool IsPaused { get; private set; }
     private MediaFoundationResampler vmResampler;
     private MediaFoundationResampler plResampler;
@@ -110,9 +109,15 @@ public class AudioData
             return decibel / MaxDecibel + 1;
     }
 
-    public AudioData()
+    private DispatcherTimer CreatePlayTimer()
     {
-        PlayTimer.Tick += (_, _) => StopCore(completed: true);
+#if AVALONIA
+        var timer = new DispatcherTimer();
+#else
+        var timer = new DispatcherTimer(System.Windows.Threading.DispatcherPriority.Normal, Application.Current.Dispatcher);
+#endif
+        timer.Tick += (_, _) => StopCore(completed: true);
+        return timer;
     }
 
     public Action AnimationPlayAction;
@@ -170,6 +175,7 @@ public class AudioData
 
             if (canPlay == false) return;
             Config.LastPlayedAt = DateTimeOffset.UtcNow;
+            AudioPreset.PlayHistoryVersion++;
             AudioPreset.Save();
             IsPaused = false;
             PlayTimer.Interval = RemainingTime;
@@ -327,7 +333,7 @@ public class AudioData
         PlaybackStopped = null;
         VolumeProvider_ToVM = null;
         VolumeProvider_ToPL = null;
-        PlayTimer.Stop();
+        playTimer?.Stop();
 
     }
 
