@@ -60,7 +60,7 @@
                            Margin="11,0"
                            VerticalAlignment="Center"
                            Foreground="{DynamicResource AccentColor}"
-                           FontFamily="{StaticResource FontLight}"/>
+                           FontFamily="{DynamicResource FontLight}"/>
             </Border>
 
             <StackPanel Grid.Row="1"
@@ -69,13 +69,13 @@
                         VerticalAlignment="Center">
                 <TextBlock Text="{L:Lan 教程提示_内容}"
                            Style="{StaticResource TextBlockLight}"
-                           FontSize="15"
+                           FontSize="{DynamicResource UiFontSize15}"
                            TextWrapping="Wrap"
                            TextAlignment="Center"/>
                 <TextBlock Margin="0,18,0,0"
                            Text="{L:Lan 教程提示_抢先体验内容}"
                            Style="{StaticResource TextBlockLight}"
-                           FontSize="14"
+                           FontSize="{DynamicResource UiFontSize14}"
                            TextWrapping="Wrap"
                            TextAlignment="Left"/>
             </StackPanel>
@@ -83,11 +83,11 @@
             <Button Grid.Row="2"
                     Width="120"
                     Height="34"
-                    Content="{L:Lan 确定}"
-                    FontFamily="{StaticResource FontMedium}"
+
+                    FontFamily="{DynamicResource FontMedium}"
                     IsDefault="True"
                     Style="{StaticResource ConfirmButtonStyle}"
-                    Click="ConfirmButton_OnClick"/>
+                    Click="ConfirmButton_OnClick" ToolTip="{L:Lan 确定}" AutomationProperties.Name="{L:Lan 确定}"><TextBlock Text="&#xE8FB;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
         </Grid>
     </Border>
 </Window>

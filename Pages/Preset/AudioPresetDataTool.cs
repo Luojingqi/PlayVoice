@@ -30,7 +30,11 @@ public static class AudioPresetDataTool
         CancellationToken cancellationToken = default)
     {
         cancellationToken.ThrowIfCancellationRequested();
+        if (!PresetStorage.TryNormalizeName(folderName, out var safeFolderName) || safeFolderName != folderName)
+            throw new InvalidDataException("Invalid audio preset directory name.");
         string path = Path.Combine(folderPath, folderName);
+        if (Directory.Exists(path) && (File.GetAttributes(path) & FileAttributes.ReparsePoint) != 0)
+            throw new InvalidDataException("Linked preset directories are not supported.");
         string configPath = Path.Combine(path, ConfigFileName);
 
         if (!JsonTool.LoadJson(configPath, out AudioPresetDataConfig presetConfigData)
@@ -38,6 +42,9 @@ public static class AudioPresetDataTool
             return null;
 
         presetConfigData.AudioDataConfigList ??= new();
+        if (presetConfigData.Version != 1) throw new NotSupportedException("Unsupported audio preset version.");
+        if (presetConfigData.AudioDataConfigList.Count > GlobalData.Inst.Config.AudioPresetMaxFiles)
+            throw new InvalidDataException("Audio preset contains too many files.");
         var presetData = new AudioPresetData { Config = presetConfigData };
         try
         {
@@ -45,7 +52,14 @@ public static class AudioPresetDataTool
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 var audioDataConfig = presetConfigData.AudioDataConfigList[i];
+                if (audioDataConfig == null || string.IsNullOrEmpty(audioDataConfig.Name)
+                    || Path.GetFileName(audioDataConfig.Name) != audioDataConfig.Name
+                    || audioDataConfig.Name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
+                    throw new InvalidDataException("Invalid audio file name.");
                 string audioPath = Path.Combine(path, audioDataConfig.Name);
+                if (File.Exists(audioPath) && ((File.GetAttributes(audioPath) & FileAttributes.ReparsePoint) != 0
+                    || new FileInfo(audioPath).Length > GlobalData.Inst.Config.AudioImportMaxBytes))
+                    throw new InvalidDataException("Audio file is linked or exceeds the configured size limit.");
                 if (File.Exists(audioPath))
                 {
                     var audioData = new AudioData
@@ -70,8 +84,7 @@ public static class AudioPresetDataTool
                 }
                 else
                 {
-                    presetConfigData.AudioDataConfigList.RemoveAt(i);
-                    i--;
+                    throw new FileNotFoundException("Audio preset references a missing file; its manifest was left unchanged.", audioPath);
                 }
                 await Task.Delay(1, cancellationToken);
             }

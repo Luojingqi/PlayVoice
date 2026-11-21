@@ -18,6 +18,8 @@ namespace PlayVoice.Pages.Preset
         public AudioTrackGrid()
         {
             InitializeComponent();
+            InitializeLibrary();
+            SizeChanged += (_, e) => LibraryInspector.IsExpanded = e.NewSize.Width >= 1000;
             this.DataContext = this;
             TopButtonGroupListBox.SelectionChanged += TopButtonGroupOnSelection;
             audioFileProgressOverlay.StopRequested += AudioFileProgressOverlay_StopRequested;
@@ -70,7 +72,7 @@ namespace PlayVoice.Pages.Preset
         {
             var b = !SelectAll;
             SelectAll = b;
-            foreach (var item in ShortcutList)
+            foreach (var item in AudioView.Cast<AudioTrackItemViewModel>())
             {
                 item.Marked = b;
             }
@@ -179,6 +181,10 @@ namespace PlayVoice.Pages.Preset
             catch (OperationCanceledException) when (cancellationSource.IsCancellationRequested)
             {
             }
+            catch (Exception exception)
+            {
+                ShowLibraryError(exception);
+            }
             finally
             {
                 try
@@ -254,6 +260,7 @@ namespace PlayVoice.Pages.Preset
             }
             if (e.Data.GetDataPresent("AudioTrackItemVisual"))
             {
+                if (IsLibraryFiltered) { e.Effects = DragDropEffects.None; e.Handled = true; return; }
                 e.Effects = DragDropEffects.Move;
                 var dragItem = e.Data.GetData("AudioTrackItemVisual") as AudioTrackItem;
                 if (dragItem == null) return;
@@ -372,6 +379,7 @@ namespace PlayVoice.Pages.Preset
 
             if (e.Data.GetDataPresent("AudioTrackItemVisual"))
             {
+                if (IsLibraryFiltered) { e.Handled = true; return; }
                 var dragItem = e.Data.GetData("AudioTrackItemVisual") as AudioTrackItem;
                 var droppedData = dragItem?.DataContext as AudioTrackItemViewModel;
                 if (droppedData == null) return;
@@ -543,6 +551,7 @@ namespace PlayVoice.Pages.Preset
 
         private void AudioTrackGrid_Loaded(object sender, RoutedEventArgs e)
         {
+            SubscribeLibrary();
             GlobalData.Inst.Playback.Changed += RefreshPlaybackMode;
             RefreshPlaybackMode();
             nativeFileDrop = new NativeFileDrop(AudioListBox, ImportDroppedFiles);
@@ -613,12 +622,13 @@ namespace PlayVoice.Pages.Preset
             e.Handled = true;
         }
 
-        private bool CanMoveSelected(int direction) => ShortcutList.Select((item, i) => (item, i))
+        private bool CanMoveSelected(int direction) => !IsLibraryFiltered && ShortcutList.Select((item, i) => (item, i))
             .Any(x => x.item.Marked && x.i + direction >= 0 && x.i + direction < ShortcutList.Count
                 && !ShortcutList[x.i + direction].Marked);
 
         private void MoveSelected(int direction)
         {
+            if (IsLibraryFiltered) return;
             var indexes = Enumerable.Range(0, ShortcutList.Count);
             if (direction > 0) indexes = indexes.Reverse();
             foreach (int i in indexes)
@@ -644,6 +654,7 @@ namespace PlayVoice.Pages.Preset
 
         private void AudioTrackGrid_Unloaded(object sender, RoutedEventArgs e)
         {
+            UnsubscribeLibrary();
             nativeFileDrop?.Dispose();
             nativeFileDrop = null;
             GlobalData.Inst.Playback.Changed -= RefreshPlaybackMode;

@@ -1,4 +1,4 @@
-﻿<Window x:Class="PlayVoice.Pages.Preset.RenameAudioWindow"
+<Window x:Class="PlayVoice.Pages.Preset.RenameAudioWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:L="clr-namespace:PlayVoice.Resources.Language"
@@ -26,7 +26,7 @@
                 </ListBox>
                 <TextBlock x:Name="ErrorText" TextWrapping="Wrap" Foreground="{DynamicResource TextPrimary}" Margin="0,8"/>
                 <ListBox Tag="Uniform" Width="90" Height="34" Style="{StaticResource HorizontalButtonGroupStyle}" SelectionChanged="Confirm_Click">
-                    <ListBoxItem Style="{StaticResource GroupButtonItemStyle}"><TextBlock Text="{L:Lan 确认}" Style="{StaticResource TextBlockLight}"/></ListBoxItem>
+                    <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" ToolTip="{L:Lan 确认}" AutomationProperties.Name="{L:Lan 确认}"><TextBlock Text="&#xE8FB;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{DynamicResource TextPrimary}"/></ListBoxItem>
                 </ListBox>
             </StackPanel>
         </StackPanel>

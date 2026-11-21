@@ -53,6 +53,18 @@ namespace PlayVoice
             new GlobalData();
 
             InitializeComponent();
+            Audio.AudioProxy.LevelChanged += UpdateAudioLevels;
+            GlobalData.Inst.Playback.Changed += RefreshShellPlayback;
+            GlobalData.Inst.StartupRequirementsChanged += RefreshShellPlayback;
+            LanguageManager.Inst.CultureChanged += ShellLanguageChanged;
+            Closed += (_, _) =>
+            {
+                GlobalData.Inst.Playback.Changed -= RefreshShellPlayback;
+                GlobalData.Inst.StartupRequirementsChanged -= RefreshShellPlayback;
+                LanguageManager.Inst.CultureChanged -= ShellLanguageChanged;
+            };
+            RefreshShellPlayback();
+            Closed += (_, _) => Audio.AudioProxy.LevelChanged -= UpdateAudioLevels;
             GlobalData.Inst.StartupRequirementsChanged += RefreshStartupRequirements;
             RefreshStartupRequirements();
             NavigateToPage(viewModel.SelectedMenu);
@@ -95,6 +107,37 @@ namespace PlayVoice
                 RefreshStartupRequirements();
             };
             Loaded += MainWindow_OnLoaded;
+        }
+
+        private void StopAll_OnClick(object sender, RoutedEventArgs e) => GlobalData.Inst.Playback.StopAll();
+        private void ShellLanguageChanged(System.Globalization.CultureInfo culture, LanguageManager.LanguageInfo language) => RefreshShellPlayback();
+        private void RefreshShellPlayback()
+        {
+            if (!Dispatcher.CheckAccess()) { Dispatcher.BeginInvoke(RefreshShellPlayback); return; }
+            var global = GlobalData.Inst;
+            ShellPlaybackState.Text = global.Playback.Current?.Config.Name ?? LanguageManager.Inst.GetString("已停止");
+            var device = global.GetRun() ? global.Equipment.VirtualLoudspeaker : global.Equipment.PhysicalLoudspeaker;
+            ShellOutputDevice.Text = LanguageManager.Inst.GetString("输出设备") + " · " + (device?.FriendlyName ?? LanguageManager.Inst.GetString("未绑定"));
+        }
+
+        private void UpdateAudioLevels(Audio.AudioProxy.SampleEnum stream, float left, float right)
+        {
+            if (Dispatcher.HasShutdownStarted) return;
+            try
+            {
+                Dispatcher.BeginInvoke(() =>
+                {
+                    var bars = stream switch
+                    {
+                        Audio.AudioProxy.SampleEnum.In => (IL, IR),
+                        Audio.AudioProxy.SampleEnum.Out => (OL, OR),
+                        _ => (AL, AR)
+                    };
+                    bars.Item1.SetLevel(left);
+                    bars.Item2.SetLevel(right);
+                });
+            }
+            catch (InvalidOperationException) when (Dispatcher.HasShutdownStarted) { }
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)

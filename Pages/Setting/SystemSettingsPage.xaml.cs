@@ -1,4 +1,4 @@
-﻿using NAudio.CoreAudioApi;
+using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using PlayVoice.Audio;
@@ -386,7 +386,7 @@ namespace PlayVoice.Pages.Setting
                 }
                 writer.Dispose();
                 writer = null;
-                Vol(MainWindow.Inst.IL, MainWindow.Inst.IR, 0, 0);
+                ResetLevel(SampleEnum.In);
 
                 MainWindow.Inst.AddNotification(
                     () => $"{LanguageManager.Inst.GetString("通知")}",
@@ -476,7 +476,7 @@ namespace PlayVoice.Pages.Setting
 
                 try
                 {
-                    Vol(MainWindow.Inst.IL, MainWindow.Inst.IR, 0, 0);
+                    ResetLevel(SampleEnum.In);
                 }
                 catch (Exception exception)
                 {

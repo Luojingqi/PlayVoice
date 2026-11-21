@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows;
@@ -21,6 +21,7 @@ namespace PlayVoice.Pages.Setting
         public AboutPage()
         {
             InitializeComponent();
+            VersionText.Text = GlobalData.AppVersion;
         }
     }
 }

@@ -14,21 +14,56 @@ internal static class ConfigStorage
     private static string FilePath =>
         Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FileName);
 
-    public static Config Load()
+    public static Config Load() => Load(FilePath);
+
+    internal static Config Load(string filePath)
     {
-        if (!File.Exists(FilePath))
+        try { return LoadCore(filePath); }
+        catch (InvalidDataException) when (File.Exists(filePath + ".bak"))
         {
+            // Validate the backup before touching the damaged original.
+            Config recovered = ReadConfig(File.ReadAllText(filePath + ".bak"), out _, out _);
+            File.Copy(filePath, filePath + ".corrupt-" + Guid.NewGuid().ToString("N"));
+            File.Copy(filePath + ".bak", filePath, true);
+            Diagnostics.AppLog.Warning("配置已从备份恢复，损坏的原文件已保留。", "ConfigStorage.Recovery");
+            return recovered;
+        }
+    }
+
+    private static Config LoadCore(string filePath)
+    {
+        if (!File.Exists(filePath))
+        {
+            if (File.Exists(filePath + ".bak"))
+            {
+                Config recovered = ReadConfig(File.ReadAllText(filePath + ".bak"), out _, out _);
+                File.Copy(filePath + ".bak", filePath);
+                return recovered;
+            }
             var newConfig = new Config();
-            if (!Save(newConfig))
-                throw new IOException($"无法创建配置文件：{FilePath}");
+            if (!Save(newConfig, filePath))
+                throw new IOException($"无法创建配置文件：{filePath}");
 
             return newConfig;
         }
 
+        Config config = ReadConfig(File.ReadAllText(filePath), out int version, out bool isLegacyFormat);
+        if (isLegacyFormat || version != GlobalData.Version)
+        {
+            string backup = filePath + $".v{version}.bak";
+            if (!File.Exists(backup)) File.Copy(filePath, backup);
+            if (!Save(config, filePath))
+                throw new IOException("配置迁移成功，但无法保存迁移后的配置文件。");
+        }
+        return config;
+    }
+
+    private static Config ReadConfig(string json, out int version, out bool isLegacyFormat)
+    {
         JsonNode root;
         try
         {
-            root = JsonNode.Parse(File.ReadAllText(FilePath))
+            root = JsonNode.Parse(json)
                 ?? throw new InvalidDataException("配置文件内容为空。");
         }
         catch (Exception exception) when (
@@ -37,19 +72,16 @@ internal static class ConfigStorage
             throw new InvalidDataException("配置文件不是有效的 JSON。", exception);
         }
 
-        DataMetadata<JsonObject> metadata = ReadMetadata(root, out bool isLegacyFormat);
+        DataMetadata<JsonObject> metadata = ReadMetadata(root, out isLegacyFormat);
+        version = metadata.Version;
         Config config = ConfigMigrator.Migrate(metadata.Version, metadata.Data);
-
-        if (isLegacyFormat || metadata.Version != GlobalData.Version)
-        {
-            if (!Save(config))
-                throw new IOException("配置迁移成功，但无法保存迁移后的配置文件。");
-        }
 
         return config;
     }
 
-    public static bool Save(Config config)
+    public static bool Save(Config config) => Save(config, FilePath);
+
+    internal static bool Save(Config config, string filePath)
     {
         ArgumentNullException.ThrowIfNull(config);
 
@@ -59,7 +91,7 @@ internal static class ConfigStorage
             Data = config
         };
 
-        return JsonTool.SaveJsonAtomically(FilePath, metadata);
+        return JsonTool.SaveJsonAtomically(filePath, metadata);
     }
 
     private static DataMetadata<JsonObject> ReadMetadata(

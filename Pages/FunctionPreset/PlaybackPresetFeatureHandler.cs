@@ -14,6 +14,7 @@ public sealed class PlaybackPresetFeatureHandler : IFunctionPresetFeatureHandler
         Bind(functionPreset.PausePlaybackHotkey, playback.PauseOrResume);
         Bind(functionPreset.PreviousTrackHotkey, playback.Previous);
         Bind(functionPreset.NextTrackHotkey, playback.Next);
+        Bind(functionPreset.StopAllHotkey, playback.StopAll);
     }
     private void Bind(HotkeyData hotkey, Action action)
     {

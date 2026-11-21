@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using PlayVoice.Resources.Language;
 
 namespace PlayVoice.Pages.Sidebar;
@@ -22,6 +22,7 @@ public partial class SidebarItemViewModel : ObservableObject
         private set => SetProperty(ref _title, value);
     }
 
+    public string Icon => _titleKey switch { "音频预设" => "\uE8D6", "创意工坊" => "\uE719", _ => "\uE713" };
     public string PageUri { get; set; }
 
     public bool IsSelected

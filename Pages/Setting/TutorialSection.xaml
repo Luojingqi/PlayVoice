@@ -24,7 +24,7 @@
                        Text="{Binding Header, ElementName=RootControl}"
                        Style="{StaticResource TextBlockMedium}"
                        VerticalAlignment="Center"
-                       FontSize="15"/>
+                       FontSize="{DynamicResource UiFontSize15}"/>
             <ExpandArrow:ExpandArrow x:Name="SectionExpandArrow"
                                      Grid.Column="1"
                                      IsExpanded="{Binding IsExpanded, ElementName=RootControl, Mode=TwoWay}"

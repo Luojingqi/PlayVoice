@@ -8,6 +8,7 @@ public partial class HeaderToolTip : UserControl
     public HeaderToolTip()
     {
         InitializeComponent();
+        SetResourceReference(HeaderFontSizeProperty, "UiFontSize16");
     }
 
     public static readonly DependencyProperty HeaderProperty =

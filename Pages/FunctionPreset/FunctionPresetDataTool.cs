@@ -17,6 +17,7 @@ public static class FunctionPresetDataTool
         {
             if (JsonTool.LoadJson(path, out FunctionPresetData preset) && preset != null)
             {
+                if (preset.Version != 1) throw new NotSupportedException("Unsupported function preset version.");
                 preset.Bindings ??= new();
                 preset.FeatureData ??= new();
                 foreach (var binding in preset.Bindings)
@@ -74,7 +75,7 @@ public static class FunctionPresetDataTool
             return false;
         preset.Name = normalizedName;
         Directory.CreateDirectory(BasePath);
-        return JsonTool.SaveJson(Path.Combine(BasePath, $"{preset.Name}.json"), preset);
+        return JsonTool.SaveJsonAtomically(Path.Combine(BasePath, $"{preset.Name}.json"), preset);
     }
 
     public static FunctionPresetData Copy(FunctionPresetData source, string name)

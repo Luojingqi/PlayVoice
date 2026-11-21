@@ -9,7 +9,7 @@
             <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontFamily" Value="{StaticResource FontMedium}"/>
+            <Setter Property="FontFamily" Value="{DynamicResource FontMedium}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -49,12 +49,12 @@
             <StackPanel>
                 <TextBlock x:Name="TitleText"
                            Style="{StaticResource TextBlockMedium}"
-                           FontSize="18"
+                           FontSize="{DynamicResource UiFontSize18}"
                            HorizontalAlignment="Center"/>
                 <TextBlock x:Name="FileNameText"
                            Margin="0,12,0,10"
                            Style="{StaticResource TextBlockLight}"
-                           FontSize="13"
+                           FontSize="{DynamicResource UiFontSize13}"
                            TextAlignment="Center"
                            TextTrimming="CharacterEllipsis"/>
                 <Grid x:Name="ProgressTrack"
@@ -73,16 +73,16 @@
                 <TextBlock x:Name="ProgressText"
                            Margin="0,8,0,0"
                            Style="{StaticResource TextBlockLight}"
-                           FontSize="13"
+                           FontSize="{DynamicResource UiFontSize13}"
                            HorizontalAlignment="Center"/>
                 <Button x:Name="StopButton"
                         Width="120"
                         Height="32"
                         Margin="0,16,0,0"
                         HorizontalAlignment="Center"
-                        Content="{L:Lan 停止加载}"
+
                         Style="{StaticResource StopButtonStyle}"
-                        Click="StopButton_Click"/>
+                        Click="StopButton_Click" ToolTip="{L:Lan 停止加载}" AutomationProperties.Name="{L:Lan 停止加载}"><TextBlock Text="&#xE71A;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
             </StackPanel>
         </Border>
     </Border>

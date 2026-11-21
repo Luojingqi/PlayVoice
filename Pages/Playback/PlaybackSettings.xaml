@@ -47,6 +47,16 @@
                     </ListBoxItem>
                 </ListBox>
             </Grid>
+            <Grid Height="37.5" Margin="0,1.5">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="24"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                <HeaderToolTip:HeaderToolTip Grid.Column="1" Header="{L:Lan 停止全部}" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                <ListBox Grid.Column="2" Width="96" Margin="10,0,0,0" Tag="Uniform" Style="{StaticResource HorizontalButtonGroupStyle}">
+                    <ListBoxItem Style="{StaticResource GroupInputItemStyle}">
+                        <TextBox x:Name="StopInput" Tag="{L:Lan 输入按键}" Style="{StaticResource GroupTextBoxStyle}"
+                                 GotFocus="Hotkey_GotFocus" LostFocus="Hotkey_LostFocus" InputMethod.IsInputMethodEnabled="False"/>
+                    </ListBoxItem>
+                </ListBox>
+            </Grid>
         </StackPanel>
     </StackPanel>
 </UserControl>

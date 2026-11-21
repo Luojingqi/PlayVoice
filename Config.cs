@@ -1,10 +1,17 @@
-﻿using PlayVoice.Resources.Themes;
+using PlayVoice.Resources.Themes;
 using PlayVoice.Hotkey;
 
 namespace PlayVoice;
 
 internal class Config
 {
+    public string ColorPalette { get; set; } = "Forest";
+    public AppearanceProfile Appearance { get; set; } = new();
+    public Dictionary<string, AppearanceProfile> CustomThemes { get; set; } = new();
+    [System.Text.Json.Serialization.JsonExtensionData]
+    public Dictionary<string, System.Text.Json.JsonElement> AdditionalSettings { get; set; }
+    public long AudioImportMaxBytes { get; set; } = 512L * 1024 * 1024;
+    public int AudioPresetMaxFiles { get; set; } = 5000;
     /// <summary>创意工坊编辑时等待原资源下载的最长时间。</summary>
     public int WorkshopDownloadTimeoutSeconds { get; set; } = 600;
 

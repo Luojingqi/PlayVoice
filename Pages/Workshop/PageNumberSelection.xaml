@@ -1,4 +1,4 @@
-﻿<Page x:Class="PlayVoice.Pages.Workshop.PageNumberSelection"
+<Page x:Class="PlayVoice.Pages.Workshop.PageNumberSelection"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -44,7 +44,7 @@
                 x:Name="InputListBox">
             <ListBoxItem Style="{StaticResource GroupInputItemStyle}" Padding="5,0">
                 <TextBox x:Name="PageNumberTextBox" 
-                         FontSize="17"
+                         FontSize="{DynamicResource UiFontSize17}"
                          TextAlignment="Center"
                          Text="1"
                         Style="{StaticResource GroupTextBoxStyle}"/>
@@ -52,11 +52,11 @@
         </ListBox>
         <TextBlock Text="/ " Grid.Column="2" TextAlignment="Center" HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    FontSize="15"
+                    FontSize="{DynamicResource UiFontSize15}"
                     Style="{StaticResource TextBlockLight}"/>
         <TextBlock  Grid.Column="3" TextAlignment="Center" HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    FontSize="20"
+                    FontSize="{DynamicResource UiFontSize20}"
                     Text="1"
                     Style="{StaticResource TextBlockLight}"
                     x:Name="MaxPageText"/>

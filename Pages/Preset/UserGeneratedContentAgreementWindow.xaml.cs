@@ -41,7 +41,9 @@ public partial class UserGeneratedContentAgreementWindow : Window
         var resourceUri = new Uri(
             $"/{typeof(UserGeneratedContentAgreementWindow).Assembly.GetName().Name};component/{resourcePath}",
             UriKind.Relative);
-        var resource = Application.GetResourceStream(resourceUri);
+        System.Windows.Resources.StreamResourceInfo resource = null;
+        try { resource = Application.GetResourceStream(resourceUri); }
+        catch (IOException) { /* Source distributions may omit the agreement resources. */ }
         if (resource == null)
         {
             return LanguageManager.Inst.CurrentCulture.TwoLetterISOLanguageName == "zh"

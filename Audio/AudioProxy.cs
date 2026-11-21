@@ -1,9 +1,8 @@
-﻿using NAudio.CoreAudioApi;
+using NAudio.CoreAudioApi;
 using NAudio.Wave;
 using NAudio.Wave.SampleProviders;
 using PlayVoice.Diagnostics;
 using PlayVoice.Hotkey;
-using PlayVoice.Pages.LevelBar;
 using PlayVoice.Pages.Workshop;
 using System.Diagnostics;
 using System.IO;
@@ -617,8 +616,8 @@ internal class AudioProxy
             }
         }
 
-        Vol(MainWindow.Inst.IL, MainWindow.Inst.IR, 0, 0);
-        Vol(MainWindow.Inst.OL, MainWindow.Inst.OR, 0, 0);
+        PublishLevel(SampleEnum.In, 0, 0);
+        PublishLevel(SampleEnum.Out, 0, 0);
     }
 
     private void PhysicalLoudspeakerOutput_PlaybackStopped(
@@ -703,79 +702,28 @@ internal class AudioProxy
     }
 
 
+    // Level events contain values only; the window owns dispatching and visual controls.
+    public static event Action<SampleEnum, float, float> LevelChanged;
+
     public static void SetStreamVolume(MeteringSampleProvider meteringSample, SampleEnum index)
     {
         meteringSample.SamplesPerNotification = meteringSample.WaveFormat.SampleRate / MeteringSampleProviderCollectionRate;
-        switch (index)
+        meteringSample.StreamVolume += (_, e) =>
         {
-            case SampleEnum.AutioToVL:
-                meteringSample.StreamVolume += (sender, e) =>
-                {
-                    if (GlobalData.Inst.GetRun() == true)
-                        Vol(e, MainWindow.Inst.AL, MainWindow.Inst.AR);
-                };
-                break;
-            case SampleEnum.AutioToPL:
-                meteringSample.StreamVolume += (sender, e) =>
-                {
-                    if (GlobalData.Inst.GetRun() == false)
-                        Vol(e, MainWindow.Inst.AL, MainWindow.Inst.AR);
-                };
-                break;
-            case SampleEnum.In:
-                meteringSample.StreamVolume += (sender, e) =>
-                {
-                    Vol(e, MainWindow.Inst.IL, MainWindow.Inst.IR);
-                };
-                break;
-            case SampleEnum.Out:
-                meteringSample.StreamVolume += (sender, e) =>
-                {
-                    Vol(e, MainWindow.Inst.OL, MainWindow.Inst.OR);
-                };
-                break;
-        }
+            if (index == SampleEnum.AutioToVL && !GlobalData.Inst.GetRun()) return;
+            if (index == SampleEnum.AutioToPL && GlobalData.Inst.GetRun()) return;
+            float left = e.MaxSampleValues.Length > 0 ? e.MaxSampleValues[0] : 0;
+            float right = e.MaxSampleValues.Length > 1 ? e.MaxSampleValues[1] : left;
+            PublishLevel(index, left, right);
+        };
     }
 
-    private static void Vol(StreamVolumeEventArgs e, LevelBar L, LevelBar R)
-    {
-        if (e.MaxSampleValues.Length == 0)
-        {
-            Vol(L, R, 0, 0);
-            return;
-        }
+    public static void ResetLevel(SampleEnum index) => PublishLevel(index, 0, 0);
 
-        float leftChannelVol = e.MaxSampleValues[0];
-        float rightChannelVol = e.MaxSampleValues.Length > 1 ? e.MaxSampleValues[1] : leftChannelVol;
-        Vol(L, R, leftChannelVol, rightChannelVol);
-    }
-    public static void Vol(LevelBar L, LevelBar R, float leftChannelVol, float rightChannelVol)
-    {
-        float leftLevel = (float)AudioData.DecibelToProportion(
-            AudioData.VolumeToDecibel(leftChannelVol));
-        float rightLevel = (float)AudioData.DecibelToProportion(
-            AudioData.VolumeToDecibel(rightChannelVol));
-        var dispatcher = Application.Current?.Dispatcher;
-        if (dispatcher == null || dispatcher.HasShutdownStarted)
-            return;
-
-        void UpdateLevelBars()
-        {
-            L?.SetLevel(leftLevel);
-            R?.SetLevel(rightLevel);
-        }
-
-        // Always enqueue the update. Stop paths enqueue their final zero after
-        // the audio threads have ended, so older meter updates cannot overwrite it.
-        try
-        {
-            dispatcher.BeginInvoke(new Action(UpdateLevelBars));
-        }
-        catch (InvalidOperationException) when (dispatcher.HasShutdownStarted)
-        {
-            // The application dispatcher completed shutdown after the guard above.
-        }
-    }
+    private static void PublishLevel(SampleEnum index, float left, float right) =>
+        LevelChanged?.Invoke(index,
+            (float)AudioData.DecibelToProportion(AudioData.VolumeToDecibel(left)),
+            (float)AudioData.DecibelToProportion(AudioData.VolumeToDecibel(right)));
 
     public enum SampleEnum
     {

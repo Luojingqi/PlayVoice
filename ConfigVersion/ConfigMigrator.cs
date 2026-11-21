@@ -47,7 +47,8 @@ internal static class ConfigMigrator
 
     private static JsonObject MigrateToV8(JsonObject data)
     {
-        return JsonSerializer.SerializeToNode(new config_v8())!.AsObject();
+        // Missing fields receive model defaults during deserialization; existing values survive.
+        return data.DeepClone().AsObject();
     }
 
     private static T Deserialize<T>(JsonNode data, int version)

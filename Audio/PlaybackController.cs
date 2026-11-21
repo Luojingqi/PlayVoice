@@ -1,5 +1,9 @@
 ﻿using PlayVoice.Diagnostics;
 
+using NAudio.Wave;
+using PlayVoice.Pages.Preset;
+using System.IO;
+
 namespace PlayVoice.Audio;
 
 public enum PlaybackMode { Single, RepeatOne, RepeatList, Shuffle }
@@ -7,6 +11,7 @@ public enum PlaybackMode { Single, RepeatOne, RepeatList, Shuffle }
 /// <summary>UI-thread playback state. Queue and position are never serialized.</summary>
 public sealed class PlaybackController
 {
+    private AudioPresetData previewPreset;
     private readonly PlaybackQueue<AudioData> queue = new();
     public AudioData Current => queue.Current;
     public event Action Changed;
@@ -83,6 +88,7 @@ public sealed class PlaybackController
     // Lifecycle cleanup and track transitions still release audio devices/readers.
     internal void StopPresetAudio()
     {
+        StopPreview();
         foreach (var track in Tracks.ToArray()) track.Stop();
         NotifyChanged();
     }
@@ -95,6 +101,33 @@ public sealed class PlaybackController
     }
 
     public void Next() => Move(1);
+    public void StopAll() => GlobalData.Inst.AudioProxy.StopClear();
+
+    public void StopPreview()
+    {
+        var previous = previewPreset;
+        previewPreset = null;
+        previous?.Dispose();
+    }
+
+    public void Preview(AudioData source)
+    {
+        StopPreview();
+        try
+        {
+            string path = Path.Combine(AudioPresetDataTool.BasePath, source.AudioPreset.Config.Name, source.Config.Name);
+            var preset = new AudioPresetData { Config = new AudioPresetDataConfig { AudioDataConfigList = new() { source.Config } } };
+            previewPreset = preset;
+            var audio = new AudioData { AudioPreset = preset, Index = 0 };
+            preset.AudioList.Add(audio);
+            audio.AudioTrackArray[0] = new AudioFileReader(path);
+            audio.AudioTrackArray[1] = new AudioFileReader(path);
+            audio.PlaybackStopped += () => { if (ReferenceEquals(previewPreset, preset)) StopPreview(); };
+            audio.Start_创意工坊播放();
+            if (!audio.IsPlaying) StopPreview();
+        }
+        catch { StopPreview(); throw; }
+    }
     public void Previous() => Move(-1);
 
     private void Move(int direction)

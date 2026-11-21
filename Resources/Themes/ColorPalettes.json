@@ -1,0 +1,110 @@
+{
+  "Forest": {
+    "Name": "森林绿",
+    "Light": [
+      "#176B50",
+      "#137D6E",
+      "#DCEDE4",
+      "#EAF3EE",
+      "#FFFFFF"
+    ],
+    "Dark": [
+      "#7DD3A6",
+      "#82CBBE",
+      "#284936",
+      "#1E3428",
+      "#10251B"
+    ],
+    "SurfacesLight": [
+      "#F3F6F3",
+      "#EAF0EB",
+      "#FFFFFF"
+    ],
+    "SurfacesDark": [
+      "#101612",
+      "#18221C",
+      "#202C24"
+    ]
+  },
+  "Ocean": {
+    "Name": "海洋蓝",
+    "Light": [
+      "#2459B9",
+      "#257B97",
+      "#DFE9FA",
+      "#EDF2FC",
+      "#FFFFFF"
+    ],
+    "Dark": [
+      "#8AB4FF",
+      "#7DCADA",
+      "#263C5D",
+      "#1C2B42",
+      "#10213A"
+    ],
+    "SurfacesLight": [
+      "#F2F5FA",
+      "#E9EEF6",
+      "#FFFFFF"
+    ],
+    "SurfacesDark": [
+      "#111722",
+      "#192333",
+      "#222F43"
+    ]
+  },
+  "Amber": {
+    "Name": "琥珀橙",
+    "Light": [
+      "#965314",
+      "#AC6931",
+      "#F7E8D4",
+      "#FCF4E9",
+      "#FFFFFF"
+    ],
+    "Dark": [
+      "#F0B76B",
+      "#E4C18A",
+      "#4D3924",
+      "#34291E",
+      "#2B1C0B"
+    ],
+    "SurfacesLight": [
+      "#F8F5F0",
+      "#F0EBE3",
+      "#FFFEFB"
+    ],
+    "SurfacesDark": [
+      "#1B1712",
+      "#282119",
+      "#342B20"
+    ]
+  },
+  "Rose": {
+    "Name": "玫瑰红",
+    "Light": [
+      "#A3365A",
+      "#A85771",
+      "#F6E1E8",
+      "#FCEFF3",
+      "#FFFFFF"
+    ],
+    "Dark": [
+      "#F2A1BA",
+      "#DCADCF",
+      "#4A2B3A",
+      "#32212B",
+      "#321321"
+    ],
+    "SurfacesLight": [
+      "#F9F3F5",
+      "#F2E9ED",
+      "#FFFCFD"
+    ],
+    "SurfacesDark": [
+      "#1C1419",
+      "#291D25",
+      "#352630"
+    ]
+  }
+}
