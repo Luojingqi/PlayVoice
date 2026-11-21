@@ -328,4 +328,61 @@
 <data name="导出主题" xml:space="preserve"><value>Exportar tema</value></data>
 <data name="重置外观" xml:space="preserve"><value>Restablecer apariencia</value></data>
 <data name="主题文件无效" xml:space="preserve"><value>Tema no válido. Revise el nombre, tamaño (11–18) y colores (#RRGGBB).</value></data>
+<data name="波形选区" xml:space="preserve"><value>Selección de onda</value></data>
+<data name="波形操作提示" xml:space="preserve"><value>Arrastre el rango o sus bordes. Flechas: inicio; Mayús+flechas: final.</value></data>
+<data name="开始秒" xml:space="preserve"><value>Inicio (s)</value></data>
+<data name="结束秒" xml:space="preserve"><value>Final (s)</value></data>
+<data name="淡入秒" xml:space="preserve"><value>Entrada (s)</value></data>
+<data name="淡出秒" xml:space="preserve"><value>Salida (s)</value></data>
+<data name="加载波形" xml:space="preserve"><value>Cargando onda…</value></data>
+<data name="波形加载失败" xml:space="preserve"><value>No se pudo cargar la onda</value></data>
+<data name="选区或淡化时长无效" xml:space="preserve"><value>Revise el rango y los fundidos; no pueden superar la selección.</value></data>
+<data name="保留原文件" xml:space="preserve"><value>Se guardan parámetros; el audio original no cambia.</value></data>
+<data name="应用剪辑" xml:space="preserve"><value>Aplicar edición</value></data>
+<data name="恢复原始音频" xml:space="preserve"><value>Restaurar audio original</value></data>
+<data name="暂无预设" xml:space="preserve"><value>Sin preajustes</value></data>
+<data name="已选择" xml:space="preserve"><value>Seleccionados</value></data>
+<data name="删除所选" xml:space="preserve"><value>Eliminar selección</value></data>
+<data name="删除所选预设确认" xml:space="preserve"><value>¿Eliminar estos preajustes y sus datos? Esta acción es irreversible.
+
+{0}</value></data>
+<data name="音效电平" xml:space="preserve"><value>Sonidos</value></data>
+<data name="麦克风电平" xml:space="preserve"><value>Micrófono</value></data>
+<data name="输出电平" xml:space="preserve"><value>Salida</value></data>
+<data name="未选择音效" xml:space="preserve"><value>Ningún sonido seleccionado</value></data>
+  <data name="窗口材质" xml:space="preserve"><value>Material de ventana</value></data>
+  <data name="纯色" xml:space="preserve"><value>Sólido</value></data>
+  <data name="亚克力" xml:space="preserve"><value>Acrílico</value></data>
+  <data name="云母" xml:space="preserve"><value>Mica</value></data>
+  <data name="材质不透明度" xml:space="preserve"><value>Opacidad del material</value></data>
+  <data name="系统材质说明" xml:space="preserve"><value>Acrílico y Mica requieren Windows 11 22H2 o posterior con transparencia activada. En caso contrario se usan superficies sólidas. El texto permanece nítido.</value></data>
+  <data name="最小化" xml:space="preserve"><value>Minimizar</value></data>
+  <data name="最大化" xml:space="preserve"><value>Maximizar / Restaurar</value></data>
+  <data name="自定义颜色" xml:space="preserve"><value>Colores personalizados</value></data>
+  <data name="刷新" xml:space="preserve"><value>Actualizar</value></data>
+  <data name="热键" xml:space="preserve"><value>Atajo</value></data>
+  <data name="保存" xml:space="preserve"><value>Guardar</value></data>
+  <data name="试听" xml:space="preserve"><value>Escuchar</value></data>
+  <data name="波形裁剪" xml:space="preserve"><value>Recortar onda</value></data>
+  <data name="开始时间" xml:space="preserve"><value>Inicio</value></data>
+  <data name="结束时间" xml:space="preserve"><value>Fin</value></data>
+  <data name="淡入" xml:space="preserve"><value>Fundido de entrada</value></data>
+  <data name="淡出" xml:space="preserve"><value>Fundido de salida</value></data>
+  <data name="播放模式" xml:space="preserve"><value>Modo de reproducción</value></data>
+  <data name="音频耳返" xml:space="preserve"><value>Monitor de audio</value></data>
+  <data name="输入耳返" xml:space="preserve"><value>Monitor de micrófono</value></data>
+  <data name="创建音频预设" xml:space="preserve"><value>Crear preajuste de audio</value></data>
+  <data name="创建游戏预设" xml:space="preserve"><value>Crear preajuste de juego</value></data>
+  <data name="播放" xml:space="preserve"><value>Reproducir</value></data>
+<data name="配色风格" xml:space="preserve"><value>Estilo de color</value></data>
+<data name="中性" xml:space="preserve"><value>Neutro</value></data>
+<data name="染色" xml:space="preserve"><value>Teñido</value></data>
+<data name="鲜明" xml:space="preserve"><value>Nítido</value></data>
+<data name="面板背景" xml:space="preserve"><value>Fondo del panel</value></data>
+<data name="侧栏背景" xml:space="preserve"><value>Fondo lateral</value></data>
+<data name="次级文字" xml:space="preserve"><value>Texto secundario</value></data>
+<data name="边框颜色" xml:space="preserve"><value>Color del borde</value></data>
+<data name="圆角" xml:space="preserve"><value>Radio de esquina</value></data>
+<data name="控件高度" xml:space="preserve"><value>Altura de controles</value></data>
+<data name="列表行高" xml:space="preserve"><value>Altura de filas</value></data>
 </root>

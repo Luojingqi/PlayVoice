@@ -4,7 +4,7 @@
         xmlns:L="clr-namespace:PlayVoice.Resources.Language"
         Width="420" SizeToContent="Height" WindowStartupLocation="CenterOwner"
         WindowStyle="None" AllowsTransparency="True" Background="Transparent" ResizeMode="NoResize"
-        ShowInTaskbar="False" Title="{L:Lan 重命名}" KeyDown="Window_KeyDown">
+        ShowInTaskbar="False" Title="{L:Lan 重命名}" KeyDown="Window_KeyDown" UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" RenderOptions.BitmapScalingMode="HighQuality">
     <Window.Resources>
         <ResourceDictionary><ResourceDictionary.MergedDictionaries>
             <ResourceDictionary Source="/Resources/Style/Button.xaml"/>

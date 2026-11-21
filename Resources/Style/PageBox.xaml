@@ -7,10 +7,10 @@
             <Setter.Value>
                 <ControlTemplate TargetType="HeaderedContentControl">
                     <Border CornerRadius="12" BorderBrush="{DynamicResource Border}" BorderThickness="1"
-                        Background="{DynamicResource AccentSurfaceSubtle}">
+                        Background="{DynamicResource BgLight}">
                         <Grid Margin="24">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="44"/>
+                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
@@ -18,7 +18,7 @@
                             <TextBlock Grid.Row="0"
                                    Text="{TemplateBinding Header}"
                                    Foreground="{DynamicResource TextPrimary}"
-                                   FontSize="{DynamicResource UiFontSize18}"
+                                   FontSize="{DynamicResource UiFontSize18}" Margin="0,0,0,20"
                                    Style="{StaticResource TextBlockMedium}"/>
 
                             <!-- 第二行：自定义内容区域 -->

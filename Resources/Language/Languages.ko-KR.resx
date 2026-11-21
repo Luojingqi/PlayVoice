@@ -328,4 +328,61 @@
 <data name="导出主题" xml:space="preserve"><value>테마 내보내기</value></data>
 <data name="重置外观" xml:space="preserve"><value>모양 초기화</value></data>
 <data name="主题文件无效" xml:space="preserve"><value>잘못된 테마입니다. 이름, 글꼴 크기(11–18), 색상(#RRGGBB)을 확인하세요.</value></data>
+<data name="波形选区" xml:space="preserve"><value>파형 선택</value></data>
+<data name="波形操作提示" xml:space="preserve"><value>범위나 경계를 드래그하세요. 화살표: 시작, Shift+화살표: 끝.</value></data>
+<data name="开始秒" xml:space="preserve"><value>시작(초)</value></data>
+<data name="结束秒" xml:space="preserve"><value>끝(초)</value></data>
+<data name="淡入秒" xml:space="preserve"><value>페이드 인(초)</value></data>
+<data name="淡出秒" xml:space="preserve"><value>페이드 아웃(초)</value></data>
+<data name="加载波形" xml:space="preserve"><value>파형 로딩 중…</value></data>
+<data name="波形加载失败" xml:space="preserve"><value>파형 로딩 실패</value></data>
+<data name="选区或淡化时长无效" xml:space="preserve"><value>선택 범위와 페이드 시간을 확인하세요. 페이드는 선택 범위를 넘을 수 없습니다.</value></data>
+<data name="保留原文件" xml:space="preserve"><value>편집 설정만 저장하며 원본 오디오 파일은 변경하지 않습니다.</value></data>
+<data name="应用剪辑" xml:space="preserve"><value>오디오 편집 적용</value></data>
+<data name="恢复原始音频" xml:space="preserve"><value>원본 오디오 복원</value></data>
+<data name="暂无预设" xml:space="preserve"><value>프리셋 없음</value></data>
+<data name="已选择" xml:space="preserve"><value>선택됨</value></data>
+<data name="删除所选" xml:space="preserve"><value>선택 항목 삭제</value></data>
+<data name="删除所选预设确认" xml:space="preserve"><value>이 프리셋과 데이터를 삭제할까요? 되돌릴 수 없습니다.
+
+{0}</value></data>
+<data name="音效电平" xml:space="preserve"><value>효과음</value></data>
+<data name="麦克风电平" xml:space="preserve"><value>마이크</value></data>
+<data name="输出电平" xml:space="preserve"><value>출력</value></data>
+<data name="未选择音效" xml:space="preserve"><value>선택된 소리 없음</value></data>
+  <data name="窗口材质" xml:space="preserve"><value>창 재질</value></data>
+  <data name="纯色" xml:space="preserve"><value>단색</value></data>
+  <data name="亚克力" xml:space="preserve"><value>아크릴</value></data>
+  <data name="云母" xml:space="preserve"><value>마이카</value></data>
+  <data name="材质不透明度" xml:space="preserve"><value>재질 불투명도</value></data>
+  <data name="系统材质说明" xml:space="preserve"><value>아크릴과 마이카는 Windows 11 22H2 이상과 시스템 투명 효과가 필요합니다. 사용할 수 없으면 단색으로 표시합니다. 텍스트는 흐리게 처리하지 않습니다.</value></data>
+  <data name="最小化" xml:space="preserve"><value>최소화</value></data>
+  <data name="最大化" xml:space="preserve"><value>최대화 / 복원</value></data>
+  <data name="自定义颜色" xml:space="preserve"><value>사용자 지정 색상</value></data>
+  <data name="刷新" xml:space="preserve"><value>새로 고침</value></data>
+  <data name="热键" xml:space="preserve"><value>단축키</value></data>
+  <data name="保存" xml:space="preserve"><value>저장</value></data>
+  <data name="试听" xml:space="preserve"><value>미리 듣기</value></data>
+  <data name="波形裁剪" xml:space="preserve"><value>파형 자르기</value></data>
+  <data name="开始时间" xml:space="preserve"><value>시작 시간</value></data>
+  <data name="结束时间" xml:space="preserve"><value>종료 시간</value></data>
+  <data name="淡入" xml:space="preserve"><value>페이드 인</value></data>
+  <data name="淡出" xml:space="preserve"><value>페이드 아웃</value></data>
+  <data name="播放模式" xml:space="preserve"><value>재생 모드</value></data>
+  <data name="音频耳返" xml:space="preserve"><value>오디오 모니터</value></data>
+  <data name="输入耳返" xml:space="preserve"><value>마이크 모니터</value></data>
+  <data name="创建音频预设" xml:space="preserve"><value>오디오 프리셋 만들기</value></data>
+  <data name="创建游戏预设" xml:space="preserve"><value>게임 프리셋 만들기</value></data>
+  <data name="播放" xml:space="preserve"><value>재생</value></data>
+<data name="配色风格" xml:space="preserve"><value>색상 스타일</value></data>
+<data name="中性" xml:space="preserve"><value>중립</value></data>
+<data name="染色" xml:space="preserve"><value>색조</value></data>
+<data name="鲜明" xml:space="preserve"><value>선명</value></data>
+<data name="面板背景" xml:space="preserve"><value>패널 배경</value></data>
+<data name="侧栏背景" xml:space="preserve"><value>사이드바 배경</value></data>
+<data name="次级文字" xml:space="preserve"><value>보조 텍스트</value></data>
+<data name="边框颜色" xml:space="preserve"><value>테두리 색</value></data>
+<data name="圆角" xml:space="preserve"><value>모서리 반경</value></data>
+<data name="控件高度" xml:space="preserve"><value>컨트롤 높이</value></data>
+<data name="列表行高" xml:space="preserve"><value>목록 행 높이</value></data>
 </root>

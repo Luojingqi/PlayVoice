@@ -328,4 +328,61 @@
 <data name="导出主题" xml:space="preserve"><value>匯出主題</value></data>
 <data name="重置外观" xml:space="preserve"><value>重設外觀</value></data>
 <data name="主题文件无效" xml:space="preserve"><value>主題無效。請檢查名稱、字級（11–18）及顏色（#RRGGBB）。</value></data>
+<data name="波形选区" xml:space="preserve"><value>波形選區</value></data>
+<data name="波形操作提示" xml:space="preserve"><value>拖曳選區或邊界；方向鍵調整起點，Shift＋方向鍵調整終點。</value></data>
+<data name="开始秒" xml:space="preserve"><value>開始（秒）</value></data>
+<data name="结束秒" xml:space="preserve"><value>結束（秒）</value></data>
+<data name="淡入秒" xml:space="preserve"><value>淡入（秒）</value></data>
+<data name="淡出秒" xml:space="preserve"><value>淡出（秒）</value></data>
+<data name="加载波形" xml:space="preserve"><value>正在載入波形…</value></data>
+<data name="波形加载失败" xml:space="preserve"><value>波形載入失敗</value></data>
+<data name="选区或淡化时长无效" xml:space="preserve"><value>請檢查選區及淡入淡出時長，淡化不能長於選區。</value></data>
+<data name="保留原文件" xml:space="preserve"><value>編輯只儲存參數，原始音訊檔案保持不變。</value></data>
+<data name="应用剪辑" xml:space="preserve"><value>套用剪輯</value></data>
+<data name="恢复原始音频" xml:space="preserve"><value>還原原始音訊</value></data>
+<data name="暂无预设" xml:space="preserve"><value>暫無預設</value></data>
+<data name="已选择" xml:space="preserve"><value>已選取</value></data>
+<data name="删除所选" xml:space="preserve"><value>刪除所選</value></data>
+<data name="删除所选预设确认" xml:space="preserve"><value>確定刪除以下預設及其資料？此操作無法復原。
+
+{0}</value></data>
+<data name="音效电平" xml:space="preserve"><value>音效</value></data>
+<data name="麦克风电平" xml:space="preserve"><value>麥克風</value></data>
+<data name="输出电平" xml:space="preserve"><value>輸出</value></data>
+<data name="未选择音效" xml:space="preserve"><value>尚未選取音效</value></data>
+  <data name="窗口材质" xml:space="preserve"><value>視窗材質</value></data>
+  <data name="纯色" xml:space="preserve"><value>純色</value></data>
+  <data name="亚克力" xml:space="preserve"><value>壓克力</value></data>
+  <data name="云母" xml:space="preserve"><value>雲母</value></data>
+  <data name="材质不透明度" xml:space="preserve"><value>材質不透明度</value></data>
+  <data name="系统材质说明" xml:space="preserve"><value>壓克力與雲母需要 Windows 11 22H2 或更新版本並開啟系統透明效果；無法使用時改用實色。文字不模糊。</value></data>
+  <data name="最小化" xml:space="preserve"><value>最小化</value></data>
+  <data name="最大化" xml:space="preserve"><value>最大化／還原</value></data>
+  <data name="自定义颜色" xml:space="preserve"><value>自訂顏色</value></data>
+  <data name="刷新" xml:space="preserve"><value>重新整理</value></data>
+  <data name="热键" xml:space="preserve"><value>快捷鍵</value></data>
+  <data name="保存" xml:space="preserve"><value>儲存</value></data>
+  <data name="试听" xml:space="preserve"><value>試聽</value></data>
+  <data name="波形裁剪" xml:space="preserve"><value>波形裁剪</value></data>
+  <data name="开始时间" xml:space="preserve"><value>開始時間</value></data>
+  <data name="结束时间" xml:space="preserve"><value>結束時間</value></data>
+  <data name="淡入" xml:space="preserve"><value>淡入</value></data>
+  <data name="淡出" xml:space="preserve"><value>淡出</value></data>
+  <data name="播放模式" xml:space="preserve"><value>播放模式</value></data>
+  <data name="音频耳返" xml:space="preserve"><value>音訊監聽</value></data>
+  <data name="输入耳返" xml:space="preserve"><value>麥克風監聽</value></data>
+  <data name="创建音频预设" xml:space="preserve"><value>建立音訊預設</value></data>
+  <data name="创建游戏预设" xml:space="preserve"><value>建立遊戲預設</value></data>
+  <data name="播放" xml:space="preserve"><value>播放</value></data>
+<data name="配色风格" xml:space="preserve"><value>配色風格</value></data>
+<data name="中性" xml:space="preserve"><value>中性</value></data>
+<data name="染色" xml:space="preserve"><value>染色</value></data>
+<data name="鲜明" xml:space="preserve"><value>鮮明</value></data>
+<data name="面板背景" xml:space="preserve"><value>面板背景</value></data>
+<data name="侧栏背景" xml:space="preserve"><value>側欄背景</value></data>
+<data name="次级文字" xml:space="preserve"><value>次要文字</value></data>
+<data name="边框颜色" xml:space="preserve"><value>邊框顏色</value></data>
+<data name="圆角" xml:space="preserve"><value>圓角</value></data>
+<data name="控件高度" xml:space="preserve"><value>控制項高度</value></data>
+<data name="列表行高" xml:space="preserve"><value>清單列高</value></data>
 </root>

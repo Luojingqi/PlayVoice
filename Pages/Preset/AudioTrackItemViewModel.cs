@@ -1,4 +1,4 @@
-﻿using PlayVoice.Audio;
+using PlayVoice.Audio;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -74,7 +74,7 @@ public class AudioTrackItemViewModel : INotifyPropertyChanged
         this.Data = audioData;
         var config = audioData.Config;
         _header = config.FileName + config.FileFormat;
-        Duration = audioData.AudioTrackArray[0].TotalTime;
+        Duration = audioData.PlaybackDuration;
         _hotkey = GlobalData.Inst.GetAudioHotkey(audioData, create: false)?.ToString() ?? "None";
         _subHeader1 = AudioData.SizeToString(config.Size);
         _volumeSliderValue = AudioData.DecibelToProportion(

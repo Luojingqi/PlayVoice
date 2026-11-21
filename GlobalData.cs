@@ -7,7 +7,11 @@ using PlayVoice.Pages.Preset;
 using PlayVoice.Resources.Language;
 using PlayVoice.Resources.Themes;
 using Steamworks;
+#if AVALONIA
+using Application = PlayVoice.DesktopApplication;
+#else
 using System.Windows;
+#endif
 
 namespace PlayVoice;
 

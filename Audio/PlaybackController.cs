@@ -1,4 +1,4 @@
-﻿using PlayVoice.Diagnostics;
+using PlayVoice.Diagnostics;
 
 using NAudio.Wave;
 using PlayVoice.Pages.Preset;
@@ -110,13 +110,15 @@ public sealed class PlaybackController
         previous?.Dispose();
     }
 
-    public void Preview(AudioData source)
+    public void Preview(AudioData source, AudioEditSettings pendingEdit = null)
     {
         StopPreview();
         try
         {
             string path = Path.Combine(AudioPresetDataTool.BasePath, source.AudioPreset.Config.Name, source.Config.Name);
-            var preset = new AudioPresetData { Config = new AudioPresetDataConfig { AudioDataConfigList = new() { source.Config } } };
+            var previewConfig = JsonTool.ToObject<AudioDataConfig>(JsonTool.ToJson(source.Config));
+            if (pendingEdit != null) previewConfig.Edit = pendingEdit;
+            var preset = new AudioPresetData { Config = new AudioPresetDataConfig { AudioDataConfigList = new() { previewConfig } } };
             previewPreset = preset;
             var audio = new AudioData { AudioPreset = preset, Index = 0 };
             preset.AudioList.Add(audio);

@@ -33,6 +33,10 @@ public partial class SettingPage
         FontChoices.SelectedItem = profile.FontFamily;
         if (FontChoices.SelectedItem == null) FontChoices.SelectedItem = "Segoe UI";
         FontSizeInput.Value = profile.FontSize;
+        MaterialChoices.ItemsSource = new[] { "Solid", "Acrylic", "Mica" }
+            .Select(key => new { Key = key, Name = LanguageManager.Inst.GetString(key switch { "Solid" => "纯色", "Acrylic" => "亚克力", _ => "云母" }) }).ToArray();
+        MaterialChoices.SelectedValue = profile.WindowMaterial;
+        MaterialOpacityInput.Value = profile.MaterialOpacity;
         string CurrentColor(string key)
         {
             var color = ((SolidColorBrush)Application.Current.FindResource(key)).Color;
@@ -41,6 +45,9 @@ public partial class SettingPage
         AccentInput.Text = string.IsNullOrEmpty(profile.Accent) ? CurrentColor("AccentColor") : profile.Accent;
         BackgroundInput.Text = string.IsNullOrEmpty(profile.Background) ? CurrentColor("BgDark") : profile.Background;
         ForegroundInput.Text = string.IsNullOrEmpty(profile.Foreground) ? CurrentColor("TextPrimary") : profile.Foreground;
+        AccentInput.Tag = AccentInput.Text;
+        BackgroundInput.Tag = BackgroundInput.Text;
+        ForegroundInput.Tag = ForegroundInput.Text;
         CustomThemeChoices.ItemsSource = config.CustomThemes.Keys.OrderBy(name => name).ToArray();
         CustomThemeChoices.SelectedItem = config.CustomThemes.ContainsKey(profile.Name) ? profile.Name : null;
         refreshingAppearance = false;
@@ -52,9 +59,14 @@ public partial class SettingPage
         profile.Name = ThemeNameInput.Text.Trim();
         profile.FontFamily = FontChoices.SelectedItem as string ?? "Segoe UI";
         profile.FontSize = FontSizeInput.Value;
-        profile.Accent = AccentInput.Text.Trim();
-        profile.Background = BackgroundInput.Text.Trim();
-        profile.Foreground = ForegroundInput.Text.Trim();
+        profile.WindowMaterial = MaterialChoices.SelectedValue as string ?? "Solid";
+        profile.MaterialOpacity = MaterialOpacityInput.Value;
+        if (!string.Equals(AccentInput.Text.Trim(), AccentInput.Tag as string, StringComparison.OrdinalIgnoreCase))
+            profile.Accent = AccentInput.Text.Trim();
+        if (!string.Equals(BackgroundInput.Text.Trim(), BackgroundInput.Tag as string, StringComparison.OrdinalIgnoreCase))
+            profile.Background = BackgroundInput.Text.Trim();
+        if (!string.Equals(ForegroundInput.Text.Trim(), ForegroundInput.Tag as string, StringComparison.OrdinalIgnoreCase))
+            profile.Foreground = ForegroundInput.Text.Trim();
         profile.Validate();
         return profile;
     }

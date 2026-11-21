@@ -8,8 +8,15 @@ namespace PlayVoice;
 /// <summary>
 /// 系统设备
 /// </summary>
-internal class Equipment
+internal class Equipment : IDisposable
 {
+    public void Dispose()
+    {
+        equipmentLoder.Dispose();
+        foreach (var device in new[] { physicalLoudspeaker, virtualLoudspeaker, physicalMicrophone, virtualMicrophone }.Distinct())
+            DisposeDevice(device, "Equipment.Exit");
+    }
+
     public Equipment()
     {
         equipmentLoder = new(this);

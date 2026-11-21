@@ -47,6 +47,12 @@ public static class ThemeManager
         };
     }
     private static ResourceDictionary NowThemeResourceDictionary;
+    public static void SelectTheme(ThemeEnum themeEnum)
+    {
+        GlobalData.Inst.Config.Appearance ??= new();
+        GlobalData.Inst.Config.Appearance.UseBuiltInMode(themeEnum.ToString());
+        SwitchTheme(themeEnum);
+    }
     public static void SwitchTheme(ThemeEnum themeEnum)
     {
         var themeInfo = ThemeList.FirstOrDefault(t => t.Theme == themeEnum) ?? ThemeList[2];
@@ -77,6 +83,7 @@ public static class ThemeManager
         ApplyPalette();
         ApplyTypographyAndColors();
         GlobalData.Inst.Config.Save();
+        ThemeChanged?.Invoke(NowTheme);
     }
     private static void ApplyPalette()
     {
@@ -139,12 +146,12 @@ public static class ThemeManager
         if (!string.IsNullOrEmpty(profile.Accent)) Set("AccentColor", Parse(profile.Accent));
         var accent = Read("AccentColor");
         var background = Read("BgDark");
-        Set("AccentSurface", Mix(background, accent, .20));
-        Set("AccentSurfaceSubtle", Mix(background, accent, .09));
+        Set("AccentSurface", Mix(background, Read("TextPrimary"), .075));
+        Set("AccentSurfaceSubtle", Read("BgLight"));
         Set("AccentColorSecondary", accent);
         Set("AccentForeground", accent.R * .299 + accent.G * .587 + accent.B * .114 > 150 ? Colors.Black : Colors.White);
-        Set("TextSecondary", Mix(background, Read("TextPrimary"), .72));
-        Set("Border", Mix(background, Read("TextPrimary"), .18));
+        Set("TextSecondary", Mix(background, Read("TextPrimary"), .78));
+        Set("Border", Mix(background, Read("TextPrimary"), .14));
     }
 
     public static event Action<ThemeInfo> ThemeChanged;

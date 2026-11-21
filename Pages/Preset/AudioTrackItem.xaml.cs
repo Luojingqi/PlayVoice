@@ -159,11 +159,12 @@ public partial class AudioTrackItem : UserControl
 
     private void DragHandle_MouseDown(object sender, MouseButtonEventArgs e)
     {
-        int width = (int)this.ActualWidth;
-        int height = (int)this.ActualHeight;
+        var dpi = VisualTreeHelper.GetDpi(this);
+        int width = (int)Math.Ceiling(ActualWidth * dpi.DpiScaleX);
+        int height = (int)Math.Ceiling(ActualHeight * dpi.DpiScaleY);
         if (width > 0 && height > 0)
         {
-            RenderTargetBitmap bmp = new RenderTargetBitmap(width, height, 96, 96, PixelFormats.Pbgra32);
+            RenderTargetBitmap bmp = new RenderTargetBitmap(width, height, dpi.PixelsPerInchX, dpi.PixelsPerInchY, PixelFormats.Pbgra32);
             bmp.Render(this);
             this.Tag = bmp;
         }

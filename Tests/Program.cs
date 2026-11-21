@@ -5,13 +5,59 @@ using PlayVoice.Audio;
 using PlayVoice.Hotkey;
 
 static void Check(bool value, string message) { if (!value) throw new Exception(message); }
+foreach (string culture in PlayVoice.Resources.Language.LocalizationCatalog.CultureNames)
+{
+    PlayVoice.Resources.Language.LocalizationCatalog.SetCulture(System.Globalization.CultureInfo.GetCultureInfo(culture));
+    string translated = PlayVoice.Resources.Language.LocalizationCatalog.Translate("删除");
+    Check(!string.IsNullOrWhiteSpace(translated), "i18n language loading: " + culture);
+    var legacy = new System.Resources.ResourceManager("PlayVoice.Resources.Language.Languages", typeof(PlayVoice.Resources.Language.LocalizationCatalog).Assembly);
+    foreach (System.Collections.DictionaryEntry entry in legacy.GetResourceSet(System.Globalization.CultureInfo.GetCultureInfo(culture), true, true)!)
+        Check(PlayVoice.Resources.Language.LocalizationCatalog.Translate((string)entry.Key) == (string)entry.Value!, "Translation parity: " + culture + ": " + entry.Key);
+}
+PlayVoice.Resources.Language.LocalizationCatalog.SetCulture(System.Globalization.CultureInfo.GetCultureInfo("en-US"));
+Check(PlayVoice.Resources.Language.LocalizationCatalog.Translate("删除") == "Delete", "i18n English translation");
+Check(PlayVoice.Resources.Language.LocalizationCatalog.Translate("missing-key") == "missing-key", "i18n missing key fallback");
+Check(PlayVoice.Resources.Language.LocalizationCatalog.ResolveCulture("invalid-culture").Name == "en-US", "Unsupported locale fallback");
+Check(PlayVoice.Resources.Language.LocalizationCatalog.Translate("删除", System.Globalization.CultureInfo.GetCultureInfo("zh-CN")) == "删除", "Bootstrap translation must not alter selected locale");
+Check(PlayVoice.Resources.Language.LocalizationCatalog.Translate("删除") == "Delete", "Bootstrap culture isolation");
+Console.WriteLine("PASS: Lepo.i18n nine-language loading, runtime culture selection, bootstrap isolation and missing-key fallback");
+AudioEditingChecks.Run();
 var customTheme = PlayVoice.Resources.Themes.AppearanceProfile.Parse("""{"Name":"Test","FontSize":16,"Accent":"#5577CC","Background":"#101010","Foreground":"#EEEEEE"}""");
-Check(customTheme.Copy().FontSize == 16, "Theme roundtrip");
+Check(customTheme.WindowMaterial == "Acrylic" && customTheme.MaterialOpacity == .84, "Old theme material defaults");
+customTheme.WindowMaterial = "Mica";
+customTheme.MaterialOpacity = .72;
+Check(customTheme.Copy().FontSize == 16 && customTheme.Copy().WindowMaterial == "Mica" && customTheme.Copy().MaterialOpacity == .72, "Theme roundtrip");
+foreach (var json in new[] { """{"WindowMaterial":"Gaussian"}""", """{"MaterialOpacity":0.1}""", """{"MaterialOpacity":1.1}""" })
+{
+    try { PlayVoice.Resources.Themes.AppearanceProfile.Parse(json); throw new Exception("Invalid material accepted"); }
+    catch (System.IO.InvalidDataException) { }
+}
 foreach (var invalid in new[] { "{\"Version\":99}", "{\"FontSize\":100}", "{\"Accent\":\"red\"}", "{\"FontFamily\":\"https://example.com/font\"}", "{\"Background\":\"#000000\",\"Foreground\":\"#000000\"}" })
 {
     try { PlayVoice.Resources.Themes.AppearanceProfile.Parse(invalid); throw new Exception("Invalid theme accepted"); }
     catch (System.IO.InvalidDataException) { }
 }
+var modeSwitch = customTheme.Copy();
+modeSwitch.UseBuiltInMode("Dark");
+Check(modeSwitch.Mode == "Dark" && modeSwitch.Background == null && modeSwitch.Foreground == null, "Explicit mode selection must release fixed background/text colors");
+Check(modeSwitch.Accent == customTheme.Accent && modeSwitch.FontSize == 16 && modeSwitch.WindowMaterial == "Mica", "Mode change must retain accent, typography and material");
+Check(customTheme.Background == "#101010", "Switching mode must not modify a saved custom theme");
+try { modeSwitch.UseBuiltInMode("invalid"); throw new Exception("Unknown mode accepted"); }
+catch (ArgumentException) { }
+Check(modeSwitch.Mode == "Dark", "Invalid mode must not mutate appearance");
+var expanded = customTheme.Copy();
+expanded.SurfaceStyle = "Tinted"; expanded.SurfaceBackground = "#112233";
+expanded.SidebarBackground = "#223344"; expanded.SecondaryForeground = "#AABBCC";
+expanded.BorderColor = "#445566"; expanded.CornerRadius = 20; expanded.ControlHeight = 44; expanded.RowHeight = 64;
+var roundtrip = expanded.Copy();
+Check(roundtrip.SurfaceStyle == "Tinted" && roundtrip.SurfaceBackground == "#112233" && roundtrip.CornerRadius == 20 && roundtrip.RowHeight == 64, "Expanded appearance roundtrip");
+foreach(var invalid in new[]{ """{"CornerRadius":25}""", """{"RowHeight":20}""", """{"ControlHeight":100}""", """{"SurfaceStyle":"invalid"}""", """{"SidebarBackground":"red"}""" })
+{
+ try { PlayVoice.Resources.Themes.AppearanceProfile.Parse(invalid); throw new Exception("Invalid expanded theme accepted"); }
+ catch(System.IO.InvalidDataException) { }
+}
+expanded.UseBuiltInMode("Dark");
+Check(expanded.SurfaceBackground == null && expanded.SidebarBackground == null && expanded.BorderColor == null, "Built-in mode clears custom surfaces");
 var palettes = JsonNode.Parse(File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "ColorPalettes.json")))!.AsObject();
 Check(palettes.Count == 4, "Four distinct color themes required");
 foreach (var palette in palettes)
@@ -62,7 +108,7 @@ try
     loaded.CustomThemes[customTheme.Name] = customTheme.Copy();
     Check(ConfigStorage.Save(loaded, path), "Custom appearance save");
     var restoredAppearance = ConfigStorage.Load(path);
-    Check(restoredAppearance.Appearance.FontSize == 16 && restoredAppearance.CustomThemes["Test"].Accent == "#5577CC", "Custom themes and font settings must survive restart");
+    Check(restoredAppearance.Appearance.WindowMaterial == "Mica" && restoredAppearance.Appearance.MaterialOpacity == .72 && restoredAppearance.Appearance.FontSize == 16 && restoredAppearance.CustomThemes["Test"].Accent == "#5577CC", "Custom themes and font settings must survive restart");
     File.WriteAllText(path, "{broken");
     Check(ConfigStorage.Load(path).MaxPlayingAudioCount == 8, "Backup recovery failed");
     Check(Directory.GetFiles(folder, "config.json.corrupt-*").Length == 1, "Damaged original must be retained");

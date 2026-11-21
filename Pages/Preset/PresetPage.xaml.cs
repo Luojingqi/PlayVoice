@@ -291,7 +291,7 @@ public partial class PresetPage : Page
                 StringComparison.OrdinalIgnoreCase);
     }
 
-    public void RemoveAudioPresetPage(string name)
+    public void RemoveAudioPresetPage(string name, bool keepManagementPage = false)
     {
         var pageToRemove = pageList.FirstOrDefault(page =>
             string.Equals(page.Name, name, StringComparison.OrdinalIgnoreCase));

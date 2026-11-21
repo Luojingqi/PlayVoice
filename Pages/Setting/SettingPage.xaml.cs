@@ -12,7 +12,7 @@ public partial class SettingPage : Page
         InitializeAppearanceEditor();
         Loaded += OnLoaded;
         Unloaded += (_, _) => { ThemeManager.ThemeChanged -= ThemeChanged; LanguageManager.Inst.CultureChanged -= LanguageChanged; };
-        AppearanceChoices.SelectionChanged += (_, _) => { if (AppearanceChoices.SelectedItem is ThemeManager.ThemeInfo theme && theme != ThemeManager.NowTheme) ThemeManager.SwitchTheme(theme.Theme); };
+        AppearanceChoices.SelectionChanged += (_, _) => { if (AppearanceChoices.SelectedItem is ThemeManager.ThemeInfo theme && theme != ThemeManager.NowTheme) ThemeManager.SelectTheme(theme.Theme); };
     }
     private void OnLoaded(object sender, RoutedEventArgs e)
     {
@@ -31,12 +31,13 @@ public partial class SettingPage : Page
         PaletteChoices.Children.Clear();
         foreach (var palette in ThemeManager.Palettes)
         {
-            var content = new StackPanel();
-            content.Children.Add(new Border { Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(palette.Value.Light[0])), Width = 100, Height = 54, CornerRadius = new CornerRadius(8), Margin = new Thickness(0,0,0,12) });
-            content.Children.Add(new TextBlock { Text = LanguageManager.Inst.GetString(palette.Value.Name) });
-            var button = new Button { Content = content, Margin = new Thickness(0,0,12,12), Padding = new Thickness(16), BorderThickness = new Thickness(1) };
+            var content = new StackPanel { Orientation = Orientation.Horizontal };
+            content.Children.Add(new Border { Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString(palette.Value.Light[0])), Width = 12, Height = 12, CornerRadius = new CornerRadius(6), Margin = new Thickness(0,0,8,0), VerticalAlignment = VerticalAlignment.Center });
+            content.Children.Add(new TextBlock { Text = LanguageManager.Inst.GetString(palette.Value.Name), VerticalAlignment = VerticalAlignment.Center });
+            var button = new Button { Content = content, Margin = new Thickness(0,3,6,3), Padding = new Thickness(10,6,10,6), BorderThickness = new Thickness(1) };
+            button.SetResourceReference(Control.BackgroundProperty, GlobalData.Inst.Config.ColorPalette == palette.Key ? "AccentSurface" : "BgLight");
             button.SetResourceReference(Control.BorderBrushProperty, GlobalData.Inst.Config.ColorPalette == palette.Key ? "AccentColor" : "Border");
-            button.Click += (_, _) => { ThemeManager.SwitchPalette(palette.Key); RefreshChoices(); };
+            button.Click += (_, _) => ThemeManager.SwitchPalette(palette.Key);
             PaletteChoices.Children.Add(button);
         }
     }

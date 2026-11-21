@@ -9,7 +9,7 @@
         ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner"
         ShowInTaskbar="False"
-        Background="Transparent">
+        Background="Transparent" UseLayoutRounding="True" SnapsToDevicePixels="True" TextOptions.TextFormattingMode="Display" TextOptions.TextRenderingMode="Auto" RenderOptions.BitmapScalingMode="HighQuality">
 
     <Window.Resources>
         <ResourceDictionary>

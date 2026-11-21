@@ -861,4 +861,61 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
 <data name="导出主题" xml:space="preserve"><value>导出主题</value></data>
 <data name="重置外观" xml:space="preserve"><value>重置外观</value></data>
 <data name="主题文件无效" xml:space="preserve"><value>主题无效，请检查名称、字号（11–18）及颜色（#RRGGBB）。</value></data>
+<data name="波形选区" xml:space="preserve"><value>波形选区</value></data>
+<data name="波形操作提示" xml:space="preserve"><value>拖动选区或边界；方向键调整起点，Shift＋方向键调整终点。</value></data>
+<data name="开始秒" xml:space="preserve"><value>开始（秒）</value></data>
+<data name="结束秒" xml:space="preserve"><value>结束（秒）</value></data>
+<data name="淡入秒" xml:space="preserve"><value>淡入（秒）</value></data>
+<data name="淡出秒" xml:space="preserve"><value>淡出（秒）</value></data>
+<data name="加载波形" xml:space="preserve"><value>正在加载波形…</value></data>
+<data name="波形加载失败" xml:space="preserve"><value>波形加载失败</value></data>
+<data name="选区或淡化时长无效" xml:space="preserve"><value>请检查选区及淡入淡出时长，淡化不能长于选区。</value></data>
+<data name="保留原文件" xml:space="preserve"><value>编辑只保存参数，原始音频文件保持不变。</value></data>
+<data name="应用剪辑" xml:space="preserve"><value>应用剪辑</value></data>
+<data name="恢复原始音频" xml:space="preserve"><value>恢复原始音频</value></data>
+<data name="暂无预设" xml:space="preserve"><value>暂无预设</value></data>
+<data name="已选择" xml:space="preserve"><value>已选择</value></data>
+<data name="删除所选" xml:space="preserve"><value>删除所选</value></data>
+<data name="删除所选预设确认" xml:space="preserve"><value>确定删除以下预设及其数据？此操作不可撤销。
+
+{0}</value></data>
+<data name="音效电平" xml:space="preserve"><value>音效</value></data>
+<data name="麦克风电平" xml:space="preserve"><value>麦克风</value></data>
+<data name="输出电平" xml:space="preserve"><value>输出</value></data>
+<data name="未选择音效" xml:space="preserve"><value>未选择音效</value></data>
+  <data name="窗口材质" xml:space="preserve"><value>窗口材质</value></data>
+  <data name="纯色" xml:space="preserve"><value>纯色</value></data>
+  <data name="亚克力" xml:space="preserve"><value>亚克力</value></data>
+  <data name="云母" xml:space="preserve"><value>云母</value></data>
+  <data name="材质不透明度" xml:space="preserve"><value>材质不透明度</value></data>
+  <data name="系统材质说明" xml:space="preserve"><value>亚克力和云母需要 Windows 11 22H2 或更高版本并开启系统透明效果；不可用时自动使用实色。正文不模糊。</value></data>
+  <data name="最小化" xml:space="preserve"><value>最小化</value></data>
+  <data name="最大化" xml:space="preserve"><value>最大化</value></data>
+  <data name="自定义颜色" xml:space="preserve"><value>自定义颜色</value></data>
+  <data name="刷新" xml:space="preserve"><value>刷新</value></data>
+  <data name="热键" xml:space="preserve"><value>热键</value></data>
+  <data name="保存" xml:space="preserve"><value>保存</value></data>
+  <data name="试听" xml:space="preserve"><value>试听</value></data>
+  <data name="波形裁剪" xml:space="preserve"><value>波形裁剪</value></data>
+  <data name="开始时间" xml:space="preserve"><value>开始时间</value></data>
+  <data name="结束时间" xml:space="preserve"><value>结束时间</value></data>
+  <data name="淡入" xml:space="preserve"><value>淡入</value></data>
+  <data name="淡出" xml:space="preserve"><value>淡出</value></data>
+  <data name="播放模式" xml:space="preserve"><value>播放模式</value></data>
+  <data name="音频耳返" xml:space="preserve"><value>音频耳返</value></data>
+  <data name="输入耳返" xml:space="preserve"><value>输入耳返</value></data>
+  <data name="创建音频预设" xml:space="preserve"><value>创建音频预设</value></data>
+  <data name="创建游戏预设" xml:space="preserve"><value>创建游戏预设</value></data>
+  <data name="播放" xml:space="preserve"><value>播放</value></data>
+<data name="配色风格" xml:space="preserve"><value>配色风格</value></data>
+<data name="中性" xml:space="preserve"><value>中性</value></data>
+<data name="染色" xml:space="preserve"><value>染色</value></data>
+<data name="鲜明" xml:space="preserve"><value>鲜明</value></data>
+<data name="面板背景" xml:space="preserve"><value>面板背景</value></data>
+<data name="侧栏背景" xml:space="preserve"><value>侧栏背景</value></data>
+<data name="次级文字" xml:space="preserve"><value>次级文字</value></data>
+<data name="边框颜色" xml:space="preserve"><value>边框颜色</value></data>
+<data name="圆角" xml:space="preserve"><value>圆角</value></data>
+<data name="控件高度" xml:space="preserve"><value>控件高度</value></data>
+<data name="列表行高" xml:space="preserve"><value>列表行高</value></data>
 </root>

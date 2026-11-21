@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>WinExe</OutputType><TargetFramework>net10.0-windows</TargetFramework><AssemblyName>PlayVoice.Avalonia</AssemblyName><RootNamespace>PlayVoice</RootNamespace><ImplicitUsings>enable</ImplicitUsings><Nullable>warnings</Nullable><DefineConstants>$(DefineConstants);AVALONIA</DefineConstants><ApplicationIcon>../Resources/Style/PlayVoice.ico</ApplicationIcon><ApplicationManifest>../app.manifest</ApplicationManifest><AvaloniaUseCompiledBindingsByDefault>false</AvaloniaUseCompiledBindingsByDefault><Version>0.0.11</Version></PropertyGroup>
+  <ItemGroup><PackageReference Include="Avalonia.Desktop" Version="12.1.6"/><PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.6"/><PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2"/><PackageReference Include="Lepo.i18n" Version="2.1.0"/><PackageReference Include="NAudio" Version="2.3.0"/></ItemGroup>
+  <ItemGroup>
+    <Compile Include="../Audio/*.cs" Link="Core/Audio/%(Filename)%(Extension)"/>
+    <Compile Include="../Hotkey/*.cs" Link="Core/Hotkey/%(Filename)%(Extension)"/>
+    <Compile Include="../Config.cs;../ConfigStorage.cs;../DataMetadata.cs;../JsonTool.cs;../GlobalData.cs;../Equipment.cs;../EquipmentLoder.cs;../DefaultAudioEndpointSnapshot.cs" Link="Core/%(Filename)%(Extension)"/>
+    <Compile Include="../ConfigVersion/*.cs" Link="Core/ConfigVersion/%(Filename)%(Extension)"/>
+    <Compile Include="../Diagnostics/AppLog.cs;../Diagnostics/AppTraceListener.cs;../Diagnostics/ConsoleLogWriter.cs;../Diagnostics/TaskExtensions.cs" Link="Core/Diagnostics/%(Filename)%(Extension)"/>
+    <Compile Include="../Pages/Preset/AudioPresetData.cs;../Pages/Preset/AudioPresetDataConfig.cs;../Pages/Preset/AudioPresetDataTool.cs;../Pages/Preset/PresetStorage.cs" Link="Core/Preset/%(Filename)%(Extension)"/>
+    <Compile Include="../Pages/FunctionPreset/*.cs" Exclude="../Pages/FunctionPreset/*.xaml.cs" Link="Core/Presets/%(Filename)%(Extension)"/>
+    <Compile Include="../Pages/Workshop/PlayAudioKeyData.cs;../Pages/Workshop/ResourceDataConfig.cs;../Pages/LabelStatus.cs" Link="Core/%(Filename)%(Extension)"/>
+    <Compile Include="../Resources/Language/LanguageManager.cs;../Resources/Language/LocalizationCatalog.cs;../Resources/Themes/AppearanceProfile.cs" Link="Core/%(Filename)%(Extension)"/>
+    <EmbeddedResource Include="../Resources/Language/Languages*.resx" Link="Resources/Language/%(Filename)%(Extension)"/>
+    <AvaloniaResource Include="../Resources/Style/PlayVoice.png;../Resources/Style/PlayVoice.ico;../Resources/Themes/ColorPalettes.json" Link="Assets/%(Filename)%(Extension)"/>
+    <Reference Include="Facepunch.Steamworks.Win64"><HintPath>../../../DLL/Facepunch.Steamworks.2.5.2/Release/net6.0/Facepunch.Steamworks.Win64.dll</HintPath></Reference>
+    <None Include="../steam_api64.dll;../Thumbnail.png;../ffmpeg.exe" Link="%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"/>
+    <None Include="../LICENSE/Avalonia.LICENSE.txt" Link="LICENSE/Avalonia.LICENSE.txt" CopyToOutputDirectory="PreserveNewest"/>
+    <None Include="../LICENSE/Lepo.i18n.*" Link="LICENSE/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest"/>
+  </ItemGroup>
+</Project>
