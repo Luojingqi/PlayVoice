@@ -17,6 +17,9 @@ public sealed class WaveformSelection : Control
     public double End { get => (double)GetValue(EndProperty); set => SetValue(EndProperty, value); }
     private double anchor;
     private int handle;
+    private bool keyboardEditing;
+    private bool pointerEditing;
+    public event Action EditCompleted;
 
     public WaveformSelection()
     {
@@ -56,6 +59,7 @@ public sealed class WaveformSelection : Control
         if (Duration <= 0 || ActualWidth <= 0) return;
         Focus();
         if (!CaptureMouse()) return;
+        pointerEditing = true;
         double x = e.GetPosition(this).X;
         anchor = Math.Clamp(x / ActualWidth, 0, 1) * Duration;
         handle = Math.Abs(x - Start / Duration * ActualWidth) <= 8 ? -1
@@ -82,14 +86,49 @@ public sealed class WaveformSelection : Control
         base.OnMouseLeftButtonUp(e);
         if (IsMouseCaptured) { ReleaseMouseCapture(); e.Handled = true; }
     }
+
+    protected override void OnLostMouseCapture(MouseEventArgs e)
+    {
+        base.OnLostMouseCapture(e);
+        if (!pointerEditing) return;
+        pointerEditing = false;
+        EditCompleted?.Invoke();
+    }
     protected override void OnKeyDown(KeyEventArgs e)
     {
         base.OnKeyDown(e);
         if (Duration <= 0 || e.Key is not (Key.Left or Key.Right)) return;
+        keyboardEditing = true;
         double step = Math.Min(.01, Duration) * (e.Key == Key.Left ? -1 : 1);
         if ((Keyboard.Modifiers & ModifierKeys.Shift) != 0)
             SetCurrentValue(EndProperty, Math.Clamp(End + step, Math.Min(Duration, Start + .001), Duration));
         else SetCurrentValue(StartProperty, Math.Clamp(Start + step, 0, Math.Max(0, End - .001)));
         e.Handled = true;
+    }
+
+    protected override void OnKeyUp(KeyEventArgs e)
+    {
+        base.OnKeyUp(e);
+        if (e.Key is Key.Left or Key.Right && !Keyboard.IsKeyDown(Key.Left) && !Keyboard.IsKeyDown(Key.Right))
+            FinishKeyboardEdit();
+    }
+
+    protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
+    {
+        base.OnLostKeyboardFocus(e);
+        FinishKeyboardEdit();
+    }
+
+    internal void FinishEditing()
+    {
+        if (IsMouseCaptured) ReleaseMouseCapture();
+        FinishKeyboardEdit();
+    }
+
+    private void FinishKeyboardEdit()
+    {
+        if (!keyboardEditing) return;
+        keyboardEditing = false;
+        EditCompleted?.Invoke();
     }
 }

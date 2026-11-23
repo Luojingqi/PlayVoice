@@ -114,8 +114,7 @@ internal class AudioProxy
             GlobalData.Inst.Config.MaxPlayingAudioCount = maxPlayingAudioCount;
             GlobalData.Inst.Config.Save();
 
-            while (AllAudioList.Count > maxPlayingAudioCount)
-                AllAudioList[0].Stop();
+            EnforcePlaybackLimits();
         }
     }
 
@@ -132,18 +131,17 @@ internal class AudioProxy
             {
                 physicalMicrophoneBufferArray[1]?.Clear();
                 physicalLoudspeakerMixer.AddMixerInput(physicalMicrophoneVolumeArray[1]);
-                StopPLEquipmentClear();
             }
             else
             {
                 physicalLoudspeakerMixer.RemoveMixerInput(physicalMicrophoneVolumeArray[1]);
                 physicalMicrophoneBufferArray[1]?.Clear();
-                StopPLEquipmentClear();
             }
         };
         GlobalData.Inst.GoEar_AudioStateChanged += (value) =>
         {
-            StopPLEquipmentClear();
+            foreach (var track in VLAudioList.ToArray()) track.SetMonitoring(value);
+            GlobalData.Inst.Playback.NotifyChanged();
         };
         audioOutDecibel = GlobalData.Inst.Config.AudioOutDecibel;
         audioEarDecibel = GlobalData.Inst.Config.AudioEarDecibel;
@@ -454,7 +452,7 @@ internal class AudioProxy
             "AudioProxy.PhysicalMicrophone.Format");
         physicalMicrophoneCapture.DataAvailable += (sender, e) =>
         {
-            if (GlobalData.Inst.AutoMute && AllAudioList.Count > 0)
+            if (GlobalData.Inst.AutoMute && HasLiveVirtualInput())
                 return;
             microphoneBuffers[0].AddSamples(e.Buffer, 0, e.BytesRecorded);
 
@@ -490,14 +488,30 @@ internal class AudioProxy
         physicalMicrophoneCapture.StartRecording();
     }
 
-    private List<AudioData> AllAudioList = new();
-    private List<AudioData> VLAudioList = new();
-    private List<AudioData> PLEquipmentList = new();
+    private readonly List<AudioData> programTracks = new();
+    private readonly List<AudioData> VLAudioList = new();
+    private readonly List<AudioData> PLEquipmentList = new();
+    internal AudioData LatestPreview => PLEquipmentList.LastOrDefault(track => track.IsPreview);
+    private PlaybackOutput[] microphoneGateInputs = [];
+
+    // The capture callback can run while the UI is busy or changing the mix.
+    private bool HasLiveVirtualInput()
+    {
+        foreach (var output in Volatile.Read(ref microphoneGateInputs))
+            if (!output.IsEnded) return true;
+        return false;
+    }
+
+    private void PublishVirtualInputs() => Volatile.Write(ref microphoneGateInputs,
+        VLAudioList.Select(track => track.VirtualOutput).ToArray());
+
     public void AddAudio(AudioData audioData)
     {
-        if ((audioData.PlayMode & AudioData.PlayModeEnum.VL播放) == AudioData.PlayModeEnum.VL播放)
+        if (audioData.VirtualOutput != null)
         {
-            if (VLAudioList.Count == 0)
+            VLAudioList.Add(audioData);
+            PublishVirtualInputs();
+            if (VLAudioList.Count == 1)
             {
                 var beforePlayingKey = GlobalData.Inst.ActiveFunctionPreset?.BeforePlayingKey;
                 switch (beforePlayingKey?.Action)
@@ -514,27 +528,41 @@ internal class AudioProxy
                         break;
                 }
             }
-            audioMixToVL.AddMixerInput(audioData.VolumeProvider_ToVM);
-            VLAudioList.Add(audioData);
+            audioMixToVL.AddMixerInput(audioData.VirtualOutput);
         }
-        if ((audioData.PlayMode & AudioData.PlayModeEnum.PL播放) == AudioData.PlayModeEnum.PL播放)
-        {
-            audioMixToPL.AddMixerInput(audioData.VolumeProvider_ToPL);
-            PLEquipmentList.Add(audioData);
-        }
+        if (audioData.PhysicalOutput != null) AddPhysicalInput(audioData);
+        if (!audioData.IsPreview) programTracks.Add(audioData);
+        EnforcePlaybackLimits();
+    }
 
-        AllAudioList.Add(audioData);
-        while (AllAudioList.Count > MaxPlayingAudioCount)
-            AllAudioList[0].Stop();
+    private void EnforcePlaybackLimits()
+    {
+        while (programTracks.Count > MaxPlayingAudioCount)
+            programTracks[0].Stop();
+        while (PLEquipmentList.Count(track => track.IsPreview) > MaxPlayingAudioCount)
+            PLEquipmentList.First(track => track.IsPreview).Stop();
+    }
+
+    internal void AddPhysicalInput(AudioData track)
+    {
+        audioMixToPL.AddMixerInput(track.PhysicalOutput);
+        PLEquipmentList.Add(track);
+    }
+
+    internal void RemovePhysicalInput(AudioData track)
+    {
+        if (PLEquipmentList.Remove(track))
+            audioMixToPL.RemoveMixerInput(track.PhysicalOutput);
     }
 
     public void RemoveAudio(AudioData audioData)
     {
-        AllAudioList.Remove(audioData);
-        if ((audioData.PlayMode & AudioData.PlayModeEnum.VL播放) == AudioData.PlayModeEnum.VL播放)
+        programTracks.Remove(audioData);
+        RemovePhysicalInput(audioData);
+        if (VLAudioList.Remove(audioData))
         {
-            audioMixToVL.RemoveMixerInput(audioData.VolumeProvider_ToVM);
-            VLAudioList.Remove(audioData);
+            audioMixToVL.RemoveMixerInput(audioData.VirtualOutput);
+            PublishVirtualInputs();
             if (VLAudioList.Count == 0)
             {
                 var afterPlayingKey = GlobalData.Inst.ActiveFunctionPreset?.AfterPlayingKey;
@@ -553,21 +581,13 @@ internal class AudioProxy
                 }
             }
         }
-        if ((audioData.PlayMode & AudioData.PlayModeEnum.PL播放) == AudioData.PlayModeEnum.PL播放)
-        {
-            audioMixToPL.RemoveMixerInput(audioData.VolumeProvider_ToPL);
-            PLEquipmentList.Remove(audioData);
-        }
     }
 
     public void StopClear()
     {
         GlobalData.Inst.Playback.StopPresetAudio();
-        foreach (var item in AllAudioList.ToArray())
-            item.Stop();
-        AllAudioList.Clear();
-        VLAudioList.Clear();
-        PLEquipmentList.Clear();
+        foreach (var item in programTracks.ToArray()) item.Stop();
+        StopPLEquipmentClear();
     }
 
     public void Stop()

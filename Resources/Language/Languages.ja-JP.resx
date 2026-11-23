@@ -385,4 +385,9 @@
 <data name="圆角" xml:space="preserve"><value>角の丸み</value></data>
 <data name="控件高度" xml:space="preserve"><value>コントロールの高さ</value></data>
 <data name="列表行高" xml:space="preserve"><value>リスト行の高さ</value></data>
+  <data name="撤销上一步" xml:space="preserve"><value>直前の編集を元に戻す</value></data>
+  <data name="重置剪辑" xml:space="preserve"><value>トリミングをリセット</value></data>
+  <data name="测试输出" xml:space="preserve"><value>出力をテスト</value></data>
+  <data name="将当前收藏和标签应用到勾选音效" xml:space="preserve"><value>現在のお気に入り状態とタグをチェックした効果音に適用</value></data>
+  <data name="请输入有效的秒数" xml:space="preserve"><value>有効な秒数を入力してください。</value></data>
 </root>

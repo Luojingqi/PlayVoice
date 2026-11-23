@@ -921,4 +921,9 @@ O</value>
 <data name="圆角" xml:space="preserve"><value>Corner radius</value></data>
 <data name="控件高度" xml:space="preserve"><value>Control height</value></data>
 <data name="列表行高" xml:space="preserve"><value>List row height</value></data>
+  <data name="撤销上一步" xml:space="preserve"><value>Undo last edit</value></data>
+  <data name="重置剪辑" xml:space="preserve"><value>Reset trim</value></data>
+  <data name="测试输出" xml:space="preserve"><value>Test output</value></data>
+  <data name="将当前收藏和标签应用到勾选音效" xml:space="preserve"><value>Apply current favorite status and tags to checked sounds</value></data>
+  <data name="请输入有效的秒数" xml:space="preserve"><value>Enter a valid number of seconds.</value></data>
 </root>

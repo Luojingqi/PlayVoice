@@ -3,6 +3,8 @@ using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Threading;
 using PlayVoice.Audio;
 using PlayVoice.Resources.Language;
 
@@ -12,18 +14,131 @@ public partial class AudioTrackGrid
 {
     public ICollectionView AudioView { get; private set; }
     public AudioLibraryViewModel Library { get; private set; }
+    private TextBox activeEditorTextBox;
+    private string originalEditorText;
+    private bool refreshQueued;
+    private AudioTrackItemViewModel editedTrackInFilter;
+    private TextBox[] clipInputs;
     private bool IsLibraryFiltered => !string.IsNullOrWhiteSpace(LibrarySearch.Text)
         || FavoritesFilter.IsChecked == true || RecentFilter.IsChecked == true;
 
     private void InitializeLibrary()
     {
         Library = new AudioLibraryViewModel(ShortcutList, ShowLibraryError, RefreshFilteredTracks, StopPreview);
+        clipInputs = new[] { LibraryTrimStart, LibraryTrimEnd, LibraryFadeIn, LibraryFadeOut };
+        foreach (var input in clipInputs.Append(LibraryTags))
+        {
+            input.GotKeyboardFocus += LibraryTextFocused;
+            input.LostKeyboardFocus += (_, _) =>
+            {
+                if (activeEditorTextBox == input) FinishTextEdit();
+            };
+            input.PreviewKeyDown += LibraryTextKeyDown;
+        }
+        Library.SelectionChanging += FinishLibraryEdits;
+        Library.EditValuesReloaded += () => Array.ForEach(clipInputs, ReloadEditorText);
+        Library.TagsReloaded += () => ReloadEditorText(LibraryTags);
+        Waveform.EditCompleted += () =>
+        {
+            if (!CanCommitEditor) return;
+            ReloadEditorText(LibraryTrimStart);
+            ReloadEditorText(LibraryTrimEnd);
+            CommitClipInputs();
+        };
+        LibraryVolume.EditStarted += Library.BeginVolumeEdit;
+        LibraryVolume.EditCompleted += FinishVolumeEdit;
         AudioView = CollectionViewSource.GetDefaultView(ShortcutList);
         AudioView.Filter = item => item is AudioTrackItemViewModel track
-            && AudioLibraryFilter.Matches(track.Data.Config, LibrarySearch.Text,
-                FavoritesFilter.IsChecked == true, RecentFilter.IsChecked == true);
+            && (ReferenceEquals(track, editedTrackInFilter) || AudioLibraryFilter.Matches(track.Data.Config,
+                LibrarySearch.Text, FavoritesFilter.IsChecked == true, RecentFilter.IsChecked == true));
         AudioView.CollectionChanged += (_, _) => UpdateEmptyLibrary();
         UpdateEmptyLibrary();
+    }
+
+    private bool CanCommitEditor => Library.Selected is { } track
+        && ReferenceEquals(track.Data.AudioPreset, GlobalData.Inst.ActiveAudioPreset)
+        && track.Data.AudioPreset.AudioList.Contains(track.Data);
+
+    private void LibraryTextFocused(object sender, KeyboardFocusChangedEventArgs e)
+    {
+        activeEditorTextBox = (TextBox)sender;
+        originalEditorText = activeEditorTextBox.Text;
+    }
+
+    private void LibraryTextKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key != Key.Enter || activeEditorTextBox != sender) return;
+        CommitEditorText(activeEditorTextBox);
+        e.Handled = true;
+    }
+
+    private void FinishTextEdit()
+    {
+        var input = activeEditorTextBox;
+        activeEditorTextBox = null;
+        if (input != null) CommitEditorText(input);
+    }
+
+    private void CommitEditorText(TextBox input)
+    {
+        if (!CanCommitEditor) return;
+        if (input.Text == originalEditorText)
+        {
+            if (input != LibraryTags && !string.IsNullOrEmpty(Library.EditError)) CommitClipInputs();
+            return;
+        }
+        input.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
+        if (ReferenceEquals(input, LibraryTags)) Library.CommitTags();
+        else CommitClipInputs();
+        originalEditorText = input.Text;
+    }
+
+    private void ReloadEditorText(TextBox input)
+    {
+        if (input.GetBindingExpression(TextBox.TextProperty) is not { } binding) return;
+        Validation.ClearInvalid(binding);
+        binding.UpdateTarget();
+        if (!input.IsKeyboardFocused) return;
+        activeEditorTextBox = input;
+        originalEditorText = input.Text;
+    }
+
+    private void CommitClipInputs()
+    {
+        if (clipInputs.Any(Validation.GetHasError))
+        {
+            Library.EditError = LanguageManager.Inst.GetString("请输入有效的秒数");
+            return;
+        }
+        Library.CommitClip();
+    }
+
+    private void LibraryFavoriteClicked(object sender, RoutedEventArgs e)
+    {
+        if (CanCommitEditor) Library.CommitFavorite(((CheckBox)sender).IsChecked == true);
+    }
+
+    internal void FinishLibraryEdits()
+    {
+        FinishTextEdit();
+        Waveform.FinishEditing();
+        FinishVolumeEdit();
+    }
+
+    private void FinishVolumeEdit()
+    {
+        if (CanCommitEditor) Library.FinishVolumeEdit();
+        else Library.CancelVolumeEdit();
+    }
+
+    internal void EndLibraryEditSession()
+    {
+        FinishLibraryEdits();
+        Library.ClearEditHistory();
+        if (CanCommitEditor) Library.DiscardDrafts();
+        if (editedTrackInFilter == null) return;
+        editedTrackInFilter = null;
+        QueueFilteredRefresh();
     }
 
     private void SubscribeLibrary()
@@ -55,6 +170,7 @@ public partial class AudioTrackGrid
     private void LibraryFilterChanged(object sender, RoutedEventArgs e)
     {
         if (AudioView == null) return;
+        editedTrackInFilter = null;
         foreach (var track in ShortcutList) track.Marked = false;
         SelectAll = false;
         // Recent ordering reads metadata directly, without changing persisted track order.
@@ -67,7 +183,21 @@ public partial class AudioTrackGrid
 
     private void RefreshFilteredTracks()
     {
-        if (IsLibraryFiltered) AudioView.Refresh();
+        if (!IsLibraryFiltered) return;
+        // Keep the edited row available for undo if its new metadata excludes it from this view.
+        editedTrackInFilter = Library.Selected;
+        QueueFilteredRefresh();
+    }
+
+    private void QueueFilteredRefresh()
+    {
+        if (refreshQueued) return;
+        refreshQueued = true;
+        Dispatcher.BeginInvoke(() =>
+        {
+            refreshQueued = false;
+            if (IsLibraryFiltered) AudioView.Refresh();
+        }, DispatcherPriority.Background);
     }
 
     private void UpdateEmptyLibrary() =>
@@ -101,6 +231,7 @@ public partial class AudioTrackGrid
     private void PreviewLibraryAudio(object sender, RoutedEventArgs e)
     {
         if (Library.Selected == null) return;
+        if (clipInputs.Any(Validation.GetHasError)) return;
         try { GlobalData.Inst.Playback.Preview(Library.Selected.Data, Library.PendingEdit()); }
         catch (Exception exception) { ShowLibraryError(exception); }
     }
@@ -124,7 +255,13 @@ public partial class AudioTrackGrid
     private string waveformStatusKey;
     private async void EditSelectionChanged(object sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(Library.Selected)) await LoadWaveformAsync();
+        if (e.PropertyName != nameof(Library.Selected)) return;
+        if (editedTrackInFilter != null && !ReferenceEquals(editedTrackInFilter, Library.Selected))
+        {
+            editedTrackInFilter = null;
+            QueueFilteredRefresh();
+        }
+        await LoadWaveformAsync();
     }
     private async Task LoadWaveformAsync()
     {

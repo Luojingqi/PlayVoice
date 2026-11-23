@@ -385,4 +385,9 @@
 <data name="圆角" xml:space="preserve"><value>Raio dos cantos</value></data>
 <data name="控件高度" xml:space="preserve"><value>Altura dos controles</value></data>
 <data name="列表行高" xml:space="preserve"><value>Altura das linhas</value></data>
+  <data name="撤销上一步" xml:space="preserve"><value>Desfazer última edição</value></data>
+  <data name="重置剪辑" xml:space="preserve"><value>Redefinir corte</value></data>
+  <data name="测试输出" xml:space="preserve"><value>Testar saída</value></data>
+  <data name="将当前收藏和标签应用到勾选音效" xml:space="preserve"><value>Aplicar o status de favorito e as tags aos sons marcados</value></data>
+  <data name="请输入有效的秒数" xml:space="preserve"><value>Digite um número válido de segundos.</value></data>
 </root>

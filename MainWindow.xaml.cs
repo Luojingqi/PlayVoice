@@ -135,13 +135,14 @@ namespace PlayVoice
             if (!Dispatcher.CheckAccess()) { Dispatcher.BeginInvoke(RefreshShellPlayback); return; }
             var global = GlobalData.Inst;
             var language = LanguageManager.Inst;
-            var current = global.Playback.Current;
-            ShellPlaybackState.Text = current?.Config.Name ?? language.GetString("未选择音效");
-            ShellPlaybackStatus.Text = language.GetString(global.Playback.IsPlaying ? "正在播放" : global.Playback.IsPaused ? "已暂停" : "已停止");
-            double progress = current?.PlaybackProgress ?? 0;
-            var duration = current?.PlaybackDuration ?? TimeSpan.Zero;
-            ShellProgress.Value = progress;
-            ShellTime.Text = Audio.AudioData.DurationToString(TimeSpan.FromTicks((long)(duration.Ticks * progress))) + " / " + Audio.AudioData.DurationToString(duration);
+            var current = global.Playback.CurrentSnapshot;
+            ShellPlaybackState.Text = current.Name ?? language.GetString("未选择音效");
+            ShellPlaybackStatus.Text = language.GetString(current.StatusKey);
+            ShellProgress.Value = current.Progress;
+            ShellTime.Text = Audio.AudioData.DurationToString(current.Position) + " / " + Audio.AudioData.DurationToString(current.Duration);
+            var preview = global.Playback.PreviewSnapshot;
+            ShellPreview.Visibility = preview.Name == null ? Visibility.Collapsed : Visibility.Visible;
+            ShellPreview.Text = language.GetString("试听") + " · " + preview.Name + " · " + Audio.AudioData.DurationToString(preview.Position);
             var device = global.GetRun() ? global.Equipment.VirtualLoudspeaker : global.Equipment.PhysicalLoudspeaker;
             ShellOutputDevice.Text = device?.FriendlyName ?? language.GetString("未绑定");
             ShellDevice.ToolTip = language.GetString("输出设备") + " · " + ShellOutputDevice.Text;

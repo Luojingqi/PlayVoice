@@ -22,6 +22,9 @@ public partial class ShellViewModel : ObservableObject
     [ObservableProperty] private string playbackStatus = "";
     [ObservableProperty] private string outputDevice = "";
     [ObservableProperty] private double progress;
+    [ObservableProperty] private bool anyPlaying;
+    [ObservableProperty] private string previewStatus;
+
     [ObservableProperty] private bool isEmpty = true;
     [ObservableProperty] private string activeAudioPresetName;
     [ObservableProperty] private string activeGamePresetName;
@@ -44,6 +47,6 @@ public sealed class TrackRow(AudioData audio)
 {
     public AudioData Audio { get; } = audio;
     public string Name => Audio.Config.FileName;
-    public string Detail => string.Join(" · ", Audio.Config.Tags ?? []) + $"  {Audio.AudioTrackArray[0].TotalTime:mm\\:ss}";
+    public string Detail => string.Join(" · ", Audio.Config.Tags ?? []) + $"  {Audio.PlaybackDuration:mm\\:ss}";
     public string Hotkey => GlobalData.Inst.GetAudioHotkey(Audio, false)?.ToString() ?? "";
 }

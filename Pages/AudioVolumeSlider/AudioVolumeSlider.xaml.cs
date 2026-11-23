@@ -1,4 +1,4 @@
-﻿using NAudio.Gui;
+using NAudio.Gui;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,7 +14,45 @@ public partial class AudioVolumeSlider : UserControl
     {
         InitializeComponent();
         this.PreviewMouseWheel += VolumeSlider_PreviewMouseWheel;
+        InnerSlider.AddHandler(Mouse.MouseUpEvent, new MouseButtonEventHandler((_, e) =>
+        {
+            if (e.ChangedButton == MouseButton.Left) EditCompleted?.Invoke();
+        }), true);
+        InnerSlider.AddHandler(Mouse.LostMouseCaptureEvent, new MouseEventHandler((_, _) =>
+        {
+            if (Mouse.LeftButton == MouseButtonState.Pressed) EditCompleted?.Invoke();
+        }), true);
     }
+
+    public event Action EditStarted;
+    public event Action EditCompleted;
+
+    protected override void OnPreviewMouseLeftButtonDown(MouseButtonEventArgs e)
+    {
+        base.OnPreviewMouseLeftButtonDown(e);
+        EditStarted?.Invoke();
+    }
+
+    protected override void OnPreviewKeyDown(KeyEventArgs e)
+    {
+        base.OnPreviewKeyDown(e);
+        if (IsAdjustmentKey(e.Key)) EditStarted?.Invoke();
+    }
+
+    protected override void OnPreviewKeyUp(KeyEventArgs e)
+    {
+        base.OnPreviewKeyUp(e);
+        if (IsAdjustmentKey(e.Key)) EditCompleted?.Invoke();
+    }
+
+    protected override void OnLostKeyboardFocus(KeyboardFocusChangedEventArgs e)
+    {
+        base.OnLostKeyboardFocus(e);
+        if (!IsKeyboardFocusWithin) EditCompleted?.Invoke();
+    }
+
+    private static bool IsAdjustmentKey(Key key) => key is Key.Left or Key.Right or Key.Up or Key.Down
+        or Key.Home or Key.End or Key.PageUp or Key.PageDown;
 
     public static readonly DependencyProperty ValueProperty =
         DependencyProperty.Register(
@@ -97,6 +135,6 @@ public partial class AudioVolumeSlider : UserControl
         if (e.Delta == 0) return;
 
         double change = e.Delta > 0 ? TickFrequency : -TickFrequency;
-        Value = Math.Clamp(Value + change, Minimum, Maximum);
+        SetCurrentValue(ValueProperty, Math.Clamp(Value + change, Minimum, Maximum));
     }
 }

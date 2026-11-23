@@ -11,7 +11,9 @@ public enum PlaybackMode { Single, RepeatOne, RepeatList, Shuffle }
 /// <summary>UI-thread playback state. Queue and position are never serialized.</summary>
 public sealed class PlaybackController
 {
-    private AudioPresetData previewPreset;
+    private AudioData preview;
+    public TrackPlaybackSnapshot PreviewSnapshot => GlobalData.Inst.AudioProxy.LatestPreview?.Snapshot ?? default;
+    public TrackPlaybackSnapshot CurrentSnapshot => Current?.Snapshot ?? default;
     private readonly PlaybackQueue<AudioData> queue = new();
     public AudioData Current => queue.Current;
     public event Action Changed;
@@ -89,6 +91,11 @@ public sealed class PlaybackController
     internal void StopPresetAudio()
     {
         StopPreview();
+        StopTracks();
+    }
+
+    private void StopTracks()
+    {
         foreach (var track in Tracks.ToArray()) track.Stop();
         NotifyChanged();
     }
@@ -105,31 +112,55 @@ public sealed class PlaybackController
 
     public void StopPreview()
     {
-        var previous = previewPreset;
-        previewPreset = null;
-        previous?.Dispose();
+        var previous = preview;
+        if (previous == null) return;
+        preview = null;
+        previous.PlaybackChanged -= PreviewChanged;
+        previous.Dispose();
+        NotifyChanged();
     }
 
-    public void Preview(AudioData source, AudioEditSettings pendingEdit = null)
+    private void PreviewChanged()
+    {
+        if (preview?.IsPlaying == false) StopPreview();
+    }
+
+    public void Preview(AudioData source, AudioEditSettings pendingEdit = null, double? decibel = null)
     {
         StopPreview();
         try
         {
             string path = Path.Combine(AudioPresetDataTool.BasePath, source.AudioPreset.Config.Name, source.Config.Name);
-            var previewConfig = JsonTool.ToObject<AudioDataConfig>(JsonTool.ToJson(source.Config));
-            if (pendingEdit != null) previewConfig.Edit = pendingEdit;
-            var preset = new AudioPresetData { Config = new AudioPresetDataConfig { AudioDataConfigList = new() { previewConfig } } };
-            previewPreset = preset;
+            var config = JsonTool.ToObject<AudioDataConfig>(JsonTool.ToJson(source.Config));
+            if (pendingEdit != null) config.Edit = pendingEdit;
+            var preset = new AudioPresetData
+            {
+                Config = new AudioPresetDataConfig
+                {
+                    Name = source.AudioPreset.Config.Name,
+                    AudioDataConfigList = new() { config }
+                }
+            };
             var audio = new AudioData { AudioPreset = preset, Index = 0 };
-            preset.AudioList.Add(audio);
+            preview = audio;
             audio.AudioTrackArray[0] = new AudioFileReader(path);
             audio.AudioTrackArray[1] = new AudioFileReader(path);
-            audio.PlaybackStopped += () => { if (ReferenceEquals(previewPreset, preset)) StopPreview(); };
-            audio.Start_创意工坊播放();
+            audio.PlaybackChanged += PreviewChanged;
+            audio.Start_创意工坊播放(decibel ?? GlobalData.Inst.GetAudioDecibel(source));
             if (!audio.IsPlaying) StopPreview();
         }
         catch { StopPreview(); throw; }
     }
+    public void ToggleWorkshopPreview(AudioData audio)
+    {
+        try { audio.Start_创意工坊播放(); }
+        catch (Exception exception)
+        {
+            audio.Stop();
+            ReportStartFailure(exception);
+        }
+    }
+
     public void Previous() => Move(-1);
 
     private void Move(int direction)
@@ -137,7 +168,7 @@ public sealed class PlaybackController
         PrepareQueue();
         var next = queue.Move(direction);
         if (next == null) return;
-        StopPresetAudio();
+        StopTracks();
         StartTrack(next);
         NotifyChanged();
     }
@@ -148,12 +179,17 @@ public sealed class PlaybackController
         catch (Exception exception)
         {
             track.Stop();
-            AppLog.Error(exception, "播放音频失败。", "PlaybackController");
-            MainWindow.Inst.AddNotification(
-                () => Resources.Language.LanguageManager.Inst.GetString("通知"),
-                () => Resources.Language.LanguageManager.Inst.GetString("播放失败"),
-                Pages.LabelStatus.Error, 4);
+            ReportStartFailure(exception);
         }
+    }
+
+    private static void ReportStartFailure(Exception exception)
+    {
+        AppLog.Error(exception, "播放音频失败。", "PlaybackController");
+        MainWindow.Inst.AddNotification(
+            () => Resources.Language.LanguageManager.Inst.GetString("通知"),
+            () => Resources.Language.LanguageManager.Inst.GetString("播放失败"),
+            Pages.LabelStatus.Error, 4);
     }
 
     internal void OnCompleted(AudioData audio)
@@ -164,12 +200,11 @@ public sealed class PlaybackController
             var next = queue.Complete();
             if (next != null)
             {
-                StopPresetAudio();
+                StopTracks();
                 StartTrack(next);
             }
         }
         NotifyChanged();
     }
 
-    internal void OnStopped(AudioData audio) => NotifyChanged();
 }

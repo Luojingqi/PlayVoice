@@ -103,7 +103,12 @@ public class AudioTrackItemViewModel : INotifyPropertyChanged
     {
         var hotkey = binding?.HotkeyData?.ToString() ?? "None";
         if (Hotkey != hotkey) Hotkey = hotkey;
-        var volume = AudioData.DecibelToProportion(binding?.Decibel ?? 0) * 100;
+        RefreshVolumeSlider(binding?.Decibel ?? 0);
+    }
+
+    internal void RefreshVolumeSlider(double decibel)
+    {
+        var volume = AudioData.DecibelToProportion(decibel) * 100;
         if (_volumeSliderValue != volume)
         {
             _volumeSliderValue = volume;

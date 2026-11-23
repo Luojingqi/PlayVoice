@@ -918,4 +918,9 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
 <data name="圆角" xml:space="preserve"><value>圆角</value></data>
 <data name="控件高度" xml:space="preserve"><value>控件高度</value></data>
 <data name="列表行高" xml:space="preserve"><value>列表行高</value></data>
+  <data name="撤销上一步" xml:space="preserve"><value>撤销上一步</value></data>
+  <data name="重置剪辑" xml:space="preserve"><value>重置剪辑</value></data>
+  <data name="测试输出" xml:space="preserve"><value>测试输出</value></data>
+  <data name="将当前收藏和标签应用到勾选音效" xml:space="preserve"><value>将当前收藏和标签应用到勾选音效</value></data>
+  <data name="请输入有效的秒数" xml:space="preserve"><value>请输入有效的秒数</value></data>
 </root>

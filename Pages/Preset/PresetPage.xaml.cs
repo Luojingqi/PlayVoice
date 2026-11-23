@@ -47,6 +47,7 @@ public partial class PresetPage : Page
 
         pageRequest?.Cancel();
         if (TopButtonListBox.SelectedItem is not PageData page) return;
+        audioTrackGridPage.FinishLibraryEdits();
         ShowPage(page);
         if (page.IsAddPage || page.IsDeletePage) return;
 
@@ -80,6 +81,8 @@ public partial class PresetPage : Page
 
     private void ShowPage(PageData page)
     {
+        if (Frame0.Visibility == Visibility.Visible && (page.IsAddPage || page.IsDeletePage))
+            audioTrackGridPage.EndLibraryEditSession();
         Frame0.Visibility = !page.IsAddPage && !page.IsDeletePage ? Visibility.Visible : Visibility.Collapsed;
         Frame1.Visibility = page.IsAddPage ? Visibility.Visible : Visibility.Collapsed;
         Frame2.Visibility = page.IsDeletePage ? Visibility.Visible : Visibility.Collapsed;
@@ -111,7 +114,10 @@ public partial class PresetPage : Page
     {
         if (isSynchronizingFunctionPresetSelection) return;
         if (FunctionPresetComboBox.SelectedItem is FunctionPresetData functionPreset)
+        {
+            audioTrackGridPage.FinishLibraryEdits();
             GlobalData.Inst.ActiveFunctionPreset = functionPreset;
+        }
     }
 
     private async void PresetPage_Loaded(object sender, RoutedEventArgs e)

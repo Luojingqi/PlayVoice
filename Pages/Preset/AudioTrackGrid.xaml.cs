@@ -367,6 +367,7 @@ namespace PlayVoice.Pages.Preset
             var preset = GlobalData.Inst.ActiveAudioPreset;
             if (ReferenceEquals(preset, displayedPreset) && displayedTracksVersion == (preset?.TracksVersion ?? 0))
                 return;
+            if (!ReferenceEquals(preset, displayedPreset)) EndLibraryEditSession();
 
             var bindings = GlobalData.Inst.ActiveFunctionPreset?.GetBindingsByAudioId(preset?.Config.Name);
             var rows = preset?.AudioList.Select(audio =>
@@ -386,6 +387,7 @@ namespace PlayVoice.Pages.Preset
             var bindings = GlobalData.Inst.ActiveFunctionPreset?.GetBindingsByAudioId(displayedPreset.Config.Name);
             foreach (var item in ShortcutList)
                 item.RefreshFunctionPresetValues(bindings?[item.Data.Config.Id].FirstOrDefault());
+            Library.RefreshVolume();
         }
 
 
@@ -437,6 +439,7 @@ namespace PlayVoice.Pages.Preset
                 element = VisualTreeHelper.GetParent(element);
             if (element is not AudioTrackItem row) return;
             var target = row.ViewModel;
+            FinishTextEdit();
             if (!target.Marked)
             {
                 foreach (var item in ShortcutList) item.Marked = item == target;
@@ -457,6 +460,7 @@ namespace PlayVoice.Pages.Preset
             delete.Click += (_, _) => DeleteButton_Click();
             menu.Items.Add(delete);
             Add("文件资源浏览器", FolderButton_Click);
+            Add("将当前收藏和标签应用到勾选音效", Library.ApplyMetadataToMarked, Library.CanApplyMetadataToMarked);
             menu.Items.Add(new Separator());
             Add("向上移动", () => MoveSelected(-1), CanMoveSelected(-1));
             Add("向下移动", () => MoveSelected(1), CanMoveSelected(1));
@@ -499,6 +503,7 @@ namespace PlayVoice.Pages.Preset
 
         public void Leave()
         {
+            EndLibraryEditSession();
             GlobalData.Inst.ActiveAudioPreset?.Save();
         }
 

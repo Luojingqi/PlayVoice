@@ -4,7 +4,7 @@ using PlayVoice.Audio;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
+using PlayVoice.Pages.Playback;
 using System.Windows.Media.Imaging;
 using PlayVoice.Pages;
 
@@ -63,7 +63,7 @@ public partial class AudioTrackItem : UserControl
     private void AudioTrackItem_Unloaded(object sender, RoutedEventArgs e)
     {
         UnsubscribeFromPlaybackState();
-        ResetPlaybackAnimation();
+        SynchronizePlaybackAnimation();
     }
 
     private void AudioTrackItem_DataContextChanged(
@@ -87,76 +87,22 @@ public partial class AudioTrackItem : UserControl
         subscribedAudioData = audioData;
         if (subscribedAudioData == null) return;
 
-        subscribedAudioData.PlaybackStarted += AudioData_PlaybackStarted;
-        subscribedAudioData.PlaybackStopped += AudioData_PlaybackStopped;
+        subscribedAudioData.PlaybackChanged += SynchronizePlaybackAnimation;
     }
 
     private void UnsubscribeFromPlaybackState()
     {
         if (subscribedAudioData == null) return;
 
-        subscribedAudioData.PlaybackStarted -= AudioData_PlaybackStarted;
-        subscribedAudioData.PlaybackStopped -= AudioData_PlaybackStopped;
+        subscribedAudioData.PlaybackChanged -= SynchronizePlaybackAnimation;
         subscribedAudioData = null;
-    }
-
-    private void AudioData_PlaybackStarted()
-    {
-        if (!Dispatcher.CheckAccess())
-        {
-            Dispatcher.BeginInvoke(SynchronizePlaybackAnimation);
-            return;
-        }
-
-        SynchronizePlaybackAnimation();
-    }
-
-    private void AudioData_PlaybackStopped()
-    {
-        if (!Dispatcher.CheckAccess())
-        {
-            Dispatcher.BeginInvoke(ResetPlaybackAnimation);
-            return;
-        }
-
-        ResetPlaybackAnimation();
     }
 
     private void SynchronizePlaybackAnimation()
     {
-        if (!IsLoaded || DataContext is not AudioTrackItemViewModel viewModel)
-            return;
-
-        var audioData = viewModel.Data;
-        RowPlayIcon.Text = audioData.IsPlaying ? "\uE769" : "\uE768";
-        double progress = audioData.PlaybackProgress;
-        if (!audioData.IsPlaying || progress >= 1)
-        {
-            ResetPlaybackAnimation();
-            return;
-        }
-
-        double remainingMilliseconds =
-            viewModel.Duration.TotalMilliseconds * (1 - progress);
-        var animation = new DoubleAnimation
-        {
-            From = progress,
-            To = 1,
-            Duration = TimeSpan.FromMilliseconds(remainingMilliseconds),
-            FillBehavior = FillBehavior.HoldEnd
-        };
-        BackgroundScale.BeginAnimation(
-            ScaleTransform.ScaleXProperty,
-            animation,
-            HandoffBehavior.SnapshotAndReplace);
-    }
-
-    private void ResetPlaybackAnimation()
-    {
-        RowPlayIcon.Text = "\uE768";
-        BackgroundScale.BeginAnimation(ScaleTransform.ScaleXProperty, null);
-        BackgroundScale.ScaleX = subscribedAudioData?.IsPaused == true
-            ? subscribedAudioData.PlaybackProgress : 0;
+        var snapshot = subscribedAudioData?.Snapshot ?? default;
+        RowPlayIcon.Text = snapshot.State == TrackPlaybackState.Playing ? "\uE769" : "\uE768";
+        PlaybackAnimation.Synchronize(BackgroundScale, snapshot);
     }
 
     private void DragHandle_MouseDown(object sender, MouseButtonEventArgs e)

@@ -23,21 +23,76 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         Inst = this; InitializeComponent(); DataContext = vm;
+        TrimStart.ValueChanged += (_, _) => UpdateWaveformSelection();
+        TrimEnd.ValueChanged += (_, _) => UpdateWaveformSelection();
         Opened += async (_, _) => await Execute(async () =>
         {
             new GlobalData(); ready = true;
             await GlobalData.Inst.RestoreActiveAudioPresetAsync();
             if (DesktopApplication.Current.Dispatcher.HasShutdownStarted) return;
-            HotkeyManager.Inst.Start(); RefreshNames(); RefreshSettings(); vm.Filter();
+            HotkeyManager.Inst.Start(); RefreshNames(); RefreshSettings(); SyncMonitorSettings(); vm.Filter();
+            GlobalData.Inst.Playback.Changed += RefreshPlayback;
+            GlobalData.Inst.GoEar_AudioStateChanged += MonitorSettingChanged;
+            GlobalData.Inst.GoEar_InStateChanged += MonitorSettingChanged;
+            GlobalData.Inst.AutoMuteStateChanged += MonitorSettingChanged;
+            GlobalData.Inst.ActiveFunctionPresetChanged += RefreshPresetControls;
+            RefreshPresetControls(GlobalData.Inst.ActiveFunctionPreset);
+            RefreshPlayback();
+            syncing = true;
+            MasterVolume.Value = GlobalData.Inst.AudioProxy.GlobalDecibel;
+            syncing = false;
             timer.Interval = TimeSpan.FromMilliseconds(250); timer.Tick += (_, _) => RefreshStatus(); timer.Start();
         });
-        Closed += (_, _) => { timer.Stop(); waveformCancellation.Cancel(); if (ready) { GlobalData.Inst.Playback.Reset(); GlobalData.Inst.DisposeAudioPresetForExit(); GlobalData.Inst.AudioProxy.Stop(); GlobalData.Inst.Equipment.Dispose(); GlobalData.Inst.Config.Save(); HotkeyManager.Inst.Stop(); } DesktopApplication.Current.Dispatcher.HasShutdownStarted = true; if (Steamworks.SteamClient.IsValid) Steamworks.SteamClient.Shutdown(); };
+        Closed += (_, _) =>
+        {
+            timer.Stop();
+            waveformCancellation.Cancel();
+            if (ready)
+            {
+                var g = GlobalData.Inst;
+                g.Playback.Changed -= RefreshPlayback;
+                g.GoEar_AudioStateChanged -= MonitorSettingChanged;
+                g.GoEar_InStateChanged -= MonitorSettingChanged;
+                g.AutoMuteStateChanged -= MonitorSettingChanged;
+                g.ActiveFunctionPresetChanged -= RefreshPresetControls;
+                g.DisposeAudioPresetForExit();
+                g.AudioProxy.Stop();
+                g.Equipment.Dispose();
+                g.Config.Save();
+                HotkeyManager.Inst.Stop();
+            }
+            DesktopApplication.Current.Dispatcher.HasShutdownStarted = true;
+            if (Steamworks.SteamClient.IsValid) Steamworks.SteamClient.Shutdown();
+        };
     }
     public void AddNotification(Func<string> title, Func<string> text, LabelStatus status = LabelStatus.None, double duration = 4) => Dispatcher.UIThread.Post(() => { vm.Notice = title() + " · " + text(); vm.HasNotice = true; });
     private async Task Execute(Func<Task> action) { try { await action(); } catch (Exception e) { Diagnostics.AppLog.Error(e, "Avalonia operation failed", "Desktop"); vm.Notice = e.Message; vm.HasNotice = true; } }
     private void Act(Action action) { if (ready) _ = Execute(() => { action(); return Task.CompletedTask; }); }
     private void RefreshNames() { syncing = true; vm.AudioPresetNames.Clear(); foreach (var n in AudioPresetDataTool.GetAllAudioPresetName()) vm.AudioPresetNames.Add(n); vm.GamePresetNames.Clear(); foreach (var n in FunctionPresetDataTool.GetAll()) vm.GamePresetNames.Add(n.Name); vm.ActiveAudioPresetName = GlobalData.Inst.ActiveAudioPreset?.Config.Name ?? ""; vm.ActiveGamePresetName = GlobalData.Inst.ActiveFunctionPreset?.Name ?? ""; syncing = false; }
-    private void RefreshStatus() { if (!ready) return; var g = GlobalData.Inst; vm.Requirements = string.Join("\n", g.GetIncompleteStartupRequirements().Select(x => x.Message)); vm.NowPlaying = g.Playback.Current?.Config.FileName ?? vm.L.GetString("没有匹配的音效"); vm.Progress = g.Playback.Current?.PlaybackProgress ?? 0; vm.PlaybackStatus = vm.L.GetString(g.Playback.IsPlaying ? "播放" : "已停止"); vm.OutputDevice = g.Equipment.PhysicalLoudspeaker?.FriendlyName ?? vm.L.GetString("未绑定"); if (Steamworks.SteamClient.IsValid) Steamworks.SteamClient.RunCallbacks(); }
+    private void RefreshPlayback()
+    {
+        var g = GlobalData.Inst;
+        var snapshot = g.Playback.CurrentSnapshot;
+        vm.NowPlaying = snapshot.Name ?? vm.L.GetString("未选择音效");
+        vm.Progress = snapshot.Progress;
+        vm.PlaybackStatus = vm.L.GetString(snapshot.StatusKey);
+        vm.AnyPlaying = g.Playback.IsPlaying;
+        var preview = g.Playback.PreviewSnapshot;
+        vm.PreviewStatus = preview.Name == null ? "" :
+            $"{vm.L.GetString("试听")} · {preview.Name} · {AudioData.DurationToString(preview.Position)}";
+        var device = g.GetRun() ? g.Equipment.VirtualLoudspeaker : g.Equipment.PhysicalLoudspeaker;
+        vm.OutputDevice = device?.FriendlyName ?? vm.L.GetString("未绑定");
+    }
+
+    private void RefreshStatus()
+    {
+        if (!ready) return;
+        var g = GlobalData.Inst;
+        vm.Requirements = string.Join("\n", g.GetIncompleteStartupRequirements().Select(x => x.Message));
+        RefreshPlayback();
+        if (Steamworks.SteamClient.IsValid) Steamworks.SteamClient.RunCallbacks();
+    }
+
     private void Navigate(object s, SelectionChangedEventArgs e) { if (LibraryPage == null) return; var pages = new Control[] { LibraryPage, PresetsPage, WorkshopPage, SettingsPage }; for (int i = 0; i < 4; i++) pages[i].IsVisible = i == Navigation.SelectedIndex; vm.PageTitle = vm.L.GetString(new[] { "音效库", "游戏预设", "创意工坊", "设置" }[Math.Clamp(Navigation.SelectedIndex, 0, 3)]); }
     private async void AudioPresetChanged(object s, SelectionChangedEventArgs e)
     {
@@ -54,12 +109,62 @@ public partial class MainWindow : Window
         });
     }
     private void GamePresetChanged(object s, SelectionChangedEventArgs e) { if (!syncing && GamePresets.SelectedItem is string n) Act(() => { GlobalData.Inst.ActiveFunctionPreset = FunctionPresetDataTool.Load(n); vm.Filter(); }); }
-    private async void SoundSelected(object s, SelectionChangedEventArgs e) { if (Sounds.SelectedItem is not TrackRow row) return; selected = row.Audio; vm.SelectedName = row.Name; TagsInput.Text = string.Join(", ", selected.Config.Tags); TrackVolume.Value = GlobalData.Inst.GetAudioDecibel(selected); var edit = selected.Config.Edit ?? new(); TrimStart.Value = (decimal)edit.StartSeconds; TrimEnd.Value = (decimal)(edit.EndSeconds ?? selected.AudioTrackArray[0].TotalTime.TotalSeconds); FadeIn.Value = (decimal)edit.FadeInSeconds; FadeOut.Value = (decimal)edit.FadeOutSeconds; waveformCancellation.Cancel(); waveformCancellation.Dispose(); waveformCancellation = new(); var token = waveformCancellation.Token; await Execute(async () => { var peaks = await Task.Run(() => WaveformPeaks.Read(Path.Combine(AudioPresetDataTool.BasePath, row.Audio.AudioPreset.Config.Name, row.Audio.Config.Name), 1024, token), token); if (!token.IsCancellationRequested) { Waveform.Peaks = peaks; Waveform.InvalidateVisual(); } }); }
+    private async void SoundSelected(object s, SelectionChangedEventArgs e)
+    {
+        if (Sounds.SelectedItem is not TrackRow row)
+        {
+            selected = null;
+            vm.SelectedName = "";
+            waveformCancellation.Cancel();
+            Waveform.Peaks = [];
+            Waveform.InvalidateVisual();
+            return;
+        }
+        selected = row.Audio;
+        vm.SelectedName = row.Name;
+        TagsInput.Text = string.Join(", ", selected.Config.Tags);
+        TrackVolume.Value = GlobalData.Inst.GetAudioDecibel(selected);
+        var edit = selected.Config.Edit ?? new();
+        TrimStart.Value = (decimal)edit.StartSeconds;
+        TrimEnd.Value = (decimal)(edit.EndSeconds ?? selected.AudioTrackArray[0].TotalTime.TotalSeconds);
+        FadeIn.Value = (decimal)edit.FadeInSeconds;
+        FadeOut.Value = (decimal)edit.FadeOutSeconds;
+        UpdateWaveformSelection();
+        Waveform.Peaks = [];
+        Waveform.InvalidateVisual();
+        waveformCancellation.Cancel();
+        waveformCancellation.Dispose();
+        waveformCancellation = new();
+        var token = waveformCancellation.Token;
+        var path = selected.AudioTrackArray[0].FileName;
+        await Execute(async () =>
+        {
+            try
+            {
+                var peaks = await Task.Run(() => WaveformPeaks.Read(path, 1024, token), token);
+                if (!token.IsCancellationRequested)
+                {
+                    Waveform.Peaks = peaks;
+                    Waveform.InvalidateVisual();
+                }
+            }
+            catch (OperationCanceledException) when (token.IsCancellationRequested) { }
+        });
+    }
+
+    private void UpdateWaveformSelection()
+    {
+        if (selected == null) return;
+        double duration = selected.AudioTrackArray[0].TotalTime.TotalSeconds;
+        Waveform.Start = Math.Clamp((double)(TrimStart.Value ?? 0) / duration, 0, 1);
+        Waveform.End = Math.Clamp((double)(TrimEnd.Value ?? 0) / duration, 0, 1);
+        Waveform.InvalidateVisual();
+    }
     private AudioEditSettings Edit() => new() { StartSeconds = (double)(TrimStart.Value ?? 0), EndSeconds = (double)(TrimEnd.Value ?? 0), FadeInSeconds = (double)(FadeIn.Value ?? 0), FadeOutSeconds = (double)(FadeOut.Value ?? 0) };
-    private void WaveformChanged(object s, EventArgs e) { if (selected == null) return; var t = selected.AudioTrackArray[0].TotalTime.TotalSeconds; TrimStart.Value = (decimal)(Waveform.Start * t); TrimEnd.Value = (decimal)(Waveform.End * t); }
-    private void SaveTrack(object s, RoutedEventArgs e) => Act(() => { if (selected == null) return; var edit = Edit(); edit.Validate(selected.AudioTrackArray[0].TotalTime.TotalSeconds); selected.Config.Edit = edit; selected.Config.Tags = (TagsInput.Text ?? "").Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).ToList(); GlobalData.Inst.SetAudioDecibel(selected, TrackVolume.Value); if (!selected.AudioPreset.Save()) throw new IOException(vm.L.GetString("保存失败")); vm.Filter(); });
+    private void WaveformChanged(object s, EventArgs e) { if (selected == null) return; var t = selected.AudioTrackArray[0].TotalTime.TotalSeconds; var end = Waveform.End; TrimStart.Value = (decimal)(Waveform.Start * t); TrimEnd.Value = (decimal)(end * t); }
+    private void SaveTrack(object s, RoutedEventArgs e) => Act(() => { if (selected == null) return; var edit = Edit(); edit.Validate(selected.AudioTrackArray[0].TotalTime.TotalSeconds); selected.Config.Edit = edit; selected.Config.Tags = (TagsInput.Text ?? "").Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries).ToList(); GlobalData.Inst.SetAudioDecibel(selected, TrackVolume.Value); selected.SetVolume(TrackVolume.Value); if (!selected.AudioPreset.Save()) throw new IOException(vm.L.GetString("保存失败")); vm.Filter(); });
     private void PlayRow(object s, RoutedEventArgs e) => Act(() => { if (((Button)s).Tag is TrackRow row) GlobalData.Inst.Playback.Toggle(row.Audio); });
-    private void Preview(object s, RoutedEventArgs e) => Act(() => { if (selected != null) GlobalData.Inst.Playback.Preview(selected, Edit()); });
+    private void Preview(object s, RoutedEventArgs e) => Act(() => { if (selected != null) GlobalData.Inst.Playback.Preview(selected, Edit(), TrackVolume.Value); });
     private void ToggleFavorite(object s, RoutedEventArgs e) => Act(() => { foreach (var row in Sounds.SelectedItems?.OfType<TrackRow>() ?? []) { row.Audio.Config.IsFavorite = !row.Audio.Config.IsFavorite; row.Audio.AudioPreset.Save(); } vm.Filter(); });
     private void RecordHotkey(object s, RoutedEventArgs e) => Act(() => { if (selected == null) return; var audio = selected; HotkeyManager.Inst.StartRecording(key => { HotkeyManager.Inst.StopRecording(); if (key == null) return; if (HotkeyManager.Inst.IsAssigned(key, GlobalData.Inst.GetAudioHotkey(audio, false))) { vm.Notice = vm.L.GetString("热键冲突"); vm.HasNotice = true; return; } var binding = GlobalData.Inst.GetAudioHotkey(audio, true); binding.VkCode = key.VkCode; binding.Modifiers = key.Modifiers; binding.IsMouse = key.IsMouse; GlobalData.Inst.SaveActiveFunctionPreset(); GlobalData.Inst.RebuildActiveHotkeys(); vm.Filter(); }); });
     private void RecordStopHotkey(object s, RoutedEventArgs e) => Act(() => HotkeyManager.Inst.StartRecording(key => { HotkeyManager.Inst.StopRecording(); if (key == null) return; GlobalData.Inst.ActiveFunctionPreset.StopAllHotkey = key; GlobalData.Inst.SaveActiveFunctionPreset(); GlobalData.Inst.RebuildActiveHotkeys(); vm.StopHotkey = key.ToString(); }));
@@ -87,13 +192,53 @@ public partial class MainWindow : Window
     private void Next(object s, RoutedEventArgs e) => Act(() => GlobalData.Inst.Playback.Next());
     private void PlayPause(object s, RoutedEventArgs e) => Act(() => GlobalData.Inst.Playback.PauseOrResume());
     private void StopAll(object s, RoutedEventArgs e) => Act(() => GlobalData.Inst.Playback.StopAll());
-    private void MasterChanged(object s, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e) => Act(() => GlobalData.Inst.AudioProxy.GlobalDecibel = MasterVolume.Value);
+    private void MasterChanged(object s, Avalonia.Controls.Primitives.RangeBaseValueChangedEventArgs e)
+    {
+        if (!syncing) Act(() => GlobalData.Inst.AudioProxy.GlobalDecibel = MasterVolume.Value);
+    }
     private void RefreshSettings() { syncing = true; RefreshThemeEditor(); ThemeChoices.ItemsSource = ThemeManager.ThemeList.Select(x => x.Name).ToArray(); ThemeChoices.SelectedIndex = (int)GlobalData.Inst.Config.Theme; PaletteChoices.ItemsSource = ThemeManager.Palettes.Keys.ToArray(); PaletteChoices.SelectedItem = GlobalData.Inst.Config.ColorPalette; LanguageChoices.ItemsSource = LanguageManager.Inst.LanguageList.Select(x => x.Value).ToArray(); LanguageChoices.SelectedIndex = LanguageManager.Inst.NowLanguageInfo.Index; Materials.ItemsSource = new[] { "Solid", "Acrylic", "Mica" }; Materials.SelectedItem = GlobalData.Inst.Config.Appearance.WindowMaterial; FontInput.Text = GlobalData.Inst.Config.Appearance.FontFamily; FontSizeInput.Value = (decimal)GlobalData.Inst.Config.Appearance.FontSize; PlaybackModes.ItemsSource = Enum.GetNames<PlaybackMode>(); PlaybackModes.SelectedIndex = (int)GlobalData.Inst.Playback.Mode; syncing = false; RefreshDevices(this, new()); }
     private record DeviceChoice(string Id, string Name) { public override string ToString() => Name; }
     private void RefreshDevices(object s, RoutedEventArgs e) { if (!ready) return; syncing = true; var g = GlobalData.Inst; var combos = new[] { PhysicalMic, PhysicalOutput, VirtualMic, VirtualOutput }; var ids = new[] { g.Config.PhysicalMicrophoneID, g.Config.PhysicalLoudspeakerID, g.Config.VirtualMicrophoneID, g.Config.VirtualLoudspeakerID }; for (int i = 0; i < 4; i++) { var dic = i % 2 == 0 ? g.Equipment.MicrophoneDic : g.Equipment.LoudspeakerDic; var list = dic.Select(x => new DeviceChoice(x.Key, x.Value)).ToArray(); combos[i].ItemsSource = list; combos[i].SelectedItem = list.FirstOrDefault(x => x.Id == ids[i]); } syncing = false; }
     private void DeviceChanged(object s, SelectionChangedEventArgs e) { if (syncing || s is not ComboBox combo || combo.SelectedItem is not DeviceChoice d) return; Act(() => { var equipment = GlobalData.Inst.Equipment; if (combo == PhysicalMic) equipment.PhysicalMicrophone = equipment.GetMicrophone(d.Id); else if (combo == VirtualMic) equipment.VirtualMicrophone = equipment.GetMicrophone(d.Id); else if (combo == PhysicalOutput) equipment.PhysicalLoudspeaker = equipment.GetLoudspeaker(d.Id); else equipment.VirtualLoudspeaker = equipment.GetLoudspeaker(d.Id); }); }
     private void TestChain(object s, RoutedEventArgs e) => Act(() => GlobalData.Inst.TryRun(true));
-    private void MonitorChanged(object s, RoutedEventArgs e) => Act(() => { GlobalData.Inst.TryGoEar_Audio(AudioMonitor.IsChecked == true); GlobalData.Inst.TryGoEar_In(MicMonitor.IsChecked == true); GlobalData.Inst.AutoMute = AutoMute.IsChecked == true; });
+    private void RefreshPresetControls(FunctionPresetData preset)
+    {
+        syncing = true;
+        try
+        {
+            PlaybackModes.SelectedIndex = (int)GlobalData.Inst.Playback.Mode;
+            vm.StopHotkey = preset?.StopAllHotkey?.ToString() ?? "";
+        }
+        finally { syncing = false; }
+    }
+
+    private void MonitorSettingChanged(bool _) => SyncMonitorSettings();
+
+    private void SyncMonitorSettings()
+    {
+        var g = GlobalData.Inst;
+        syncing = true;
+        try
+        {
+            AudioMonitor.IsChecked = g.GetGoEar_Audio();
+            MicMonitor.IsChecked = g.GetGoEar_In();
+            AutoMute.IsChecked = g.AutoMute;
+        }
+        finally { syncing = false; }
+    }
+
+    private void MonitorChanged(object sender, RoutedEventArgs e)
+    {
+        if (!ready || syncing) return;
+        Act(() =>
+        {
+            var g = GlobalData.Inst;
+            if (sender == AudioMonitor) g.TryGoEar_Audio(AudioMonitor.IsChecked == true);
+            else if (sender == MicMonitor) g.TryGoEar_In(MicMonitor.IsChecked == true);
+            else if (sender == AutoMute) g.AutoMute = AutoMute.IsChecked == true;
+            SyncMonitorSettings();
+        });
+    }
     private void ThemeSelected(object s, SelectionChangedEventArgs e) { if (!syncing && ThemeChoices.SelectedIndex >= 0) Act(() => { ThemeManager.SelectTheme((ThemeManager.ThemeEnum)ThemeChoices.SelectedIndex); RefreshSettings(); }); }
     private void PaletteSelected(object s, SelectionChangedEventArgs e) { if (!syncing && PaletteChoices.SelectedItem is string name) Act(() => { var p = ThemeManager.CaptureAppearance(); p.Palette = name; p.Accent = null; ThemeManager.ApplyAppearance(p); RefreshSettings(); }); }
     private void LanguageSelected(object s, SelectionChangedEventArgs e) { if (!syncing && LanguageChoices.SelectedIndex >= 0) Act(() => { LanguageManager.Inst.SetCulture(LanguageManager.Inst.LanguageList[LanguageChoices.SelectedIndex].Key); vm.RefreshLanguage(); RefreshSettings(); }); }

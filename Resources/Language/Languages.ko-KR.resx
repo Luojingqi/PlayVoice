@@ -385,4 +385,9 @@
 <data name="圆角" xml:space="preserve"><value>모서리 반경</value></data>
 <data name="控件高度" xml:space="preserve"><value>컨트롤 높이</value></data>
 <data name="列表行高" xml:space="preserve"><value>목록 행 높이</value></data>
+  <data name="撤销上一步" xml:space="preserve"><value>마지막 편집 실행 취소</value></data>
+  <data name="重置剪辑" xml:space="preserve"><value>트리밍 초기화</value></data>
+  <data name="测试输出" xml:space="preserve"><value>출력 테스트</value></data>
+  <data name="将当前收藏和标签应用到勾选音效" xml:space="preserve"><value>현재 즐겨찾기 상태 및 태그를 체크한 효과음에 적용</value></data>
+  <data name="请输入有效的秒数" xml:space="preserve"><value>올바른 초 값을 입력하세요.</value></data>
 </root>

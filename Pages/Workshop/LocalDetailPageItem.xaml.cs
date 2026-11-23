@@ -2,7 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
+using PlayVoice.Pages.Playback;
 using PlayVoice.Pages;
 
 namespace PlayVoice.Pages.Workshop
@@ -18,18 +18,35 @@ namespace PlayVoice.Pages.Workshop
         {
             InitializeComponent();
             CheckBoxListBox.SelectionChanged += CheckBoxListBox_SelectionChanged;
+            Loaded += (_, _) => Observe(DataContext as LocalDetailPageItemViewModel);
+            Unloaded += (_, _) => Observe(null);
+            DataContextChanged += (_, _) => { if (IsLoaded) Observe(DataContext as LocalDetailPageItemViewModel); };
         }
-        public override void OnApplyTemplate()
+
+        private LocalDetailPageItemViewModel observed;
+        private void Observe(LocalDetailPageItemViewModel item)
         {
-            base.OnApplyTemplate();
-            ViewModel.MarkedChanged += b =>
+            if (observed != null)
             {
-                if (b)
-                    SelectCenterPoint.Visibility = Visibility.Visible;
-                else
-                    SelectCenterPoint.Visibility = Visibility.Collapsed;
-            };
+                observed.MarkedChanged -= RefreshMark;
+                observed.Data.PlaybackChanged -= RefreshProgress;
+            }
+            observed = item;
+            if (observed != null)
+            {
+                observed.MarkedChanged += RefreshMark;
+                observed.Data.PlaybackChanged += RefreshProgress;
+            }
+            RefreshMark(observed?.Marked == true);
+            RefreshProgress();
         }
+
+        private void RefreshMark(bool marked) =>
+            SelectCenterPoint.Visibility = marked ? Visibility.Visible : Visibility.Collapsed;
+
+        private void RefreshProgress() =>
+            PlaybackAnimation.Synchronize(BackgroundScale, observed?.Data.Snapshot ?? default);
+
         private void CheckBoxListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (CheckBoxListBox.SelectedIndex == -1) return;
@@ -60,33 +77,12 @@ namespace PlayVoice.Pages.Workshop
             }
 
             ClickRippleEffect.Start(RippleCanvas, e.GetPosition(RippleCanvas));
-            ViewModel.Data.AnimationPlayAction = PlayClickAnimation;
-            ViewModel.Data.AnimationStopAction = ResetAnimation;
-            ViewModel.Data.Start_创意工坊播放();
+            GlobalData.Inst.Playback.ToggleWorkshopPreview(ViewModel.Data);
         }
 
         private void RippleCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             ClickRippleEffect.UpdateClip(RippleCanvas, e.NewSize);
-        }
-
-
-        public void PlayClickAnimation()
-        {
-            DoubleAnimation scaleAnim = new DoubleAnimation
-            {
-                From = 0,
-                To = 1,
-                Duration = new Duration(((LocalDetailPageItemViewModel)this.DataContext).Duration)
-            };
-
-            BackgroundScale.BeginAnimation(ScaleTransform.ScaleXProperty, scaleAnim);
-        }
-
-        public void ResetAnimation()
-        {
-            BackgroundScale.BeginAnimation(ScaleTransform.ScaleXProperty, null);
-            BackgroundScale.ScaleX = 0;
         }
     }
 }

@@ -13,11 +13,8 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Resources/Style/ListBox.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/ComboBox.xaml"/>
-                <ResourceDictionary Source="/Resources/Style/TrashCan.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/Import.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/Upload.xaml"/>
-                <ResourceDictionary Source="/Resources/Style/Copy.xaml"/>
-                <ResourceDictionary Source="/Resources/Style/Paste.xaml"/>
                 <ResourceDictionary Source="/Resources/Style/Folder.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="PlaybackModeItemStyle" TargetType="ListBoxItem" BasedOn="{StaticResource GroupButtonItemStyle}">
@@ -27,6 +24,67 @@
             </Style>
             <Style TargetType="Button" BasedOn="{StaticResource StudioButton}"/>
             <Style TargetType="CheckBox"><Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/></Style>
+            <StreamGeometry x:Key="LibraryFavoriteIcon">M 8,1.5 L 10,5.7 L 14.5,6.3 L 11.3,9.5 L 12,14 L 8,11.9 L 4,14 L 4.7,9.5 L 1.5,6.3 L 6,5.7 Z</StreamGeometry>
+            <StreamGeometry x:Key="RecentFilterIcon">M 2,7 A 6,6 0 1 1 3.5,12.3 M 2,3.5 V 7 H 5.5 M 8,5 V 8 L 10,9.5</StreamGeometry>
+            <Style x:Key="LibraryPillCheckBox" TargetType="CheckBox">
+                <Setter Property="Foreground" Value="{DynamicResource TextSecondary}"/>
+                <Setter Property="Background" Value="{DynamicResource BgLight}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource Border}"/>
+                <Setter Property="MinHeight" Value="34"/>
+                <Setter Property="Padding" Value="11,6"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="FocusVisualStyle">
+                    <Setter.Value>
+                        <Style TargetType="Control">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="Control">
+                                        <Border Margin="-3" CornerRadius="21" BorderThickness="1" BorderBrush="{DynamicResource AccentColor}"/>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="CheckBox">
+                            <Border x:Name="Surface" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="1" CornerRadius="18" Padding="{TemplateBinding Padding}">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Path Data="{TemplateBinding Tag}" Width="14" Height="14" Margin="0,0,6,0" Stretch="Uniform"
+                                          Stroke="{TemplateBinding Foreground}" StrokeThickness="1.4"
+                                          StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round" VerticalAlignment="Center"/>
+                                    <ContentPresenter RecognizesAccessKey="True" VerticalAlignment="Center"/>
+                                    <Path x:Name="CheckMark" Data="M 1,6 L 4,9 L 10,3" Width="12" Height="12" Margin="6,0,0,0"
+                                          Stretch="Uniform" Stroke="{DynamicResource AccentColor}" StrokeThickness="1.6"
+                                          StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                                          VerticalAlignment="Center" Visibility="Hidden"/>
+                                </StackPanel>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Surface" Property="Background" Value="{DynamicResource AccentSurfaceSubtle}"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                </Trigger>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="Surface" Property="Background" Value="{DynamicResource AccentSurface}"/>
+                                    <Setter TargetName="Surface" Property="BorderBrush" Value="{DynamicResource AccentColor}"/>
+                                    <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
+                                    <Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/>
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="True">
+                                    <Setter TargetName="Surface" Property="Opacity" Value="0.75"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter TargetName="Surface" Property="Opacity" Value="0.45"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
             <Style TargetType="Expander"><Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/></Style>
             <Style TargetType="TextBox" BasedOn="{StaticResource StudioInput}"/>
         </ResourceDictionary>
@@ -44,8 +102,10 @@
                 <WrapPanel>
                     <TextBox x:Name="LibrarySearch" Width="300" MinHeight="38" Padding="8,4" Margin="0,0,12,0"
                              ToolTip="{L:Lan 搜索名称或标签}" AutomationProperties.Name="{L:Lan 搜索名称或标签}" TextChanged="LibraryFilterChanged"/>
-                    <CheckBox x:Name="FavoritesFilter" Content="{L:Lan 收藏}" Margin="0,0,12,0" VerticalAlignment="Center" Checked="LibraryFilterChanged" Unchecked="LibraryFilterChanged"/>
-                    <CheckBox x:Name="RecentFilter" Content="{L:Lan 最近播放}" VerticalAlignment="Center" Checked="LibraryFilterChanged" Unchecked="LibraryFilterChanged"/>
+                    <CheckBox x:Name="FavoritesFilter" Style="{StaticResource LibraryPillCheckBox}" Tag="{StaticResource LibraryFavoriteIcon}"
+                              Content="{L:Lan 收藏}" Margin="0,0,8,0" Checked="LibraryFilterChanged" Unchecked="LibraryFilterChanged"/>
+                    <CheckBox x:Name="RecentFilter" Style="{StaticResource LibraryPillCheckBox}" Tag="{StaticResource RecentFilterIcon}"
+                              Content="{L:Lan 最近播放}" Checked="LibraryFilterChanged" Unchecked="LibraryFilterChanged"/>
                 </WrapPanel>
             </StackPanel>
             <Border Visibility="Collapsed" DockPanel.Dock="Bottom" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource Border}" Padding="0,10,0,0">
@@ -59,25 +119,61 @@
             </Border>
             <Expander x:Name="LibraryInspector" DockPanel.Dock="Right" Header="{L:Lan 编辑}" ExpandDirection="Left" IsExpanded="True" Margin="20,0,0,12">
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"><StackPanel x:Name="LibraryEditor" Width="240" IsEnabled="{Binding Library.HasSelection}" Margin="8">
+                    <UniformGrid Rows="1" Columns="4" Margin="0,0,0,8">
+                        <UniformGrid.Resources>
+                            <Style TargetType="Button" BasedOn="{StaticResource StudioButton}">
+                                <Setter Property="Width" Value="40"/>
+                                <Setter Property="Height" Value="40"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+                                <Setter Property="FontSize" Value="16"/>
+                            </Style>
+                        </UniformGrid.Resources>
+                        <Button Command="{Binding Library.UndoEditCommand}" ToolTip="{L:Lan 撤销上一步}" AutomationProperties.Name="{L:Lan 撤销上一步}" Content="&#xE7A7;"/>
+                        <Button Command="{Binding Library.ResetAudioEditCommand}" ToolTip="{L:Lan 重置剪辑}" AutomationProperties.Name="{L:Lan 重置剪辑}" Content="&#xE777;"/>
+                        <Button Click="PreviewLibraryAudio" ToolTip="{L:Lan 独立试听}" AutomationProperties.Name="{L:Lan 独立试听}" Content="&#xE7F5;"/>
+                        <Button Click="TestLibraryRoute" ToolTip="{L:Lan 使用所选音效测试当前输出}" AutomationProperties.Name="{L:Lan 测试输出}" Content="&#xE768;"/>
+                    </UniformGrid>
                     <TextBlock Text="{Binding Library.SelectedName}" TextWrapping="Wrap" FontWeight="SemiBold" Foreground="{DynamicResource TextPrimary}" Margin="0,0,0,16"/>
-                    <CheckBox IsChecked="{Binding Library.IsFavorite}" Content="{L:Lan 收藏}" Margin="0,0,0,12"/>
                     <TextBlock Text="{L:Lan 标签}" Foreground="{DynamicResource TextPrimary}"/>
-                    <TextBox Text="{Binding Library.TagsText, UpdateSourceTrigger=PropertyChanged}" MinHeight="32" Padding="6" Margin="0,6,0,12" ToolTip="{L:Lan 标签以逗号分隔}" AutomationProperties.Name="{L:Lan 标签}"/>
-                    <TextBlock Text="{L:Lan 音量}" Foreground="{DynamicResource TextSecondary}" Margin="0,0,0,8"/><volume:AudioVolumeSlider Value="{Binding Library.Selected.VolumeSliderValue, Mode=TwoWay}" Margin="0,0,0,16"/>
+                    <Grid Margin="0,6,0,12">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBox x:Name="LibraryTags" Text="{Binding Library.TagsText, Mode=TwoWay, UpdateSourceTrigger=Explicit}"
+                                 MinHeight="32" Padding="6" Margin="0,0,8,0" ToolTip="{L:Lan 标签以逗号分隔}" AutomationProperties.Name="{L:Lan 标签}"/>
+                        <CheckBox Grid.Column="1" Style="{StaticResource LibraryPillCheckBox}" Tag="{StaticResource LibraryFavoriteIcon}"
+                                  VerticalAlignment="Stretch" IsChecked="{Binding Library.IsFavorite, Mode=OneWay}"
+                                  Click="LibraryFavoriteClicked" Content="{L:Lan 收藏}"/>
+                    </Grid>
+                    <TextBlock Text="{L:Lan 音量}" Foreground="{DynamicResource TextSecondary}" Margin="0,0,0,8"/><volume:AudioVolumeSlider x:Name="LibraryVolume" Value="{Binding Library.Volume, Mode=TwoWay}" Margin="0,0,0,16"/>
                     <Separator Margin="0,12"/>
                     <TextBlock Text="{L:Lan 波形选区}" Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold" Margin="0,0,0,8"/>
                     <local:WaveformSelection x:Name="Waveform" Duration="{Binding Library.OriginalDuration}" Start="{Binding Library.SelectionStart, Mode=TwoWay}" End="{Binding Library.SelectionEnd, Mode=TwoWay}" ToolTip="{L:Lan 波形操作提示}" AutomationProperties.Name="{L:Lan 波形选区}"/>
                     <TextBlock x:Name="WaveformStatus" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap" Margin="0,4,0,8"/>
-                    <Grid Margin="0,3"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions><TextBlock Text="{L:Lan 开始秒}" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Library.SelectionStart, Mode=TwoWay, StringFormat={}{0:0.###}, ValidatesOnExceptions=True}" AutomationProperties.Name="{L:Lan 开始秒}"/></Grid>
-                    <Grid Margin="0,3"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions><TextBlock Text="{L:Lan 结束秒}" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Library.SelectionEnd, Mode=TwoWay, StringFormat={}{0:0.###}, ValidatesOnExceptions=True}" AutomationProperties.Name="{L:Lan 结束秒}"/></Grid>
-                    <Grid Margin="0,3"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions><TextBlock Text="{L:Lan 淡入秒}" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Library.FadeIn, Mode=TwoWay, StringFormat={}{0:0.###}, ValidatesOnExceptions=True}" AutomationProperties.Name="{L:Lan 淡入秒}"/></Grid>
-                    <Grid Margin="0,3"><Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions><TextBlock Text="{L:Lan 淡出秒}" Foreground="{DynamicResource TextSecondary}" VerticalAlignment="Center"/><TextBox Grid.Column="1" Text="{Binding Library.FadeOut, Mode=TwoWay, StringFormat={}{0:0.###}, ValidatesOnExceptions=True}" AutomationProperties.Name="{L:Lan 淡出秒}"/></Grid>
+                    <Grid Margin="0,3,0,8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{L:Lan 开始秒}" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                        <TextBox x:Name="LibraryTrimStart" Grid.Row="1" Grid.Column="0" Text="{Binding Library.SelectionStart, Mode=TwoWay, UpdateSourceTrigger=Explicit, StringFormat={}{0:0.###}, ValidatesOnExceptions=True}" AutomationProperties.Name="{L:Lan 开始秒}"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Text="{L:Lan 结束秒}" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,0,0,4"/>
+                        <TextBox x:Name="LibraryTrimEnd" Grid.Row="1" Grid.Column="2" Text="{Binding Library.SelectionEnd, Mode=TwoWay, UpdateSourceTrigger=Explicit, StringFormat={}{0:0.###}, ValidatesOnExceptions=True}" AutomationProperties.Name="{L:Lan 结束秒}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{L:Lan 淡入秒}" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,8,0,4"/>
+                        <TextBox x:Name="LibraryFadeIn" Grid.Row="3" Grid.Column="0" Text="{Binding Library.FadeIn, Mode=TwoWay, UpdateSourceTrigger=Explicit, StringFormat={}{0:0.###}, ValidatesOnExceptions=True}" AutomationProperties.Name="{L:Lan 淡入秒}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" Text="{L:Lan 淡出秒}" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="0,8,0,4"/>
+                        <TextBox x:Name="LibraryFadeOut" Grid.Row="3" Grid.Column="2" Text="{Binding Library.FadeOut, Mode=TwoWay, UpdateSourceTrigger=Explicit, StringFormat={}{0:0.###}, ValidatesOnExceptions=True}" AutomationProperties.Name="{L:Lan 淡出秒}"/>
+                    </Grid>
                     <TextBlock Text="{Binding Library.EditError}" Foreground="{DynamicResource Error}" TextWrapping="Wrap"/>
-                    <TextBlock Text="{L:Lan 保留原文件}" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap" FontSize="{DynamicResource UiFontSize11}" Margin="0,8"/>
-                    <WrapPanel Margin="0,0,0,16"><Button Command="{Binding Library.SaveAudioEditCommand}" Width="40" ToolTip="{L:Lan 应用剪辑}" AutomationProperties.Name="{L:Lan 应用剪辑}" Margin="0,0,8,0" Padding="0" Height="40"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8FB;"/></Button><Button Command="{Binding Library.ResetAudioEditCommand}" Width="40" ToolTip="{L:Lan 恢复原始音频}" AutomationProperties.Name="{L:Lan 恢复原始音频}" Padding="0" Height="40"><TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE777;"/></Button></WrapPanel>
-                    <Button Style="{StaticResource PrimaryButton}"  Command="{Binding Library.SaveSelectedCommand}" Margin="0,0,0,12" ToolTip="{L:Lan 保存所选}" AutomationProperties.Name="{L:Lan 保存所选}" Width="40" Padding="0" Height="40"><TextBlock Text="&#xE74E;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
-                    <Button  Click="PreviewLibraryAudio" Margin="0,0,0,8" ToolTip="{L:Lan 独立试听}" AutomationProperties.Name="{L:Lan 独立试听}" Width="40" Padding="0" Height="40"><TextBlock Text="&#xE7F5;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
-                    <Button  Click="TestLibraryRoute" ToolTip="{L:Lan 使用所选音效测试当前输出}" AutomationProperties.Name="{L:Lan 测试播放链路}" Width="40" Padding="0" Height="40"><TextBlock Text="&#xE768;" FontFamily="Segoe MDL2 Assets" FontSize="16"/></Button>
                 </StackPanel></ScrollViewer>
             </Expander>
         <Grid>
@@ -107,19 +203,24 @@
                             </Grid>
                         </ListBoxItem>
                         <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="3.5" ToolTip="{L:Lan 复制}" AutomationProperties.Name="{L:Lan 复制}">
-                            <StackPanel Orientation="Horizontal"><Image Source="{StaticResource CopyIcon}" Width="16" Height="16"/><TextBlock Text="&#xE8C8;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{DynamicResource TextPrimary}"/></StackPanel>
+                            <TextBlock Text="&#xE8C8;" FontFamily="Segoe MDL2 Assets" FontSize="16"
+                                       Width="32" TextAlignment="Center" Foreground="{DynamicResource TextPrimary}"/>
                         </ListBoxItem>
                         <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="3.5" ToolTip="{L:Lan 粘贴}" AutomationProperties.Name="{L:Lan 粘贴}">
-                            <StackPanel Orientation="Horizontal"><Image Source="{StaticResource PasteIcon}" Width="16" Height="16"/><TextBlock Text="&#xE77F;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{DynamicResource TextPrimary}"/></StackPanel>
+                            <TextBlock Text="&#xE77F;" FontFamily="Segoe MDL2 Assets" FontSize="16"
+                                       Width="32" TextAlignment="Center" Foreground="{DynamicResource TextPrimary}"/>
                         </ListBoxItem>
                         <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="6.5" ToolTip="{L:Lan 导入}" AutomationProperties.Name="{L:Lan 导入}">
-                            <StackPanel Orientation="Horizontal"><Image Source="{StaticResource ImportIcon}" Width="16" Height="16"/><TextBlock Text="&#xE8B5;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{DynamicResource TextPrimary}"/></StackPanel>
+                            <Grid Width="32">
+                                <Image Source="{StaticResource ImportIcon}" Width="16" Height="16" HorizontalAlignment="Center"/>
+                            </Grid>
                         </ListBoxItem>
                         <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="6.5" ToolTip="{L:Lan 上传}">
                             <Image Source="{StaticResource UploadIcon}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </ListBoxItem>
                         <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="6.5,4.5" ToolTip="{L:Lan 删除}" AutomationProperties.Name="{L:Lan 删除}">
-                            <StackPanel Orientation="Horizontal"><Image Source="{StaticResource TrashCanIcon}" Width="16" Height="16"/><TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="{DynamicResource TextPrimary}"/></StackPanel>
+                            <TextBlock Text="&#xE74D;" FontFamily="Segoe MDL2 Assets" FontSize="16"
+                                       Width="32" TextAlignment="Center" Foreground="{DynamicResource TextPrimary}"/>
                         </ListBoxItem>
                         <ListBoxItem Style="{StaticResource GroupButtonItemStyle}" Padding="6.5" ToolTip="{L:Lan 文件资源浏览器}">
                             <Image Source="{StaticResource FolderIcon}"  HorizontalAlignment="Center" VerticalAlignment="Center"/>

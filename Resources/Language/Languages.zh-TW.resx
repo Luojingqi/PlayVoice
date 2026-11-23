@@ -385,4 +385,9 @@
 <data name="圆角" xml:space="preserve"><value>圓角</value></data>
 <data name="控件高度" xml:space="preserve"><value>控制項高度</value></data>
 <data name="列表行高" xml:space="preserve"><value>清單列高</value></data>
+  <data name="撤销上一步" xml:space="preserve"><value>復原上一步</value></data>
+  <data name="重置剪辑" xml:space="preserve"><value>重設剪輯</value></data>
+  <data name="测试输出" xml:space="preserve"><value>測試輸出</value></data>
+  <data name="将当前收藏和标签应用到勾选音效" xml:space="preserve"><value>將目前的收藏狀態與標籤套用至勾選的音效</value></data>
+  <data name="请输入有效的秒数" xml:space="preserve"><value>請輸入有效的秒數</value></data>
 </root>
