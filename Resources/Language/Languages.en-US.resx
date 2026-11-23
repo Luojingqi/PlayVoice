@@ -842,6 +842,8 @@ O</value>
   <data name="已停止" xml:space="preserve"><value>Stopped</value></data>
   <data name="操作失败" xml:space="preserve"><value>Operation failed</value></data>
   <data name="编辑" xml:space="preserve"><value>Edit</value></data>
+  <data name="展开编辑区" xml:space="preserve"><value>Expand editor</value></data>
+  <data name="收起编辑区" xml:space="preserve"><value>Collapse editor</value></data>
   <data name="主题配色" xml:space="preserve"><value>Color themes</value></data>
   <data name="森林绿" xml:space="preserve"><value>Forest</value></data>
   <data name="海洋蓝" xml:space="preserve"><value>Ocean</value></data>

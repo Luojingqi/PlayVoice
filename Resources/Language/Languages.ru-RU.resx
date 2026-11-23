@@ -306,6 +306,8 @@
   <data name="已停止" xml:space="preserve"><value>Остановлено</value></data>
   <data name="操作失败" xml:space="preserve"><value>Ошибка операции</value></data>
   <data name="编辑" xml:space="preserve"><value>Изменить</value></data>
+  <data name="展开编辑区" xml:space="preserve"><value>Развернуть панель редактирования</value></data>
+  <data name="收起编辑区" xml:space="preserve"><value>Свернуть панель редактирования</value></data>
   <data name="主题配色" xml:space="preserve"><value>Цветовые темы</value></data>
   <data name="森林绿" xml:space="preserve"><value>Лес</value></data>
   <data name="海洋蓝" xml:space="preserve"><value>Океан</value></data>

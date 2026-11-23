@@ -113,6 +113,11 @@ public partial class AudioTrackGrid
         Library.CommitClip();
     }
 
+    private void ToggleLibraryInspector(object sender, RoutedEventArgs e)
+    {
+        LibraryInspector.IsExpanded = !LibraryInspector.IsExpanded;
+    }
+
     private void LibraryFavoriteClicked(object sender, RoutedEventArgs e)
     {
         if (CanCommitEditor) Library.CommitFavorite(((CheckBox)sender).IsChecked == true);

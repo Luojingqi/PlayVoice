@@ -306,6 +306,8 @@
   <data name="已停止" xml:space="preserve"><value>Gestoppt</value></data>
   <data name="操作失败" xml:space="preserve"><value>Vorgang fehlgeschlagen</value></data>
   <data name="编辑" xml:space="preserve"><value>Bearbeiten</value></data>
+  <data name="展开编辑区" xml:space="preserve"><value>Editor einblenden</value></data>
+  <data name="收起编辑区" xml:space="preserve"><value>Editor ausblenden</value></data>
   <data name="主题配色" xml:space="preserve"><value>Farbthemen</value></data>
   <data name="森林绿" xml:space="preserve"><value>Wald</value></data>
   <data name="海洋蓝" xml:space="preserve"><value>Ozean</value></data>

@@ -23,6 +23,11 @@
                 </Trigger></Style.Triggers>
             </Style>
             <Style TargetType="Button" BasedOn="{StaticResource StudioButton}"/>
+            <Style x:Key="LibraryEditorIconButton" TargetType="Button" BasedOn="{StaticResource StudioButton}">
+                <Setter Property="Width" Value="40"/>
+                <Setter Property="Height" Value="40"/>
+                <Setter Property="Padding" Value="0"/>
+            </Style>
             <Style TargetType="CheckBox"><Setter Property="Foreground" Value="{DynamicResource TextPrimary}"/></Style>
             <StreamGeometry x:Key="LibraryFavoriteIcon">M 8,1.5 L 10,5.7 L 14.5,6.3 L 11.3,9.5 L 12,14 L 8,11.9 L 4,14 L 4.7,9.5 L 1.5,6.3 L 6,5.7 Z</StreamGeometry>
             <StreamGeometry x:Key="RecentFilterIcon">M 2,7 A 6,6 0 1 1 3.5,12.3 M 2,3.5 V 7 H 5.5 M 8,5 V 8 L 10,9.5</StreamGeometry>
@@ -118,13 +123,40 @@
                 </StackPanel>
             </Border>
             <Expander x:Name="LibraryInspector" DockPanel.Dock="Right" Header="{L:Lan 编辑}" ExpandDirection="Left" IsExpanded="True" Margin="20,0,0,12">
+                <Expander.Template>
+                    <ControlTemplate TargetType="Expander">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <DockPanel Margin="8,0">
+                                <Button x:Name="InspectorToggle" DockPanel.Dock="Right" Style="{StaticResource LibraryEditorIconButton}"
+                                        Click="ToggleLibraryInspector" ToolTip="{L:Lan 展开编辑区}"
+                                        AutomationProperties.Name="{Binding ToolTip, RelativeSource={RelativeSource Self}}">
+                                    <Path x:Name="InspectorArrow" Data="M 6,1 L 1,6 L 6,11" Width="7" Height="12"
+                                          Stroke="{DynamicResource TextPrimary}" StrokeThickness="1.8"
+                                          StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+                                </Button>
+                                <ContentPresenter x:Name="InspectorTitle" ContentSource="Header" VerticalAlignment="Center"
+                                                  Margin="0,0,8,0" TextElement.FontWeight="SemiBold" Visibility="Collapsed"/>
+                            </DockPanel>
+                            <ContentPresenter x:Name="InspectorContent" Grid.Row="1" ContentSource="Content" Visibility="Collapsed"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsExpanded" Value="True">
+                                <Setter TargetName="InspectorTitle" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="InspectorContent" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="InspectorToggle" Property="ToolTip" Value="{L:Lan 收起编辑区}"/>
+                                <Setter TargetName="InspectorArrow" Property="Data" Value="M 1,1 L 6,6 L 1,11"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Expander.Template>
                 <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"><StackPanel x:Name="LibraryEditor" Width="240" IsEnabled="{Binding Library.HasSelection}" Margin="8">
                     <UniformGrid Rows="1" Columns="4" Margin="0,0,0,8">
                         <UniformGrid.Resources>
-                            <Style TargetType="Button" BasedOn="{StaticResource StudioButton}">
-                                <Setter Property="Width" Value="40"/>
-                                <Setter Property="Height" Value="40"/>
-                                <Setter Property="Padding" Value="0"/>
+                            <Style TargetType="Button" BasedOn="{StaticResource LibraryEditorIconButton}">
                                 <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
                                 <Setter Property="FontSize" Value="16"/>
                             </Style>

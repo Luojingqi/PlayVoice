@@ -839,6 +839,8 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="已停止" xml:space="preserve"><value>已停止</value></data>
   <data name="操作失败" xml:space="preserve"><value>操作失败</value></data>
   <data name="编辑" xml:space="preserve"><value>编辑</value></data>
+  <data name="展开编辑区" xml:space="preserve"><value>展开编辑区</value></data>
+  <data name="收起编辑区" xml:space="preserve"><value>收起编辑区</value></data>
   <data name="主题配色" xml:space="preserve"><value>主题配色</value></data>
   <data name="森林绿" xml:space="preserve"><value>森林绿</value></data>
   <data name="海洋蓝" xml:space="preserve"><value>海洋蓝</value></data>
