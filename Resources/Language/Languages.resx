@@ -925,4 +925,7 @@ VB-CABLE是一个捐赠软件，欢迎所有人参与。</value>
   <data name="测试输出" xml:space="preserve"><value>测试输出</value></data>
   <data name="将当前收藏和标签应用到勾选音效" xml:space="preserve"><value>将当前收藏和标签应用到勾选音效</value></data>
   <data name="请输入有效的秒数" xml:space="preserve"><value>请输入有效的秒数</value></data>
+<data name="波形淡化操作提示" xml:space="preserve"><value>拖动圆环调整淡入淡出，拖动边界调整裁剪。方向键调起点，Shift＋方向键调终点，Ctrl＋方向键调淡入，Ctrl＋Shift＋方向键调淡出。</value></data>
+<data name="波形淡入结束" xml:space="preserve"><value>淡入结束</value></data>
+<data name="波形淡出开始" xml:space="preserve"><value>淡出开始</value></data>
 </root>

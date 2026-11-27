@@ -182,7 +182,12 @@
                     <TextBlock Text="{L:Lan 音量}" Foreground="{DynamicResource TextSecondary}" Margin="0,0,0,8"/><volume:AudioVolumeSlider x:Name="LibraryVolume" Value="{Binding Library.Volume, Mode=TwoWay}" Margin="0,0,0,16"/>
                     <Separator Margin="0,12"/>
                     <TextBlock Text="{L:Lan 波形选区}" Foreground="{DynamicResource TextPrimary}" FontWeight="SemiBold" Margin="0,0,0,8"/>
-                    <local:WaveformSelection x:Name="Waveform" Duration="{Binding Library.OriginalDuration}" Start="{Binding Library.SelectionStart, Mode=TwoWay}" End="{Binding Library.SelectionEnd, Mode=TwoWay}" ToolTip="{L:Lan 波形操作提示}" AutomationProperties.Name="{L:Lan 波形选区}"/>
+                    <local:WaveformSelection x:Name="Waveform" Duration="{Binding Library.OriginalDuration}"
+                                             Start="{Binding Library.SelectionStart, Mode=TwoWay}" End="{Binding Library.SelectionEnd, Mode=TwoWay}"
+                                             FadeIn="{Binding Library.FadeIn, Mode=TwoWay}" FadeOut="{Binding Library.FadeOut, Mode=TwoWay}"
+                                             FadeInLabel="{L:Lan 波形淡入结束}" FadeOutLabel="{L:Lan 波形淡出开始}"
+                                             ToolTip="{L:Lan 波形淡化操作提示}" ToolTipService.Placement="Bottom"
+                                             AutomationProperties.Name="{L:Lan 波形选区}"/>
                     <TextBlock x:Name="WaveformStatus" Foreground="{DynamicResource TextSecondary}" TextWrapping="Wrap" Margin="0,4,0,8"/>
                     <Grid Margin="0,3,0,8">
                         <Grid.ColumnDefinitions>

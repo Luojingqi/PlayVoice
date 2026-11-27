@@ -392,4 +392,7 @@
   <data name="测试输出" xml:space="preserve"><value>測試輸出</value></data>
   <data name="将当前收藏和标签应用到勾选音效" xml:space="preserve"><value>將目前的收藏狀態與標籤套用至勾選的音效</value></data>
   <data name="请输入有效的秒数" xml:space="preserve"><value>請輸入有效的秒數</value></data>
+<data name="波形淡化操作提示" xml:space="preserve"><value>拖曳圓環調整淡入淡出，拖曳邊界調整裁剪。方向鍵調整起點，Shift＋方向鍵調整終點，Ctrl＋方向鍵調整淡入，Ctrl＋Shift＋方向鍵調整淡出。</value></data>
+<data name="波形淡入结束" xml:space="preserve"><value>淡入結束</value></data>
+<data name="波形淡出开始" xml:space="preserve"><value>淡出開始</value></data>
 </root>

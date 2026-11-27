@@ -392,4 +392,7 @@
   <data name="测试输出" xml:space="preserve"><value>Проверить вывод</value></data>
   <data name="将当前收藏和标签应用到勾选音效" xml:space="preserve"><value>Применить статус избранного и теги к отмеченным звукам</value></data>
   <data name="请输入有效的秒数" xml:space="preserve"><value>Введите допустимое число секунд.</value></data>
+<data name="波形淡化操作提示" xml:space="preserve"><value>Перетаскивайте круги для настройки переходов, а границы — для обрезки. Стрелки меняют начало, Shift+стрелки — конец, Ctrl+стрелки — нарастание, Ctrl+Shift+стрелки — затухание.</value></data>
+<data name="波形淡入结束" xml:space="preserve"><value>Конец нарастания</value></data>
+<data name="波形淡出开始" xml:space="preserve"><value>Начало затухания</value></data>
 </root>

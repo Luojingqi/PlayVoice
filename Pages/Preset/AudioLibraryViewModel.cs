@@ -78,14 +78,37 @@ public partial class AudioLibraryViewModel : ObservableObject
         var edit = Selected?.Data.Config.Edit;
         SelectionStart = edit?.StartSeconds ?? 0;
         SelectionEnd = edit?.EndSeconds ?? OriginalDuration;
-        FadeIn = edit?.FadeInSeconds ?? 0;
-        FadeOut = edit?.FadeOutSeconds ?? 0;
+        (FadeIn, FadeOut) = AudioEditSettings.FitFadesToDuration(
+            edit?.FadeInSeconds ?? 0, edit?.FadeOutSeconds ?? 0, SelectionEnd - SelectionStart);
         EditValuesReloaded?.Invoke();
+    }
+
+    internal bool LimitFadeToSelection(bool editingFadeIn)
+    {
+        if (!(SelectionStart >= 0 && SelectionEnd <= OriginalDuration && SelectionStart < SelectionEnd)
+            || !double.IsFinite(FadeIn) || !double.IsFinite(FadeOut) || FadeIn < 0 || FadeOut < 0)
+            return false;
+
+        double requested = editingFadeIn ? FadeIn : FadeOut;
+        double otherFade = editingFadeIn ? FadeOut : FadeIn;
+        double available = AudioEditSettings.RemainingFadeTime(SelectionEnd - SelectionStart, otherFade);
+        if (requested <= available) return false;
+
+        if (editingFadeIn) FadeIn = available;
+        else FadeOut = available;
+        return true;
     }
 
     public AudioEditSettings PendingEdit()
     {
-        var edit = new AudioEditSettings { StartSeconds = SelectionStart, EndSeconds = SelectionEnd, FadeInSeconds = FadeIn, FadeOutSeconds = FadeOut };
+        var (fittedFadeIn, fittedFadeOut) = AudioEditSettings.FitFadesToDuration(FadeIn, FadeOut, SelectionEnd - SelectionStart);
+        var edit = new AudioEditSettings
+        {
+            StartSeconds = SelectionStart,
+            EndSeconds = SelectionEnd,
+            FadeInSeconds = fittedFadeIn,
+            FadeOutSeconds = fittedFadeOut
+        };
         edit.Validate(OriginalDuration, Selected.Data.AudioTrackArray[0].WaveFormat.SampleRate);
         return edit;
     }
@@ -107,6 +130,7 @@ public partial class AudioLibraryViewModel : ObservableObject
             return false;
         }
 
+        (FadeIn, FadeOut) = (next.FadeInSeconds, next.FadeOutSeconds);
         bool saved = SaveClip(Selected, next);
         EditError = saved ? "" : LanguageManager.Inst.GetString("保存失败");
         return saved;

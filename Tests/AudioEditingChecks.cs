@@ -7,6 +7,13 @@ internal static class AudioEditingChecks
     public static void Run()
     {
         static void Check(bool condition, string message) { if (!condition) throw new Exception(message); }
+        double remainingFade = AudioEditSettings.RemainingFadeTime(.009, .001);
+        Check(remainingFade > .007999 && remainingFade + .001 <= .009, "A clamped fade must fit after rounding");
+        var fittedFades = AudioEditSettings.FitFadesToDuration(.45, 1.95, .6);
+        Check(Math.Abs(fittedFades.FadeIn - .1125) < .000001 && Math.Abs(fittedFades.FadeOut - .4875) < .000001,
+            "Shortening a trim fits both fades proportionally");
+        Check(AudioEditSettings.FitFadesToDuration(fittedFades.FadeIn, fittedFades.FadeOut, .6) == fittedFades,
+            "Fitting an already valid pair must keep both durations");
         string path = Path.Combine(Path.GetTempPath(), "PlayVoice-edit-" + Guid.NewGuid().ToString("N") + ".wav");
         try
         {

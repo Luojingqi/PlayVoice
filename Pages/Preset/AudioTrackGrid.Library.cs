@@ -38,11 +38,22 @@ public partial class AudioTrackGrid
         Library.SelectionChanging += FinishLibraryEdits;
         Library.EditValuesReloaded += () => Array.ForEach(clipInputs, ReloadEditorText);
         Library.TagsReloaded += () => ReloadEditorText(LibraryTags);
-        Waveform.EditCompleted += () =>
+        Waveform.EditCompleted += handle =>
         {
             if (!CanCommitEditor) return;
-            ReloadEditorText(LibraryTrimStart);
-            ReloadEditorText(LibraryTrimEnd);
+            switch (handle)
+            {
+                case WaveformSelection.Handle.FadeIn:
+                    ReloadEditorText(LibraryFadeIn);
+                    break;
+                case WaveformSelection.Handle.FadeOut:
+                    ReloadEditorText(LibraryFadeOut);
+                    break;
+                default:
+                    ReloadEditorText(LibraryTrimStart);
+                    ReloadEditorText(LibraryTrimEnd);
+                    break;
+            }
             CommitClipInputs();
         };
         LibraryVolume.EditStarted += Library.BeginVolumeEdit;
@@ -89,7 +100,13 @@ public partial class AudioTrackGrid
         }
         input.GetBindingExpression(TextBox.TextProperty)?.UpdateSource();
         if (ReferenceEquals(input, LibraryTags)) Library.CommitTags();
-        else CommitClipInputs();
+        else
+        {
+            bool isFadeInput = input == LibraryFadeIn || input == LibraryFadeOut;
+            if (isFadeInput && !Validation.GetHasError(input) && Library.LimitFadeToSelection(input == LibraryFadeIn))
+                ReloadEditorText(input);
+            CommitClipInputs();
+        }
         originalEditorText = input.Text;
     }
 

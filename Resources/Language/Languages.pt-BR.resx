@@ -392,4 +392,7 @@
   <data name="测试输出" xml:space="preserve"><value>Testar saída</value></data>
   <data name="将当前收藏和标签应用到勾选音效" xml:space="preserve"><value>Aplicar o status de favorito e as tags aos sons marcados</value></data>
   <data name="请输入有效的秒数" xml:space="preserve"><value>Digite um número válido de segundos.</value></data>
+<data name="波形淡化操作提示" xml:space="preserve"><value>Arraste os círculos para ajustar as transições e as bordas para recortar. Setas: início; Shift+setas: fim; Ctrl+setas: entrada gradual; Ctrl+Shift+setas: saída gradual.</value></data>
+<data name="波形淡入结束" xml:space="preserve"><value>Fim da entrada gradual</value></data>
+<data name="波形淡出开始" xml:space="preserve"><value>Início da saída gradual</value></data>
 </root>
